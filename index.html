@@ -138,9 +138,22 @@
             <p id="engiNote" class="text-xs text-gray-500 mt-4">PW awansowała na 64 miejsce w EngiRank 2024.</p>
             <p class="text-[11px] text-gray-400 mt-2">Źródło: EngiRank 2023-2024. Przełącznik: pozycja ↔ WSK (0-100).</p>
           </div>
-          <div class="bg-white rounded-2xl border-2 border-dashed border-gray-200 p-6 flex flex-col justify-center text-center">
-            <p class="text-xs font-semibold uppercase tracking-widest text-indigo-500">Placeholder #5</p>
-            <p class="mt-3 text-sm text-gray-500">Rezerwacja pod kolejny wskaźnik EngiRank lub ENHANCE.</p>
+          <div class="bg-white rounded-2xl shadow-sm p-6">
+            <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgba(79,70,229,0.75); border-color: rgba(79,70,229,0.75); background-color: #f8f9ff;">Aktualizacja: 03.12.2025</span>
+            <div class="flex items-baseline justify-between gap-3">
+              <h3 class="text-lg font-semibold text-gray-900">EngiRank by Subject</h3>
+              <button id="engiSubjectToggle" type="button" class="inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-xl border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition" aria-pressed="false">
+                Pokaż punktację
+              </button>
+            </div>
+            <label for="engiSubjectSelect" class="block mt-4">
+              <span class="text-xs font-semibold text-gray-500 uppercase tracking-widest">Wybierz kierunek</span>
+              <select id="engiSubjectSelect" class="mt-1 w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-indigo-500 focus:ring-indigo-500"></select>
+            </label>
+            <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 260px) -->
+            <canvas id="chartEngiSubject" class="w-full" style="margin-top: 0.25rem; height: 260px;"></canvas>
+            <p id="engiSubjectNote" class="text-xs text-gray-500 mt-4">Pozycje PW w EngiRank by Subject aktualizują się po wyborze kierunku.</p>
+            <p class="text-[11px] text-gray-400 mt-2">Źródło: EngiRank by Subject 2023. Przełącznik: pozycja ↔ punktacja (0-100).</p>
           </div>
         </div>
       </section>
@@ -1714,6 +1727,185 @@
             currentSubject = event.target.value;
             updateGRASChart(currentSubject);
           });
+        }
+
+        const engiSubjectData = {
+          years: [2023],
+          subjects: {
+            "Inżynieria chemiczna (Chemical Engineering)": {
+              lower: [77],
+              upper: [77],
+              raw: ["77"],
+              score: [63.13]
+            },
+            "Inżynieria lądowa (Civil Engineering)": {
+              lower: [77],
+              upper: [77],
+              raw: ["77"],
+              score: [58.87]
+            },
+            "Elektronika, elektrotechnika i inżynieria informacyjna": {
+              lower: [95],
+              upper: [95],
+              raw: ["95"],
+              score: [64.72]
+            },
+            "Inżynieria środowiska (Environmental engineering)": {
+              lower: [74],
+              upper: [74],
+              raw: ["74"],
+              score: [60.85]
+            },
+            "Inżynieria materiałowa (Materials Engineering)": {
+              lower: [95],
+              upper: [95],
+              raw: ["95"],
+              score: [65.95]
+            },
+            "Inżynieria mechaniczna (Mechanical engineering)": {
+              lower: [63],
+              upper: [63],
+              raw: ["63"],
+              score: [72.77]
+            },
+            "Inżynieria medyczna": {
+              lower: [63],
+              upper: [63],
+              raw: ["63"],
+              score: [71.63]
+            }
+          }
+        };
+
+        const engiSubjectCanvas = document.getElementById('chartEngiSubject');
+        const engiSubjectSelect = document.getElementById('engiSubjectSelect');
+        const engiSubjectNote = document.getElementById('engiSubjectNote');
+        const engiSubjectToggle = document.getElementById('engiSubjectToggle');
+        
+        let engiSubjectChart;
+        let engiSubjectMode = 'position';
+
+        if (engiSubjectCanvas && engiSubjectSelect && engiSubjectData) {
+          const subjectNames = Object.keys(engiSubjectData.subjects).sort((a, b) => a.localeCompare(b, 'pl-PL'));
+
+          engiSubjectSelect.innerHTML = subjectNames
+            .map((subject) => `<option value="${subject}">${subject}</option>`)
+            .join('');
+
+          const defaultSubject = subjectNames[0];
+          if (defaultSubject) engiSubjectSelect.value = defaultSubject;
+
+          engiSubjectChart = new Chart(engiSubjectCanvas, {
+            type: 'line',
+            data: {
+              labels: engiSubjectData.years,
+              datasets: [
+                {
+                  label: '',
+                  data: [],
+                  borderColor: 'rgb(79,70,229)',
+                  backgroundColor: 'rgba(79,70,229,0.12)',
+                  fill: false,
+                  tension: 0,
+                  pointRadius: 6,
+                  pointHoverRadius: 8
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              interaction: { mode: 'index', intersect: false },
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: (context) => {
+                       const val = context.parsed.y;
+                       if (engiSubjectMode === 'score') return `Punktacja: ${val}`;
+                       return `Pozycja: ${val}`;
+                    }
+                  }
+                }
+              },
+              scales: {
+                y: {
+                  reverse: true,
+                  beginAtZero: false,
+                  ticks: { stepSize: 1 },
+                  grid: { color: 'rgba(17,24,39,0.08)' },
+                  title: { display: true, text: 'Pozycja (niższa = lepiej)' }
+                },
+                x: {
+                   grid: { display: false },
+                   offset: true
+                }
+              }
+            }
+          });
+
+          const updateEngiSubjectChart = (subjectName) => {
+            const data = engiSubjectData.subjects[subjectName];
+            if (!data) return;
+
+            const dataset = engiSubjectChart.data.datasets[0];
+            const yAxis = engiSubjectChart.options.scales.y;
+            
+            let values;
+            if (engiSubjectMode === 'score') {
+               values = data.score;
+               dataset.borderColor = 'rgba(16,185,129,0.85)';
+               dataset.backgroundColor = 'rgba(16,185,129,0.15)';
+               yAxis.reverse = false;
+               yAxis.title.text = 'Punktacja (im wyższa, tym lepiej)';
+            } else {
+               values = data.lower;
+               dataset.borderColor = 'rgb(79,70,229)';
+               dataset.backgroundColor = 'rgba(79,70,229,0.12)';
+               yAxis.reverse = true;
+               yAxis.title.text = 'Pozycja (niższa = lepiej)';
+            }
+            
+            dataset.data = values;
+
+            const validValues = values.filter(v => typeof v === 'number');
+            if (validValues.length) {
+               const minVal = Math.min(...validValues);
+               const maxVal = Math.max(...validValues);
+               const padding = Math.max((maxVal - minVal) * 0.2, 5);
+               
+               if (engiSubjectMode === 'score') {
+                  yAxis.suggestedMin = Math.max(0, minVal - padding);
+                  yAxis.suggestedMax = Math.min(100, maxVal + padding);
+               } else {
+                  yAxis.suggestedMin = maxVal + padding;
+                  yAxis.suggestedMax = Math.max(1, minVal - padding);
+               }
+            }
+
+            engiSubjectChart.update();
+
+            if (engiSubjectNote && data.raw && data.raw.length) {
+               const year = engiSubjectData.years[0];
+               const pos = data.raw[0];
+               const score = data.score[0];
+               engiSubjectNote.textContent = `EngiRank ${year}: ${subjectName} - miejsce ${pos} (pkt ${score}).`;
+            }
+          };
+
+          if (defaultSubject) updateEngiSubjectChart(defaultSubject);
+
+          engiSubjectSelect.addEventListener('change', (e) => {
+             updateEngiSubjectChart(e.target.value);
+          });
+
+          if (engiSubjectToggle) {
+             engiSubjectToggle.addEventListener('click', () => {
+                engiSubjectMode = engiSubjectMode === 'position' ? 'score' : 'position';
+                engiSubjectToggle.textContent = engiSubjectMode === 'score' ? 'Pokaż pozycję' : 'Pokaż punktację';
+                engiSubjectToggle.setAttribute('aria-pressed', (engiSubjectMode === 'score').toString());
+                updateEngiSubjectChart(engiSubjectSelect.value);
+             });
+          }
         }
 
         const rksCanvas = document.getElementById('chartRKS');
