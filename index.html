@@ -1940,9 +1940,9 @@
           }
         }
 
-        const engiYears = [2023, 2024];
-        const engiPositions = [69, 64];
-        const engiScores = [60.17, 62.2];
+        const engiYears = [2023, 2024, 2025];
+        const engiPositions = [69, 64, 72];
+        const engiScores = [60.17, 62.2, 63.82];
         const engiCanvas = document.getElementById('chartEngi');
         const engiToggle = document.getElementById('engiToggle');
         const engiNote = document.getElementById('engiNote');
@@ -2018,7 +2018,7 @@
                 return value !== null && value !== undefined ? `WSK: ${value.toFixed(2)}` : 'Brak danych';
               };
               if (engiNote) {
-                engiNote.textContent = 'PW stopniowo zmniejsza dystans do uczelni z najwyższymi wartościami WSK w EngiRank.';
+                engiNote.textContent = 'PW w EngiRank 2025 zajęła 72 miejsce (WSK 63,82).';
               }
             } else {
               dataset.label = 'Pozycja (niższa = lepiej)';
@@ -2038,7 +2038,7 @@
                 return value !== null && value !== undefined ? `Pozycja: ${value}` : 'Brak danych';
               };
               if (engiNote) {
-                engiNote.textContent = 'PW awansowała na 64 miejsce w EngiRank 2024.';
+                engiNote.textContent = 'PW w EngiRank 2025 zajęła 72 miejsce (WSK 63,82).';
               }
             }
 
