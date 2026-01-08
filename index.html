@@ -1,0 +1,2079 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Politechnika Warszawska — Wyniki rankingowe (draft)</title>
+    <meta name="description" content="Wstepna wersja strony prezentujacej wyniki rankingowe Politechniki Warszawskiej wraz z kontekstem i benchmarkami." />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      html,body{font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial}
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-900">
+    <main class="max-w-7xl mx-auto px-4 md:px-6">
+      <section id="trendy" class="py-16 md:py-20 border-t border-gray-200">
+        <header class="mb-8">
+          <span class="text-xs uppercase tracking-widest text-indigo-600 font-semibold">Trendy</span>
+          <h2 class="text-3xl md:text-[34px] font-extrabold leading-tight mt-2">Jak zmienialy sie wyniki PW?</h2>
+          <p class="text-gray-600 mt-3 max-w-3xl">Poniższe wykresy pokazują zmiany pozycji PW w rankingach QS, THE i ARWU w latach 2020-2025, a także kluczowe wskaźniki Perspektyw i EngiRank.
+          </p>
+        </header>
+        <div class="grid gap-6 md:grid-cols-2" style="grid-auto-rows: 1fr;">
+          <div class="bg-white rounded-2xl shadow-sm p-6">
+            <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgb(79,70,229); border-color: rgb(79,70,229); background-color: #f8f9ff;">Aktualizacja: 19.06.2025</span>
+            <h3 class="text-lg font-semibold text-gray-900">QS World University Rankings</h3>
+            <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 340px) -->
+            <canvas id="chartQS" class="mt-4 w-full" style="height: 350px;"></canvas>
+            <p class="text-xs text-gray-500 mt-4">PW konsekwentnie poprawia pozycję i zbliża się do top 500 QS.</p>
+            <p class="text-[11px] text-gray-400 mt-2">Źródło: QS World University Rankings 2020–2026.</p>
+          </div>
+          <div class="bg-white rounded-2xl shadow-sm p-6">
+            <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgb(79,70,229); border-color: rgb(79,70,229); background-color: #f8f9ff;">Aktualizacja: 12.03.2025</span>
+            <h3 class="text-lg font-semibold text-gray-900">QS World University Rankings by Subject</h3>
+            <label for="qsSubjectSelect" class="block mt-4">
+              <span class="text-xs font-semibold text-gray-500 uppercase tracking-widest">Wybierz dyscyplinę</span>
+              <select id="qsSubjectSelect" class="mt-1 w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
+              </select>
+            </label>
+            <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 300px) -->
+            <canvas id="chartQSSubject" class="w-full" style="margin-top: 0.25rem; height: 280px;"></canvas>
+            <p id="qsSubjectNote" class="text-xs text-gray-500 mt-4">Pozycja PW w QS by Subject aktualizuje się po wyborze dyscypliny.</p>
+            <p class="text-[11px] text-gray-400 mt-2">Źródło: QS World University Rankings by Subject 2020-2024.</p>
+          </div>
+        </div>
+        <div class="grid gap-6 md:grid-cols-2 mt-6">
+          <div class="bg-white rounded-2xl shadow-sm p-6">
+            <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgb(14,116,144); border-color: rgb(14,116,144); background-color: #e0f7ff;">Aktualizacja: 09.10.2025</span>
+            <h3 class="text-lg font-semibold text-gray-900">World University Rankings (THE)</h3>
+            <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
+            <canvas id="chartTHE" class="mt-4 w-full" style="height: 288px;"></canvas>
+            <p class="text-xs text-gray-500 mt-4">PW utrzymuje stabilną obecność w przedziale 1201–1500 THE.</p>
+            <p class="text-[11px] text-gray-400 mt-2">Źródło: Times Higher Education World University Rankings 2020–2026.</p>
+          </div>
+          <div class="bg-white rounded-2xl border-2 border-dashed border-gray-200 p-6 flex flex-col justify-center text-center">
+            <p class="text-xs font-semibold uppercase tracking-widest text-indigo-500">Placeholder #2</p>
+            <p class="mt-3 text-sm text-gray-500">Miejsce na materiał uzupełniający wyniki THE.</p>
+          </div>
+        </div>
+        <div class="grid gap-6 md:grid-cols-2 mt-6">
+          <div class="bg-white rounded-2xl shadow-sm p-6">
+            <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgb(220,38,38); border-color: rgb(220,38,38); background-color: #fff5f5;">Aktualizacja: 15.08.2025</span>
+            <h3 class="text-lg font-semibold text-gray-900">ARWU (Lista Szanghajska)</h3>
+            <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
+            <canvas id="chartARWU" class="mt-4 w-full" style="height: 288px;"></canvas>
+            <p class="text-xs text-gray-500 mt-4">PW pozostaje w globalnym TOP 1000 ARWU, utrzymując stabilne wskaźniki badań.</p>
+            <p class="text-[11px] text-gray-400 mt-2">Źródło: Academic Ranking of World Universities 2020–2025.</p>
+          </div>
+          <div class="bg-white rounded-2xl border-2 border-dashed border-gray-200 p-6 flex flex-col justify-center text-center">
+            <p class="text-xs font-semibold uppercase tracking-widest text-indigo-500">Placeholder #3</p>
+            <p class="mt-3 text-sm text-gray-500">Rezerwacja na komentarz jakościowy do wyników ARWU.</p>
+          </div>
+        </div>
+        <div class="grid gap-6 md:grid-cols-2 mt-6">
+          <div class="bg-white rounded-2xl shadow-sm p-6">
+            <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgba(79,70,229,0.85); border-color: rgba(79,70,229,0.85); background-color: #f8f9ff;">Aktualizacja: 25.06.2025</span>
+            <div class="flex items-baseline justify-between gap-3">
+              <h3 class="text-lg font-semibold text-gray-900">Ranking Perspektywy</h3>
+              <button id="perspektywyToggle" type="button" class="inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-xl border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition" aria-pressed="false">
+                Pokaż WSK
+              </button>
+            </div>
+            <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
+            <canvas id="chartPerspektywy" class="mt-4 w-full" style="height: 330px;"></canvas>
+            <p id="perspektywyNote" class="text-xs text-gray-500 mt-4">Politechnika Warszawska utrzymuje 3 miejsce w rankingu.</p>
+            <p class="text-[11px] text-gray-400 mt-2">Źródło: Ranking Perspektyw (wydania 2020-2025). Przełącznik: pozycja ↔ WSK (0-100).</p>
+          </div>
+          <div class="bg-white rounded-2xl shadow-sm p-6">
+            <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgba(79,70,229,0.85); border-color: rgba(79,70,229,0.85); background-color: #f8f9ff;">Aktualizacja: 25.06.2025</span>
+            <div class="flex items-baseline justify-between gap-3">
+              <h3 class="text-lg font-semibold text-gray-900">Ranking Kierunków Perspektywy</h3>
+              <button id="rksToggle" type="button" class="inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-xl border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition" aria-pressed="false">
+                Pokaż punktację
+              </button>
+            </div>
+            <label for="rksSubjectSelect" class="block mt-4">
+              <span class="text-xs font-semibold text-gray-500 uppercase tracking-widest">Wybierz kierunek</span>
+              <select id="rksSubjectSelect" class="mt-1 w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-indigo-500 focus:ring-indigo-500"></select>
+            </label>
+            <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 220px) -->
+            <canvas id="chartRKS" class="w-full" style="margin-top: 0.25rem; height: 260px;"></canvas>
+            <p id="rksSubjectNote" class="text-xs text-gray-500 mt-4">Pozycje PW w rankingach kierunkowych Perspektyw aktualizują się po wyborze kierunku.</p>
+            <p class="text-[11px] text-gray-400 mt-2">Źródło: Perspektywy — Ranking Kierunków Studiów 2020–2025. Przełącznik: pozycja ↔ punktacja (0-100).</p>
+          </div>
+        </div>
+        <div class="grid gap-6 md:grid-cols-2 mt-6">
+          <div class="bg-white rounded-2xl shadow-sm p-6">
+            <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgba(79,70,229,0.75); border-color: rgba(79,70,229,0.75); background-color: #f8f9ff;">Aktualizacja: 30.10.2024</span>
+            <div class="flex items-baseline justify-between gap-3">
+              <h3 class="text-lg font-semibold text-gray-900">EngiRank</h3>
+              <button id="engiToggle" type="button" class="inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-xl border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition" aria-pressed="false">
+                Pokaż punktację
+              </button>
+            </div>
+            <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
+            <canvas id="chartEngi" class="mt-4 w-full" style="height: 288px;"></canvas>
+            <p id="engiNote" class="text-xs text-gray-500 mt-4">PW awansowała na 64 miejsce w EngiRank 2024.</p>
+            <p class="text-[11px] text-gray-400 mt-2">Źródło: EngiRank 2023-2024. Przełącznik: pozycja ↔ WSK (0-100).</p>
+          </div>
+          <div class="bg-white rounded-2xl border-2 border-dashed border-gray-200 p-6 flex flex-col justify-center text-center">
+            <p class="text-xs font-semibold uppercase tracking-widest text-indigo-500">Placeholder #5</p>
+            <p class="mt-3 text-sm text-gray-500">Rezerwacja pod kolejny wskaźnik EngiRank lub ENHANCE.</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        if (typeof Chart === 'undefined') {
+          return;
+        }
+
+        Chart.defaults.font.family = 'Inter, system-ui, sans-serif';
+        Chart.defaults.color = '#4B5563';
+
+        const qsSubjectData = {
+          years: [2020, 2021, 2022, 2023, 2024],
+          subjects: {
+            'Architektura (Architecture and Built Environment)': {
+              lower: [null, null, 151, 151, 201],
+              upper: [null, null, 200, 200, 240]
+            },
+            'Automatyka, elektronika i elektrotechnika (Engineering - Electrical and Electronic)': {
+              lower: [201, 201, 151, 151, 201],
+              upper: [250, 250, 200, 200, 250]
+            },
+            'Biznes i zarządzanie (Business and Management Studies)': {
+              lower: [null, 401, 401, 551, 551],
+              upper: [null, 450, 450, 580, 600]
+            },
+            'Chemia (Chemistry)': {
+              lower: [251, 301, 351, 301, 301],
+              upper: [300, 350, 400, 350, 350]
+            },
+            'Fizyka (Physics and Astronomy)': {
+              lower: [251, 251, 251, 251, 251],
+              upper: [300, 300, 300, 300, 300]
+            },
+            'Informatyka techniczna i telekomunikacja (Computer Science)': {
+              lower: [301, 251, 251, 251, 251],
+              upper: [350, 300, 300, 300, 300]
+            },
+            'Inżynieria chemiczna (Engineering - Chemical)': {
+              lower: [251, 251, 201, 201, 251],
+              upper: [300, 300, 250, 250, 300]
+            },
+            'Inżynieria i technologia (Engineering and Technology)': {
+              lower: [237, 230, 199, 231, 232],
+              upper: [237, 230, 199, 231, 232]
+            },
+            'Inżynieria lądowa i transport (Engineering - Civil and Structural)': {
+              lower: [151, 151, 151, 151, null],
+              upper: [200, 200, 200, 200, null]
+            },
+            'Inżynieria materiałowa (Materials Science)': {
+              lower: [151, 251, 201, 201, 201],
+              upper: [200, 300, 250, 250, 250]
+            },
+            'Inżynieria mechaniczna (Engineering - Mechanical, Aeronautical and Manufacturing)': {
+              lower: [201, 201, 201, 151, 151],
+              upper: [250, 250, 250, 200, 200]
+            },
+            'Matematyka (Mathematics)': {
+              lower: [301, 301, 301, 301, 301],
+              upper: [350, 350, 350, 350, 350]
+            },
+            'Nauki ścisłe (Natural Sciences)': {
+              lower: [258, 284, 262, 275, 312],
+              upper: [258, 284, 262, 275, 312]
+            }
+          }
+        };
+
+        const rksSubjectData = JSON.parse(`{
+  "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "subjects": {
+    "AI & Data Science": {
+      "lower": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        1
+      ],
+      "upper": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        1
+      ],
+      "raw": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        "1"
+      ],
+      "score": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        100.0
+      ]
+    },
+    "Administracja": {
+      "lower": [
+        6,
+        null,
+        null,
+        5,
+        6,
+        7
+      ],
+      "upper": [
+        6,
+        null,
+        null,
+        5,
+        6,
+        7
+      ],
+      "raw": [
+        "6",
+        null,
+        null,
+        "5",
+        "6",
+        "7"
+      ],
+      "score": [
+        70.5,
+        null,
+        null,
+        81.1,
+        80.8,
+        76.7
+      ]
+    },
+    "Architektura": {
+      "lower": [
+        1,
+        1,
+        1,
+        3,
+        5,
+        5
+      ],
+      "upper": [
+        1,
+        1,
+        1,
+        3,
+        5,
+        5
+      ],
+      "raw": [
+        "1",
+        "1",
+        "1",
+        "3=",
+        "5",
+        "5"
+      ],
+      "score": [
+        100.0,
+        100.0,
+        100.0,
+        91.8,
+        87.1,
+        86.2
+      ]
+    },
+    "Automatyka i robotyka": {
+      "lower": [
+        null,
+        1,
+        1,
+        2,
+        1,
+        3
+      ],
+      "upper": [
+        null,
+        1,
+        1,
+        2,
+        1,
+        3
+      ],
+      "raw": [
+        null,
+        "1",
+        "1",
+        "2",
+        "1=",
+        "3"
+      ],
+      "score": [
+        null,
+        100.0,
+        100.0,
+        97.6,
+        100.0,
+        90.0
+      ]
+    },
+    "Biotechnologia (mgr in\u017c.)": {
+      "lower": [
+        null,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "upper": [
+        null,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "raw": [
+        null,
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ],
+      "score": [
+        null,
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        100.0
+      ]
+    },
+    "Budownictwo": {
+      "lower": [
+        null,
+        2,
+        1,
+        1,
+        2,
+        3
+      ],
+      "upper": [
+        null,
+        2,
+        1,
+        1,
+        2,
+        3
+      ],
+      "raw": [
+        null,
+        "2",
+        "1=",
+        "1=",
+        "2=",
+        "3="
+      ],
+      "score": [
+        null,
+        99.0,
+        99.5,
+        99.9,
+        98.3,
+        98.1
+      ]
+    },
+    "Ekonomia": {
+      "lower": [
+        null,
+        null,
+        22,
+        29,
+        34,
+        31
+      ],
+      "upper": [
+        null,
+        null,
+        22,
+        29,
+        34,
+        31
+      ],
+      "raw": [
+        null,
+        null,
+        "22",
+        "29=",
+        "34",
+        "31="
+      ],
+      "score": [
+        null,
+        null,
+        40.8,
+        36.0,
+        36.6,
+        38.2
+      ]
+    },
+    "Elektronika i telekomunikacja": {
+      "lower": [
+        null,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "upper": [
+        null,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "raw": [
+        null,
+        "1",
+        "1",
+        "1",
+        "1=",
+        "2"
+      ],
+      "score": [
+        null,
+        100.0,
+        100.0,
+        100.0,
+        99.6,
+        94.6
+      ]
+    },
+    "Elektrotechnika": {
+      "lower": [
+        null,
+        null,
+        1,
+        1,
+        1,
+        1
+      ],
+      "upper": [
+        null,
+        null,
+        1,
+        1,
+        1,
+        1
+      ],
+      "raw": [
+        null,
+        null,
+        "1",
+        "1",
+        "1",
+        "1="
+      ],
+      "score": [
+        null,
+        null,
+        100.0,
+        100.0,
+        100.0,
+        99.5
+      ]
+    },
+    "Energetyka": {
+      "lower": [
+        null,
+        null,
+        1,
+        1,
+        1,
+        1
+      ],
+      "upper": [
+        null,
+        null,
+        1,
+        1,
+        1,
+        1
+      ],
+      "raw": [
+        null,
+        null,
+        "1",
+        "1",
+        "1",
+        "1"
+      ],
+      "score": [
+        null,
+        null,
+        100.0,
+        100.0,
+        100.0,
+        100.0
+      ]
+    },
+    "Fizyka techniczna": {
+      "lower": [
+        null,
+        null,
+        2,
+        2,
+        2,
+        2
+      ],
+      "upper": [
+        null,
+        null,
+        2,
+        2,
+        2,
+        2
+      ],
+      "raw": [
+        null,
+        null,
+        "2",
+        "2",
+        "2",
+        "2"
+      ],
+      "score": [
+        null,
+        null,
+        96.6,
+        98.7,
+        93.9,
+        90.4
+      ]
+    },
+    "Geodezja i kartografia": {
+      "lower": [
+        null,
+        null,
+        1,
+        1,
+        1,
+        1
+      ],
+      "upper": [
+        null,
+        null,
+        1,
+        1,
+        1,
+        1
+      ],
+      "raw": [
+        null,
+        null,
+        "1",
+        "1",
+        "1",
+        "1"
+      ],
+      "score": [
+        null,
+        null,
+        100.0,
+        100.0,
+        100.0,
+        100.0
+      ]
+    },
+    "Gospodarka przestrzenna": {
+      "lower": [
+        3,
+        3,
+        null,
+        1,
+        4,
+        5
+      ],
+      "upper": [
+        3,
+        3,
+        null,
+        1,
+        4,
+        5
+      ],
+      "raw": [
+        "3",
+        "3",
+        null,
+        "1=",
+        "4",
+        "5"
+      ],
+      "score": [
+        85.2,
+        82.5,
+        null,
+        100.0,
+        90.9,
+        87.5
+      ]
+    },
+    "Informatyka (mgr in\u017c.)": {
+      "lower": [
+        null,
+        null,
+        null,
+        1,
+        1,
+        1
+      ],
+      "upper": [
+        null,
+        null,
+        null,
+        1,
+        1,
+        1
+      ],
+      "raw": [
+        null,
+        null,
+        null,
+        "1",
+        "1",
+        "1"
+      ],
+      "score": [
+        null,
+        null,
+        null,
+        100.0,
+        100.0,
+        100.0
+      ]
+    },
+    "In\u017cynieria biomedyczna": {
+      "lower": [
+        null,
+        null,
+        null,
+        1,
+        2,
+        2
+      ],
+      "upper": [
+        null,
+        null,
+        null,
+        1,
+        2,
+        2
+      ],
+      "raw": [
+        null,
+        null,
+        null,
+        "1",
+        "2=",
+        "2"
+      ],
+      "score": [
+        null,
+        null,
+        null,
+        100.0,
+        90.4,
+        92.5
+      ]
+    },
+    "In\u017cynieria chemiczna": {
+      "lower": [
+        1,
+        null,
+        null,
+        2,
+        2,
+        2
+      ],
+      "upper": [
+        1,
+        null,
+        null,
+        2,
+        2,
+        2
+      ],
+      "raw": [
+        "1",
+        null,
+        null,
+        "2",
+        "2",
+        "2"
+      ],
+      "score": [
+        100.0,
+        null,
+        null,
+        89.9,
+        90.5,
+        93.9
+      ]
+    },
+    "In\u017cynieria materia\u0142owa": {
+      "lower": [
+        1,
+        null,
+        null,
+        1,
+        1,
+        1
+      ],
+      "upper": [
+        1,
+        null,
+        null,
+        1,
+        1,
+        1
+      ],
+      "raw": [
+        "1",
+        null,
+        null,
+        "1",
+        "1",
+        "1"
+      ],
+      "score": [
+        100.0,
+        null,
+        null,
+        100.0,
+        100.0,
+        100.0
+      ]
+    },
+    "In\u017cynieria \u015brodowiska": {
+      "lower": [
+        1,
+        null,
+        null,
+        3,
+        2,
+        4
+      ],
+      "upper": [
+        1,
+        null,
+        null,
+        3,
+        2,
+        4
+      ],
+      "raw": [
+        "1",
+        null,
+        null,
+        "3",
+        "2=",
+        "4="
+      ],
+      "score": [
+        100.0,
+        null,
+        null,
+        88.6,
+        85.8,
+        85.0
+      ]
+    },
+    "Lotnictwo i kosmonautyka": {
+      "lower": [
+        1,
+        1,
+        null,
+        1,
+        1,
+        1
+      ],
+      "upper": [
+        1,
+        1,
+        null,
+        1,
+        1,
+        1
+      ],
+      "raw": [
+        "1",
+        "1",
+        null,
+        "1",
+        "1",
+        "1"
+      ],
+      "score": [
+        100.0,
+        100.0,
+        null,
+        100.0,
+        100.0,
+        100.0
+      ]
+    },
+    "Matematyka": {
+      "lower": [
+        3,
+        null,
+        null,
+        2,
+        2,
+        2
+      ],
+      "upper": [
+        3,
+        null,
+        null,
+        2,
+        2,
+        2
+      ],
+      "raw": [
+        "3",
+        null,
+        null,
+        "2",
+        "2",
+        "2"
+      ],
+      "score": [
+        75.1,
+        null,
+        null,
+        84.3,
+        87.6,
+        92.9
+      ]
+    },
+    "Mechanika i budowa maszyn": {
+      "lower": [
+        1,
+        1,
+        null,
+        1,
+        1,
+        1
+      ],
+      "upper": [
+        1,
+        1,
+        null,
+        1,
+        1,
+        1
+      ],
+      "raw": [
+        "1",
+        "1",
+        null,
+        "1",
+        "1",
+        "1="
+      ],
+      "score": [
+        100.0,
+        100.0,
+        null,
+        100.0,
+        100.0,
+        99.7
+      ]
+    },
+    "Mechatronika": {
+      "lower": [
+        2,
+        2,
+        null,
+        2,
+        2,
+        2
+      ],
+      "upper": [
+        2,
+        2,
+        null,
+        2,
+        2,
+        2
+      ],
+      "raw": [
+        "2",
+        "2",
+        null,
+        "2",
+        "2",
+        "2="
+      ],
+      "score": [
+        85.0,
+        91.4,
+        null,
+        88.9,
+        90.6,
+        85.7
+      ]
+    },
+    "Ochrona \u015brodowiska": {
+      "lower": [
+        4,
+        8,
+        null,
+        8,
+        7,
+        7
+      ],
+      "upper": [
+        4,
+        8,
+        null,
+        8,
+        7,
+        7
+      ],
+      "raw": [
+        "4",
+        "8",
+        null,
+        "8",
+        "7=",
+        "7"
+      ],
+      "score": [
+        82.6,
+        76.5,
+        null,
+        79.1,
+        80.5,
+        83.8
+      ]
+    },
+    "Technologia chemiczna": {
+      "lower": [
+        1,
+        1,
+        null,
+        1,
+        1,
+        4
+      ],
+      "upper": [
+        1,
+        1,
+        null,
+        1,
+        1,
+        4
+      ],
+      "raw": [
+        "1",
+        "1",
+        null,
+        "1=",
+        "1=",
+        "4"
+      ],
+      "score": [
+        100.0,
+        100.0,
+        null,
+        100.0,
+        100.0,
+        95.8
+      ]
+    },
+    "Transport": {
+      "lower": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "upper": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "raw": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1=",
+        "1"
+      ],
+      "score": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        100.0
+      ]
+    },
+    "Zarz\u0105dzanie": {
+      "lower": [
+        null,
+        null,
+        null,
+        5,
+        6,
+        7
+      ],
+      "upper": [
+        null,
+        null,
+        null,
+        5,
+        6,
+        7
+      ],
+      "raw": [
+        null,
+        null,
+        null,
+        "5=",
+        "6=",
+        "7="
+      ],
+      "score": [
+        null,
+        null,
+        null,
+        81.4,
+        83.4,
+        82.7
+      ]
+    },
+    "Zarz\u0105dzanie i in\u017cynieria produkcji": {
+      "lower": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "upper": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "raw": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1="
+      ],
+      "score": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        99.6
+      ]
+    }
+  }
+}`);
+
+        const qsYears = [2020, 2021, 2022, 2023, 2024, 2025, 2026];
+        const qsMin = [521, 511, 501, 521, 571, 527, 487];
+        const qsMax = [530, 520, 510, 530, 571, 527, 487];
+        new Chart(document.getElementById('chartQS'), {
+          type: 'line',
+          data: {
+            labels: qsYears,
+            datasets: [
+              {
+                label: 'Granica dolna',
+                data: qsMin,
+                borderColor: 'rgb(79,70,229)',
+                fill: '+1',
+                backgroundColor: 'rgba(79,70,229,0.12)',
+                tension: 0.25,
+                pointRadius: 3,
+                spanGaps: true,
+                borderWidth: 2
+              },
+              {
+                label: 'Granica g\u00F3rna',
+                data: qsMax,
+                borderColor: 'rgba(79,70,229,0.5)',
+                fill: false,
+                tension: 0.25,
+                pointRadius: 3,
+                spanGaps: true,
+                borderDash: [6, 4],
+                borderWidth: 2
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+              legend: {
+                display: true,
+                labels: {
+                  usePointStyle: true,
+                  pointStyle: 'line',
+                  boxHeight: 2
+                }
+              },
+              tooltip: {
+                callbacks: {
+                  label: (context) => {
+                    const index = context.dataIndex;
+                    const lower = qsMin[index];
+                    const upper = qsMax[index];
+                    if (context.dataset.label !== 'Granica dolna') {
+                      return null;
+                    }
+                    if (lower === upper) {
+                      return `Pozycja: ${Math.round(lower)}`;
+                    }
+                    return `Pozycja: ${Math.round(lower)}-${Math.round(upper)}`;
+                  }
+                }
+              }
+            },
+            scales: {
+              y: {
+                reverse: true,
+                suggestedMin: 650,
+                suggestedMax: 480,
+                ticks: {
+                  callback: (value) => Math.round(value)
+                },
+                grid: { color: 'rgba(17,24,39,0.08)' },
+                title: { display: true, text: 'Pozycja (wy\u017Cej = lepiej)' }
+              },
+              x: {
+                grid: { display: false }
+              }
+            }
+          }
+        });
+
+        const qsSubjectCanvas = document.getElementById('chartQSSubject');
+        const qsSubjectSelect = document.getElementById('qsSubjectSelect');
+        const qsSubjectNote = document.getElementById('qsSubjectNote');
+
+        if (qsSubjectCanvas && qsSubjectSelect && qsSubjectData && qsSubjectData.subjects) {
+          const subjectNames = Object.keys(qsSubjectData.subjects).sort((a, b) => a.localeCompare(b, 'pl-PL'));
+
+          qsSubjectSelect.innerHTML = subjectNames
+            .map((subject) => `<option value="${subject}">${subject}</option>`)
+            .join('');
+
+          let currentSubject = qsSubjectSelect.value || subjectNames[0] || null;
+          if (!qsSubjectSelect.value && currentSubject) {
+            qsSubjectSelect.value = currentSubject;
+          }
+
+          const qsSubjectChart = new Chart(qsSubjectCanvas, {
+            type: 'line',
+            data: {
+              labels: qsSubjectData.years,
+              datasets: [
+                {
+                  label: 'Granica dolna',
+                  data: [],
+                  borderColor: 'rgb(79,70,229)',
+                  backgroundColor: 'rgba(79,70,229,0.12)',
+                  fill: '+1',
+                  tension: 0.25,
+                  pointRadius: 3,
+                  spanGaps: true,
+                  borderWidth: 2
+                },
+                {
+                  label: 'Granica górna',
+                  data: [],
+                  borderColor: 'rgba(79,70,229,0.45)',
+                  backgroundColor: 'rgba(79,70,229,0.05)',
+                  fill: false,
+                  tension: 0.25,
+                  pointRadius: 3,
+                  spanGaps: true,
+                  borderDash: [6, 4],
+                  borderWidth: 2
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              interaction: { mode: 'index', intersect: false },
+              plugins: {
+                legend: {
+                  display: true,
+                  labels: {
+                    usePointStyle: true,
+                    pointStyle: 'line',
+                    boxHeight: 2
+                  }
+                },
+                tooltip: {
+                  callbacks: {
+                    label: (context) => {
+                      if (context.datasetIndex !== 0) {
+                        return null;
+                      }
+                      const chartRef = context.chart;
+                      const lowerValue = chartRef.data.datasets[0].data[context.dataIndex];
+                      const upperValue = chartRef.data.datasets[1].data[context.dataIndex];
+                      if (typeof lowerValue !== 'number') {
+                        return 'Brak danych';
+                      }
+                      if (typeof upperValue === 'number' && upperValue !== lowerValue) {
+                        return `Pozycja: ${lowerValue}-${upperValue}`;
+                      }
+                      return `Pozycja: ${lowerValue}`;
+                    }
+                  }
+                }
+              },
+              scales: {
+                y: {
+                  reverse: true,
+                  suggestedMin: 600,
+                  suggestedMax: 150,
+                  ticks: {
+                    callback: (value) => (typeof value === 'number' ? Math.round(value) : value)
+                  },
+                  grid: { color: 'rgba(17,24,39,0.08)' },
+                  title: { display: true, text: 'Pozycja (wyżej = lepiej)' }
+                },
+                x: {
+                  grid: { display: false }
+                }
+              }
+            }
+          });
+
+          const updateQSSubjectChart = (subjectName) => {
+            const subjectData = qsSubjectData.subjects[subjectName];
+            if (!subjectData) {
+              return;
+            }
+
+            const lowerSeries = Array.isArray(subjectData.lower) ? subjectData.lower.slice() : [];
+            const upperSeries = Array.isArray(subjectData.upper) ? subjectData.upper.slice() : [];
+            const combinedValues = lowerSeries.concat(upperSeries).filter((value) => typeof value === 'number');
+
+            const fallbackValues = combinedValues.length ? combinedValues : [600];
+            const maxValue = Math.max(...fallbackValues);
+            const minValue = Math.min(...fallbackValues);
+            const padding = 20;
+
+            qsSubjectChart.data.labels = qsSubjectData.years;
+            qsSubjectChart.data.datasets[0].data = lowerSeries;
+            qsSubjectChart.data.datasets[1].data = upperSeries;
+
+            const yAxis = qsSubjectChart.options.scales.y;
+            yAxis.suggestedMin = maxValue + padding;
+            yAxis.suggestedMax = Math.max(minValue - padding, 1);
+
+            qsSubjectChart.update();
+
+            if (qsSubjectNote) {
+              let noteText = `Pozycja PW w dyscyplinie ${subjectName}.`;
+              for (let idx = qsSubjectData.years.length - 1; idx >= 0; idx -= 1) {
+                const year = qsSubjectData.years[idx];
+                const lowerValue = lowerSeries[idx];
+                const upperValue = upperSeries[idx];
+                if (typeof lowerValue === 'number') {
+                  if (typeof upperValue === 'number' && upperValue !== lowerValue) {
+                    noteText = `QS ${year}: przedział ${lowerValue}-${upperValue} dla ${subjectName}.`;
+                  } else {
+                    noteText = `QS ${year}: miejsce ${lowerValue} dla ${subjectName}.`;
+                  }
+                  break;
+                }
+              }
+              qsSubjectNote.textContent = noteText;
+            }
+          };
+
+          if (currentSubject) {
+            updateQSSubjectChart(currentSubject);
+          }
+
+          qsSubjectSelect.addEventListener('change', (event) => {
+            currentSubject = event.target.value;
+            updateQSSubjectChart(currentSubject);
+          });
+        }
+
+        const rksCanvas = document.getElementById('chartRKS');
+        const rksSelect = document.getElementById('rksSubjectSelect');
+        const rksNote = document.getElementById('rksSubjectNote');
+        const rksYears = Array.isArray(rksSubjectData && rksSubjectData.years) ? rksSubjectData.years.slice() : [];
+        const rksSubjects = rksSubjectData && typeof rksSubjectData.subjects === 'object' ? rksSubjectData.subjects : {};
+        let rksChart;
+
+        if (rksCanvas && rksSelect && rksYears.length && Object.keys(rksSubjects).length) {
+          const subjectNames = Object.keys(rksSubjects).sort((a, b) => a.localeCompare(b, 'pl-PL'));
+
+          rksSelect.innerHTML = subjectNames
+            .map((subject) => `<option value="${subject}">${subject}</option>`)
+            .join('');
+
+          const defaultSubject = subjectNames.includes('Architektura') ? 'Architektura' : subjectNames[0];
+
+          if (defaultSubject) {
+            rksSelect.value = defaultSubject;
+          }
+
+          rksChart = new Chart(rksCanvas, {
+            type: 'line',
+            data: {
+              labels: rksYears,
+              datasets: [
+                {
+                  label: '',
+                  data: [],
+                  borderColor: 'rgb(79,70,229)',
+                  backgroundColor: 'rgba(79,70,229,0.12)',
+                  fill: '+1',
+                  tension: 0.25,
+                  pointRadius: 3,
+                  spanGaps: true,
+                  borderWidth: 2
+                },
+                {
+                  label: '',
+                  data: [],
+                  borderColor: 'rgba(129,140,248,0.6)',
+                  backgroundColor: 'rgba(129,140,248,0.05)',
+                  fill: false,
+                  tension: 0.25,
+                  pointRadius: 3,
+                  spanGaps: true,
+                  borderDash: [6, 4],
+                  borderWidth: 2
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              interaction: { mode: 'index', intersect: false },
+              plugins: {
+                legend: {
+                  display: false
+                },
+                tooltip: {
+                  callbacks: {
+                    label: (context) => {
+                      if (context.datasetIndex !== 0) {
+                        return null;
+                      }
+                      const rawSeries = context.chart.$rawSeries;
+                      const rawValue = rawSeries ? rawSeries[context.dataIndex] : null;
+                      if (rawValue) {
+                        return `Pozycja: ${rawValue}`;
+                      }
+                      const lowerValue = context.raw;
+                      const upperDataset = context.chart.data.datasets[1];
+                      const upperValue =
+                        upperDataset && Array.isArray(upperDataset.data) ? upperDataset.data[context.dataIndex] : null;
+                      if (typeof lowerValue === 'number' && typeof upperValue === 'number' && upperValue !== lowerValue) {
+                        return `Pozycja: ${lowerValue}-${upperValue}`;
+                      }
+                      if (typeof lowerValue === 'number') {
+                        return `Pozycja: ${lowerValue}`;
+                      }
+                      return 'Brak danych';
+                    }
+                  }
+                }
+              },
+              scales: {
+                y: {
+                  reverse: true,
+                  suggestedMin: 10,
+                  suggestedMax: 1,
+                  ticks: {
+                    stepSize: 1,
+                    callback: (value) => (typeof value === 'number' ? Math.round(value) : value)
+                  },
+                  grid: { color: 'rgba(17,24,39,0.08)' },
+                  title: { display: true, text: 'Pozycja (niższa = lepiej)' }
+                },
+                x: {
+                  grid: { display: false }
+                }
+              }
+            }
+          });
+
+          const updateRKSChart = (subjectName) => {
+            const subjectData = rksSubjects[subjectName];
+            if (!subjectData) {
+              return;
+            }
+
+            const lowerSeries = Array.isArray(subjectData.lower) ? subjectData.lower.slice() : [];
+            const upperSeries = Array.isArray(subjectData.upper) ? subjectData.upper.slice() : [];
+            const rawSeries = Array.isArray(subjectData.raw) ? subjectData.raw.slice() : [];
+            const scoreSeries = Array.isArray(subjectData.score) ? subjectData.score.slice() : [];
+
+            rksChart.data.labels = rksYears;
+            rksChart.data.datasets[0].data = lowerSeries;
+            rksChart.data.datasets[1].data = upperSeries;
+
+            const numericValues = lowerSeries.concat(upperSeries).filter((value) => typeof value === 'number');
+            const fallbackValues = numericValues.length ? numericValues : [10];
+            const maxValue = Math.max(...fallbackValues);
+            const minValue = Math.min(...fallbackValues);
+            const padding = Math.max(Math.round((maxValue - minValue) * 0.1), 1);
+
+            const yAxis = rksChart.options.scales.y;
+            if (numericValues.length) {
+              yAxis.suggestedMin = maxValue + padding;
+              yAxis.suggestedMax = Math.max(minValue - padding, 1);
+            } else {
+              yAxis.suggestedMin = 10;
+              yAxis.suggestedMax = 1;
+            }
+
+            rksChart.$rawSeries = rawSeries;
+            rksChart.$scoreSeries = scoreSeries;
+            rksChart.update();
+
+            if (rksNote) {
+              let latestYear = null;
+              let latestRaw = null;
+              let latestScore = null;
+
+              for (let idx = rksYears.length - 1; idx >= 0; idx -= 1) {
+                if (rawSeries[idx]) {
+                  latestYear = rksYears[idx];
+                  latestRaw = rawSeries[idx];
+                  latestScore = typeof scoreSeries[idx] === 'number' ? scoreSeries[idx] : null;
+                  break;
+                }
+              }
+
+              let bestValue = null;
+              const bestYears = [];
+              for (let idx = 0; idx < lowerSeries.length; idx += 1) {
+                const value = lowerSeries[idx];
+                if (typeof value === 'number') {
+                  if (bestValue === null || value < bestValue) {
+                    bestValue = value;
+                  }
+                }
+              }
+              if (bestValue !== null) {
+                for (let idx = 0; idx < lowerSeries.length; idx += 1) {
+                  if (lowerSeries[idx] === bestValue) {
+                    bestYears.push(rksYears[idx]);
+                  }
+                }
+              }
+
+              const noteParts = [];
+
+              if (latestYear !== null && latestRaw !== null) {
+                const scoreText = latestScore !== null ? ` (punktacja ${latestScore.toFixed(1)})` : '';
+                noteParts.push(`${subjectName} w ${latestYear}: miejsce ${latestRaw}${scoreText}.`);
+              } else {
+                noteParts.push(`${subjectName}: brak danych dla lat 2020–2025.`);
+              }
+
+              if (bestValue !== null && bestYears.length) {
+                const yearLabel = bestYears.length === 1 ? `${bestYears[0]}` : bestYears.join(', ');
+                noteParts.push(`Najlepsza pozycja: ${bestValue} (${bestYears.length === 1 ? 'rok ' : 'lata '}${yearLabel}).`);
+              }
+
+              rksNote.textContent = noteParts.join(' ');
+            }
+          };
+
+          if (defaultSubject) {
+            updateRKSChart(defaultSubject);
+          }
+
+          rksSelect.addEventListener('change', (event) => {
+            updateRKSChart(event.target.value);
+          });
+
+          // RKS Toggle functionality for position ↔ score
+          const rksToggle = document.getElementById('rksToggle');
+          let rksMode = 'position';
+
+          const setRKSMode = (mode) => {
+            const scoreSeries = rksChart.$scoreSeries || [];
+            const lowerSeries = rksChart.data.datasets[0].data.slice();
+            const upperSeries = rksChart.data.datasets[1].data.slice();
+            const dataset0 = rksChart.data.datasets[0];
+            const dataset1 = rksChart.data.datasets[1];
+            const yAxis = rksChart.options.scales.y;
+
+            if (mode === 'score') {
+              // Switch to score mode
+              dataset0.data = scoreSeries;
+              dataset0.borderColor = 'rgba(16,185,129,0.85)';
+              dataset0.backgroundColor = 'rgba(16,185,129,0.15)';
+              dataset0.fill = false;
+
+              // Hide upper dataset
+              dataset1.data = [];
+
+              // Adjust Y-axis for scores (0-100)
+              yAxis.reverse = false;
+              const numericScores = scoreSeries.filter((val) => typeof val === 'number');
+              if (numericScores.length) {
+                const minScore = Math.min(...numericScores);
+                const maxScore = Math.max(...numericScores);
+                const padding = Math.max((maxScore - minScore) * 0.1, 5);
+                yAxis.suggestedMin = Math.max(minScore - padding, 0);
+                yAxis.suggestedMax = Math.min(maxScore + padding, 100);
+              } else {
+                yAxis.suggestedMin = 75;
+                yAxis.suggestedMax = 100;
+              }
+              yAxis.ticks.callback = (value) => (typeof value === 'number' ? value.toFixed(0) : value);
+              yAxis.title.text = 'Punktacja (im wyższa, tym lepiej)';
+
+              // Update tooltip for score mode
+              rksChart.options.plugins.tooltip.callbacks.label = (context) => {
+                if (context.datasetIndex !== 0) {
+                  return null;
+                }
+                const value = context.parsed.y;
+                return value !== null && typeof value === 'number' ? `Punktacja: ${value.toFixed(1)}` : 'Brak danych';
+              };
+            } else {
+              // Switch to position mode
+              dataset0.data = lowerSeries;
+              dataset0.borderColor = 'rgb(79,70,229)';
+              dataset0.backgroundColor = 'rgba(79,70,229,0.12)';
+              dataset0.fill = '+1';
+
+              // Show upper dataset
+              dataset1.data = upperSeries;
+
+              // Adjust Y-axis for positions
+              const numericValues = lowerSeries.concat(upperSeries).filter((val) => typeof val === 'number');
+              if (numericValues.length) {
+                const maxValue = Math.max(...numericValues);
+                const minValue = Math.min(...numericValues);
+                const padding = Math.max(Math.round((maxValue - minValue) * 0.1), 1);
+                yAxis.suggestedMin = maxValue + padding;
+                yAxis.suggestedMax = Math.max(minValue - padding, 1);
+              } else {
+                yAxis.suggestedMin = 10;
+                yAxis.suggestedMax = 1;
+              }
+              yAxis.reverse = true;
+              yAxis.ticks.callback = (value) => (typeof value === 'number' ? Math.round(value) : value);
+              yAxis.title.text = 'Pozycja (niższa = lepiej)';
+
+              // Update tooltip for position mode
+              rksChart.options.plugins.tooltip.callbacks.label = (context) => {
+                if (context.datasetIndex !== 0) {
+                  return null;
+                }
+                const rawSeries = rksChart.$rawSeries;
+                const rawValue = rawSeries ? rawSeries[context.dataIndex] : null;
+                if (rawValue) {
+                  return `Pozycja: ${rawValue}`;
+                }
+                const lowerValue = context.raw;
+                const upperDataset = context.chart.data.datasets[1];
+                const upperValue =
+                  upperDataset && Array.isArray(upperDataset.data) ? upperDataset.data[context.dataIndex] : null;
+                if (typeof lowerValue === 'number' && typeof upperValue === 'number' && upperValue !== lowerValue) {
+                  return `Pozycja: ${lowerValue}-${upperValue}`;
+                }
+                if (typeof lowerValue === 'number') {
+                  return `Pozycja: ${lowerValue}`;
+                }
+                return 'Brak danych';
+              };
+            }
+
+            rksChart.update();
+          };
+
+          // Initialize with position mode
+          if (defaultSubject) {
+            setRKSMode(rksMode);
+          }
+
+          // Add click event listener to toggle button
+          if (rksToggle) {
+            rksToggle.addEventListener('click', () => {
+              rksMode = rksMode === 'position' ? 'score' : 'position';
+              setRKSMode(rksMode);
+
+              const isScore = rksMode === 'score';
+              rksToggle.textContent = isScore ? 'Pokaż pozycję' : 'Pokaż punktację';
+              rksToggle.setAttribute('aria-pressed', isScore.toString());
+            });
+          }
+        }
+
+        const theYears = [2020, 2021, 2022, 2023, 2024, 2025, 2026];
+        const theLower = [1001, 1001, 1201, 1201, 1201, 1201, 1201];
+        const theUpper = [1001, 1001, 1201, 1500, 1500, 1500, 1500];
+        new Chart(document.getElementById('chartTHE'), {
+          type: 'line',
+          data: {
+            labels: theYears,
+            datasets: [
+              {
+                label: 'Granica dolna',
+                data: theLower,
+                borderColor: 'rgb(14,116,144)',
+                fill: '+1',
+                backgroundColor: 'rgba(14,116,144,0.12)',
+                tension: 0.25,
+                pointRadius: 3,
+                spanGaps: true,
+                borderWidth: 2
+              },
+              {
+                label: 'Granica górna',
+                data: theUpper,
+                borderColor: 'rgba(14,116,144,0.5)',
+                fill: false,
+                tension: 0.25,
+                pointRadius: 3,
+                spanGaps: true,
+                borderDash: [6, 4],
+                borderWidth: 2
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+              legend: {
+                display: true,
+                labels: {
+                  usePointStyle: true,
+                  pointStyle: 'line',
+                  boxHeight: 2
+                }
+              },
+              tooltip: {
+                callbacks: {
+                  label: (context) => {
+                    const index = context.dataIndex;
+                    const lower = theLower[index];
+                    const upper = theUpper[index];
+                    if (context.dataset.label !== 'Granica dolna') {
+                      return null;
+                    }
+                    if (lower === upper) {
+                      return `Pozycja: ${Math.round(lower)}`;
+                    }
+                    return `Pozycja: ${Math.round(lower)}-${Math.round(upper)}`;
+                  }
+                }
+              }
+            },
+            scales: {
+              y: {
+                reverse: true,
+                suggestedMin: 1200,
+                suggestedMax: 700,
+                ticks: {
+                  callback: (value) => Math.round(value),
+                  stepSize: 50
+                },
+                grid: { color: 'rgba(17,24,39,0.08)' },
+                title: { display: true, text: 'Pozycja (wyżej = lepiej)' }
+              },
+              x: {
+                grid: { display: false }
+              }
+            }
+          }
+        });
+
+        const arwuYears = [2020, 2021, 2022, 2023, 2024, 2025];
+        const arwuLower = [801, 901, 901, 901, 901, 901];
+        const arwuUpper = [900, 1000, 1000, 1000, 1000, 1000];
+        new Chart(document.getElementById('chartARWU'), {
+          type: 'line',
+          data: {
+            labels: arwuYears,
+            datasets: [
+              {
+                label: 'Granica dolna',
+                data: arwuLower,
+                borderColor: 'rgb(220,38,38)',
+                backgroundColor: 'rgba(220,38,38,0.18)',
+                fill: '+1',
+                tension: 0.25,
+                pointRadius: 3,
+                spanGaps: true
+              },
+              {
+                label: 'Granica górna',
+                data: arwuUpper,
+                borderColor: 'rgb(248,113,113)',
+                backgroundColor: 'rgba(248,113,113,0.12)',
+                fill: false,
+                tension: 0.25,
+                pointRadius: 2,
+                borderDash: [6, 4],
+                spanGaps: true
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+              legend: {
+                display: true,
+                labels: { color: '#1f2937', usePointStyle: true, pointStyle: 'line', boxHeight: 2 }
+              },
+              tooltip: {
+                callbacks: {
+                  label: (context) => {
+                    const index = context.dataIndex;
+                    const lower = arwuLower[index];
+                    const upper = arwuUpper[index];
+                    if (context.dataset.label !== 'Granica dolna') {
+                      return null;
+                    }
+                    if (lower === upper) {
+                      return `Pozycja: ${lower}`;
+                    }
+                    return `Pozycja: ${lower}-${upper}`;
+                  }
+                }
+              }
+            },
+            scales: {
+              y: {
+                reverse: true,
+                suggestedMin: 1100,
+                suggestedMax: 700,
+                ticks: {
+                  callback: (value) => Math.round(value),
+                  stepSize: 50
+                },
+                grid: { color: 'rgba(17,24,39,0.08)' },
+                title: { display: true, text: 'Pozycja (wyżej = lepiej)' }
+              },
+              x: {
+                grid: { display: false }
+              }
+            }
+          }
+        });
+
+        const perspektywyYears = [2020, 2021, 2022, 2023, 2024, 2025];
+        const perspektywyPositions = [3, 3, 3, 3, 3, 3];
+        const perspektywyScores = [78.9, 83.4, 84.0, 88.0, 85.0, 89.9];
+        const perspektywyCanvas = document.getElementById('chartPerspektywy');
+        const perspektywyToggle = document.getElementById('perspektywyToggle');
+        let perspektywyMode = 'position';
+        const perspektywyNote = document.getElementById('perspektywyNote');
+        let perspektywyChart;
+
+        if (perspektywyCanvas) {
+          perspektywyChart = new Chart(perspektywyCanvas, {
+            type: 'line',
+            data: {
+              labels: perspektywyYears,
+              datasets: [
+                {
+                  label: '',
+                  data: [],
+                  borderColor: 'rgba(79,70,229,0.85)',
+                  backgroundColor: 'rgba(79,70,229,0.15)',
+                  tension: 0.3,
+                  pointRadius: 4,
+                  fill: false,
+                  spanGaps: true
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: () => ''
+                  }
+                }
+              },
+              scales: {
+                y: {
+                  reverse: true,
+                  min: 1,
+                  max: 4,
+                  ticks: {
+                    stepSize: 1,
+                    callback: (value) => (value >= 1 && value <= 4 ? value : null)
+                  },
+                  grid: { color: 'rgba(17,24,39,0.08)' },
+                  title: { display: true, text: 'Pozycja (im mniejsza, tym lepiej)' }
+                },
+                x: {
+                  grid: { display: false }
+                }
+              }
+            }
+          });
+
+          const setPerspektywyMode = (mode) => {
+            const dataset = perspektywyChart.data.datasets[0];
+            const yAxis = perspektywyChart.options.scales.y;
+
+            if (mode === 'score') {
+              dataset.label = 'WSK (0-100)';
+              dataset.data = perspektywyScores;
+              dataset.borderColor = 'rgba(16,185,129,0.85)';
+              dataset.backgroundColor = 'rgba(16,185,129,0.15)';
+
+              yAxis.reverse = false;
+              yAxis.min = 75;
+              yAxis.max = 100;
+              yAxis.ticks.stepSize = 2;
+              yAxis.ticks.callback = (value) => (typeof value === 'number' ? value.toFixed(0) : value);
+              yAxis.title.text = 'WSK (im wyższy, tym lepiej)';
+
+              perspektywyChart.options.plugins.tooltip.callbacks.label = (context) => {
+                const value = context.parsed.y;
+                return value !== null && value !== undefined ? `WSK: ${value.toFixed(1)}` : 'Brak danych';
+              };
+              if (perspektywyNote) {
+                perspektywyNote.textContent = 'PW stopniowo zmniejsza dystans do uczelni z najwyższymi wartościami WSK.';
+              }
+            } else {
+              dataset.label = 'Pozycja (niższa = lepiej)';
+              dataset.data = perspektywyPositions;
+              dataset.borderColor = 'rgba(79,70,229,0.85)';
+              dataset.backgroundColor = 'rgba(79,70,229,0.15)';
+
+              yAxis.reverse = true;
+              yAxis.min = 1;
+              yAxis.max = 4;
+              yAxis.ticks.stepSize = 1;
+              yAxis.ticks.callback = (value) => (value >= 1 && value <= 4 ? value : null);
+              yAxis.title.text = 'Pozycja (im mniejsza, tym lepiej)';
+
+              perspektywyChart.options.plugins.tooltip.callbacks.label = (context) => {
+                const value = context.parsed.y;
+                return value ? `Pozycja: ${value}` : 'Brak danych';
+              };
+              if (perspektywyNote) {
+                perspektywyNote.textContent = 'Politechnika Warszawska utrzymuje 3 miejsce w rankingu.';
+              }
+            }
+
+            perspektywyChart.update();
+          };
+
+          setPerspektywyMode(perspektywyMode);
+
+          if (perspektywyToggle) {
+            perspektywyToggle.addEventListener('click', () => {
+              perspektywyMode = perspektywyMode === 'position' ? 'score' : 'position';
+              setPerspektywyMode(perspektywyMode);
+
+              const isScore = perspektywyMode === 'score';
+              perspektywyToggle.textContent = isScore ? 'Pokaż pozycję' : 'Pokaż WSK';
+              perspektywyToggle.setAttribute('aria-pressed', isScore.toString());
+            });
+          }
+        }
+
+        const engiYears = [2023, 2024];
+        const engiPositions = [69, 64];
+        const engiScores = [60.17, 62.2];
+        const engiCanvas = document.getElementById('chartEngi');
+        const engiToggle = document.getElementById('engiToggle');
+        const engiNote = document.getElementById('engiNote');
+        let engiMode = 'position';
+        let engiChart;
+
+        if (engiCanvas) {
+          engiChart = new Chart(engiCanvas, {
+            type: 'line',
+            data: {
+              labels: engiYears,
+              datasets: [
+                {
+                  label: '',
+                  data: [],
+                  borderColor: 'rgba(79,70,229,0.85)',
+                  backgroundColor: 'rgba(79,70,229,0.15)',
+                  tension: 0.3,
+                  pointRadius: 4,
+                  fill: false,
+                  spanGaps: true
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: () => ''
+                  }
+                }
+              },
+              scales: {
+                y: {
+                  reverse: true,
+                  min: 60,
+                  max: 80,
+                  ticks: {
+                    stepSize: 2,
+                    callback: (value) => (typeof value === 'number' ? value.toFixed(0) : value)
+                  },
+                  grid: { color: 'rgba(17,24,39,0.08)' },
+                  title: { display: true, text: 'Pozycja (im mniejsza, tym lepiej)' }
+                },
+                x: {
+                  grid: { display: false }
+                }
+              }
+            }
+          });
+
+          const setEngiMode = (mode) => {
+            const dataset = engiChart.data.datasets[0];
+            const yAxis = engiChart.options.scales.y;
+
+            if (mode === 'score') {
+              dataset.label = 'WSK (0-100)';
+              dataset.data = engiScores;
+              dataset.borderColor = 'rgba(16,185,129,0.85)';
+              dataset.backgroundColor = 'rgba(16,185,129,0.15)';
+
+              yAxis.reverse = false;
+              yAxis.min = 58;
+              yAxis.max = 65;
+              yAxis.ticks.stepSize = 1;
+              yAxis.ticks.callback = (value) => (typeof value === 'number' ? value.toFixed(1) : value);
+              yAxis.title.text = 'WSK (im wyższy, tym lepiej)';
+
+              engiChart.options.plugins.tooltip.callbacks.label = (context) => {
+                const value = context.parsed.y;
+                return value !== null && value !== undefined ? `WSK: ${value.toFixed(2)}` : 'Brak danych';
+              };
+              if (engiNote) {
+                engiNote.textContent = 'PW stopniowo zmniejsza dystans do uczelni z najwyższymi wartościami WSK w EngiRank.';
+              }
+            } else {
+              dataset.label = 'Pozycja (niższa = lepiej)';
+              dataset.data = engiPositions;
+              dataset.borderColor = 'rgba(79,70,229,0.85)';
+              dataset.backgroundColor = 'rgba(79,70,229,0.15)';
+
+              yAxis.reverse = true;
+              yAxis.min = 60;
+              yAxis.max = 80;
+              yAxis.ticks.stepSize = 2;
+              yAxis.ticks.callback = (value) => (typeof value === 'number' ? value.toFixed(0) : value);
+              yAxis.title.text = 'Pozycja (im mniejsza, tym lepiej)';
+
+              engiChart.options.plugins.tooltip.callbacks.label = (context) => {
+                const value = context.parsed.y;
+                return value !== null && value !== undefined ? `Pozycja: ${value}` : 'Brak danych';
+              };
+              if (engiNote) {
+                engiNote.textContent = 'PW awansowała na 64 miejsce w EngiRank 2024.';
+              }
+            }
+
+            engiChart.update();
+          };
+
+          setEngiMode(engiMode);
+
+          if (engiToggle) {
+            engiToggle.addEventListener('click', () => {
+              engiMode = engiMode === 'position' ? 'score' : 'position';
+              setEngiMode(engiMode);
+
+              const isScore = engiMode === 'score';
+              engiToggle.textContent = isScore ? 'Pokaż pozycję' : 'Pokaż punktację';
+              engiToggle.setAttribute('aria-pressed', isScore.toString());
+            });
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
