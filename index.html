@@ -1730,49 +1730,49 @@
         }
 
         const engiSubjectData = {
-          years: [2023],
+          years: [2023, 2024, 2025],
           subjects: {
             "Inżynieria chemiczna (Chemical Engineering)": {
-              lower: [77],
-              upper: [77],
-              raw: ["77"],
-              score: [63.13]
+              lower: [77, 49, 56],
+              upper: [77, 49, 56],
+              raw: ["77", "49", "56"],
+              score: [63.13, 100.0, 100.0]
             },
             "Inżynieria lądowa (Civil Engineering)": {
-              lower: [77],
-              upper: [77],
-              raw: ["77"],
-              score: [58.87]
+              lower: [77, 70, 84],
+              upper: [77, 70, 84],
+              raw: ["77", "70", "84"],
+              score: [58.87, 85.71, 100.0]
             },
             "Elektronika, elektrotechnika i inżynieria informacyjna": {
-              lower: [95],
-              upper: [95],
-              raw: ["95"],
-              score: [64.72]
+              lower: [95, 71, 62],
+              upper: [95, 71, 62],
+              raw: ["95", "71", "62"],
+              score: [64.72, 25.0, 62.5]
             },
             "Inżynieria środowiska (Environmental engineering)": {
-              lower: [74],
-              upper: [74],
-              raw: ["74"],
-              score: [60.85]
+              lower: [74, 86, 130],
+              upper: [74, 86, 130],
+              raw: ["74", "86", "130"],
+              score: [60.85, 26.67, 0.0]
             },
             "Inżynieria materiałowa (Materials Engineering)": {
-              lower: [95],
-              upper: [95],
-              raw: ["95"],
-              score: [65.95]
+              lower: [95, 47, 50],
+              upper: [95, 47, 50],
+              raw: ["95", "47", "50"],
+              score: [65.95, 50.0, 50.0]
             },
             "Inżynieria mechaniczna (Mechanical engineering)": {
-              lower: [63],
-              upper: [63],
-              raw: ["63"],
-              score: [72.77]
+              lower: [63, 76, 80],
+              upper: [63, 76, 80],
+              raw: ["63", "76", "80"],
+              score: [72.77, 50.0, 62.5]
             },
             "Inżynieria medyczna": {
-              lower: [63],
-              upper: [63],
-              raw: ["63"],
-              score: [71.63]
+              lower: [63, 59, 73],
+              upper: [63, 59, 73],
+              raw: ["63", "59", "73"],
+              score: [71.63, 0.0, 0.0]
             }
           }
         };
@@ -1885,9 +1885,10 @@
             engiSubjectChart.update();
 
             if (engiSubjectNote && data.raw && data.raw.length) {
-               const year = engiSubjectData.years[0];
-               const pos = data.raw[0];
-               const score = data.score[0];
+               const lastIdx = data.raw.length - 1;
+               const year = engiSubjectData.years[lastIdx];
+               const pos = data.raw[lastIdx];
+               const score = data.score[lastIdx];
                engiSubjectNote.textContent = `EngiRank ${year}: ${subjectName} - miejsce ${pos} (pkt ${score}).`;
             }
           };
