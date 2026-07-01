@@ -25,12 +25,12 @@
         </header>
         <div class="grid gap-6 md:grid-cols-2" style="grid-auto-rows: 1fr;">
           <div class="bg-white rounded-2xl shadow-sm p-6">
-            <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgb(79,70,229); border-color: rgb(79,70,229); background-color: #f8f9ff;">Aktualizacja: 19.06.2025</span>
+            <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgb(79,70,229); border-color: rgb(79,70,229); background-color: #f8f9ff;">Aktualizacja: 29.06.2026</span>
             <h3 class="text-lg font-semibold text-gray-900">QS World University Rankings</h3>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 340px) -->
             <canvas id="chartQS" class="mt-4 w-full" style="height: 350px;"></canvas>
-            <p class="text-xs text-gray-500 mt-4">PW konsekwentnie poprawia pozycję i zbliża się do top 500 QS.</p>
-            <p class="text-[11px] text-gray-400 mt-2">Źródło: QS World University Rankings 2020–2026.</p>
+            <p class="text-xs text-gray-500 mt-4">PW utrzymuje się w okolicach globalnego top 500 QS; w edycji 2027 zajmuje miejsce =504.</p>
+            <p class="text-[11px] text-gray-400 mt-2">Źródło: QS World University Rankings 2020–2027.</p>
           </div>
           <div class="bg-white rounded-2xl shadow-sm p-6">
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgb(79,70,229); border-color: rgb(79,70,229); background-color: #f8f9ff;">Aktualizacja: 12.03.2025</span>
@@ -1266,9 +1266,9 @@
   }
 }`);
 
-        const qsYears = [2020, 2021, 2022, 2023, 2024, 2025, 2026];
-        const qsMin = [521, 511, 501, 521, 571, 527, 487];
-        const qsMax = [530, 520, 510, 530, 571, 527, 487];
+        const qsYears = [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027];
+        const qsMin = [521, 511, 501, 521, 571, 527, 487, 504];
+        const qsMax = [530, 520, 510, 530, 571, 527, 487, 504];
         new Chart(document.getElementById('chartQS'), {
           type: 'line',
           data: {
