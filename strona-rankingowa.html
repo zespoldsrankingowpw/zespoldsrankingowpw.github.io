@@ -2120,8 +2120,74 @@
             }
           });
 
-          const updateRKSChart = (subjectName) => {
-            const subjectData = rksSubjects[subjectName];
+          // RKS state is rendered from immutable per-subject series. Do not infer
+          // position data from the visible dataset, because that dataset may
+          // currently contain scores after a mode switch.
+          const rksToggle = document.getElementById('rksToggle');
+          let rksMode = 'position';
+          let currentRKSSubject = defaultSubject;
+
+          const setRKSButtonState = () => {
+            if (!rksToggle) {
+              return;
+            }
+            const isScore = rksMode === 'score';
+            rksToggle.textContent = isScore ? 'Pokaż pozycję' : 'Pokaż punktację';
+            rksToggle.setAttribute('aria-pressed', isScore.toString());
+          };
+
+          const updateRKSNote = (subjectName, lowerSeries, rawSeries, scoreSeries) => {
+            if (!rksNote) {
+              return;
+            }
+
+            let latestYear = null;
+            let latestRaw = null;
+            let latestScore = null;
+
+            for (let idx = rksYears.length - 1; idx >= 0; idx -= 1) {
+              if (rawSeries[idx]) {
+                latestYear = rksYears[idx];
+                latestRaw = rawSeries[idx];
+                latestScore = typeof scoreSeries[idx] === 'number' ? scoreSeries[idx] : null;
+                break;
+              }
+            }
+
+            let bestValue = null;
+            const bestYears = [];
+            for (let idx = 0; idx < lowerSeries.length; idx += 1) {
+              const value = lowerSeries[idx];
+              if (typeof value === 'number' && (bestValue === null || value < bestValue)) {
+                bestValue = value;
+              }
+            }
+            if (bestValue !== null) {
+              for (let idx = 0; idx < lowerSeries.length; idx += 1) {
+                if (lowerSeries[idx] === bestValue) {
+                  bestYears.push(rksYears[idx]);
+                }
+              }
+            }
+
+            const noteParts = [];
+            if (latestYear !== null && latestRaw !== null) {
+              const scoreText = latestScore !== null ? ` (punktacja ${latestScore.toFixed(1)})` : '';
+              noteParts.push(`${subjectName} w ${latestYear}: miejsce ${latestRaw}${scoreText}.`);
+            } else {
+              noteParts.push(`${subjectName}: brak danych dla lat 2020–2026.`);
+            }
+
+            if (bestValue !== null && bestYears.length) {
+              const yearLabel = bestYears.length === 1 ? `${bestYears[0]}` : bestYears.join(', ');
+              noteParts.push(`Najlepsza pozycja: ${bestValue} (${bestYears.length === 1 ? 'rok ' : 'lata '}${yearLabel}).`);
+            }
+
+            rksNote.textContent = noteParts.join(' ');
+          };
+
+          const renderRKSChart = () => {
+            const subjectData = rksSubjects[currentRKSSubject];
             if (!subjectData) {
               return;
             }
@@ -2130,113 +2196,27 @@
             const upperSeries = Array.isArray(subjectData.upper) ? subjectData.upper.slice() : [];
             const rawSeries = Array.isArray(subjectData.raw) ? subjectData.raw.slice() : [];
             const scoreSeries = Array.isArray(subjectData.score) ? subjectData.score.slice() : [];
-
-            rksChart.data.labels = rksYears;
-            rksChart.data.datasets[0].data = lowerSeries;
-            rksChart.data.datasets[1].data = upperSeries;
-
-            const numericValues = lowerSeries.concat(upperSeries).filter((value) => typeof value === 'number');
-            const fallbackValues = numericValues.length ? numericValues : [10];
-            const maxValue = Math.max(...fallbackValues);
-            const minValue = Math.min(...fallbackValues);
-            const padding = Math.max(Math.round((maxValue - minValue) * 0.1), 1);
-
-            const yAxis = rksChart.options.scales.y;
-            if (numericValues.length) {
-              yAxis.suggestedMin = maxValue + padding;
-              yAxis.suggestedMax = Math.max(minValue - padding, 1);
-            } else {
-              yAxis.suggestedMin = 10;
-              yAxis.suggestedMax = 1;
-            }
-
-            rksChart.$rawSeries = rawSeries;
-            rksChart.$scoreSeries = scoreSeries;
-            rksChart.update();
-
-            if (rksNote) {
-              let latestYear = null;
-              let latestRaw = null;
-              let latestScore = null;
-
-              for (let idx = rksYears.length - 1; idx >= 0; idx -= 1) {
-                if (rawSeries[idx]) {
-                  latestYear = rksYears[idx];
-                  latestRaw = rawSeries[idx];
-                  latestScore = typeof scoreSeries[idx] === 'number' ? scoreSeries[idx] : null;
-                  break;
-                }
-              }
-
-              let bestValue = null;
-              const bestYears = [];
-              for (let idx = 0; idx < lowerSeries.length; idx += 1) {
-                const value = lowerSeries[idx];
-                if (typeof value === 'number') {
-                  if (bestValue === null || value < bestValue) {
-                    bestValue = value;
-                  }
-                }
-              }
-              if (bestValue !== null) {
-                for (let idx = 0; idx < lowerSeries.length; idx += 1) {
-                  if (lowerSeries[idx] === bestValue) {
-                    bestYears.push(rksYears[idx]);
-                  }
-                }
-              }
-
-              const noteParts = [];
-
-              if (latestYear !== null && latestRaw !== null) {
-                const scoreText = latestScore !== null ? ` (punktacja ${latestScore.toFixed(1)})` : '';
-                noteParts.push(`${subjectName} w ${latestYear}: miejsce ${latestRaw}${scoreText}.`);
-              } else {
-                noteParts.push(`${subjectName}: brak danych dla lat 2020–2026.`);
-              }
-
-              if (bestValue !== null && bestYears.length) {
-                const yearLabel = bestYears.length === 1 ? `${bestYears[0]}` : bestYears.join(', ');
-                noteParts.push(`Najlepsza pozycja: ${bestValue} (${bestYears.length === 1 ? 'rok ' : 'lata '}${yearLabel}).`);
-              }
-
-              rksNote.textContent = noteParts.join(' ');
-            }
-          };
-
-          if (defaultSubject) {
-            updateRKSChart(defaultSubject);
-          }
-
-          rksSelect.addEventListener('change', (event) => {
-            updateRKSChart(event.target.value);
-          });
-
-          // RKS Toggle functionality for position ↔ score
-          const rksToggle = document.getElementById('rksToggle');
-          let rksMode = 'position';
-
-          const setRKSMode = (mode) => {
-            const scoreSeries = rksChart.$scoreSeries || [];
-            const lowerSeries = rksChart.data.datasets[0].data.slice();
-            const upperSeries = rksChart.data.datasets[1].data.slice();
             const dataset0 = rksChart.data.datasets[0];
             const dataset1 = rksChart.data.datasets[1];
             const yAxis = rksChart.options.scales.y;
 
-            if (mode === 'score') {
-              // Switch to score mode
+            rksChart.data.labels = rksYears;
+            rksChart.$rawSeries = rawSeries;
+            rksChart.$scoreSeries = scoreSeries;
+            rksChart.$lowerSeries = lowerSeries;
+            rksChart.$upperSeries = upperSeries;
+            rksChart.$mode = rksMode;
+
+            if (rksMode === 'score') {
               dataset0.data = scoreSeries;
+              dataset0.label = 'Punktacja (0-100)';
               dataset0.borderColor = 'rgba(16,185,129,0.85)';
               dataset0.backgroundColor = 'rgba(16,185,129,0.15)';
               dataset0.fill = false;
-
-              // Hide upper dataset
               dataset1.data = [];
 
-              // Adjust Y-axis for scores (0-100)
               yAxis.reverse = false;
-              const numericScores = scoreSeries.filter((val) => typeof val === 'number');
+              const numericScores = scoreSeries.filter((value) => typeof value === 'number');
               if (numericScores.length) {
                 const minScore = Math.min(...numericScores);
                 const maxScore = Math.max(...numericScores);
@@ -2247,10 +2227,10 @@
                 yAxis.suggestedMin = 75;
                 yAxis.suggestedMax = 100;
               }
+              yAxis.ticks.stepSize = undefined;
               yAxis.ticks.callback = (value) => (typeof value === 'number' ? value.toFixed(0) : value);
               yAxis.title.text = 'Punktacja (im wyższa, tym lepiej)';
 
-              // Update tooltip for score mode
               rksChart.options.plugins.tooltip.callbacks.label = (context) => {
                 if (context.datasetIndex !== 0) {
                   return null;
@@ -2259,20 +2239,18 @@
                 return value !== null && typeof value === 'number' ? `Punktacja: ${value.toFixed(1)}` : 'Brak danych';
               };
             } else {
-              // Switch to position mode
               dataset0.data = lowerSeries;
+              dataset0.label = 'Pozycja (niższa = lepiej)';
               dataset0.borderColor = 'rgb(79,70,229)';
               dataset0.backgroundColor = 'rgba(79,70,229,0.12)';
               dataset0.fill = '+1';
-
-              // Show upper dataset
               dataset1.data = upperSeries;
 
-              // Adjust Y-axis for positions
-              const numericValues = lowerSeries.concat(upperSeries).filter((val) => typeof val === 'number');
-              if (numericValues.length) {
-                const maxValue = Math.max(...numericValues);
-                const minValue = Math.min(...numericValues);
+              yAxis.reverse = true;
+              const numericPositions = lowerSeries.concat(upperSeries).filter((value) => typeof value === 'number');
+              if (numericPositions.length) {
+                const maxValue = Math.max(...numericPositions);
+                const minValue = Math.min(...numericPositions);
                 const padding = Math.max(Math.round((maxValue - minValue) * 0.1), 1);
                 yAxis.suggestedMin = maxValue + padding;
                 yAxis.suggestedMax = Math.max(minValue - padding, 1);
@@ -2280,24 +2258,20 @@
                 yAxis.suggestedMin = 10;
                 yAxis.suggestedMax = 1;
               }
-              yAxis.reverse = true;
+              yAxis.ticks.stepSize = 1;
               yAxis.ticks.callback = (value) => (typeof value === 'number' ? Math.round(value) : value);
               yAxis.title.text = 'Pozycja (niższa = lepiej)';
 
-              // Update tooltip for position mode
               rksChart.options.plugins.tooltip.callbacks.label = (context) => {
                 if (context.datasetIndex !== 0) {
                   return null;
                 }
-                const rawSeries = rksChart.$rawSeries;
-                const rawValue = rawSeries ? rawSeries[context.dataIndex] : null;
+                const rawValue = rawSeries[context.dataIndex];
                 if (rawValue) {
                   return `Pozycja: ${rawValue}`;
                 }
                 const lowerValue = context.raw;
-                const upperDataset = context.chart.data.datasets[1];
-                const upperValue =
-                  upperDataset && Array.isArray(upperDataset.data) ? upperDataset.data[context.dataIndex] : null;
+                const upperValue = Array.isArray(upperSeries) ? upperSeries[context.dataIndex] : null;
                 if (typeof lowerValue === 'number' && typeof upperValue === 'number' && upperValue !== lowerValue) {
                   return `Pozycja: ${lowerValue}-${upperValue}`;
                 }
@@ -2308,23 +2282,28 @@
               };
             }
 
+            setRKSButtonState();
+            updateRKSNote(currentRKSSubject, lowerSeries, rawSeries, scoreSeries);
             rksChart.update();
           };
 
-          // Initialize with position mode
+          const updateRKSChart = (subjectName) => {
+            currentRKSSubject = subjectName;
+            renderRKSChart();
+          };
+
           if (defaultSubject) {
-            setRKSMode(rksMode);
+            updateRKSChart(defaultSubject);
           }
 
-          // Add click event listener to toggle button
+          rksSelect.addEventListener('change', (event) => {
+            updateRKSChart(event.target.value);
+          });
+
           if (rksToggle) {
             rksToggle.addEventListener('click', () => {
               rksMode = rksMode === 'position' ? 'score' : 'position';
-              setRKSMode(rksMode);
-
-              const isScore = rksMode === 'score';
-              rksToggle.textContent = isScore ? 'Pokaż pozycję' : 'Pokaż punktację';
-              rksToggle.setAttribute('aria-pressed', isScore.toString());
+              renderRKSChart();
             });
           }
         }
