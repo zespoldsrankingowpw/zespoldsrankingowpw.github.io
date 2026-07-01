@@ -103,7 +103,7 @@
             </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
             <canvas id="chartPerspektywy" class="mt-4 w-full" style="height: 330px;"></canvas>
-            <p id="perspektywyNote" class="text-xs text-gray-500 mt-4">Politechnika Warszawska utrzymuje 3 miejsce w rankingu.</p>
+            <p id="perspektywyNote" class="text-xs text-gray-500 mt-4">Politechnika Warszawska utrzymuje 3 miejsce w rankingu; WSK 88,0 pkt.</p>
             <p class="text-[11px] text-gray-400 mt-2">Źródło: Ranking Perspektyw (wydania 2020-2025). Przełącznik: pozycja ↔ WSK (0-100).</p>
           </div>
           <div class="bg-white rounded-2xl shadow-sm p-6">
@@ -2473,7 +2473,7 @@
                 return value ? `Pozycja: ${value}` : 'Brak danych';
               };
               if (perspektywyNote) {
-                perspektywyNote.textContent = 'Politechnika Warszawska utrzymuje 3 miejsce w rankingu.';
+                perspektywyNote.textContent = 'Politechnika Warszawska utrzymuje 3 miejsce w rankingu; WSK 88,0 pkt.';
               }
             }
 
