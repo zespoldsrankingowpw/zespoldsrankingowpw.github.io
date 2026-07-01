@@ -2385,6 +2385,63 @@
         let perspektywyChart;
 
         if (perspektywyCanvas) {
+          const perspektywyValueLabelsPlugin = {
+            id: 'perspektywyValueLabels',
+            afterDatasetsDraw(chart) {
+              const { ctx } = chart;
+              const meta = chart.getDatasetMeta(0);
+              const dataset = chart.data.datasets[0];
+
+              if (!meta || !dataset || !meta.data) {
+                return;
+              }
+
+              ctx.save();
+              ctx.font = '600 11px Inter, system-ui, sans-serif';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'bottom';
+
+              meta.data.forEach((point, index) => {
+                const rawValue = dataset.data[index];
+                if (rawValue === null || rawValue === undefined) {
+                  return;
+                }
+
+                const label = perspektywyMode === 'score'
+                  ? Number(rawValue).toFixed(1)
+                  : String(rawValue);
+                const textWidth = ctx.measureText(label).width;
+                const boxWidth = textWidth + 10;
+                const boxHeight = 18;
+                const boxX = point.x - boxWidth / 2;
+                const boxY = point.y - 30;
+                const radius = 6;
+
+                ctx.fillStyle = 'rgba(255,255,255,0.92)';
+                ctx.strokeStyle = perspektywyMode === 'score' ? 'rgba(16,185,129,0.35)' : 'rgba(79,70,229,0.35)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(boxX + radius, boxY);
+                ctx.lineTo(boxX + boxWidth - radius, boxY);
+                ctx.quadraticCurveTo(boxX + boxWidth, boxY, boxX + boxWidth, boxY + radius);
+                ctx.lineTo(boxX + boxWidth, boxY + boxHeight - radius);
+                ctx.quadraticCurveTo(boxX + boxWidth, boxY + boxHeight, boxX + boxWidth - radius, boxY + boxHeight);
+                ctx.lineTo(boxX + radius, boxY + boxHeight);
+                ctx.quadraticCurveTo(boxX, boxY + boxHeight, boxX, boxY + boxHeight - radius);
+                ctx.lineTo(boxX, boxY + radius);
+                ctx.quadraticCurveTo(boxX, boxY, boxX + radius, boxY);
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = perspektywyMode === 'score' ? 'rgb(5,150,105)' : 'rgb(79,70,229)';
+                ctx.fillText(label, point.x, boxY + boxHeight - 4);
+              });
+
+              ctx.restore();
+            }
+          };
+
           perspektywyChart = new Chart(perspektywyCanvas, {
             type: 'line',
             data: {
@@ -2428,7 +2485,8 @@
                   grid: { display: false }
                 }
               }
-            }
+            },
+            plugins: [perspektywyValueLabelsPlugin]
           });
 
           const setPerspektywyMode = (mode) => {
