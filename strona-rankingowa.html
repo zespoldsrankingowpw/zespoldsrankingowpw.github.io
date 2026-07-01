@@ -1942,7 +1942,7 @@
                   beginAtZero: false,
                   ticks: { stepSize: 1 },
                   grid: { color: 'rgba(17,24,39,0.08)' },
-                  title: { display: true, text: 'Pozycja (niższa = lepiej)' }
+                  title: { display: true, text: 'Pozycja (im wyżej, tym lepiej)' }
                 },
                 x: {
                    grid: { display: false },
@@ -1971,7 +1971,7 @@
                dataset.borderColor = 'rgb(79,70,229)';
                dataset.backgroundColor = 'rgba(79,70,229,0.12)';
                yAxis.reverse = true;
-               yAxis.title.text = 'Pozycja (niższa = lepiej)';
+               yAxis.title.text = 'Pozycja (im wyżej, tym lepiej)';
             }
             
             dataset.data = values;
@@ -2111,7 +2111,7 @@
                     callback: (value) => (typeof value === 'number' ? Math.round(value) : value)
                   },
                   grid: { color: 'rgba(17,24,39,0.08)' },
-                  title: { display: true, text: 'Pozycja (niższa = lepiej)' }
+                  title: { display: true, text: 'Pozycja (im wyżej, tym lepiej)' }
                 },
                 x: {
                   grid: { display: false }
@@ -2240,7 +2240,7 @@
               };
             } else {
               dataset0.data = lowerSeries;
-              dataset0.label = 'Pozycja (niższa = lepiej)';
+              dataset0.label = 'Pozycja (im wyżej, tym lepiej)';
               dataset0.borderColor = 'rgb(79,70,229)';
               dataset0.backgroundColor = 'rgba(79,70,229,0.12)';
               dataset0.fill = '+1';
@@ -2260,7 +2260,7 @@
               }
               yAxis.ticks.stepSize = 1;
               yAxis.ticks.callback = (value) => (typeof value === 'number' ? Math.round(value) : value);
-              yAxis.title.text = 'Pozycja (niższa = lepiej)';
+              yAxis.title.text = 'Pozycja (im wyżej, tym lepiej)';
 
               rksChart.options.plugins.tooltip.callbacks.label = (context) => {
                 if (context.datasetIndex !== 0) {
@@ -2602,7 +2602,7 @@
                 perspektywyNote.textContent = 'PW stopniowo zmniejsza dystans do uczelni z najwyższymi wartościami WSK; WSK 92,3 pkt w 2026.';
               }
             } else {
-              dataset.label = 'Pozycja (niższa = lepiej)';
+              dataset.label = 'Pozycja (im wyżej, tym lepiej)';
               dataset.data = perspektywyPositions;
               dataset.borderColor = 'rgba(79,70,229,0.85)';
               dataset.backgroundColor = 'rgba(79,70,229,0.15)';
@@ -2721,7 +2721,7 @@
                 engiNote.textContent = 'PW w EngiRank 2025 zajęła 72 miejsce (WSK 63,82).';
               }
             } else {
-              dataset.label = 'Pozycja (niższa = lepiej)';
+              dataset.label = 'Pozycja (im wyżej, tym lepiej)';
               dataset.data = engiPositions;
               dataset.borderColor = 'rgba(79,70,229,0.85)';
               dataset.backgroundColor = 'rgba(79,70,229,0.15)';
