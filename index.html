@@ -103,7 +103,39 @@
             </div>
           </div>
         </section>
-        <div class="grid gap-6 md:grid-cols-2" style="grid-auto-rows: 1fr;">
+        <div class="grid gap-6 md:grid-cols-2">
+          <div class="bg-white rounded-2xl shadow-sm p-6">
+            <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgba(79,70,229,0.85); border-color: rgba(79,70,229,0.85); background-color: #f8f9ff;">Aktualizacja: 26.06.2026</span>
+            <div class="flex items-baseline justify-between gap-3">
+              <h3 class="text-lg font-semibold text-gray-900">Ranking Perspektywy</h3>
+              <button id="perspektywyToggle" type="button" class="inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-xl border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition" aria-pressed="false">
+                Pokaż WSK
+              </button>
+            </div>
+            <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
+            <canvas id="chartPerspektywy" class="mt-4 w-full" style="height: 330px;"></canvas>
+            <p id="perspektywyNote" class="text-xs text-gray-500 mt-4">Politechnika Warszawska utrzymuje 3 miejsce w rankingu; WSK 88,0 pkt.</p>
+            <p class="text-[11px] text-gray-400 mt-2">Źródło: Ranking Perspektyw (wydania 2020-2026). Przełącznik: pozycja ↔ WSK (0-100).</p>
+          </div>
+          <div class="bg-white rounded-2xl shadow-sm p-6">
+            <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgba(79,70,229,0.85); border-color: rgba(79,70,229,0.85); background-color: #f8f9ff;">Aktualizacja: 26.06.2026</span>
+            <div class="flex items-baseline justify-between gap-3">
+              <h3 class="text-lg font-semibold text-gray-900">Ranking Kierunków Perspektywy</h3>
+              <button id="rksToggle" type="button" class="inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-xl border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition" aria-pressed="false">
+                Pokaż punktację
+              </button>
+            </div>
+            <label for="rksSubjectSelect" class="block mt-4">
+              <span class="text-xs font-semibold text-gray-500 uppercase tracking-widest">Wybierz kierunek</span>
+              <select id="rksSubjectSelect" class="mt-1 w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-indigo-500 focus:ring-indigo-500"></select>
+            </label>
+            <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 220px) -->
+            <canvas id="chartRKS" class="w-full" style="margin-top: 0.25rem; height: 260px;"></canvas>
+            <p id="rksSubjectNote" class="text-xs text-gray-500 mt-4">Pozycje PW w rankingach kierunkowych Perspektyw aktualizują się po wyborze kierunku.</p>
+            <p class="text-[11px] text-gray-400 mt-2">Źródło: Perspektywy — Ranking Kierunków Studiów 2020–2026. Przełącznik: pozycja ↔ punktacja (0-100).</p>
+          </div>
+        </div>
+        <div class="grid gap-6 md:grid-cols-2 mt-6" style="grid-auto-rows: 1fr;">
           <div class="bg-white rounded-2xl shadow-sm p-6">
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgb(79,70,229); border-color: rgb(79,70,229); background-color: #f8f9ff;">Aktualizacja: 18.06.2026</span>
             <h3 class="text-lg font-semibold text-gray-900">QS World University Rankings</h3>
@@ -170,38 +202,6 @@
             <canvas id="chartGRAS" class="w-full" style="margin-top: 0.25rem; height: 280px;"></canvas>
             <p id="grasSubjectNote" class="text-xs text-gray-500 mt-4">Pozycja PW w GRAS aktualizuje się po wyborze dyscypliny.</p>
             <p class="text-[11px] text-gray-400 mt-2">Źródło: Global Ranking of Academic Subjects 2020-2023.</p>
-          </div>
-        </div>
-        <div class="grid gap-6 md:grid-cols-2 mt-6">
-          <div class="bg-white rounded-2xl shadow-sm p-6">
-            <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgba(79,70,229,0.85); border-color: rgba(79,70,229,0.85); background-color: #f8f9ff;">Aktualizacja: 26.06.2026</span>
-            <div class="flex items-baseline justify-between gap-3">
-              <h3 class="text-lg font-semibold text-gray-900">Ranking Perspektywy</h3>
-              <button id="perspektywyToggle" type="button" class="inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-xl border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition" aria-pressed="false">
-                Pokaż WSK
-              </button>
-            </div>
-            <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
-            <canvas id="chartPerspektywy" class="mt-4 w-full" style="height: 330px;"></canvas>
-            <p id="perspektywyNote" class="text-xs text-gray-500 mt-4">Politechnika Warszawska utrzymuje 3 miejsce w rankingu; WSK 88,0 pkt.</p>
-            <p class="text-[11px] text-gray-400 mt-2">Źródło: Ranking Perspektyw (wydania 2020-2026). Przełącznik: pozycja ↔ WSK (0-100).</p>
-          </div>
-          <div class="bg-white rounded-2xl shadow-sm p-6">
-            <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgba(79,70,229,0.85); border-color: rgba(79,70,229,0.85); background-color: #f8f9ff;">Aktualizacja: 26.06.2026</span>
-            <div class="flex items-baseline justify-between gap-3">
-              <h3 class="text-lg font-semibold text-gray-900">Ranking Kierunków Perspektywy</h3>
-              <button id="rksToggle" type="button" class="inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-xl border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition" aria-pressed="false">
-                Pokaż punktację
-              </button>
-            </div>
-            <label for="rksSubjectSelect" class="block mt-4">
-              <span class="text-xs font-semibold text-gray-500 uppercase tracking-widest">Wybierz kierunek</span>
-              <select id="rksSubjectSelect" class="mt-1 w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-indigo-500 focus:ring-indigo-500"></select>
-            </label>
-            <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 220px) -->
-            <canvas id="chartRKS" class="w-full" style="margin-top: 0.25rem; height: 260px;"></canvas>
-            <p id="rksSubjectNote" class="text-xs text-gray-500 mt-4">Pozycje PW w rankingach kierunkowych Perspektyw aktualizują się po wyborze kierunku.</p>
-            <p class="text-[11px] text-gray-400 mt-2">Źródło: Perspektywy — Ranking Kierunków Studiów 2020–2026. Przełącznik: pozycja ↔ punktacja (0-100).</p>
           </div>
         </div>
         <div class="grid gap-6 md:grid-cols-2 mt-6">
