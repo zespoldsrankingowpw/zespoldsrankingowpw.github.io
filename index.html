@@ -2228,6 +2228,38 @@
                      break;
                   }
                }
+
+               const missingYearRanges = [];
+               let missingRangeStart = null;
+               let previousMissingYear = null;
+
+               grasSubjectData.years.forEach((year, idx) => {
+                  if (typeof lowerSeries[idx] !== 'number') {
+                     if (missingRangeStart === null) {
+                        missingRangeStart = year;
+                     }
+                     previousMissingYear = year;
+                  } else if (missingRangeStart !== null) {
+                     missingYearRanges.push([missingRangeStart, previousMissingYear]);
+                     missingRangeStart = null;
+                     previousMissingYear = null;
+                  }
+               });
+
+               if (missingRangeStart !== null) {
+                  missingYearRanges.push([missingRangeStart, previousMissingYear]);
+               }
+
+               if (missingYearRanges.length) {
+                  const missingParts = missingYearRanges
+                     .map(([startYear, endYear]) => startYear === endYear ? `${startYear}` : `${startYear}-${endYear}`);
+                  const missingText = missingParts.length === 1
+                     ? missingParts[0]
+                     : `${missingParts.slice(0, -1).join(', ')} oraz ${missingParts[missingParts.length - 1]}`;
+                  const missingPrefix = missingParts.length === 1 && !missingParts[0].includes('-') ? 'W roku' : 'W latach';
+                  noteText += ` ${missingPrefix} ${missingText} poza rankingiem.`;
+               }
+
                grasNote.textContent = noteText;
             }
           };
