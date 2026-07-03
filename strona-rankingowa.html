@@ -114,7 +114,7 @@
             </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
             <canvas id="chartPerspektywy" class="mt-4 w-full" style="height: 330px;"></canvas>
-            <p id="perspektywyNote" class="text-xs text-gray-500 mt-4">Politechnika Warszawska utrzymuje 3 miejsce w rankingu; WSK 88,0 pkt.</p>
+            <p id="perspektywyNote" class="text-xs text-gray-500 mt-4">Politechnika Warszawska utrzymuje 3 miejsce w rankingu; WSK 92,3 pkt.</p>
             <p class="text-[11px] text-gray-400 mt-2">Źródło: Ranking Perspektyw (wydania 2020-2026). Przełącznik: pozycja ↔ WSK (0-100).</p>
           </div>
           <div class="bg-white rounded-2xl shadow-sm p-6">
@@ -161,12 +161,12 @@
             <div class="p-8 md:p-10">
               <div class="flex items-start justify-between gap-6 border-b border-slate-200 pb-5">
                 <div>
-                  <p class="text-xs uppercase tracking-[0.24em] text-cyan-700 font-bold">QS by Subject 2025</p>
+                  <p class="text-xs uppercase tracking-[0.24em] text-cyan-700 font-bold">QS by Subject 2026</p>
                   <h4 class="mt-2 text-2xl font-extrabold text-slate-950">Najmocniejsze obszary PW</h4>
                   <p class="mt-3 text-sm text-slate-500">Doskonałość w dziedzinach inżynierskich i naukowych.</p>
                 </div>
                 <div class="hidden sm:block text-right">
-                  <p class="text-4xl font-extrabold text-cyan-700">10</p>
+                  <p class="text-4xl font-extrabold text-cyan-700">13</p>
                   <p class="text-xs text-slate-500 uppercase tracking-wider">obszarów w zestawieniu</p>
                 </div>
               </div>
@@ -212,7 +212,7 @@
                   <p class="mt-2 text-sm text-slate-600"><span class="font-extrabold text-cyan-700">3.</span> w Polsce · <span class="font-extrabold text-slate-900">301-350</span> na świecie</p>
                 </div>
               </div>
-              <p class="mt-6 rounded-2xl bg-slate-50 p-4 text-xs leading-5 text-slate-500">Źródło: QS World University Rankings 2027 oraz QS World University Rankings by Subject 2025; panel syntetyzuje dane z profilu QS i wykresów poniżej.</p>
+              <p class="mt-6 rounded-2xl bg-slate-50 p-4 text-xs leading-5 text-slate-500">Źródło: QS World University Rankings 2027 oraz QS World University Rankings by Subject 2026; panel syntetyzuje dane z profilu QS i wykresów poniżej.</p>
             </div>
           </div>
         </section>
@@ -236,7 +236,7 @@
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 300px) -->
             <canvas id="chartQSSubject" class="w-full" style="margin-top: 0.25rem; height: 280px;"></canvas>
             <p id="qsSubjectNote" class="text-xs text-gray-500 mt-4">Pozycja PW w QS by Subject aktualizuje się po wyborze dyscypliny.</p>
-            <p class="text-[11px] text-gray-400 mt-2">Źródło: QS World University Rankings by Subject 2020-2024.</p>
+            <p class="text-[11px] text-gray-400 mt-2">Źródło: QS World University Rankings by Subject 2023-2026.</p>
           </div>
         </div>
         <div class="grid gap-6 md:grid-cols-2 mt-6">
@@ -259,7 +259,7 @@
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 280px) -->
             <canvas id="chartTHESubject" class="w-full" style="margin-top: 0.25rem; height: 280px;"></canvas>
             <p id="theSubjectNote" class="text-xs text-gray-500 mt-4">Pozycja PW w THE by Subject aktualizuje się po wyborze dyscypliny.</p>
-            <p class="text-[11px] text-gray-400 mt-2">Źródło: THE World University Rankings by Subject 2020-2025.</p>
+            <p class="text-[11px] text-gray-400 mt-2">Źródło: THE World University Rankings by Subject 2020-2026.</p>
           </div>
         </div>
         <div class="grid gap-6 md:grid-cols-2 mt-6">
@@ -282,7 +282,7 @@
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 280px) -->
             <canvas id="chartGRAS" class="w-full" style="margin-top: 0.25rem; height: 280px;"></canvas>
             <p id="grasSubjectNote" class="text-xs text-gray-500 mt-4">Pozycja PW w GRAS aktualizuje się po wyborze dyscypliny.</p>
-            <p class="text-[11px] text-gray-400 mt-2">Źródło: Global Ranking of Academic Subjects 2020-2023.</p>
+            <p class="text-[11px] text-gray-400 mt-2">Źródło: Global Ranking of Academic Subjects 2020-2025.</p>
           </div>
         </div>
         <div class="grid gap-6 md:grid-cols-2 mt-6">
@@ -329,63 +329,198 @@
         Chart.defaults.font.family = 'Inter, system-ui, sans-serif';
         Chart.defaults.color = '#4B5563';
 
-        const qsSubjectData = {
-          years: [2020, 2021, 2022, 2023, 2024, 2025],
-          subjects: {
-            'Architektura (Architecture and Built Environment)': {
-              lower: [null, null, 151, 151, 201, 201],
-              upper: [null, null, 200, 200, 240, 260]
-            },
-            'Automatyka, elektronika i elektrotechnika (Engineering - Electrical and Electronic)': {
-              lower: [201, 201, 151, 151, 201, 151],
-              upper: [250, 250, 200, 200, 250, 200]
-            },
-            'Biznes i zarządzanie (Business and Management Studies)': {
-              lower: [null, 401, 401, 551, 551, 501],
-              upper: [null, 450, 450, 580, 600, 550]
-            },
-            'Chemia (Chemistry)': {
-              lower: [251, 301, 351, 301, 301, 301],
-              upper: [300, 350, 400, 350, 350, 350]
-            },
-            'Fizyka (Physics and Astronomy)': {
-              lower: [251, 251, 251, 251, 251, 251],
-              upper: [300, 300, 300, 300, 300, 300]
-            },
-            'Informatyka techniczna i telekomunikacja (Computer Science)': {
-              lower: [301, 251, 251, 251, 251, 201],
-              upper: [350, 300, 300, 300, 300, 250]
-            },
-            'Inżynieria chemiczna (Engineering - Chemical)': {
-              lower: [251, 251, 201, 201, 251, 201],
-              upper: [300, 300, 250, 250, 300, 250]
-            },
-            'Inżynieria i technologia (Engineering and Technology)': {
-              lower: [237, 230, 199, 231, 232, 197],
-              upper: [237, 230, 199, 231, 232, 197]
-            },
-            'Inżynieria lądowa i transport (Engineering - Civil and Structural)': {
-              lower: [151, 151, 151, 151, null, 151],
-              upper: [200, 200, 200, 200, null, 200]
-            },
-            'Inżynieria materiałowa (Materials Science)': {
-              lower: [151, 251, 201, 201, 201, 201],
-              upper: [200, 300, 250, 250, 250, 250]
-            },
-            'Inżynieria mechaniczna (Engineering - Mechanical, Aeronautical and Manufacturing)': {
-              lower: [201, 201, 201, 151, 151, 151],
-              upper: [250, 250, 250, 200, 200, 200]
-            },
-            'Matematyka (Mathematics)': {
-              lower: [301, 301, 301, 301, 301, 251],
-              upper: [350, 350, 350, 350, 350, 300]
-            },
-            'Nauki ścisłe (Natural Sciences)': {
-              lower: [258, 284, 262, 275, 312, 295],
-              upper: [258, 284, 262, 275, 312, 295]
-            }
-          }
-        };
+        const qsSubjectData = JSON.parse(`{
+  "years": [
+    2023,
+    2024,
+    2025,
+    2026
+  ],
+  "subjects": {
+    "Architecture & Built Environment": {
+      "lower": [
+        151,
+        201,
+        201,
+        151
+      ],
+      "upper": [
+        200,
+        240,
+        260,
+        200
+      ]
+    },
+    "Business & Management Studies": {
+      "lower": [
+        551,
+        551,
+        501,
+        501
+      ],
+      "upper": [
+        580,
+        600,
+        550,
+        550
+      ]
+    },
+    "Chemistry": {
+      "lower": [
+        301,
+        301,
+        301,
+        351
+      ],
+      "upper": [
+        350,
+        350,
+        350,
+        400
+      ]
+    },
+    "Computer Science & Information Systems": {
+      "lower": [
+        251,
+        251,
+        201,
+        251
+      ],
+      "upper": [
+        300,
+        300,
+        250,
+        300
+      ]
+    },
+    "Engineering & Technology": {
+      "lower": [
+        231,
+        232,
+        null,
+        231
+      ],
+      "upper": [
+        231,
+        232,
+        null,
+        231
+      ]
+    },
+    "Engineering - Chemical": {
+      "lower": [
+        201,
+        251,
+        201,
+        251
+      ],
+      "upper": [
+        250,
+        300,
+        250,
+        300
+      ]
+    },
+    "Engineering - Civil & Structural": {
+      "lower": [
+        151,
+        null,
+        151,
+        201
+      ],
+      "upper": [
+        200,
+        null,
+        200,
+        275
+      ]
+    },
+    "Engineering - Electrical & Electronic": {
+      "lower": [
+        151,
+        201,
+        151,
+        201
+      ],
+      "upper": [
+        200,
+        250,
+        200,
+        250
+      ]
+    },
+    "Engineering - Mechanical, Aeronautical & Manufacturing": {
+      "lower": [
+        151,
+        151,
+        151,
+        151
+      ],
+      "upper": [
+        200,
+        200,
+        200,
+        200
+      ]
+    },
+    "Materials Science": {
+      "lower": [
+        201,
+        201,
+        201,
+        201
+      ],
+      "upper": [
+        250,
+        250,
+        250,
+        250
+      ]
+    },
+    "Mathematics": {
+      "lower": [
+        301,
+        301,
+        251,
+        251
+      ],
+      "upper": [
+        350,
+        350,
+        300,
+        300
+      ]
+    },
+    "Natural Sciences": {
+      "lower": [
+        275,
+        null,
+        null,
+        350
+      ],
+      "upper": [
+        275,
+        null,
+        null,
+        350
+      ]
+    },
+    "Physics & Astronomy": {
+      "lower": [
+        251,
+        251,
+        251,
+        251
+      ],
+      "upper": [
+        300,
+        300,
+        300,
+        300
+      ]
+    }
+  }
+}`);
 
         const rksSubjectData = JSON.parse(`{
   "years": [
@@ -1656,27 +1791,119 @@
           });
         }
 
-        const theSubjectData = {
-          years: [2020, 2021, 2022, 2023, 2024, 2025],
-          subjects: {
-            "Informatyka (Computer Science)": {
-              lower: [501, 501, 601, 601, 601, 601],
-              upper: [600, 600, 800, 800, 800, 800]
-            },
-            "Inżynieria (Engineering)": {
-              lower: [601, 601, 801, 801, 801, 801],
-              upper: [800, 800, 1000, 1000, 1000, 1000]
-            },
-            "Nauki ścisłe (Physical Sciences)": {
-              lower: [601, 801, 801, 1001, 1001, 1001],
-              upper: [800, 1000, 1000, 1001, 1001, 1001]
-            },
-            "Biznes i Ekonomia (Business and Economics)": {
-              lower: [null, null, null, 801, 801, 801],
-              upper: [null, null, null, 801, 801, 801]
-            }
-          }
-        };
+        const theSubjectData = JSON.parse(`{
+  "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+  ],
+  "subjects": {
+    "Biznes i Ekonomia (Business and Economics)": {
+      "lower": [
+        null,
+        null,
+        null,
+        801,
+        801,
+        801,
+        801
+      ],
+      "upper": [
+        null,
+        null,
+        null,
+        801,
+        801,
+        801,
+        801
+      ]
+    },
+    "Informatyka (Computer Science)": {
+      "lower": [
+        501,
+        501,
+        601,
+        601,
+        601,
+        601,
+        601
+      ],
+      "upper": [
+        501,
+        501,
+        601,
+        601,
+        601,
+        601,
+        601
+      ]
+    },
+    "Inżynieria (Engineering)": {
+      "lower": [
+        601,
+        601,
+        801,
+        801,
+        801,
+        801,
+        1001
+      ],
+      "upper": [
+        601,
+        601,
+        801,
+        801,
+        801,
+        801,
+        1001
+      ]
+    },
+    "Nauki ścisłe (Physical Sciences)": {
+      "lower": [
+        601,
+        801,
+        801,
+        1001,
+        1001,
+        1001,
+        801
+      ],
+      "upper": [
+        601,
+        801,
+        801,
+        1001,
+        1001,
+        1001,
+        801
+      ]
+    },
+    "Nauki społeczne (Social Sciences)": {
+      "lower": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        801
+      ],
+      "upper": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        801
+      ]
+    }
+  }
+}`);
 
         const theSubjectCanvas = document.getElementById('chartTHESubject');
         const theSubjectSelect = document.getElementById('theSubjectSelect');
@@ -1831,23 +2058,39 @@
         }
 
         const grasSubjectData = {
-          years: [2020, 2021, 2022, 2023],
+          years: [2020, 2021, 2022, 2023, 2024, 2025],
           subjects: {
-            "Nauka i technologie instrumentacji (Instruments Science & Technology)": {
-              lower: [151, 151, 101, null],
-              upper: [200, 200, 150, null]
+            "Elektrotechnika i elektronika (Electrical & Electronic Engineering)": {
+              lower: [301, 401, 401, null, null, null],
+              upper: [400, 500, 500, null, null, null]
+            },
+            "Energetyka (Energy Science & Engineering)": {
+              lower: [301, null, null, null, null, null],
+              upper: [400, null, null, null, null, null]
             },
             "Fizyka (Physics)": {
-              lower: [301, 301, 201, 301],
-              upper: [400, 400, 300, 400]
-            },
-            "Elektrotechnika i elektronika (Electrical & Electronic Engineering)": {
-              lower: [301, 401, 401, null],
-              upper: [400, 500, 500, null]
+              lower: [301, 301, 201, 301, 401, 401],
+              upper: [400, 400, 300, 400, 500, 500]
             },
             "Inżynieria mechaniczna (Mechanical Engineering)": {
-              lower: [201, 301, null, null],
-              upper: [300, 400, null, null]
+              lower: [201, 301, null, null, 301, null],
+              upper: [300, 400, null, null, 400, null]
+            },
+            "Inżynieria metalurgiczna (Metallurgical Engineering)": {
+              lower: [null, null, null, null, 151, 101],
+              upper: [null, null, null, null, 200, 150]
+            },
+            "Matematyka (Mathematics)": {
+              lower: [301, null, null, null, null, null],
+              upper: [400, null, null, null, null, null]
+            },
+            "Nauka i technologie instrumentacji (Instruments Science & Technology)": {
+              lower: [151, 151, 101, null, 201, 201],
+              upper: [200, 200, 150, null, 300, 300]
+            },
+            "Telekomunikacja (Telecommunication Engineering)": {
+              lower: [201, null, null, null, null, null],
+              upper: [300, null, null, null, null, null]
             }
           }
         };
@@ -2624,9 +2867,9 @@
           }
         });
 
-        const perspektywyYears = [2020, 2021, 2022, 2023, 2024, 2025, 2026];
-        const perspektywyPositions = [3, 3, 3, 3, 3, 3, 3];
-        const perspektywyScores = [78.9, 83.4, 84.0, 88.0, 85.0, 89.9, 92.3];
+        const perspektywyYears = [2023, 2024, 2025, 2026];
+        const perspektywyPositions = [3, 3, 3, 3];
+        const perspektywyScores = [null, null, null, 92.3];
         const perspektywyCanvas = document.getElementById('chartPerspektywy');
         const perspektywyToggle = document.getElementById('perspektywyToggle');
         let perspektywyMode = 'position';
