@@ -109,13 +109,13 @@
             <div class="flex items-baseline justify-between gap-3">
               <h3 class="text-lg font-semibold text-gray-900">Ranking Perspektywy</h3>
               <button id="perspektywyToggle" type="button" class="inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-xl border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition" aria-pressed="false">
-                Pokaż WSK
+                Pokaż WSK 2026
               </button>
             </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
             <canvas id="chartPerspektywy" class="mt-4 w-full" style="height: 330px;"></canvas>
-            <p id="perspektywyNote" class="text-xs text-gray-500 mt-4">Politechnika Warszawska utrzymuje 3 miejsce w rankingu; WSK 92,3 pkt.</p>
-            <p class="text-[11px] text-gray-400 mt-2">Źródło: Ranking Perspektyw (wydania 2020-2026). Przełącznik: pozycja ↔ WSK (0-100).</p>
+            <p id="perspektywyNote" class="text-xs text-gray-500 mt-4">Politechnika Warszawska utrzymuje 3 miejsce w rankingu; WSK 92,3 pkt w 2026.</p>
+            <p class="text-[11px] text-gray-400 mt-2">Źródło: Ranking Perspektyw 2026. Oficjalny widok publikuje miejsca 2023–2026 oraz WSK dla edycji 2026.</p>
           </div>
           <div class="bg-white rounded-2xl shadow-sm p-6">
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgba(79,70,229,0.85); border-color: rgba(79,70,229,0.85); background-color: #f8f9ff;">Aktualizacja: 26.06.2026</span>
@@ -2933,7 +2933,7 @@
 
         const perspektywyYears = [2023, 2024, 2025, 2026];
         const perspektywyPositions = [3, 3, 3, 3];
-        const perspektywyScores = [null, null, null, 92.3];
+        const perspektywyScores = [92.3];
         const perspektywyCanvas = document.getElementById('chartPerspektywy');
         const perspektywyToggle = document.getElementById('perspektywyToggle');
         let perspektywyMode = 'position';
@@ -3050,6 +3050,7 @@
             const yAxis = perspektywyChart.options.scales.y;
 
             if (mode === 'score') {
+              perspektywyChart.data.labels = [2026];
               dataset.label = 'WSK (0-100)';
               dataset.data = perspektywyScores;
               dataset.borderColor = 'rgba(16,185,129,0.85)';
@@ -3067,9 +3068,10 @@
                 return value !== null && value !== undefined ? `WSK: ${value.toFixed(1)}` : 'Brak danych';
               };
               if (perspektywyNote) {
-                perspektywyNote.textContent = 'PW stopniowo zmniejsza dystans do uczelni z najwyższymi wartościami WSK; WSK 92,3 pkt w 2026.';
+                perspektywyNote.textContent = 'WSK 92,3 pkt dotyczy edycji 2026; wcześniejsze lata na stronie Perspektyw są publikowane jako miejsca, nie jako historyczny WSK.';
               }
             } else {
+              perspektywyChart.data.labels = perspektywyYears;
               dataset.label = 'Pozycja (im wyżej, tym lepiej)';
               dataset.data = perspektywyPositions;
               dataset.borderColor = 'rgba(79,70,229,0.85)';
@@ -3087,7 +3089,7 @@
                 return value ? `Pozycja: ${value}` : 'Brak danych';
               };
               if (perspektywyNote) {
-                perspektywyNote.textContent = 'Politechnika Warszawska utrzymuje 3 miejsce w rankingu; WSK 92,3 pkt.';
+                perspektywyNote.textContent = 'Politechnika Warszawska utrzymuje 3 miejsce w rankingu w latach 2023–2026; WSK 92,3 pkt w 2026.';
               }
             }
 
@@ -3102,7 +3104,7 @@
               setPerspektywyMode(perspektywyMode);
 
               const isScore = perspektywyMode === 'score';
-              perspektywyToggle.textContent = isScore ? 'Pokaż pozycję' : 'Pokaż WSK';
+              perspektywyToggle.textContent = isScore ? 'Pokaż pozycję' : 'Pokaż WSK 2026';
               perspektywyToggle.setAttribute('aria-pressed', isScore.toString());
             });
           }
