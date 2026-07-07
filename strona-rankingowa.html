@@ -106,8 +106,14 @@
         <div class="grid gap-6 md:grid-cols-2">
           <div class="bg-white rounded-2xl shadow-sm p-6">
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgba(79,70,229,0.85); border-color: rgba(79,70,229,0.85); background-color: #f8f9ff;">Aktualizacja: 26.06.2026</span>
-            <div class="flex items-baseline justify-between gap-3">
-              <h3 class="text-lg font-semibold text-gray-900">Ranking Perspektywy</h3>
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-center gap-2">
+                <h3 class="text-lg font-semibold text-gray-900">Ranking Perspektywy</h3>
+                <button id="ruaMethodologyOpen" type="button" class="group relative inline-flex h-8 w-8 items-center justify-center rounded-full border border-cyan-200 bg-cyan-50 text-cyan-700 transition hover:border-cyan-300 hover:bg-cyan-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2" aria-label="Otwórz metodykę Rankingu Uczelni Akademickich Perspektywy" aria-haspopup="dialog" title="Metodyka RUA: struktura wag, źródła danych i interpretacja WSK">
+                  <span aria-hidden="true" class="text-sm font-black">?</span>
+                  <span class="pointer-events-none absolute left-1/2 top-full z-20 mt-2 hidden w-64 -translate-x-1/2 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Metodyka RUA: kliknij, aby zobaczyć skumulowany wykres wag i krótkie wyjaśnienia wskaźników.</span>
+                </button>
+              </div>
               <button id="perspektywyToggle" type="button" class="inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-xl border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition" aria-pressed="false">
                 Pokaż WSK
               </button>
@@ -319,9 +325,97 @@
         </div>
       </section>
 
+    <div id="ruaMethodologyModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-labelledby="ruaMethodologyTitle" aria-describedby="ruaMethodologyDesc">
+      <div id="ruaMethodologyBackdrop" class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
+      <div class="relative z-10 flex min-h-full items-center justify-center p-4">
+        <section class="max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-[28px] bg-white shadow-2xl ring-1 ring-slate-900/10">
+          <div class="flex items-start justify-between gap-6 border-b border-slate-200 p-6 md:p-8">
+            <div>
+              <p class="text-xs font-bold uppercase tracking-[0.24em] text-cyan-700">Metodyka Perspektywy RUA 2026</p>
+              <h2 id="ruaMethodologyTitle" class="mt-2 text-2xl font-extrabold text-slate-950">Jak składa się WSK w Rankingu Uczelni Akademickich?</h2>
+              <p id="ruaMethodologyDesc" class="mt-3 max-w-2xl text-sm leading-6 text-slate-600">Wynik końcowy jest złożony z siedmiu kryteriów. Poniższy poziomy wykres pokazuje ich skumulowany udział w 100% wyniku.</p>
+            </div>
+            <button id="ruaMethodologyClose" type="button" class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-500" aria-label="Zamknij modal metodyki">×</button>
+          </div>
+
+          <div class="p-6 md:p-8">
+            <div class="overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 p-4 md:p-5">
+              <div class="flex h-16 overflow-hidden rounded-2xl bg-white shadow-inner ring-1 ring-slate-200" aria-label="Skumulowane wagi kryteriów RUA 2026">
+                <div class="flex items-center justify-center bg-indigo-600 px-2 text-[10px] font-bold text-white" style="width: 12%;" title="Prestiż — 12%">12%</div>
+                <div class="flex items-center justify-center bg-sky-500 px-2 text-[10px] font-bold text-white" style="width: 12%;" title="Absolwenci na rynku pracy — 12%">12%</div>
+                <div class="flex items-center justify-center bg-cyan-600 px-2 text-[10px] font-bold text-white" style="width: 13%;" title="Potencjał naukowy — 13%">13%</div>
+                <div class="flex items-center justify-center bg-emerald-600 px-2 text-[11px] font-extrabold text-white" style="width: 30%;" title="Efektywność naukowa — 30%">Efektywność 30%</div>
+                <div class="flex items-center justify-center bg-lime-600 px-2 text-[10px] font-bold text-white" style="width: 8%;" title="Innowacyjność — 8%">8%</div>
+                <div class="flex items-center justify-center bg-amber-500 px-2 text-[10px] font-bold text-white" style="width: 10%;" title="Warunki kształcenia — 10%">10%</div>
+                <div class="flex items-center justify-center bg-rose-500 px-2 text-[10px] font-bold text-white" style="width: 15%;" title="Umiędzynarodowienie — 15%">15%</div>
+              </div>
+              <div class="mt-4 grid gap-2 text-[11px] text-slate-600 sm:grid-cols-2 lg:grid-cols-4">
+                <span><b class="text-indigo-700">■</b> Prestiż 12%</span>
+                <span><b class="text-sky-600">■</b> Absolwenci 12%</span>
+                <span><b class="text-cyan-700">■</b> Potencjał naukowy 13%</span>
+                <span><b class="text-emerald-700">■</b> Efektywność naukowa 30%</span>
+                <span><b class="text-lime-700">■</b> Innowacyjność 8%</span>
+                <span><b class="text-amber-600">■</b> Warunki kształcenia 10%</span>
+                <span><b class="text-rose-600">■</b> Umiędzynarodowienie 15%</span>
+              </div>
+            </div>
+
+            <div class="mt-6 grid gap-4 md:grid-cols-2">
+              <article class="rounded-2xl border border-slate-200 p-4">
+                <h3 class="font-bold text-slate-950">Największy blok: nauka</h3>
+                <p class="mt-2 text-sm leading-6 text-slate-600">Potencjał naukowy, efektywność naukowa i innowacyjność dają łącznie <b>51%</b> wyniku, więc ranking silnie premiuje badania, publikacje, granty, patenty i jakość dorobku.</p>
+              </article>
+              <article class="rounded-2xl border border-slate-200 p-4">
+                <h3 class="font-bold text-slate-950">Reputacja i absolwenci</h3>
+                <p class="mt-2 text-sm leading-6 text-slate-600">Prestiż oraz losy absolwentów mają po <b>12%</b>. Łączą opinię środowiska akademickiego z danymi ELA/ZUS o wynagrodzeniach i zatrudnieniu.</p>
+              </article>
+              <article class="rounded-2xl border border-slate-200 p-4">
+                <h3 class="font-bold text-slate-950">Umiędzynarodowienie</h3>
+                <p class="mt-2 text-sm leading-6 text-slate-600">Blok <b>15%</b> obejmuje studentów i kadrę z zagranicy, programy w językach obcych, wymianę, ICI oraz udział w uniwersytecie europejskim.</p>
+              </article>
+              <article class="rounded-2xl border border-slate-200 p-4">
+                <h3 class="font-bold text-slate-950">Jak czytać WSK?</h3>
+                <p class="mt-2 text-sm leading-6 text-slate-600">WSK to syntetyczny wynik 0–100 po zważeniu kryteriów. Na wykresie obok można przełączać widok między miejscem PW a wartością WSK.</p>
+              </article>
+            </div>
+
+            <p class="mt-6 rounded-2xl bg-cyan-50 p-4 text-xs leading-5 text-cyan-900">Źródło robocze: metodyka Perspektywy RUA 2026 opracowana w OKF na podstawie dokumentu <code>rua.txt</code>. Dane źródłowe obejmują m.in. POL-on, SciVal/SCOPUS, ELA/ZUS, CORDIS, PKA oraz bazy Erasmus+/KE.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+
     </main>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
+        const ruaMethodologyModal = document.getElementById('ruaMethodologyModal');
+        const ruaMethodologyOpen = document.getElementById('ruaMethodologyOpen');
+        const ruaMethodologyClose = document.getElementById('ruaMethodologyClose');
+        const ruaMethodologyBackdrop = document.getElementById('ruaMethodologyBackdrop');
+
+        const openRuaMethodology = () => {
+          if (!ruaMethodologyModal) return;
+          ruaMethodologyModal.classList.remove('hidden');
+          document.body.classList.add('overflow-hidden');
+          ruaMethodologyClose?.focus();
+        };
+
+        const closeRuaMethodology = () => {
+          if (!ruaMethodologyModal) return;
+          ruaMethodologyModal.classList.add('hidden');
+          document.body.classList.remove('overflow-hidden');
+          ruaMethodologyOpen?.focus();
+        };
+
+        ruaMethodologyOpen?.addEventListener('click', openRuaMethodology);
+        ruaMethodologyClose?.addEventListener('click', closeRuaMethodology);
+        ruaMethodologyBackdrop?.addEventListener('click', closeRuaMethodology);
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape' && ruaMethodologyModal && !ruaMethodologyModal.classList.contains('hidden')) {
+            closeRuaMethodology();
+          }
+        });
+
         if (typeof Chart === 'undefined') {
           return;
         }
