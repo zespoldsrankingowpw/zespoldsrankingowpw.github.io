@@ -109,13 +109,13 @@
             <div class="flex items-baseline justify-between gap-3">
               <h3 class="text-lg font-semibold text-gray-900">Ranking Perspektywy</h3>
               <button id="perspektywyToggle" type="button" class="inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-xl border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition" aria-pressed="false">
-                Pokaż WSK 2026
+                Pokaż WSK
               </button>
             </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
             <canvas id="chartPerspektywy" class="mt-4 w-full" style="height: 330px;"></canvas>
-            <p id="perspektywyNote" class="text-xs text-gray-500 mt-4">Politechnika Warszawska utrzymuje 3 miejsce w rankingu; WSK 92,3 pkt w 2026.</p>
-            <p class="text-[11px] text-gray-400 mt-2">Źródło: Ranking Perspektyw 2026. Oficjalny widok publikuje miejsca 2023–2026 oraz WSK dla edycji 2026.</p>
+            <p id="perspektywyNote" class="text-xs text-gray-500 mt-4">Politechnika Warszawska utrzymuje 3 miejsce w latach 2020–2026; WSK wzrósł z 78,9 do 92,3 pkt.</p>
+            <p class="text-[11px] text-gray-400 mt-2">Źródło: Perspektywy RUA 2020–2026 z pliku rankingi.xlsx. Przełącznik: pozycja ↔ WSK (0-100).</p>
           </div>
           <div class="bg-white rounded-2xl shadow-sm p-6">
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgba(79,70,229,0.85); border-color: rgba(79,70,229,0.85); background-color: #f8f9ff;">Aktualizacja: 26.06.2026</span>
@@ -2931,9 +2931,9 @@
           }
         });
 
-        const perspektywyYears = [2023, 2024, 2025, 2026];
-        const perspektywyPositions = [3, 3, 3, 3];
-        const perspektywyScores = [92.3];
+        const perspektywyYears = [2020, 2021, 2022, 2023, 2024, 2025, 2026];
+        const perspektywyPositions = [3, 3, 3, 3, 3, 3, 3];
+        const perspektywyScores = [78.9, 83.4, 84, 88, 85, 89.9, 92.3];
         const perspektywyCanvas = document.getElementById('chartPerspektywy');
         const perspektywyToggle = document.getElementById('perspektywyToggle');
         let perspektywyMode = 'position';
@@ -3050,7 +3050,7 @@
             const yAxis = perspektywyChart.options.scales.y;
 
             if (mode === 'score') {
-              perspektywyChart.data.labels = [2026];
+              perspektywyChart.data.labels = perspektywyYears;
               dataset.label = 'WSK (0-100)';
               dataset.data = perspektywyScores;
               dataset.borderColor = 'rgba(16,185,129,0.85)';
@@ -3068,7 +3068,7 @@
                 return value !== null && value !== undefined ? `WSK: ${value.toFixed(1)}` : 'Brak danych';
               };
               if (perspektywyNote) {
-                perspektywyNote.textContent = 'WSK 92,3 pkt dotyczy edycji 2026; wcześniejsze lata na stronie Perspektyw są publikowane jako miejsca, nie jako historyczny WSK.';
+                perspektywyNote.textContent = 'Historyczne dane WSK z pliku rankingi.xlsx pokazują wzrost PW: 78,9 pkt w 2020 → 92,3 pkt w 2026.';
               }
             } else {
               perspektywyChart.data.labels = perspektywyYears;
@@ -3089,7 +3089,7 @@
                 return value ? `Pozycja: ${value}` : 'Brak danych';
               };
               if (perspektywyNote) {
-                perspektywyNote.textContent = 'Politechnika Warszawska utrzymuje 3 miejsce w rankingu w latach 2023–2026; WSK 92,3 pkt w 2026.';
+                perspektywyNote.textContent = 'Politechnika Warszawska utrzymuje 3 miejsce w rankingu w całej serii 2020–2026; WSK wzrósł do 92,3 pkt.';
               }
             }
 
@@ -3104,7 +3104,7 @@
               setPerspektywyMode(perspektywyMode);
 
               const isScore = perspektywyMode === 'score';
-              perspektywyToggle.textContent = isScore ? 'Pokaż pozycję' : 'Pokaż WSK 2026';
+              perspektywyToggle.textContent = isScore ? 'Pokaż pozycję' : 'Pokaż WSK';
               perspektywyToggle.setAttribute('aria-pressed', isScore.toString());
             });
           }
