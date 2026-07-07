@@ -329,58 +329,125 @@
     <div id="ruaMethodologyModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-labelledby="ruaMethodologyTitle" aria-describedby="ruaMethodologyDesc">
       <div id="ruaMethodologyBackdrop" class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
       <div class="relative z-10 flex min-h-full items-center justify-center p-4">
-        <section class="max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-[28px] bg-white shadow-2xl ring-1 ring-slate-900/10">
+        <section class="max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[28px] bg-white shadow-2xl ring-1 ring-slate-900/10">
           <div class="flex items-start justify-between gap-6 border-b border-slate-200 p-6 md:p-8">
             <div>
               <p class="text-xs font-bold uppercase tracking-[0.24em] text-cyan-700">Metodyka Perspektywy RUA 2026</p>
-              <h2 id="ruaMethodologyTitle" class="mt-2 text-2xl font-extrabold text-slate-950">Jak składa się WSK w Rankingu Uczelni Akademickich?</h2>
-              <p id="ruaMethodologyDesc" class="mt-3 max-w-2xl text-sm leading-6 text-slate-600">Wynik końcowy jest złożony z siedmiu kryteriów. Poniższy poziomy wykres pokazuje ich skumulowany udział w 100% wyniku.</p>
+              <h2 id="ruaMethodologyTitle" class="mt-2 text-2xl font-extrabold text-slate-950">Co dokładnie składa się na WSK?</h2>
+              <p id="ruaMethodologyDesc" class="mt-3 max-w-3xl text-sm leading-6 text-slate-600">Modal streszcza plik <code>rua.txt</code>: kryteria wejścia, pełny układ wag oraz wskaźniki cząstkowe ze źródłami danych używanymi w Rankingu Uczelni Akademickich 2026.</p>
             </div>
             <button id="ruaMethodologyClose" type="button" class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-500" aria-label="Zamknij modal metodyki">×</button>
           </div>
 
-          <div class="p-6 md:p-8">
-            <div class="overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 p-4 md:p-5">
-              <div class="flex h-16 overflow-hidden rounded-2xl bg-white shadow-inner ring-1 ring-slate-200" aria-label="Skumulowane wagi kryteriów RUA 2026">
+          <div class="space-y-6 p-6 md:p-8">
+            <section class="rounded-3xl border border-slate-200 bg-slate-50 p-4 md:p-5" aria-label="Skumulowane wagi kryteriów RUA 2026">
+              <div class="mb-3 flex flex-wrap items-end justify-between gap-3">
+                <div>
+                  <h3 class="text-base font-extrabold text-slate-950">Poziomy skumulowany wykres wag</h3>
+                  <p class="mt-1 text-xs leading-5 text-slate-500">Każdy segment odpowiada udziałowi kryterium w końcowym WSK. Nazwy są w legendzie — na pasku zostają tylko wartości procentowe.</p>
+                </div>
+                <p class="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-600 ring-1 ring-slate-200">Razem 100%</p>
+              </div>
+              <div class="flex h-16 overflow-hidden rounded-2xl bg-white shadow-inner ring-1 ring-slate-200">
                 <div class="flex items-center justify-center bg-indigo-600 px-2 text-[10px] font-bold text-white" style="width: 12%;" title="Prestiż — 12%">12%</div>
                 <div class="flex items-center justify-center bg-sky-500 px-2 text-[10px] font-bold text-white" style="width: 12%;" title="Absolwenci na rynku pracy — 12%">12%</div>
                 <div class="flex items-center justify-center bg-cyan-600 px-2 text-[10px] font-bold text-white" style="width: 13%;" title="Potencjał naukowy — 13%">13%</div>
-                <div class="flex items-center justify-center bg-emerald-600 px-2 text-[11px] font-extrabold text-white" style="width: 30%;" title="Efektywność naukowa — 30%">Efektywność 30%</div>
+                <div class="flex items-center justify-center bg-emerald-600 px-2 text-[12px] font-extrabold text-white" style="width: 30%;" title="Efektywność naukowa — 30%">30%</div>
                 <div class="flex items-center justify-center bg-lime-600 px-2 text-[10px] font-bold text-white" style="width: 8%;" title="Innowacyjność — 8%">8%</div>
                 <div class="flex items-center justify-center bg-amber-500 px-2 text-[10px] font-bold text-white" style="width: 10%;" title="Warunki kształcenia — 10%">10%</div>
                 <div class="flex items-center justify-center bg-rose-500 px-2 text-[10px] font-bold text-white" style="width: 15%;" title="Umiędzynarodowienie — 15%">15%</div>
               </div>
               <div class="mt-4 grid gap-2 text-[11px] text-slate-600 sm:grid-cols-2 lg:grid-cols-4">
                 <span><b class="text-indigo-700">■</b> Prestiż 12%</span>
-                <span><b class="text-sky-600">■</b> Absolwenci 12%</span>
+                <span><b class="text-sky-600">■</b> Absolwenci na rynku pracy 12%</span>
                 <span><b class="text-cyan-700">■</b> Potencjał naukowy 13%</span>
                 <span><b class="text-emerald-700">■</b> Efektywność naukowa 30%</span>
                 <span><b class="text-lime-700">■</b> Innowacyjność 8%</span>
                 <span><b class="text-amber-600">■</b> Warunki kształcenia 10%</span>
                 <span><b class="text-rose-600">■</b> Umiędzynarodowienie 15%</span>
               </div>
-            </div>
+            </section>
 
-            <div class="mt-6 grid gap-4 md:grid-cols-2">
-              <article class="rounded-2xl border border-slate-200 p-4">
-                <h3 class="font-bold text-slate-950">Największy blok: nauka</h3>
-                <p class="mt-2 text-sm leading-6 text-slate-600">Potencjał naukowy, efektywność naukowa i innowacyjność dają łącznie <b>51%</b> wyniku, więc ranking silnie premiuje badania, publikacje, granty, patenty i jakość dorobku.</p>
-              </article>
-              <article class="rounded-2xl border border-slate-200 p-4">
-                <h3 class="font-bold text-slate-950">Reputacja i absolwenci</h3>
-                <p class="mt-2 text-sm leading-6 text-slate-600">Prestiż oraz losy absolwentów mają po <b>12%</b>. Łączą opinię środowiska akademickiego z danymi ELA/ZUS o wynagrodzeniach i zatrudnieniu.</p>
-              </article>
-              <article class="rounded-2xl border border-slate-200 p-4">
-                <h3 class="font-bold text-slate-950">Umiędzynarodowienie</h3>
-                <p class="mt-2 text-sm leading-6 text-slate-600">Blok <b>15%</b> obejmuje studentów i kadrę z zagranicy, programy w językach obcych, wymianę, ICI oraz udział w uniwersytecie europejskim.</p>
-              </article>
-              <article class="rounded-2xl border border-slate-200 p-4">
-                <h3 class="font-bold text-slate-950">Jak czytać WSK?</h3>
-                <p class="mt-2 text-sm leading-6 text-slate-600">WSK to syntetyczny wynik 0–100 po zważeniu kryteriów. Na wykresie obok można przełączać widok między miejscem PW a wartością WSK.</p>
-              </article>
-            </div>
+            <section class="rounded-3xl border border-cyan-100 bg-cyan-50/70 p-5">
+              <h3 class="font-extrabold text-slate-950">Kryteria wejścia do RUA 2026</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-700">Ranking obejmuje publiczne i niepubliczne uczelnie akademickie z wykazu RAD-on, które spełniają jednocześnie trzy warunki: mają uprawnienia do nadawania stopnia doktora w co najmniej jednej dyscyplinie naukowej, co najmniej 300 studentów studiów stacjonarnych oraz przynajmniej dwa roczniki absolwentów.</p>
+            </section>
 
-            <p class="mt-6 rounded-2xl bg-cyan-50 p-4 text-xs leading-5 text-cyan-900">Źródło robocze: metodyka Perspektywy RUA 2026 opracowana w OKF na podstawie dokumentu <code>rua.txt</code>. Dane źródłowe obejmują m.in. POL-on, SciVal/SCOPUS, ELA/ZUS, CORDIS, PKA oraz bazy Erasmus+/KE.</p>
+            <section class="grid gap-4 lg:grid-cols-2" aria-label="Szczegółowe kryteria i wskaźniki RUA 2026">
+              <details class="rounded-2xl border border-slate-200 bg-white p-4" open>
+                <summary class="cursor-pointer text-sm font-extrabold text-indigo-700">Prestiż — 12%</summary>
+                <ul class="mt-3 space-y-3 text-xs leading-5 text-slate-600">
+                  <li><b>Ocena przez kadrę akademicką — 10%.</b> Liczba wskazań uczelni w badaniu CAWI wśród profesorów i doktorów habilitowanych z lat 2021–2025; uwzględniany jest także wynik poprzedniej edycji. Źródło: badanie własne Fundacji Edukacyjnej „Perspektywy”.</li>
+                  <li><b>Uznanie międzynarodowe — 2%.</b> Pozycja uczelni w najnowszych globalnych rankingach dostępnych w maju 2026: ARWU, THE, QS, US News, CWTS Leiden, FT i Webometrics.</li>
+                </ul>
+              </details>
+
+              <details class="rounded-2xl border border-slate-200 bg-white p-4" open>
+                <summary class="cursor-pointer text-sm font-extrabold text-sky-700">Absolwenci na rynku pracy — 12%</summary>
+                <ul class="mt-3 space-y-3 text-xs leading-5 text-slate-600">
+                  <li><b>Wynagrodzenia absolwentów — 6%.</b> Średnie wynagrodzenia absolwentów z lat 2020–2023 odniesione do wynagrodzeń w powiatach zamieszkania. Źródło: ELA, MNiSW/ZUS, dane do 2024 r.</li>
+                  <li><b>Zatrudnienie absolwentów — 6%.</b> Średnia długość zatrudnienia, szacowana przez udział miesięcy bez rejestracji jako bezrobotny, odniesiona do powiatów zamieszkania. Źródło: ELA, MNiSW/ZUS, dane do 2024 r.</li>
+                </ul>
+              </details>
+
+              <details class="rounded-2xl border border-slate-200 bg-white p-4" open>
+                <summary class="cursor-pointer text-sm font-extrabold text-cyan-700">Potencjał naukowy — 13%</summary>
+                <ul class="mt-3 space-y-3 text-xs leading-5 text-slate-600">
+                  <li><b>Ewaluacja działalności naukowej — 8%.</b> Suma kategorii ewaluacyjnych dyscyplin ważona liczbą N; dla uczelni z jedną ewaluowaną dyscypliną wskaźnika nie wyznacza się, a WSK koryguje współczynnikiem 100/92. Źródło: POL-on.</li>
+                  <li><b>Nasycenie kadry osobami o najwyższych kwalifikacjach — 2%.</b> Udział pracowników badawczych i badawczo-dydaktycznych z habilitacją lub profesurą. Źródło: POL-on, stan na 31.12.2025.</li>
+                  <li><b>Uprawnienia doktorskie i habilitacyjne — 1%.</b> Ważona suma uprawnień i nadanych stopni doktora oraz doktora habilitowanego. Źródło: POL-on, stan na 31.12.2025.</li>
+                  <li><b>Kształcenie doktorantów w szkołach doktorskich — 2%.</b> Relacja liczby doktorantów do kadry z habilitacją/profesurą; relacja ≥ 1 daje maksimum. Źródło: POL-on.</li>
+                </ul>
+              </details>
+
+              <details class="rounded-2xl border border-slate-200 bg-white p-4" open>
+                <summary class="cursor-pointer text-sm font-extrabold text-emerald-700">Efektywność naukowa — 30%</summary>
+                <ul class="mt-3 space-y-3 text-xs leading-5 text-slate-600">
+                  <li><b>Środki na badania — 5%.</b> Nakłady B+R z lat 2022–2025 na pracownika działalności naukowej, z korektą kosztochłonności dyscyplin. Źródła: POL-on, ankieta uczelni, PNT-01.</li>
+                  <li><b>Programy ramowe UE — 4%.</b> Środki z programów ramowych UE na badania i innowacje na pracownika naukowego, lata 2022–2025. Źródła: POL-on i CORDIS.</li>
+                  <li><b>Rozwój kadry własnej — 3%.</b> Stopnie i tytuły pracowników z lat 2024–2025: doktor 1,0; doktor habilitowany 1,5; profesor 2,0. Źródło: POL-on.</li>
+                  <li><b>Nadane stopnie naukowe — 3%.</b> Stopnie doktora i doktora habilitowanego nadane przez uczelnię w latach 2024–2025, ważone odpowiednio 1,0 i 1,5. Źródło: POL-on.</li>
+                  <li><b>Publikacje — 3%.</b> Publikacje z lat 2021–2025 w SCOPUS w relacji do liczby pracowników badawczych i badawczo-dydaktycznych. Źródła: SciVal i POL-on.</li>
+                  <li><b>FWCI — 5%.</b> Cytowania publikacji z lat 2021–2025 względem średniej dla porównywalnych publikacji w SCOPUS, bez autocytowań. Źródło: SciVal.</li>
+                  <li><b>FWVI — 3%.</b> Odsłony publikacji względem średniej dla porównywalnych publikacji w SCOPUS. Źródło: SciVal.</li>
+                  <li><b>Top 10 — 4%.</b> Publikacje w czasopismach z górnych 10% wg CiteScore w relacji do publikacji uczelni w SCOPUS. Źródło: SciVal.</li>
+                </ul>
+              </details>
+
+              <details class="rounded-2xl border border-slate-200 bg-white p-4">
+                <summary class="cursor-pointer text-sm font-extrabold text-lime-700">Innowacyjność — 8%</summary>
+                <ul class="mt-3 space-y-3 text-xs leading-5 text-slate-600">
+                  <li><b>Patenty i prawa ochronne w Polsce — 3%.</b> Krajowe patenty i prawa ochronne na wzory użytkowe z lat 2022–2025, skorygowane współczynnikami intensywności patentowej i wzorów użytkowych. Źródła: POL-on i ankieta uczelni.</li>
+                  <li><b>Patenty i prawa ochronne za granicą — 3%.</b> Zagraniczne patenty i prawa ochronne z lat 2022–2025 z analogiczną korektą dyscyplinową. Źródła: POL-on i ankieta uczelni.</li>
+                  <li><b>SDG — 2%.</b> Wkład badań uczelni w Cele Zrównoważonego Rozwoju ONZ. Źródło: SciVal.</li>
+                </ul>
+              </details>
+
+              <details class="rounded-2xl border border-slate-200 bg-white p-4">
+                <summary class="cursor-pointer text-sm font-extrabold text-amber-700">Warunki kształcenia — 10%</summary>
+                <ul class="mt-3 space-y-3 text-xs leading-5 text-slate-600">
+                  <li><b>Dostępność kadr wysokokwalifikowanych — 5%.</b> Ważona liczba nauczycieli akademickich na etacie względem liczby studentów przeliczeniowych; profesor 2,0, doktor habilitowany 1,5, doktor 1,0; student stacjonarny 1,0, niestacjonarny 0,6. Źródło: POL-on, stan na 31.12.2025.</li>
+                  <li><b>Akredytacje — 5%.</b> Ważona suma aktualnych akredytacji i certyfikatów międzynarodowych oraz certyfikatów doskonałości kształcenia PKA. Źródło: baza PKA i bazy międzynarodowych agencji akredytacyjnych.</li>
+                </ul>
+              </details>
+
+              <details class="rounded-2xl border border-slate-200 bg-white p-4 lg:col-span-2">
+                <summary class="cursor-pointer text-sm font-extrabold text-rose-700">Umiędzynarodowienie — 15%</summary>
+                <div class="mt-3 grid gap-3 md:grid-cols-2 text-xs leading-5 text-slate-600">
+                  <p><b>Studenci cudzoziemcy — 3%.</b> Udział studentów zagranicznych; ≥25% daje maksimum. Źródło: POL-on.</p>
+                  <p><b>Studiujący w językach obcych — 3%.</b> Udział studentów na studiach w językach obcych; ≥25% daje maksimum. Źródła: POL-on i ankieta uczelni.</p>
+                  <p><b>ICI — 2%.</b> International Collaboration Impact: cytowania publikacji współautorskich z podmiotami zagranicznymi z lat 2021–2025, bez autocytowań. Źródło: SciVal.</p>
+                  <p><b>Uniwersytet europejski — 1%.</b> Premia za pełne członkostwo w uniwersytecie europejskim wyłonionym w konkursach KE. Źródło: baza Komisji Europejskiej.</p>
+                  <p><b>Nauczyciele akademiccy z zagranicy — 1%.</b> Udział kadry zagranicznej; ≥25% daje maksimum. Źródło: POL-on.</p>
+                  <p><b>Wymiana kadry Erasmus+ — 1%.</b> Wyjazdy pracowników na co najmniej 5 dni w 2025 r. w relacji do liczby nauczycieli akademickich; ≥25% daje maksimum. Źródło: Erasmus+.</p>
+                  <p><b>Wymiana studencka — wyjazdy — 1,5%.</b> Studenci wyjeżdżający na co najmniej 3 miesiące w relacji do ogólnej liczby studentów. Źródło: POL-on.</p>
+                  <p><b>Wymiana studencka — przyjazdy — 1,5%.</b> Studenci przyjeżdżający na co najmniej 3 miesiące w relacji do ogólnej liczby studentów. Źródło: POL-on.</p>
+                  <p><b>Wielokulturowość — 1%.</b> Liczba krajów, z których pochodzi co najmniej 10 studentów cudzoziemców. Źródło: POL-on.</p>
+                </div>
+              </details>
+            </section>
+
+            <p class="rounded-2xl bg-cyan-50 p-4 text-xs leading-5 text-cyan-900">Źródło treści: plik <code>rua.txt</code> — „Metodologia Rankingu Uczelni Akademickich 2026”. Modal jest skrótem publikacyjnym, ale obejmuje wszystkie główne kryteria, wskaźniki cząstkowe, wagi i źródła danych wymienione w pliku.</p>
           </div>
         </section>
       </div>
