@@ -128,8 +128,19 @@
           </div>
           <div class="bg-white rounded-2xl shadow-sm p-6">
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgba(79,70,229,0.85); border-color: rgba(79,70,229,0.85); background-color: #f8f9ff;">Aktualizacja: 26.06.2026</span>
-            <div class="flex items-baseline justify-between gap-3">
-              <h3 class="text-lg font-semibold text-gray-900">Ranking Kierunków Perspektywy</h3>
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-center gap-2">
+                <h3 class="text-lg font-semibold text-gray-900">Ranking Kierunków Perspektywy</h3>
+                <button id="rksMethodologyOpen" type="button" class="group relative inline-flex items-center gap-1.5 rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-bold text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-100 hover:text-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Otwórz metodykę Rankingu Kierunków Perspektywy" aria-haspopup="dialog" title="Metodyka RKS: kryteria wejścia, warianty wag i źródła danych">
+                  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5 shrink-0 text-indigo-700/80">
+                    <path d="M6 5.5h12a1 1 0 0 1 1 1v11.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6.5a1 1 0 0 1 1-1Z" />
+                    <path d="M8 8.5h8" />
+                    <path d="M8 11.5h8" />
+                    <path d="M8 14.5h5" />
+                  </svg>
+                  <span>Metodyka</span>
+                </button>
+              </div>
               <button id="rksToggle" type="button" class="inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-xl border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition" aria-pressed="false">
                 Pokaż punktację
               </button>
@@ -144,7 +155,110 @@
             <p class="text-[11px] text-gray-400 mt-2">Źródło: Perspektywy — Ranking Kierunków Studiów 2020–2026. Przełącznik: pozycja ↔ punktacja (0-100).</p>
           </div>
         </div>
-        <section aria-label="Podsumowanie QS 2027" class="mt-10 mb-6 overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm">
+
+        <div id="rksMethodologyModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-labelledby="rksMethodologyTitle" aria-describedby="rksMethodologyDesc">
+          <div id="rksMethodologyBackdrop" class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
+          <div class="relative z-10 flex min-h-full items-center justify-center p-4">
+            <section class="max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[28px] bg-white shadow-2xl ring-1 ring-slate-900/10">
+              <div class="flex items-start justify-between gap-6 border-b border-slate-200 p-6 md:p-8">
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-[0.24em] text-indigo-700">Metodyka Perspektywy RKS 2026</p>
+                  <h2 id="rksMethodologyTitle" class="mt-2 text-2xl font-extrabold text-slate-950">Jak czytać Ranking Kierunków Studiów?</h2>
+                  <p id="rksMethodologyDesc" class="mt-3 max-w-3xl text-sm leading-6 text-slate-600">Modal streszcza zasady wejścia, dominujące bloki wag oraz warianty dla kierunków technicznych, regulowanych i astronomii. To skrót do szybkiego odczytu metodyki, bez zagłębiania się w pełny PDF.</p>
+                </div>
+                <button id="rksMethodologyClose" type="button" class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-label="Zamknij modal metodyki">×</button>
+              </div>
+
+              <div class="space-y-6 p-6 md:p-8">
+                <section class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" aria-label="Szybkie fakty o rankingu kierunków">
+                  <div class="rounded-2xl border border-indigo-100 bg-indigo-50 p-4">
+                    <p class="text-3xl font-extrabold text-indigo-700">76</p>
+                    <p class="mt-2 text-xs font-semibold uppercase tracking-wider text-slate-500">kierunków w paczce</p>
+                  </div>
+                  <div class="rounded-2xl border border-cyan-100 bg-cyan-50 p-4">
+                    <p class="text-3xl font-extrabold text-cyan-700">9</p>
+                    <p class="mt-2 text-xs font-semibold uppercase tracking-wider text-slate-500">grup kierunków</p>
+                  </div>
+                  <div class="rounded-2xl border border-emerald-100 bg-emerald-50 p-4">
+                    <p class="text-3xl font-extrabold text-emerald-700">64</p>
+                    <p class="mt-2 text-xs font-semibold uppercase tracking-wider text-slate-500">kierunki standardowe</p>
+                  </div>
+                  <div class="rounded-2xl border border-amber-100 bg-amber-50 p-4">
+                    <p class="text-3xl font-extrabold text-amber-700">4</p>
+                    <p class="mt-2 text-xs font-semibold uppercase tracking-wider text-slate-500">warianty wag</p>
+                  </div>
+                </section>
+
+                <section class="grid gap-4 lg:grid-cols-2">
+                  <article class="rounded-3xl border border-slate-200 bg-slate-50 p-5">
+                    <h3 class="text-base font-extrabold text-slate-950">Kryteria wejścia</h3>
+                    <ul class="mt-3 space-y-3 text-sm leading-6 text-slate-700">
+                      <li>kierunek musi być prowadzony w trybie stacjonarnym;</li>
+                      <li>to albo jednolite studium magisterskie, albo ciąg I i II stopnia w tej samej uczelni;</li>
+                      <li>co najmniej jeden kierunek w grupie musi mieć dwa roczniki absolwentów;</li>
+                      <li>na kierunku musi studiować przynajmniej 10 osób;</li>
+                      <li>dla lekarskiego, lekarsko-dentystycznego i prawa dochodzi warunek egzaminów zawodowych.</li>
+                    </ul>
+                  </article>
+
+                  <article class="rounded-3xl border border-cyan-100 bg-cyan-50/70 p-5">
+                    <h3 class="text-base font-extrabold text-slate-950">Co waży najmocniej</h3>
+                    <div class="mt-3 grid gap-3 sm:grid-cols-2">
+                      <div class="rounded-2xl bg-white p-4 ring-1 ring-cyan-100">
+                        <p class="text-xs font-bold uppercase tracking-wider text-cyan-700">Prestiż</p>
+                        <p class="mt-1 text-sm text-slate-700">Ocena przez kadrę akademicką 15% + reputacja międzynarodowa 2%.</p>
+                      </div>
+                      <div class="rounded-2xl bg-white p-4 ring-1 ring-cyan-100">
+                        <p class="text-xs font-bold uppercase tracking-wider text-cyan-700">Absolwenci</p>
+                        <p class="mt-1 text-sm text-slate-700">Wynagrodzenia i zatrudnialność po 10% w schemacie bazowym.</p>
+                      </div>
+                      <div class="rounded-2xl bg-white p-4 ring-1 ring-cyan-100">
+                        <p class="text-xs font-bold uppercase tracking-wider text-cyan-700">Akademicki i naukowy</p>
+                        <p class="mt-1 text-sm text-slate-700">Ewaluacja, publikacje, FWCI/FWVI i Top 10 budują wynik kierunków naukowych.</p>
+                      </div>
+                      <div class="rounded-2xl bg-white p-4 ring-1 ring-cyan-100">
+                        <p class="text-xs font-bold uppercase tracking-wider text-cyan-700">Dydaktyka i zagranica</p>
+                        <p class="mt-1 text-sm text-slate-700">Akredytacje, jakość przyjętych i umiędzynarodowienie wnoszą istotne korekty.</p>
+                      </div>
+                    </div>
+                  </article>
+                </section>
+
+                <section class="rounded-3xl border border-slate-200 bg-slate-50 p-5">
+                  <h3 class="text-base font-extrabold text-slate-950">Warianty wag</h3>
+                  <div class="mt-4 grid gap-3 md:grid-cols-2">
+                    <div class="rounded-2xl border border-slate-200 bg-white p-4">
+                      <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Standardowy · 64 kierunki</p>
+                      <p class="mt-2 text-sm leading-6 text-slate-700">Brak EngiRank i brak kryterium egzaminacyjnego. Największe wagi mają: ocena przez kadrę, wynagrodzenia / zatrudnialność, akredytacje / jakość przyjętych, ewaluacja oraz wskaźniki bibliometryczne.</p>
+                    </div>
+                    <div class="rounded-2xl border border-slate-200 bg-white p-4">
+                      <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Techniczny z EngiRank · 8 kierunków</p>
+                      <p class="mt-2 text-sm leading-6 text-slate-700">Dodatkowy wskaźnik EngiRank (10%) wzmacnia kierunki techniczne: budownictwo, elektronika i telekomunikacja, elektrotechnika, inżynieria biomedyczna, chemiczna, materiałowa, środowiska oraz mechanika i budowa maszyn.</p>
+                    </div>
+                    <div class="rounded-2xl border border-slate-200 bg-white p-4">
+                      <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Regulowany zawodowo · 3 kierunki</p>
+                      <p class="mt-2 text-sm leading-6 text-slate-700">Kierunek lekarski, lekarsko-dentystyczny i prawo mają dodatkowy wskaźnik egzaminacyjny 10% zamiast EngiRank.</p>
+                    </div>
+                    <div class="rounded-2xl border border-slate-200 bg-white p-4">
+                      <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Astronomia · 1 kierunek</p>
+                      <p class="mt-2 text-sm leading-6 text-slate-700">Osobny profil wag: silniejszy nacisk na potencjał naukowy (20%), umiędzynarodowienie (12%) i prestiż (15%).</p>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="rounded-3xl border border-amber-100 bg-amber-50 p-5">
+                  <h3 class="text-base font-extrabold text-slate-950">Co warto pamiętać</h3>
+                  <ul class="mt-3 space-y-2 text-sm leading-6 text-amber-950">
+                    <li>Metodyka miesza dane administracyjne, bibliometryczne, ankietowe i reputacyjne.</li>
+                    <li>FWVI pojawia się w opisie tekstowym, ale nie ma osobnej kolumny w przekazanym JSON-ie.</li>
+                    <li>W ekstrakcie `studenci_cudzoziemcy` i `top_10` pozostają puste, więc bez pełnego PDF nie należy domyślać się wag.</li>
+                    <li>Wskaźniki trzeba czytać łącznie z wariantem kierunku, bo nie wszystkie działają we wszystkich grupach.</li>
+                  </ul>
+                </section>
+              </div>
+            </section>
+          </div>
+        </div>        <section aria-label="Podsumowanie QS 2027" class="mt-10 mb-6 overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm">
           <div class="grid lg:grid-cols-[0.95fr_1.35fr]">
             <div class="bg-slate-950 text-white p-8 md:p-10 flex flex-col justify-between gap-8">
               <div>
@@ -479,6 +593,10 @@
         const ruaMethodologyOpen = document.getElementById('ruaMethodologyOpen');
         const ruaMethodologyClose = document.getElementById('ruaMethodologyClose');
         const ruaMethodologyBackdrop = document.getElementById('ruaMethodologyBackdrop');
+        const rksMethodologyModal = document.getElementById('rksMethodologyModal');
+        const rksMethodologyOpen = document.getElementById('rksMethodologyOpen');
+        const rksMethodologyClose = document.getElementById('rksMethodologyClose');
+        const rksMethodologyBackdrop = document.getElementById('rksMethodologyBackdrop');
 
         const openRuaMethodology = () => {
           if (!ruaMethodologyModal) return;
@@ -494,12 +612,34 @@
           ruaMethodologyOpen?.focus();
         };
 
+        const openRksMethodology = () => {
+          if (!rksMethodologyModal) return;
+          rksMethodologyModal.classList.remove('hidden');
+          document.body.classList.add('overflow-hidden');
+          rksMethodologyClose?.focus();
+        };
+
+        const closeRksMethodology = () => {
+          if (!rksMethodologyModal) return;
+          rksMethodologyModal.classList.add('hidden');
+          document.body.classList.remove('overflow-hidden');
+          rksMethodologyOpen?.focus();
+        };
+
         ruaMethodologyOpen?.addEventListener('click', openRuaMethodology);
         ruaMethodologyClose?.addEventListener('click', closeRuaMethodology);
         ruaMethodologyBackdrop?.addEventListener('click', closeRuaMethodology);
+        rksMethodologyOpen?.addEventListener('click', openRksMethodology);
+        rksMethodologyClose?.addEventListener('click', closeRksMethodology);
+        rksMethodologyBackdrop?.addEventListener('click', closeRksMethodology);
         document.addEventListener('keydown', (event) => {
-          if (event.key === 'Escape' && ruaMethodologyModal && !ruaMethodologyModal.classList.contains('hidden')) {
-            closeRuaMethodology();
+          if (event.key === 'Escape') {
+            if (ruaMethodologyModal && !ruaMethodologyModal.classList.contains('hidden')) {
+              closeRuaMethodology();
+            }
+            if (rksMethodologyModal && !rksMethodologyModal.classList.contains('hidden')) {
+              closeRksMethodology();
+            }
           }
         });
 
