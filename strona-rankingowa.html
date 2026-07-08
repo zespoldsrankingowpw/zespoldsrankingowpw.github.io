@@ -449,6 +449,23 @@
               </section>
             </section>
 
+            <section class="rounded-3xl border border-slate-200 bg-slate-50 p-5">
+              <div class="mb-3 flex flex-wrap items-end justify-between gap-3">
+                <div>
+                  <h3 class="text-base font-extrabold text-slate-950">Dyscypliny PW w QS by Subject</h3>
+                  <p class="mt-1 text-xs leading-5 text-slate-500">Lista obejmuje wyłącznie dyscypliny, w których PW ma wynik w QS World University Rankings by Subject.</p>
+                </div>
+                <p class="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-600 ring-1 ring-slate-200">Tylko dyscypliny PW</p>
+              </div>
+              <label for="ruaSubjectSelect" class="block">
+                <span class="text-xs font-semibold uppercase tracking-widest text-gray-500">Wybierz dyscyplinę</span>
+                <select id="ruaSubjectSelect" class="mt-1 w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-indigo-500 focus:ring-indigo-500"></select>
+              </label>
+              <canvas id="ruaSubjectChart" class="w-full" style="margin-top: 0.5rem; height: 250px;"></canvas>
+              <p id="ruaSubjectNote" class="mt-4 text-xs text-gray-500">Pozycja PW w QS by Subject aktualizuje się po wyborze dyscypliny.</p>
+              <p class="mt-2 text-[11px] text-gray-400">Źródło: QS World University Rankings by Subject 2023-2026.</p>
+            </section>
+
             <p class="rounded-2xl bg-cyan-50 p-4 text-xs leading-5 text-cyan-900">Źródło treści: strona Perspektywy — „Metodologia Rankingu Uczelni Akademickich 2026”. Modal jest skrótem publikacyjnym, ale obejmuje główne kryteria, wskaźniki cząstkowe, wagi i źródła danych opisane w metodyce.</p>
           </div>
         </section>
@@ -1810,7 +1827,14 @@
         const qsSubjectNote = document.getElementById('qsSubjectNote');
 
         if (qsSubjectCanvas && qsSubjectSelect && qsSubjectData && qsSubjectData.subjects) {
-          const subjectNames = Object.keys(qsSubjectData.subjects).sort((a, b) => a.localeCompare(b, 'pl-PL'));
+          const hasSubjectData = (subjectData) => {
+            const values = (subjectData?.lower || []).concat(subjectData?.upper || []);
+            return values.some((value) => typeof value === 'number');
+          };
+
+          const subjectNames = Object.keys(qsSubjectData.subjects)
+            .filter((subject) => hasSubjectData(qsSubjectData.subjects[subject]))
+            .sort((a, b) => a.localeCompare(b, 'pl-PL'));
 
           qsSubjectSelect.innerHTML = subjectNames
             .map((subject) => `<option value="${subject}">${subject}</option>`)
@@ -1952,6 +1976,159 @@
           qsSubjectSelect.addEventListener('change', (event) => {
             currentSubject = event.target.value;
             updateQSSubjectChart(currentSubject);
+          });
+        }
+
+        const ruaSubjectCanvas = document.getElementById('ruaSubjectChart');
+        const ruaSubjectSelect = document.getElementById('ruaSubjectSelect');
+        const ruaSubjectNote = document.getElementById('ruaSubjectNote');
+
+        if (ruaSubjectCanvas && ruaSubjectSelect && qsSubjectData && qsSubjectData.subjects) {
+          const hasSubjectData = (subjectData) => {
+            const values = (subjectData?.lower || []).concat(subjectData?.upper || []);
+            return values.some((value) => typeof value === 'number');
+          };
+
+          const subjectNames = Object.keys(qsSubjectData.subjects)
+            .filter((subject) => hasSubjectData(qsSubjectData.subjects[subject]))
+            .sort((a, b) => a.localeCompare(b, 'pl-PL'));
+
+          ruaSubjectSelect.innerHTML = subjectNames
+            .map((subject) => `<option value="${subject}">${subject}</option>`)
+            .join('');
+
+          let currentSubject = ruaSubjectSelect.value || subjectNames[0] || null;
+          if (!ruaSubjectSelect.value && currentSubject) {
+            ruaSubjectSelect.value = currentSubject;
+          }
+
+          const ruaSubjectChart = new Chart(ruaSubjectCanvas, {
+            type: 'line',
+            data: {
+              labels: qsSubjectData.years,
+              datasets: [
+                {
+                  label: 'Granica dolna',
+                  data: [],
+                  borderColor: 'rgb(79,70,229)',
+                  backgroundColor: 'rgba(79,70,229,0.12)',
+                  fill: '+1',
+                  tension: 0.25,
+                  pointRadius: 3,
+                  spanGaps: false,
+                  borderWidth: 2
+                },
+                {
+                  label: 'Granica górna',
+                  data: [],
+                  borderColor: 'rgba(79,70,229,0.45)',
+                  backgroundColor: 'rgba(79,70,229,0.05)',
+                  fill: false,
+                  tension: 0.25,
+                  pointRadius: 3,
+                  spanGaps: false,
+                  borderDash: [6, 4],
+                  borderWidth: 2
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              interaction: { mode: 'index', intersect: false },
+              plugins: {
+                legend: {
+                  display: true,
+                  labels: {
+                    usePointStyle: true,
+                    pointStyle: 'line',
+                    boxHeight: 2
+                  }
+                },
+                tooltip: {
+                  callbacks: {
+                    label: (context) => {
+                      if (context.datasetIndex !== 0) {
+                        return null;
+                      }
+                      const chartRef = context.chart;
+                      const lowerValue = chartRef.data.datasets[0].data[context.dataIndex];
+                      const upperValue = chartRef.data.datasets[1].data[context.dataIndex];
+                      if (typeof lowerValue !== 'number') {
+                        return 'Brak danych';
+                      }
+                      if (typeof upperValue === 'number' && upperValue !== lowerValue) {
+                        return `Pozycja: ${lowerValue}-${upperValue}`;
+                      }
+                      return `Pozycja: ${lowerValue}`;
+                    }
+                  }
+                }
+              },
+              scales: {
+                y: {
+                  reverse: true,
+                  suggestedMin: 600,
+                  suggestedMax: 150,
+                  ticks: {
+                    callback: (value) => (typeof value === 'number' ? Math.round(value) : value)
+                  },
+                  grid: { color: 'rgba(17,24,39,0.08)' },
+                  title: { display: true, text: 'Pozycja (wyżej = lepiej)' }
+                },
+                x: {
+                  grid: { display: false }
+                }
+              }
+            }
+          });
+
+          const updateRuaSubjectChart = (subjectName) => {
+            const subjectData = qsSubjectData.subjects[subjectName];
+            if (!subjectData) {
+              return;
+            }
+
+            const lowerSeries = Array.isArray(subjectData.lower) ? subjectData.lower.slice() : [];
+            const upperSeries = Array.isArray(subjectData.upper) ? subjectData.upper.slice() : [];
+            const combinedValues = lowerSeries.concat(upperSeries).filter((value) => typeof value === 'number');
+            const fallbackValues = combinedValues.length ? combinedValues : [600];
+            const maxValue = Math.max(...fallbackValues);
+            const minValue = Math.min(...fallbackValues);
+            const padding = 20;
+
+            ruaSubjectChart.data.labels = qsSubjectData.years;
+            ruaSubjectChart.data.datasets[0].data = lowerSeries;
+            ruaSubjectChart.data.datasets[1].data = upperSeries;
+            ruaSubjectChart.options.scales.y.suggestedMin = maxValue + padding;
+            ruaSubjectChart.options.scales.y.suggestedMax = Math.max(minValue - padding, 1);
+            ruaSubjectChart.update();
+
+            if (ruaSubjectNote) {
+              let noteText = `Pozycja PW w dyscyplinie ${subjectName}.`;
+              for (let idx = qsSubjectData.years.length - 1; idx >= 0; idx -= 1) {
+                const year = qsSubjectData.years[idx];
+                const lowerValue = lowerSeries[idx];
+                const upperValue = upperSeries[idx];
+                if (typeof lowerValue === 'number') {
+                  if (typeof upperValue === 'number' && upperValue !== lowerValue) {
+                    noteText = `QS ${year}: przedział ${lowerValue}-${upperValue} dla ${subjectName}.`;
+                  } else {
+                    noteText = `QS ${year}: miejsce ${lowerValue} dla ${subjectName}.`;
+                  }
+                  break;
+                }
+              }
+              ruaSubjectNote.textContent = noteText;
+            }
+          };
+
+          if (currentSubject) {
+            updateRuaSubjectChart(currentSubject);
+          }
+
+          ruaSubjectSelect.addEventListener('change', (event) => {
+            currentSubject = event.target.value;
+            updateRuaSubjectChart(currentSubject);
           });
         }
 
