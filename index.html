@@ -185,23 +185,16 @@
                   <div class="rounded-2xl border border-white bg-white p-4 shadow-inner ring-1 ring-slate-200/70">
                     <div class="mb-3 flex flex-wrap items-end justify-between gap-3">
                       <div>
-                        <h4 class="text-sm font-extrabold text-slate-950">Wariant wag dla wybranego kierunku</h4>
-                        <p id="rksMethodologyVariantText" class="mt-1 text-xs leading-5 text-slate-500">Wybierz kierunek, aby zobaczyć właściwy wariant metodyki.</p>
+                        <h4 class="text-sm font-extrabold text-slate-950">Poziomy skumulowany wykres wag</h4>
+                        <p id="rksMethodologyVariantText" class="mt-1 text-xs leading-5 text-slate-500">Każdy segment odpowiada udziałowi wskaźnika w końcowym WSK dla wybranego kierunku.</p>
                       </div>
-                      <p id="rksMethodologyVariantBadge" class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-700 ring-1 ring-indigo-100">—</p>
+                      <div class="flex flex-wrap items-center gap-2">
+                        <p id="rksMethodologyVariantBadge" class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-700 ring-1 ring-indigo-100">—</p>
+                        <p class="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-600 ring-1 ring-slate-200">Razem 100%</p>
+                      </div>
                     </div>
-                    <div class="flex h-16 overflow-hidden rounded-2xl bg-white shadow-inner ring-1 ring-slate-200">
-                      <div id="rksVariantStandardSegment" class="flex items-center justify-center bg-indigo-600 px-2 text-[11px] font-extrabold text-white transition-opacity" style="width: 84.21%;" title="Standardowy — 64 kierunki">64</div>
-                      <div id="rksVariantEngiSegment" class="flex items-center justify-center bg-cyan-600 px-2 text-[10px] font-bold text-white transition-opacity" style="width: 10.53%;" title="Techniczny z EngiRank — 8 kierunków">8</div>
-                      <div id="rksVariantRegulatedSegment" class="flex items-center justify-center bg-amber-500 px-2 text-[10px] font-bold text-white transition-opacity" style="width: 3.95%;" title="Regulowany zawodowo — 3 kierunki">3</div>
-                      <div id="rksVariantAstronomySegment" class="flex items-center justify-center bg-rose-500 px-2 text-[10px] font-bold text-white transition-opacity" style="width: 1.31%;" title="Astronomia — 1 kierunek">1</div>
-                    </div>
-                    <div class="mt-4 grid gap-2 text-[11px] text-slate-600 sm:grid-cols-2 lg:grid-cols-4">
-                      <span><b class="text-indigo-700">■</b> Standardowy — 64 kierunki</span>
-                      <span><b class="text-cyan-700">■</b> Techniczny z EngiRank — 8</span>
-                      <span><b class="text-amber-600">■</b> Regulowany zawodowo — 3</span>
-                      <span><b class="text-rose-600">■</b> Astronomia — 1</span>
-                    </div>
+                    <div id="rksMethodologyWeightChart" class="flex h-16 overflow-hidden rounded-2xl bg-white shadow-inner ring-1 ring-slate-200" aria-label="Skumulowany wykres wag dla wybranego kierunku RKS 2026"></div>
+                    <div id="rksMethodologyWeightLegend" class="mt-4 grid gap-2 text-[11px] text-slate-600 sm:grid-cols-2 lg:grid-cols-4"></div>
                   </div>
                 </section>
 
@@ -257,7 +250,7 @@
                   </section>
                 </section>
 
-                <p class="rounded-2xl bg-indigo-50 p-4 text-xs leading-5 text-indigo-950">Źródło treści: notatki OKF dla metodyki Perspektywy RKS 2026 — kryteria wejścia, struktura wag, wskaźniki i źródła danych oraz uwagi audytowe. Modal jest skrótem publikacyjnym, spójnym wizualnie z modalem RUA.</p>
+                <p class="rounded-2xl bg-indigo-50 p-4 text-xs leading-5 text-indigo-950">Źródło treści i wag: oficjalna tabela wag Perspektywy RKS 2026 oraz notatki OKF — kryteria wejścia, wskaźniki i uwagi audytowe. Modal jest skrótem publikacyjnym, spójnym wizualnie z modalem RUA.</p>
               </div>
             </section>
           </div>
@@ -588,12 +581,8 @@
         const rksMethodologySubjectSelect = document.getElementById('rksMethodologySubjectSelect');
         const rksMethodologyVariantText = document.getElementById('rksMethodologyVariantText');
         const rksMethodologyVariantBadge = document.getElementById('rksMethodologyVariantBadge');
-        const rksVariantSegments = {
-          standard: document.getElementById('rksVariantStandardSegment'),
-          engi: document.getElementById('rksVariantEngiSegment'),
-          regulated: document.getElementById('rksVariantRegulatedSegment'),
-          astronomy: document.getElementById('rksVariantAstronomySegment')
-        };
+        const rksMethodologyWeightChart = document.getElementById('rksMethodologyWeightChart');
+        const rksMethodologyWeightLegend = document.getElementById('rksMethodologyWeightLegend');
 
         const openRuaMethodology = () => {
           if (!ruaMethodologyModal) return;
@@ -3098,19 +3087,72 @@
             }
           }
 
+          const rksWeightPalettes = {
+            prestige: '#ec4899',
+            salary: '#fbbf24',
+            employment: '#fde68a',
+            academic: '#14b8a6',
+            accreditation: '#64748b',
+            admission: '#94a3b8',
+            publications: '#f59e0b',
+            fwci: '#fed7aa',
+            fwvi: '#ffedd5',
+            top10: '#fff7ed',
+            internationalPubs: '#ef4444',
+            foreignStudents: '#fb7185',
+            extra: '#cbd5e1'
+          };
+
+          const rksMethodologyWeights = {
+            standard: [
+              ['Prestiż', 10, 'prestige'],
+              ['Wynagrodzenie', 7.5, 'salary'],
+              ['Zatrudnialność', 7.5, 'employment'],
+              ['Potencjał akademicki', 10, 'academic'],
+              ['Akredytacje', 5, 'accreditation'],
+              ['Jakość przyjętych', 10, 'admission'],
+              ['Publikacje', 15, 'publications'],
+              ['FWCI', 10, 'fwci'],
+              ['FWVI', 6, 'fwvi'],
+              ['Top 10', 8, 'top10'],
+              ['Publikacje we współpracy zagranicznej', 6, 'internationalPubs'],
+              ['Studenci cudzoziemcy', 5, 'foreignStudents']
+            ],
+            engi: [
+              ['Prestiż', 10, 'prestige'],
+              ['Wynagrodzenie', 7.5, 'salary'],
+              ['Zatrudnialność', 7.5, 'employment'],
+              ['Potencjał akademicki', 10, 'academic'],
+              ['Akredytacje', 5, 'accreditation'],
+              ['Jakość przyjętych', 10, 'admission'],
+              ['Publikacje', 10, 'publications'],
+              ['FWCI', 8, 'fwci'],
+              ['FWVI', 5, 'fwvi'],
+              ['Top 10', 7, 'top10'],
+              ['Publikacje we współpracy zagranicznej', 5, 'internationalPubs'],
+              ['Studenci cudzoziemcy', 5, 'foreignStudents'],
+              ['EngiRank', 10, 'extra']
+            ],
+            astronomy: [
+              ['Prestiż', 15, 'prestige'],
+              ['Potencjał akademicki', 10, 'academic'],
+              ['Akredytacje', 5, 'accreditation'],
+              ['Jakość przyjętych', 10, 'admission'],
+              ['Publikacje', 20, 'publications'],
+              ['FWCI', 12, 'fwci'],
+              ['FWVI', 7, 'fwvi'],
+              ['Top 10', 9, 'top10'],
+              ['Publikacje we współpracy zagranicznej', 7, 'internationalPubs'],
+              ['Studenci cudzoziemcy', 5, 'foreignStudents']
+            ]
+          };
+
           const getRKSMethodologyVariant = (subjectName) => {
             if (rksEngiRankSubjects.has(subjectName)) {
               return {
                 key: 'engi',
                 badge: 'Techniczny z EngiRank',
-                text: `${subjectName}: wariant techniczny z dodatkowym wskaźnikiem EngiRank 10%. Pozostałe bloki wag są niższe niż w schemacie standardowym, dlatego interpretacja wyniku powinna uwzględniać komponent inżynierski.`
-              };
-            }
-            if (rksRegulatedSubjects.has(subjectName)) {
-              return {
-                key: 'regulated',
-                badge: 'Regulowany zawodowo',
-                text: `${subjectName}: wariant z dodatkowym kryterium egzaminacyjnym 10%. Ten profil wag dotyczy kierunków z egzaminami zawodowymi.`
+                text: `${subjectName}: wariant techniczny z dodatkowym segmentem EngiRank 10%. Wykres pokazuje dokładny układ wag dla tego kierunku.`
               };
             }
             if (subjectName === 'Astronomia') {
@@ -3120,11 +3162,37 @@
                 text: 'Astronomia: osobny profil wag z mocniejszym naciskiem na potencjał naukowy, umiędzynarodowienie i prestiż.'
               };
             }
+            if (rksRegulatedSubjects.has(subjectName)) {
+              return {
+                key: 'engi',
+                badge: 'Regulowany zawodowo',
+                text: `${subjectName}: kierunek z dodatkowym kryterium egzaminacyjnym; w panelu PW nie występuje jako kierunek Politechniki Warszawskiej.`
+              };
+            }
             return {
               key: 'standard',
               badge: 'Standardowy',
-              text: `${subjectName}: wariant standardowy — bez EngiRank i bez kryterium egzaminacyjnego. Najmocniej liczą się ocena przez kadrę, wynagrodzenia i zatrudnialność absolwentów, potencjał dydaktyczny oraz wskaźniki naukowe.`
+              text: `${subjectName}: wariant standardowy — bez EngiRank i bez kryterium egzaminacyjnego. Wykres pokazuje dokładny układ wag dla tego kierunku.`
             };
+          };
+
+          const formatRKSWeight = (value) => Number.isInteger(value) ? `${value}%` : `${String(value).replace('.', ',')}%`;
+
+          const renderRKSMethodologyWeightChart = (variantKey) => {
+            const weights = rksMethodologyWeights[variantKey] || rksMethodologyWeights.standard;
+            if (rksMethodologyWeightChart) {
+              rksMethodologyWeightChart.innerHTML = weights.map(([label, value, colorKey]) => {
+                const bg = rksWeightPalettes[colorKey] || '#94a3b8';
+                const textColor = ['fwci', 'fwvi', 'top10', 'employment'].includes(colorKey) ? 'text-slate-800' : 'text-white';
+                return `<div class="flex items-center justify-center px-2 text-[10px] font-extrabold ${textColor}" style="width: ${value}%; background-color: ${bg};" title="${label} — ${formatRKSWeight(value)}">${value >= 5 ? formatRKSWeight(value) : ''}</div>`;
+              }).join('');
+            }
+            if (rksMethodologyWeightLegend) {
+              rksMethodologyWeightLegend.innerHTML = weights.map(([label, value, colorKey]) => {
+                const bg = rksWeightPalettes[colorKey] || '#94a3b8';
+                return `<span><b style="color: ${bg};">■</b> ${label} ${formatRKSWeight(value)}</span>`;
+              }).join('');
+            }
           };
 
           const updateRKSMethodologyPanel = (subjectName) => {
@@ -3134,13 +3202,9 @@
             }
             if (rksMethodologyVariantBadge) {
               rksMethodologyVariantBadge.textContent = variant.badge;
-              rksMethodologyVariantBadge.className = 'rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-700 ring-1 ring-slate-200';
+              rksMethodologyVariantBadge.className = 'rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-700 ring-1 ring-indigo-100';
             }
-            Object.entries(rksVariantSegments).forEach(([key, element]) => {
-              if (!element) return;
-              element.classList.toggle('opacity-100', key === variant.key);
-              element.classList.toggle('opacity-35', key !== variant.key);
-            });
+            renderRKSMethodologyWeightChart(variant.key);
           };
 
           const syncRKSSubjectControls = (subjectName) => {
