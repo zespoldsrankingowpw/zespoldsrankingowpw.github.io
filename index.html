@@ -163,102 +163,94 @@
               <div class="flex items-start justify-between gap-6 border-b border-slate-200 p-6 md:p-8">
                 <div>
                   <p class="text-xs font-bold uppercase tracking-[0.24em] text-indigo-700">Metodyka Perspektywy RKS 2026</p>
-                  <h2 id="rksMethodologyTitle" class="mt-2 text-2xl font-extrabold text-slate-950">Jak czytać Ranking Kierunków Studiów?</h2>
-                  <p id="rksMethodologyDesc" class="mt-3 max-w-3xl text-sm leading-6 text-slate-600">Modal streszcza zasady wejścia, dominujące bloki wag oraz warianty dla kierunków technicznych, regulowanych i astronomii. To skrót do szybkiego odczytu metodyki, bez zagłębiania się w pełny PDF.</p>
+                  <h2 id="rksMethodologyTitle" class="mt-2 text-2xl font-extrabold text-slate-950">Jak liczony jest Ranking Kierunków Studiów?</h2>
+                  <p id="rksMethodologyDesc" class="mt-3 max-w-3xl text-sm leading-6 text-slate-600">Modal streszcza metodykę Rankingu Kierunków Studiów Perspektywy 2026: warunki wejścia, warianty wag oraz główne bloki wskaźników i źródeł danych.</p>
                 </div>
                 <button id="rksMethodologyClose" type="button" class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-label="Zamknij modal metodyki">×</button>
               </div>
 
               <div class="space-y-6 p-6 md:p-8">
-                <section class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" aria-label="Szybkie fakty o rankingu kierunków">
-                  <div class="rounded-2xl border border-indigo-100 bg-indigo-50 p-4">
-                    <p class="text-3xl font-extrabold text-indigo-700">76</p>
-                    <p class="mt-2 text-xs font-semibold uppercase tracking-wider text-slate-500">kierunków w paczce</p>
+                <section class="rounded-3xl border border-slate-200 bg-slate-50 p-4 md:p-5" aria-label="Rozkład wariantów wag RKS 2026">
+                  <div class="mb-3 flex flex-wrap items-end justify-between gap-3">
+                    <div>
+                      <h3 class="text-base font-extrabold text-slate-950">Warianty wag w RKS 2026</h3>
+                      <p class="mt-1 text-xs leading-5 text-slate-500">Ranking kierunków nie ma jednego uniwersalnego profilu wag — schemat zależy od typu kierunku.</p>
+                    </div>
+                    <p class="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-600 ring-1 ring-slate-200">76 kierunków</p>
                   </div>
-                  <div class="rounded-2xl border border-cyan-100 bg-cyan-50 p-4">
-                    <p class="text-3xl font-extrabold text-cyan-700">9</p>
-                    <p class="mt-2 text-xs font-semibold uppercase tracking-wider text-slate-500">grup kierunków</p>
+                  <div class="flex h-16 overflow-hidden rounded-2xl bg-white shadow-inner ring-1 ring-slate-200">
+                    <div class="flex items-center justify-center bg-indigo-600 px-2 text-[11px] font-extrabold text-white" style="width: 84.21%;" title="Standardowy — 64 kierunki">64</div>
+                    <div class="flex items-center justify-center bg-cyan-600 px-2 text-[10px] font-bold text-white" style="width: 10.53%;" title="Techniczny z EngiRank — 8 kierunków">8</div>
+                    <div class="flex items-center justify-center bg-amber-500 px-2 text-[10px] font-bold text-white" style="width: 3.95%;" title="Regulowany zawodowo — 3 kierunki">3</div>
+                    <div class="flex items-center justify-center bg-rose-500 px-2 text-[10px] font-bold text-white" style="width: 1.31%;" title="Astronomia — 1 kierunek">1</div>
                   </div>
-                  <div class="rounded-2xl border border-emerald-100 bg-emerald-50 p-4">
-                    <p class="text-3xl font-extrabold text-emerald-700">64</p>
-                    <p class="mt-2 text-xs font-semibold uppercase tracking-wider text-slate-500">kierunki standardowe</p>
-                  </div>
-                  <div class="rounded-2xl border border-amber-100 bg-amber-50 p-4">
-                    <p class="text-3xl font-extrabold text-amber-700">4</p>
-                    <p class="mt-2 text-xs font-semibold uppercase tracking-wider text-slate-500">warianty wag</p>
+                  <div class="mt-4 grid gap-2 text-[11px] text-slate-600 sm:grid-cols-2 lg:grid-cols-4">
+                    <span><b class="text-indigo-700">■</b> Standardowy — 64 kierunki</span>
+                    <span><b class="text-cyan-700">■</b> Techniczny z EngiRank — 8</span>
+                    <span><b class="text-amber-600">■</b> Regulowany zawodowo — 3</span>
+                    <span><b class="text-rose-600">■</b> Astronomia — 1</span>
                   </div>
                 </section>
 
-                <section class="grid gap-4 lg:grid-cols-2">
-                  <article class="rounded-3xl border border-slate-200 bg-slate-50 p-5">
-                    <h3 class="text-base font-extrabold text-slate-950">Kryteria wejścia</h3>
-                    <ul class="mt-3 space-y-3 text-sm leading-6 text-slate-700">
-                      <li>kierunek musi być prowadzony w trybie stacjonarnym;</li>
-                      <li>to albo jednolite studium magisterskie, albo ciąg I i II stopnia w tej samej uczelni;</li>
-                      <li>co najmniej jeden kierunek w grupie musi mieć dwa roczniki absolwentów;</li>
-                      <li>na kierunku musi studiować przynajmniej 10 osób;</li>
-                      <li>dla lekarskiego, lekarsko-dentystycznego i prawa dochodzi warunek egzaminów zawodowych.</li>
+                <section class="rounded-3xl border border-indigo-100 bg-indigo-50/70 p-5">
+                  <h3 class="font-extrabold text-slate-950">Kryteria wejścia do RKS 2026</h3>
+                  <p class="mt-2 text-sm leading-6 text-slate-700">Do rankingu wchodzą kierunki prowadzone stacjonarnie, jako jednolite studia magisterskie albo ciąg I i II stopnia w tej samej uczelni, z minimalną historią absolwentów i co najmniej 10 studentami. Dla prawa oraz kierunków lekarskich wymagany jest także strumień danych z egzaminów zawodowych.</p>
+                </section>
+
+                <section class="grid gap-4 lg:grid-cols-2" aria-label="Szczegółowe bloki wskaźników RKS 2026">
+                  <section class="rounded-2xl border border-slate-200 bg-white p-4">
+                    <h4 class="text-sm font-extrabold text-indigo-700">Prestiż i absolwenci</h4>
+                    <ul class="mt-3 space-y-3 text-xs leading-5 text-slate-600">
+                      <li><b>Ocena przez kadrę akademicką.</b> Badanie własne Perspektyw prowadzone metodą CAWI; w wariancie standardowym to jeden z najmocniejszych pojedynczych wskaźników.</li>
+                      <li><b>Wynagrodzenia i zatrudnienie absolwentów.</b> Dane z systemu Ekonomicznych Losów Absolwentów, MNiSW/ZUS; w schemacie bazowym każdy z tych wymiarów ma wagę 10%.</li>
                     </ul>
-                  </article>
+                  </section>
 
-                  <article class="rounded-3xl border border-cyan-100 bg-cyan-50/70 p-5">
-                    <h3 class="text-base font-extrabold text-slate-950">Co waży najmocniej</h3>
-                    <div class="mt-3 grid gap-3 sm:grid-cols-2">
-                      <div class="rounded-2xl bg-white p-4 ring-1 ring-cyan-100">
-                        <p class="text-xs font-bold uppercase tracking-wider text-cyan-700">Prestiż</p>
-                        <p class="mt-1 text-sm text-slate-700">Ocena przez kadrę akademicką 15% + reputacja międzynarodowa 2%.</p>
-                      </div>
-                      <div class="rounded-2xl bg-white p-4 ring-1 ring-cyan-100">
-                        <p class="text-xs font-bold uppercase tracking-wider text-cyan-700">Absolwenci</p>
-                        <p class="mt-1 text-sm text-slate-700">Wynagrodzenia i zatrudnialność po 10% w schemacie bazowym.</p>
-                      </div>
-                      <div class="rounded-2xl bg-white p-4 ring-1 ring-cyan-100">
-                        <p class="text-xs font-bold uppercase tracking-wider text-cyan-700">Akademicki i naukowy</p>
-                        <p class="mt-1 text-sm text-slate-700">Ewaluacja, publikacje, FWCI/FWVI i Top 10 budują wynik kierunków naukowych.</p>
-                      </div>
-                      <div class="rounded-2xl bg-white p-4 ring-1 ring-cyan-100">
-                        <p class="text-xs font-bold uppercase tracking-wider text-cyan-700">Dydaktyka i zagranica</p>
-                        <p class="mt-1 text-sm text-slate-700">Akredytacje, jakość przyjętych i umiędzynarodowienie wnoszą istotne korekty.</p>
-                      </div>
+                  <section class="rounded-2xl border border-slate-200 bg-white p-4">
+                    <h4 class="text-sm font-extrabold text-cyan-700">Potencjał akademicki i dydaktyczny</h4>
+                    <ul class="mt-3 space-y-3 text-xs leading-5 text-slate-600">
+                      <li><b>Ewaluacja działalności naukowej.</b> Dane POL-on/KEN wiążą wynik kierunku z jakością dyscyplin naukowych uczelni.</li>
+                      <li><b>Akredytacje i jakość przyjętych.</b> Źródła obejmują bazę PKA oraz dane przekazywane przez uczelnie; te wskaźniki opisują jakość procesu dydaktycznego i selekcyjność.</li>
+                    </ul>
+                  </section>
+
+                  <section class="rounded-2xl border border-slate-200 bg-white p-4">
+                    <h4 class="text-sm font-extrabold text-emerald-700">Potencjał naukowy</h4>
+                    <ul class="mt-3 space-y-3 text-xs leading-5 text-slate-600">
+                      <li><b>Publikacje, FWCI, FWVI i Top 10.</b> Blok bibliometryczny opiera się na SciVal/SCOPUS i opisuje widoczność oraz wpływ dorobku naukowego.</li>
+                      <li><b>Uwaga audytowa.</b> W przekazanym ekstrakcie nie ma osobnej kolumny FWVI, a pola `top_10` pozostają puste — nie należy dopowiadać wartości bez pełnego źródła.</li>
+                    </ul>
+                  </section>
+
+                  <section class="rounded-2xl border border-slate-200 bg-white p-4">
+                    <h4 class="text-sm font-extrabold text-sky-700">Umiędzynarodowienie</h4>
+                    <ul class="mt-3 space-y-3 text-xs leading-5 text-slate-600">
+                      <li><b>Współpraca zagraniczna i studenci cudzoziemcy.</b> Wskaźniki łączą dane bibliometryczne SciVal z danymi POL-on.</li>
+                      <li><b>Ograniczenie danych.</b> W ekstrakcie `studenci_cudzoziemcy` pozostaje pusty dla wszystkich 76 kierunków, więc trzeba go traktować jako element metodyki, nie gotową wartość do wizualizacji.</li>
+                    </ul>
+                  </section>
+
+                  <section class="rounded-2xl border border-slate-200 bg-white p-4">
+                    <h4 class="text-sm font-extrabold text-amber-700">Wariant techniczny z EngiRank</h4>
+                    <p class="mt-3 text-xs leading-5 text-slate-600"><b>EngiRank — 10%.</b> Dodatkowy wskaźnik dotyczy 8 kierunków technicznych: budownictwa, elektroniki i telekomunikacji, elektrotechniki, inżynierii biomedycznej, chemicznej, materiałowej, środowiska oraz mechaniki i budowy maszyn.</p>
+                  </section>
+
+                  <section class="rounded-2xl border border-slate-200 bg-white p-4">
+                    <h4 class="text-sm font-extrabold text-rose-700">Warianty specjalne</h4>
+                    <div class="mt-3 grid gap-3 text-xs leading-5 text-slate-600 md:grid-cols-2">
+                      <p><b>Kierunki regulowane.</b> Lekarski, lekarsko-dentystyczny i prawo mają dodatkowy wskaźnik egzaminacyjny 10% zamiast EngiRank.</p>
+                      <p><b>Astronomia.</b> Osobny profil wag: potencjał naukowy 20%, umiędzynarodowienie 12% i prestiż 15%.</p>
                     </div>
-                  </article>
+                  </section>
                 </section>
 
-                <section class="rounded-3xl border border-slate-200 bg-slate-50 p-5">
-                  <h3 class="text-base font-extrabold text-slate-950">Warianty wag</h3>
-                  <div class="mt-4 grid gap-3 md:grid-cols-2">
-                    <div class="rounded-2xl border border-slate-200 bg-white p-4">
-                      <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Standardowy · 64 kierunki</p>
-                      <p class="mt-2 text-sm leading-6 text-slate-700">Brak EngiRank i brak kryterium egzaminacyjnego. Największe wagi mają: ocena przez kadrę, wynagrodzenia / zatrudnialność, akredytacje / jakość przyjętych, ewaluacja oraz wskaźniki bibliometryczne.</p>
-                    </div>
-                    <div class="rounded-2xl border border-slate-200 bg-white p-4">
-                      <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Techniczny z EngiRank · 8 kierunków</p>
-                      <p class="mt-2 text-sm leading-6 text-slate-700">Dodatkowy wskaźnik EngiRank (10%) wzmacnia kierunki techniczne: budownictwo, elektronika i telekomunikacja, elektrotechnika, inżynieria biomedyczna, chemiczna, materiałowa, środowiska oraz mechanika i budowa maszyn.</p>
-                    </div>
-                    <div class="rounded-2xl border border-slate-200 bg-white p-4">
-                      <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Regulowany zawodowo · 3 kierunki</p>
-                      <p class="mt-2 text-sm leading-6 text-slate-700">Kierunek lekarski, lekarsko-dentystyczny i prawo mają dodatkowy wskaźnik egzaminacyjny 10% zamiast EngiRank.</p>
-                    </div>
-                    <div class="rounded-2xl border border-slate-200 bg-white p-4">
-                      <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Astronomia · 1 kierunek</p>
-                      <p class="mt-2 text-sm leading-6 text-slate-700">Osobny profil wag: silniejszy nacisk na potencjał naukowy (20%), umiędzynarodowienie (12%) i prestiż (15%).</p>
-                    </div>
-                  </div>
-                </section>
-
-                <section class="rounded-3xl border border-amber-100 bg-amber-50 p-5">
-                  <h3 class="text-base font-extrabold text-slate-950">Co warto pamiętać</h3>
-                  <ul class="mt-3 space-y-2 text-sm leading-6 text-amber-950">
-                    <li>Metodyka miesza dane administracyjne, bibliometryczne, ankietowe i reputacyjne.</li>
-                    <li>FWVI pojawia się w opisie tekstowym, ale nie ma osobnej kolumny w przekazanym JSON-ie.</li>
-                    <li>W ekstrakcie `studenci_cudzoziemcy` i `top_10` pozostają puste, więc bez pełnego PDF nie należy domyślać się wag.</li>
-                    <li>Wskaźniki trzeba czytać łącznie z wariantem kierunku, bo nie wszystkie działają we wszystkich grupach.</li>
-                  </ul>
-                </section>
+                <p class="rounded-2xl bg-indigo-50 p-4 text-xs leading-5 text-indigo-950">Źródło treści: notatki OKF dla metodyki Perspektywy RKS 2026 — kryteria wejścia, struktura wag, wskaźniki i źródła danych oraz uwagi audytowe. Modal jest skrótem publikacyjnym, spójnym wizualnie z modalem RUA.</p>
               </div>
             </section>
           </div>
-        </div>        <section aria-label="Podsumowanie QS 2027" class="mt-10 mb-6 overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm">
+        </div>
+
+        <section aria-label="Podsumowanie QS 2027" class="mt-10 mb-6 overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm">
           <div class="grid lg:grid-cols-[0.95fr_1.35fr]">
             <div class="bg-slate-950 text-white p-8 md:p-10 flex flex-col justify-between gap-8">
               <div>
