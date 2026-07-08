@@ -170,25 +170,38 @@
               </div>
 
               <div class="space-y-6 p-6 md:p-8">
-                <section class="rounded-3xl border border-slate-200 bg-slate-50 p-4 md:p-5" aria-label="Rozkład wariantów wag RKS 2026">
-                  <div class="mb-3 flex flex-wrap items-end justify-between gap-3">
+                <section class="rounded-3xl border border-slate-200 bg-slate-50 p-4 md:p-5" aria-label="Wybór kierunku i rozkład wariantów wag RKS 2026">
+                  <div class="mb-4 grid gap-4 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
                     <div>
-                      <h3 class="text-base font-extrabold text-slate-950">Warianty wag w RKS 2026</h3>
-                      <p class="mt-1 text-xs leading-5 text-slate-500">Ranking kierunków nie ma jednego uniwersalnego profilu wag — schemat zależy od typu kierunku.</p>
+                      <h3 class="text-base font-extrabold text-slate-950">Wybierz kierunek PW</h3>
+                      <p class="mt-1 text-xs leading-5 text-slate-500">Lista jest ograniczona do kierunków, w których w Rankingu Kierunków Studiów występuje Politechnika Warszawska. Zmiana wyboru aktualizuje wykres oraz interpretację metodyki.</p>
                     </div>
-                    <p class="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-600 ring-1 ring-slate-200">76 kierunków</p>
+                    <label for="rksMethodologySubjectSelect" class="block">
+                      <span class="text-xs font-semibold uppercase tracking-widest text-slate-500">Kierunek</span>
+                      <select id="rksMethodologySubjectSelect" class="mt-1 w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-indigo-500 focus:ring-indigo-500"></select>
+                    </label>
                   </div>
-                  <div class="flex h-16 overflow-hidden rounded-2xl bg-white shadow-inner ring-1 ring-slate-200">
-                    <div class="flex items-center justify-center bg-indigo-600 px-2 text-[11px] font-extrabold text-white" style="width: 84.21%;" title="Standardowy — 64 kierunki">64</div>
-                    <div class="flex items-center justify-center bg-cyan-600 px-2 text-[10px] font-bold text-white" style="width: 10.53%;" title="Techniczny z EngiRank — 8 kierunków">8</div>
-                    <div class="flex items-center justify-center bg-amber-500 px-2 text-[10px] font-bold text-white" style="width: 3.95%;" title="Regulowany zawodowo — 3 kierunki">3</div>
-                    <div class="flex items-center justify-center bg-rose-500 px-2 text-[10px] font-bold text-white" style="width: 1.31%;" title="Astronomia — 1 kierunek">1</div>
-                  </div>
-                  <div class="mt-4 grid gap-2 text-[11px] text-slate-600 sm:grid-cols-2 lg:grid-cols-4">
-                    <span><b class="text-indigo-700">■</b> Standardowy — 64 kierunki</span>
-                    <span><b class="text-cyan-700">■</b> Techniczny z EngiRank — 8</span>
-                    <span><b class="text-amber-600">■</b> Regulowany zawodowo — 3</span>
-                    <span><b class="text-rose-600">■</b> Astronomia — 1</span>
+
+                  <div class="rounded-2xl border border-white bg-white p-4 shadow-inner ring-1 ring-slate-200/70">
+                    <div class="mb-3 flex flex-wrap items-end justify-between gap-3">
+                      <div>
+                        <h4 class="text-sm font-extrabold text-slate-950">Wariant wag dla wybranego kierunku</h4>
+                        <p id="rksMethodologyVariantText" class="mt-1 text-xs leading-5 text-slate-500">Wybierz kierunek, aby zobaczyć właściwy wariant metodyki.</p>
+                      </div>
+                      <p id="rksMethodologyVariantBadge" class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-700 ring-1 ring-indigo-100">—</p>
+                    </div>
+                    <div class="flex h-16 overflow-hidden rounded-2xl bg-white shadow-inner ring-1 ring-slate-200">
+                      <div id="rksVariantStandardSegment" class="flex items-center justify-center bg-indigo-600 px-2 text-[11px] font-extrabold text-white transition-opacity" style="width: 84.21%;" title="Standardowy — 64 kierunki">64</div>
+                      <div id="rksVariantEngiSegment" class="flex items-center justify-center bg-cyan-600 px-2 text-[10px] font-bold text-white transition-opacity" style="width: 10.53%;" title="Techniczny z EngiRank — 8 kierunków">8</div>
+                      <div id="rksVariantRegulatedSegment" class="flex items-center justify-center bg-amber-500 px-2 text-[10px] font-bold text-white transition-opacity" style="width: 3.95%;" title="Regulowany zawodowo — 3 kierunki">3</div>
+                      <div id="rksVariantAstronomySegment" class="flex items-center justify-center bg-rose-500 px-2 text-[10px] font-bold text-white transition-opacity" style="width: 1.31%;" title="Astronomia — 1 kierunek">1</div>
+                    </div>
+                    <div class="mt-4 grid gap-2 text-[11px] text-slate-600 sm:grid-cols-2 lg:grid-cols-4">
+                      <span><b class="text-indigo-700">■</b> Standardowy — 64 kierunki</span>
+                      <span><b class="text-cyan-700">■</b> Techniczny z EngiRank — 8</span>
+                      <span><b class="text-amber-600">■</b> Regulowany zawodowo — 3</span>
+                      <span><b class="text-rose-600">■</b> Astronomia — 1</span>
+                    </div>
                   </div>
                 </section>
 
@@ -572,6 +585,15 @@
         const rksMethodologyOpen = document.getElementById('rksMethodologyOpen');
         const rksMethodologyClose = document.getElementById('rksMethodologyClose');
         const rksMethodologyBackdrop = document.getElementById('rksMethodologyBackdrop');
+        const rksMethodologySubjectSelect = document.getElementById('rksMethodologySubjectSelect');
+        const rksMethodologyVariantText = document.getElementById('rksMethodologyVariantText');
+        const rksMethodologyVariantBadge = document.getElementById('rksMethodologyVariantBadge');
+        const rksVariantSegments = {
+          standard: document.getElementById('rksVariantStandardSegment'),
+          engi: document.getElementById('rksVariantEngiSegment'),
+          regulated: document.getElementById('rksVariantRegulatedSegment'),
+          astronomy: document.getElementById('rksVariantAstronomySegment')
+        };
 
         const openRuaMethodology = () => {
           if (!ruaMethodologyModal) return;
@@ -589,6 +611,11 @@
 
         const openRksMethodology = () => {
           if (!rksMethodologyModal) return;
+          const chartSubjectSelect = document.getElementById('rksSubjectSelect');
+          if (rksMethodologySubjectSelect && chartSubjectSelect && chartSubjectSelect.value) {
+            rksMethodologySubjectSelect.value = chartSubjectSelect.value;
+            rksMethodologySubjectSelect.dispatchEvent(new Event('change'));
+          }
           rksMethodologyModal.classList.remove('hidden');
           document.body.classList.add('overflow-hidden');
           rksMethodologyClose?.focus();
@@ -3048,8 +3075,83 @@
           // position data from the visible dataset, because that dataset may
           // currently contain scores after a mode switch.
           const rksToggle = document.getElementById('rksToggle');
+          const rksEngiRankSubjects = new Set([
+            'Budownictwo',
+            'Elektronika i telekomunikacja',
+            'Elektrotechnika',
+            'Inżynieria biomedyczna',
+            'Inżynieria chemiczna',
+            'Inżynieria materiałowa',
+            'Inżynieria środowiska',
+            'Mechanika i budowa maszyn'
+          ]);
+          const rksRegulatedSubjects = new Set(['Kierunek lekarski', 'Kierunek lekarsko-dentystyczny', 'Prawo']);
           let rksMode = 'position';
           let currentRKSSubject = defaultSubject;
+
+          if (rksMethodologySubjectSelect) {
+            rksMethodologySubjectSelect.innerHTML = subjectNames
+              .map((subject) => `<option value="${subject}">${subject}</option>`)
+              .join('');
+            if (defaultSubject) {
+              rksMethodologySubjectSelect.value = defaultSubject;
+            }
+          }
+
+          const getRKSMethodologyVariant = (subjectName) => {
+            if (rksEngiRankSubjects.has(subjectName)) {
+              return {
+                key: 'engi',
+                badge: 'Techniczny z EngiRank',
+                text: `${subjectName}: wariant techniczny z dodatkowym wskaźnikiem EngiRank 10%. Pozostałe bloki wag są niższe niż w schemacie standardowym, dlatego interpretacja wyniku powinna uwzględniać komponent inżynierski.`
+              };
+            }
+            if (rksRegulatedSubjects.has(subjectName)) {
+              return {
+                key: 'regulated',
+                badge: 'Regulowany zawodowo',
+                text: `${subjectName}: wariant z dodatkowym kryterium egzaminacyjnym 10%. Ten profil wag dotyczy kierunków z egzaminami zawodowymi.`
+              };
+            }
+            if (subjectName === 'Astronomia') {
+              return {
+                key: 'astronomy',
+                badge: 'Astronomia',
+                text: 'Astronomia: osobny profil wag z mocniejszym naciskiem na potencjał naukowy, umiędzynarodowienie i prestiż.'
+              };
+            }
+            return {
+              key: 'standard',
+              badge: 'Standardowy',
+              text: `${subjectName}: wariant standardowy — bez EngiRank i bez kryterium egzaminacyjnego. Najmocniej liczą się ocena przez kadrę, wynagrodzenia i zatrudnialność absolwentów, potencjał dydaktyczny oraz wskaźniki naukowe.`
+            };
+          };
+
+          const updateRKSMethodologyPanel = (subjectName) => {
+            const variant = getRKSMethodologyVariant(subjectName);
+            if (rksMethodologyVariantText) {
+              rksMethodologyVariantText.textContent = variant.text;
+            }
+            if (rksMethodologyVariantBadge) {
+              rksMethodologyVariantBadge.textContent = variant.badge;
+              rksMethodologyVariantBadge.className = 'rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-700 ring-1 ring-slate-200';
+            }
+            Object.entries(rksVariantSegments).forEach(([key, element]) => {
+              if (!element) return;
+              element.classList.toggle('opacity-100', key === variant.key);
+              element.classList.toggle('opacity-35', key !== variant.key);
+            });
+          };
+
+          const syncRKSSubjectControls = (subjectName) => {
+            if (rksSelect && rksSelect.value !== subjectName) {
+              rksSelect.value = subjectName;
+            }
+            if (rksMethodologySubjectSelect && rksMethodologySubjectSelect.value !== subjectName) {
+              rksMethodologySubjectSelect.value = subjectName;
+            }
+            updateRKSMethodologyPanel(subjectName);
+          };
 
           const setRKSButtonState = () => {
             if (!rksToggle) {
@@ -3213,6 +3315,7 @@
 
           const updateRKSChart = (subjectName) => {
             currentRKSSubject = subjectName;
+            syncRKSSubjectControls(subjectName);
             renderRKSChart();
           };
 
@@ -3223,6 +3326,12 @@
           rksSelect.addEventListener('change', (event) => {
             updateRKSChart(event.target.value);
           });
+
+          if (rksMethodologySubjectSelect) {
+            rksMethodologySubjectSelect.addEventListener('change', (event) => {
+              updateRKSChart(event.target.value);
+            });
+          }
 
           if (rksToggle) {
             rksToggle.addEventListener('click', () => {
