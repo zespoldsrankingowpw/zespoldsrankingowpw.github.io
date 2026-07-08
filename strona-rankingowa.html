@@ -117,8 +117,10 @@
                   <span class="pointer-events-none absolute left-1/2 top-full z-20 mt-2 hidden w-72 -translate-x-1/2 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Metodyka RUA: kliknij, aby zobaczyć skumulowany wykres wag i krótkie wyjaśnienia wskaźników.</span>
                 </button>
               </div>
-              <button id="perspektywyToggle" type="button" class="inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-xl border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition" aria-pressed="false">
-                Pokaż WSK
+              <button id="perspektywyToggle" type="button" class="group relative inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50/70 p-0.5 text-[11px] font-bold uppercase tracking-wide text-slate-500 transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-pressed="false" aria-label="Przełącz wykres Perspektywy między pozycją i WSK">
+                <span data-toggle-option="position" class="rounded-full bg-white px-2.5 py-1 text-indigo-700 shadow-sm transition">poz</span>
+                <span data-toggle-option="score" class="rounded-full px-2.5 py-1 transition hover:text-indigo-700">WSK</span>
+                <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-64 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium normal-case leading-4 tracking-normal text-white shadow-xl group-hover:block group-focus:block">Przełącz widok wykresu: pozycja w rankingu albo WSK — wskaźnik rankingowy Perspektyw.</span>
               </button>
             </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
@@ -138,8 +140,10 @@
                   </svg>
                 </button>
               </div>
-              <button id="rksToggle" type="button" class="inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-xl border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition" aria-pressed="false">
-                Pokaż punktację
+              <button id="rksToggle" type="button" class="group relative inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50/70 p-0.5 text-[11px] font-bold uppercase tracking-wide text-slate-500 transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-pressed="false" aria-label="Przełącz wykres kierunku między pozycją i punktacją">
+                <span data-toggle-option="position" class="rounded-full bg-white px-2.5 py-1 text-indigo-700 shadow-sm transition">poz</span>
+                <span data-toggle-option="score" class="rounded-full px-2.5 py-1 transition hover:text-indigo-700">pkt</span>
+                <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-64 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium normal-case leading-4 tracking-normal text-white shadow-xl group-hover:block group-focus:block">Przełącz widok wykresu kierunku: pozycja w rankingu albo punktacja 0–100.</span>
               </button>
             </div>
             <label for="rksSubjectSelect" class="block mt-4">
@@ -406,8 +410,10 @@
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgba(79,70,229,0.75); border-color: rgba(79,70,229,0.75); background-color: #f8f9ff;">Aktualizacja: 22.12.2025</span>
             <div class="flex items-baseline justify-between gap-3">
               <h3 class="text-lg font-semibold text-gray-900">EngiRank</h3>
-              <button id="engiToggle" type="button" class="inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-xl border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition" aria-pressed="false">
-                Pokaż punktację
+              <button id="engiToggle" type="button" class="group relative inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50/70 p-0.5 text-[11px] font-bold uppercase tracking-wide text-slate-500 transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-pressed="false" aria-label="Przełącz wykres EngiRank między pozycją i WSK">
+                <span data-toggle-option="position" class="rounded-full bg-white px-2.5 py-1 text-indigo-700 shadow-sm transition">poz</span>
+                <span data-toggle-option="score" class="rounded-full px-2.5 py-1 transition hover:text-indigo-700">WSK</span>
+                <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-64 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium normal-case leading-4 tracking-normal text-white shadow-xl group-hover:block group-focus:block">Przełącz widok wykresu EngiRank: pozycja albo WSK — wskaźnik punktowy 0–100.</span>
               </button>
             </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
@@ -419,8 +425,10 @@
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgba(79,70,229,0.75); border-color: rgba(79,70,229,0.75); background-color: #f8f9ff;">Aktualizacja: 22.12.2025</span>
             <div class="flex items-baseline justify-between gap-3">
               <h3 class="text-lg font-semibold text-gray-900">EngiRank by Subject</h3>
-              <button id="engiSubjectToggle" type="button" class="inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-xl border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition" aria-pressed="false">
-                Pokaż punktację
+              <button id="engiSubjectToggle" type="button" class="group relative inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50/70 p-0.5 text-[11px] font-bold uppercase tracking-wide text-slate-500 transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-pressed="false" aria-label="Przełącz wykres EngiRank by Subject między pozycją i punktacją">
+                <span data-toggle-option="position" class="rounded-full bg-white px-2.5 py-1 text-indigo-700 shadow-sm transition">poz</span>
+                <span data-toggle-option="score" class="rounded-full px-2.5 py-1 transition hover:text-indigo-700">pkt</span>
+                <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-64 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium normal-case leading-4 tracking-normal text-white shadow-xl group-hover:block group-focus:block">Przełącz widok wykresu kierunku EngiRank: pozycja albo punktacja 0–100.</span>
               </button>
             </div>
             <label for="engiSubjectSelect" class="block mt-4">
@@ -578,6 +586,18 @@
         const rksMethodologyVariantBadge = document.getElementById('rksMethodologyVariantBadge');
         const rksMethodologyWeightChart = document.getElementById('rksMethodologyWeightChart');
         const rksMethodologyWeightLegend = document.getElementById('rksMethodologyWeightLegend');
+
+        const updateSegmentedToggle = (button, activeMode) => {
+          if (!button) return;
+          button.setAttribute('aria-pressed', (activeMode !== 'position').toString());
+          button.querySelectorAll('[data-toggle-option]').forEach((option) => {
+            const isActive = option.dataset.toggleOption === activeMode;
+            option.className = isActive
+              ? 'rounded-full bg-white px-2.5 py-1 text-indigo-700 shadow-sm transition'
+              : 'rounded-full px-2.5 py-1 text-slate-500 transition hover:text-indigo-700';
+          });
+        };
+
 
         const openRuaMethodology = () => {
           if (!ruaMethodologyModal) return;
@@ -2937,6 +2957,7 @@
             }
           };
 
+          updateSegmentedToggle(engiSubjectToggle, engiSubjectMode === 'score' ? 'score' : 'position');
           if (defaultSubject) updateEngiSubjectChart(defaultSubject);
 
           engiSubjectSelect.addEventListener('change', (e) => {
@@ -2946,8 +2967,7 @@
           if (engiSubjectToggle) {
              engiSubjectToggle.addEventListener('click', () => {
                 engiSubjectMode = engiSubjectMode === 'position' ? 'score' : 'position';
-                engiSubjectToggle.textContent = engiSubjectMode === 'score' ? 'Pokaż pozycję' : 'Pokaż punktację';
-                engiSubjectToggle.setAttribute('aria-pressed', (engiSubjectMode === 'score').toString());
+                updateSegmentedToggle(engiSubjectToggle, engiSubjectMode === 'score' ? 'score' : 'position');
                 updateEngiSubjectChart(engiSubjectSelect.value);
              });
           }
@@ -3217,8 +3237,7 @@
               return;
             }
             const isScore = rksMode === 'score';
-            rksToggle.textContent = isScore ? 'Pokaż pozycję' : 'Pokaż punktację';
-            rksToggle.setAttribute('aria-pressed', isScore.toString());
+            updateSegmentedToggle(rksToggle, isScore ? 'score' : 'position');
           };
 
           const updateRKSNote = (subjectName, lowerSeries, rawSeries, scoreSeries) => {
@@ -3670,6 +3689,7 @@
           });
 
           const setPerspektywyMode = (mode) => {
+            updateSegmentedToggle(perspektywyToggle, mode === 'score' ? 'score' : 'position');
             const dataset = perspektywyChart.data.datasets[0];
             const yAxis = perspektywyChart.options.scales.y;
 
@@ -3728,8 +3748,7 @@
               setPerspektywyMode(perspektywyMode);
 
               const isScore = perspektywyMode === 'score';
-              perspektywyToggle.textContent = isScore ? 'Pokaż pozycję' : 'Pokaż WSK';
-              perspektywyToggle.setAttribute('aria-pressed', isScore.toString());
+              updateSegmentedToggle(perspektywyToggle, isScore ? 'score' : 'position');
             });
           }
         }
@@ -3791,6 +3810,7 @@
           });
 
           const setEngiMode = (mode) => {
+            updateSegmentedToggle(engiToggle, mode === 'score' ? 'score' : 'position');
             const dataset = engiChart.data.datasets[0];
             const yAxis = engiChart.options.scales.y;
 
@@ -3847,8 +3867,7 @@
               setEngiMode(engiMode);
 
               const isScore = engiMode === 'score';
-              engiToggle.textContent = isScore ? 'Pokaż pozycję' : 'Pokaż punktację';
-              engiToggle.setAttribute('aria-pressed', isScore.toString());
+              updateSegmentedToggle(engiToggle, isScore ? 'score' : 'position');
             });
           }
         }
