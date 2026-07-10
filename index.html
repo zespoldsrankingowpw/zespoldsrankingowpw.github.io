@@ -41,6 +41,13 @@
       }
 
       .chart-shell { position: relative; width: 100%; }
+      .chart-frame { position: relative; width: 100%; }
+      .chart-frame--perspektywy { height: 330px; }
+      .chart-frame--engirank { height: 288px; }
+      @media (max-width: 640px) {
+        .chart-frame--perspektywy { height: 280px; }
+        .chart-frame--engirank { height: 250px; }
+      }
       :focus-visible { outline: 3px solid rgba(79, 70, 229, .35); outline-offset: 3px; }
       @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
@@ -219,10 +226,11 @@
                 <span data-toggle-option="score" class="rounded-full px-2.5 py-1 transition hover:text-indigo-700">WSK</span>
                 <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-64 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium normal-case leading-4 tracking-normal text-white shadow-xl group-hover:block group-focus:block">Przełącz widok wykresu: pozycja w rankingu albo WSK — wskaźnik rankingowy Perspektyw.</span>
               </button>
-              </div>
             </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
-            <canvas id="chartPerspektywy" role="img" aria-label="Trend pozycji oraz wskaźnika WSK Politechniki Warszawskiej w rankingu Perspektywy w latach 2020–2026." class="mt-4 w-full" style="height: 330px;">Trend pozycji oraz wskaźnika WSK Politechniki Warszawskiej w rankingu Perspektywy w latach 2020–2026. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <div class="chart-frame chart-frame--perspektywy mt-4">
+              <canvas id="chartPerspektywy" role="img" aria-label="Trend pozycji oraz wskaźnika WSK Politechniki Warszawskiej w rankingu Perspektywy w latach 2020–2026.">Trend pozycji oraz wskaźnika WSK Politechniki Warszawskiej w rankingu Perspektywy w latach 2020–2026. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            </div>
             <p id="perspektywyNote" aria-live="polite" class="text-xs text-gray-500 mt-4">Politechnika Warszawska utrzymuje 3 miejsce w latach 2020–2026; WSK wzrósł z 78,9 do 92,3 pkt.</p>
             <p class="text-[11px] text-slate-500 mt-2">Źródło: Perspektywy RUA 2020–2026 z pliku rankingi.xlsx. Przełącznik: pozycja ↔ WSK (0-100).</p>
           </div>
@@ -576,8 +584,11 @@
                 <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-64 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium normal-case leading-4 tracking-normal text-white shadow-xl group-hover:block group-focus:block">Przełącz widok wykresu EngiRank: pozycja albo WSK — wskaźnik punktowy 0–100.</span>
               </button>
             </div>
+            </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
-            <canvas id="chartEngi" role="img" aria-label="Trend pozycji i wskaźnika punktowego Politechniki Warszawskiej w EngiRank." class="mt-4 w-full" style="height: 288px;">Trend pozycji i wskaźnika punktowego Politechniki Warszawskiej w EngiRank. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <div class="chart-frame chart-frame--engirank mt-4">
+              <canvas id="chartEngi" role="img" aria-label="Trend pozycji i wskaźnika punktowego Politechniki Warszawskiej w EngiRank.">Trend pozycji i wskaźnika punktowego Politechniki Warszawskiej w EngiRank. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            </div>
             <p id="engiNote" aria-live="polite" class="text-xs text-gray-500 mt-4">PW awansowała na 64 miejsce w EngiRank 2024.</p>
             <p class="text-[11px] text-slate-500 mt-2">Źródło: EngiRank 2023-2024. Przełącznik: pozycja ↔ WSK (0-100).</p>
           </div>
@@ -4307,8 +4318,8 @@
               ]
             },
             options: {
-              responsive: false,
-            maintainAspectRatio: false,
+              responsive: true,
+              maintainAspectRatio: false,
               plugins: {
                 legend: { display: false },
                 tooltip: {
@@ -4430,8 +4441,8 @@
               ]
             },
             options: {
-              responsive: false,
-            maintainAspectRatio: false,
+              responsive: true,
+              maintainAspectRatio: false,
               plugins: {
                 legend: { display: false },
                 tooltip: {
