@@ -597,7 +597,7 @@
             <div class="flex items-center justify-between gap-3">
               <h3 class="text-lg font-semibold text-gray-900">EngiRank by Subject</h3>
               <div class="flex items-center gap-2">
-                <button id="engiSubjectMethodologyOpen" type="button" data-methodology-open="engiMethodologyModal" aria-controls="engiMethodologyModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Otwórz metodykę EngiRank by Subject" title="Otwórz metodykę EngiRank by Subject">
+                <button id="engiSubjectMethodologyOpen" type="button" data-methodology-open="engiSubjectMethodologyModal" aria-controls="engiSubjectMethodologyModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Otwórz metodykę EngiRank by Subject" title="Otwórz metodykę EngiRank by Subject">
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0">
   <path d="M12 8.5a3.5 3.5 0 1 1 0 7a3.5 3.5 0 0 1 0-7Z" />
   <path d="M19.4 13.5a7.9 7.9 0 0 0 .1-1.5 7.9 7.9 0 0 0-.1-1.5l1.6-1.2a.6.6 0 0 0 .1-.8l-1.5-2.6a.6.6 0 0 0-.8-.3l-1.9.8a8.6 8.6 0 0 0-2.6-1.5l-.3-2a.6.6 0 0 0-.6-.5h-3a.6.6 0 0 0-.6.5l-.3 2a8.6 8.6 0 0 0-2.6 1.5l-1.9-.8a.6.6 0 0 0-.8.3L2.8 8.5a.6.6 0 0 0 .1.8l1.6 1.2a7.9 7.9 0 0 0-.1 1.5 7.9 7.9 0 0 0 .1 1.5l-1.6 1.2a.6.6 0 0 0-.1.8l1.5 2.6a.6.6 0 0 0 .8.3l1.9-.8a8.6 8.6 0 0 0 2.6 1.5l.3 2a.6.6 0 0 0 .6.5h3a.6.6 0 0 0 .6-.5l.3-2a8.6 8.6 0 0 0 2.6-1.5l1.9.8a.6.6 0 0 0 .8-.3l1.5-2.6a.6.6 0 0 0-.1-.8l-1.6-1.2Z" />
@@ -978,10 +978,41 @@
             </section>
             <section class="grid gap-4 lg:grid-cols-2"><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-indigo-700">Research — 28%</h4><p class="mt-3 text-xs leading-5 text-slate-600">Publikacje 10%, publikacje w top 10% czasopism 6%, cytowania 6% i zmiana wpływu cytowaniowego 6%. Dane: Scopus/SciVal, okno 2020–2024.</p></section><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-cyan-700">Innovation — 25%</h4><p class="mt-3 text-xs leading-5 text-slate-600">Finansowanie badań i innowacji UE 10%, patenty EPO 5%, cytowania patentowe 5% i współpraca akademicko-biznesowa 5%.</p></section><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-emerald-700">SDG 9 i umiędzynarodowienie — 26%</h4><p class="mt-3 text-xs leading-5 text-slate-600">Ranking premiuje wkład w przemysł, innowacje i infrastrukturę, współautorstwo międzynarodowe oraz udział w europejskich inicjatywach badawczych i edukacyjnych.</p></section><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-rose-700">Multidisciplinarity — 21%</h4><p class="mt-3 text-xs leading-5 text-slate-600">Po 3% za wynik uczelni w każdej z siedmiu klasyfikacji dziedzinowych. Kryterium premiuje szerokość i równowagę potencjału technicznego.</p></section></section>
 
-            <section class="rounded-3xl border border-indigo-100 bg-indigo-50/60 p-4 md:p-5"><div class="grid gap-4 lg:grid-cols-[1.1fr_0.9fr] lg:items-end"><div><h3 class="text-base font-extrabold text-slate-950">EngiRank by Subject — wagi wybranego kierunku</h3><p class="mt-1 text-xs leading-5 text-slate-600">W czterech dyscyplinach standardowych pięć wskaźników ma po 16%. W inżynierii lądowej, środowiska i medycznej mają po 15%, a dodatkowe 5% przypisano właściwemu celowi SDG.</p></div><label for="engiMethodologySubjectSelect" class="block"><span class="text-xs font-semibold uppercase tracking-widest text-slate-500">Kierunek</span><select id="engiMethodologySubjectSelect" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:ring-indigo-500"></select></label></div>
-              <div class="mt-4 rounded-2xl border border-white bg-white p-4 shadow-inner ring-1 ring-indigo-100"><div class="flex flex-wrap items-center justify-between gap-3"><p id="engiMethodologyProfileText" class="text-xs leading-5 text-slate-600">Wybierz kierunek, aby zobaczyć wagi.</p><p id="engiMethodologyProfileBadge" class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-700 ring-1 ring-indigo-100">—</p></div><div id="engiMethodologySubjectChart" class="mt-4 flex h-16 overflow-hidden rounded-2xl bg-white shadow-inner ring-1 ring-slate-200"></div><div id="engiMethodologySubjectLegend" class="mt-4 grid gap-2 text-[11px] text-slate-600 sm:grid-cols-2 lg:grid-cols-4"></div></div>
-            </section>
             <p class="rounded-2xl bg-indigo-50 p-4 text-xs leading-5 text-indigo-950">Źródło: <a href="https://engirank.eu/methodology/2025/" target="_blank" rel="noopener noreferrer" class="font-bold text-indigo-700 underline decoration-indigo-300 underline-offset-2">EngiRank 2025 Methodology</a>. Dane źródłowe obejmują m.in. Scopus/SciVal, CORDIS, Bank Światowy i EPO-PATSTAT.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div id="engiSubjectMethodologyModal" data-methodology-modal class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="engiSubjectMethodologyTitle" aria-describedby="engiSubjectMethodologyDesc">
+      <div data-methodology-backdrop class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
+      <div class="relative z-10 flex min-h-full items-center justify-center p-4">
+        <section class="max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-[28px] bg-white shadow-2xl ring-1 ring-slate-900/10">
+          <div class="flex items-start justify-between gap-6 border-b border-slate-200 p-6 md:p-8">
+            <div>
+              <p class="text-xs font-bold uppercase tracking-[0.24em] text-indigo-700">Metodyka EngiRank by Subject 2025</p>
+              <h2 id="engiSubjectMethodologyTitle" class="mt-2 text-2xl font-extrabold text-slate-950">Jak EngiRank porównuje dyscypliny inżynierskie?</h2>
+              <p id="engiSubjectMethodologyDesc" class="mt-3 max-w-3xl text-sm leading-6 text-slate-600">Ranking dziedzinowy ocenia badania, innowacyjność, umiędzynarodowienie, współpracę z przemysłem i — dla wybranych kierunków — wkład w odpowiedni cel zrównoważonego rozwoju.</p>
+            </div>
+            <button data-methodology-close type="button" class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-label="Zamknij modal metodyki EngiRank by Subject">×</button>
+          </div>
+          <div class="space-y-6 p-6 md:p-8">
+            <section class="rounded-3xl border border-indigo-100 bg-indigo-50/60 p-4 md:p-5">
+              <div class="grid gap-4 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+                <div><h3 class="text-base font-extrabold text-slate-950">Wagi wybranego kierunku</h3><p class="mt-1 text-xs leading-5 text-slate-600">W czterech dyscyplinach standardowych pięć wskaźników ma po 16%. W inżynierii lądowej, środowiska i medycznej mają po 15%, a dodatkowe 5% przypisano właściwemu celowi SDG.</p></div>
+                <label for="engiMethodologySubjectSelect" class="block"><span class="text-xs font-semibold uppercase tracking-widest text-slate-500">Kierunek</span><select id="engiMethodologySubjectSelect" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:ring-indigo-500"></select></label>
+              </div>
+              <div class="mt-4 rounded-2xl border border-white bg-white p-4 shadow-inner ring-1 ring-indigo-100">
+                <div class="flex flex-wrap items-center justify-between gap-3"><p id="engiMethodologyProfileText" class="text-xs leading-5 text-slate-600">Wybierz kierunek, aby zobaczyć wagi.</p><p id="engiMethodologyProfileBadge" class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-700 ring-1 ring-indigo-100">—</p></div>
+                <div id="engiMethodologySubjectChart" class="mt-4 flex h-16 overflow-hidden rounded-2xl bg-white shadow-inner ring-1 ring-slate-200"></div>
+                <div id="engiMethodologySubjectLegend" class="mt-4 grid gap-2 text-[11px] text-slate-600 sm:grid-cols-2 lg:grid-cols-4"></div>
+              </div>
+            </section>
+            <section class="grid gap-4 lg:grid-cols-2">
+              <section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-indigo-700">Profil standardowy</h4><p class="mt-3 text-xs leading-5 text-slate-600">Badania, innowacyjność, umiędzynarodowienie, współpraca akademicko-biznesowa oraz aktywność w programach europejskich mają równoważne udziały po 16%.</p></section>
+              <section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-emerald-700">Profile z komponentem SDG</h4><p class="mt-3 text-xs leading-5 text-slate-600">Dla inżynierii lądowej, środowiska i medycznej podstawowe wskaźniki mają po 15%, a dodatkowe 5% mierzy rezultat w odpowiednim celu SDG.</p></section>
+            </section>
+            <p class="rounded-2xl bg-indigo-50 p-4 text-xs leading-5 text-indigo-950">Źródło: <a href="https://engirank.eu/methodology/2025/" target="_blank" rel="noopener noreferrer" class="font-bold text-indigo-700 underline decoration-indigo-300 underline-offset-2">EngiRank 2025 Methodology</a>.</p>
           </div>
         </section>
       </div>
@@ -1158,7 +1189,7 @@
             qsSubjectMethodologyModal: ['qsSubjectSelect', 'qsMethodologySubjectSelect'],
             theSubjectMethodologyModal: ['theSubjectSelect', 'theMethodologySubjectSelect'],
             grasMethodologyModal: ['grasSubjectSelect', 'grasMethodologySubjectSelect'],
-            engiMethodologyModal: ['engiSubjectSelect', 'engiMethodologySubjectSelect']
+            engiSubjectMethodologyModal: ['engiSubjectSelect', 'engiMethodologySubjectSelect']
           };
           const pair = pairs[modalId];
           if (!pair) return;
