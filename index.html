@@ -11,10 +11,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+      html{scroll-behavior:smooth}
       html,body{font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial}
+      [id]{scroll-margin-top:5.5rem}
+      .dashboard-nav a[aria-current="true"]{background:#eef2ff;color:#4338ca;box-shadow:inset 0 0 0 1px #c7d2fe}
+      @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+      @media print{.dashboard-nav{display:none!important}}
     </style>
   </head>
   <body class="bg-gray-50 text-gray-900">
+    <nav class="dashboard-nav sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur" aria-label="Nawigacja po rankingach">
+      <div class="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 py-3 md:px-6">
+        <a href="#trendy" class="whitespace-nowrap rounded-full px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-950" aria-current="true">Przegląd</a>
+        <a href="#perspektywy" class="whitespace-nowrap rounded-full px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-950">Perspektywy</a>
+        <a href="#qs" class="whitespace-nowrap rounded-full px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-950">QS</a>
+        <a href="#the" class="whitespace-nowrap rounded-full px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-950">THE</a>
+        <a href="#arwu" class="whitespace-nowrap rounded-full px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-950">ARWU / GRAS</a>
+        <a href="#engirank" class="whitespace-nowrap rounded-full px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-950">EngiRank</a>
+      </div>
+    </nav>
     <main class="max-w-7xl mx-auto px-4 md:px-6">
       <section id="trendy" class="py-16 md:py-20 border-t border-gray-200">
         <header class="mb-8">
@@ -23,7 +38,7 @@
           <p class="text-gray-600 mt-3 max-w-3xl">Poniższe wykresy pokazują zmiany pozycji PW w&nbsp;rankingach QS, THE i&nbsp;ARWU w&nbsp;latach 2020-2027, a&nbsp;także kluczowe wskaźniki Perspektyw i&nbsp;EngiRank.
           </p>
         </header>
-        <section aria-label="Podsumowanie Perspektywy 2026" class="mb-10 overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm">
+        <section id="perspektywy" aria-label="Podsumowanie Perspektywy 2026" class="mb-10 overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm">
           <div class="grid lg:grid-cols-[0.95fr_1.35fr]">
             <div class="bg-slate-950 text-white p-8 md:p-10 flex flex-col justify-between gap-8">
               <div>
@@ -337,10 +352,9 @@
           </div>
         </section>
         <div class="grid gap-6 md:grid-cols-2 mt-6" style="grid-auto-rows: 1fr;">
-          <div class="bg-white rounded-2xl shadow-sm p-6">
+          <div id="qs" class="bg-white rounded-2xl shadow-sm p-6">
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgb(79,70,229); border-color: rgb(79,70,229); background-color: #f8f9ff;">Aktualizacja: 18.06.2026</span>
             <h3 class="text-lg font-semibold text-gray-900">QS World University Rankings</h3>
-            <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 340px) -->
             <canvas id="chartQS" class="mt-4 w-full" style="height: 350px;"></canvas>
             <p class="text-xs text-gray-500 mt-4">PW utrzymuje się w okolicach globalnego top 500 QS; w edycji 2027 zajmuje miejsce =504.</p>
             <p class="text-[11px] text-gray-400 mt-2">Źródło: QS World University Rankings 2020–2027.</p>
@@ -360,10 +374,9 @@
           </div>
         </div>
         <div class="grid gap-6 md:grid-cols-2 mt-6">
-          <div class="bg-white rounded-2xl shadow-sm p-6">
+          <div id="the" class="bg-white rounded-2xl shadow-sm p-6">
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgb(14,116,144); border-color: rgb(14,116,144); background-color: #e0f7ff;">Aktualizacja: 09.10.2025</span>
             <h3 class="text-lg font-semibold text-gray-900">World University Rankings (THE)</h3>
-            <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
             <canvas id="chartTHE" class="mt-4 w-full" style="height: 288px;"></canvas>
             <p class="text-xs text-gray-500 mt-4">PW utrzymuje stabilną obecność w przedziale 1201–1500 THE.</p>
             <p class="text-[11px] text-gray-400 mt-2">Źródło: Times Higher Education World University Rankings 2020–2026.</p>
@@ -383,7 +396,7 @@
           </div>
         </div>
         <div class="grid gap-6 md:grid-cols-2 mt-6">
-          <div class="bg-white rounded-2xl shadow-sm p-6">
+          <div id="arwu" class="bg-white rounded-2xl shadow-sm p-6">
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgb(220,38,38); border-color: rgb(220,38,38); background-color: #fff5f5;">Aktualizacja: 15.08.2025</span>
             <h3 class="text-lg font-semibold text-gray-900">ARWU (Lista Szanghajska)</h3>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
@@ -406,7 +419,7 @@
           </div>
         </div>
         <div class="grid gap-6 md:grid-cols-2 mt-6">
-          <div class="bg-white rounded-2xl shadow-sm p-6">
+          <div id="engirank" class="bg-white rounded-2xl shadow-sm p-6">
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgba(79,70,229,0.75); border-color: rgba(79,70,229,0.75); background-color: #f8f9ff;">Aktualizacja: 22.12.2025</span>
             <div class="flex items-baseline justify-between gap-3">
               <h3 class="text-lg font-semibold text-gray-900">EngiRank</h3>
@@ -3870,6 +3883,20 @@
               updateSegmentedToggle(engiToggle, isScore ? 'score' : 'position');
             });
           }
+        }
+        const navLinks = [...document.querySelectorAll('.dashboard-nav a[href^="#"]')];
+        const navSections = navLinks
+          .map((link) => document.querySelector(link.getAttribute('href')))
+          .filter(Boolean);
+        const setActiveNav = (id) => navLinks.forEach((link) => {
+          link.toggleAttribute('aria-current', link.getAttribute('href') === `#${id}`);
+        });
+        if ('IntersectionObserver' in window && navSections.length) {
+          const navObserver = new IntersectionObserver((entries) => {
+            const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+            if (visible[0]) setActiveNav(visible[0].target.id);
+          }, { rootMargin: '-5.5rem 0px -55% 0px', threshold: [0.1, 0.5, 0.9] });
+          navSections.forEach((section) => navObserver.observe(section));
         }
       });
     </script>
