@@ -3,26 +3,117 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Politechnika Warszawska — Wyniki rankingowe (draft)</title>
-    <meta name="description" content="Wstępna wersja strony prezentującej wyniki rankingowe Politechniki Warszawskiej wraz z kontekstem i benchmarkami." />
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Politechnika Warszawska — wyniki i trendy rankingowe</title>
+    <meta name="description" content="Interaktywny dashboard wyników Politechniki Warszawskiej w rankingach krajowych i międzynarodowych — trendy, kierunki, wskaźniki i metodyki." />
+    <meta name="theme-color" content="#0f172a" />
+    <meta name="color-scheme" content="light" />
+    <script src="https://cdn.tailwindcss.com" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
     <style>
-      html{scroll-behavior:smooth}
-      html,body{font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial}
-      [id]{scroll-margin-top:5.5rem}
-      .dashboard-nav a[aria-current="true"]{background:#eef2ff;color:#4338ca;box-shadow:inset 0 0 0 1px #c7d2fe}
-      @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
-      @media print{.dashboard-nav{display:none!important}}
+      :root {
+        --pw-navy: #0f172a;
+        --pw-indigo: #4f46e5;
+        --pw-cyan: #0891b2;
+        --surface: #ffffff;
+        --page: #f8fafc;
+      }
+      html { scroll-behavior: smooth; }
+      html, body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+      body { background: radial-gradient(circle at 50% -10%, #eef2ff 0, #f8fafc 34rem); }
+      [id] { scroll-margin-top: 6.5rem; }
+      .ranking-card {
+        border: 1px solid rgba(226, 232, 240, .95);
+        box-shadow: 0 12px 34px rgba(15, 23, 42, .055);
+        transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+      }
+      .ranking-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(165, 180, 252, .8);
+        box-shadow: 0 18px 42px rgba(15, 23, 42, .09);
+      }
+      .dashboard-nav a[aria-current="true"] {
+        background: #eef2ff;
+        color: #4338ca;
+        box-shadow: inset 0 0 0 1px #c7d2fe;
+      }
+      canvas[role="img"] {
+        min-height: 0 !important;
+        height: 220px !important;
+        max-height: 220px !important;
+      }
+      #chartRKS,
+      #chartQSSubject,
+      #chartTHESubject,
+      #chartGRAS,
+      #chartEngiSubject {
+        height: 200px !important;
+        max-height: 200px !important;
+      }
+      @media (max-width: 640px) {
+        canvas[role="img"] {
+          height: 190px !important;
+          max-height: 190px !important;
+        }
+        #chartRKS,
+        #chartQSSubject,
+        #chartTHESubject,
+        #chartGRAS,
+        #chartEngiSubject {
+          height: 180px !important;
+          max-height: 180px !important;
+        }
+      }
+      .chart-shell { position: relative; width: 100%; }
+      :focus-visible { outline: 3px solid rgba(79, 70, 229, .35); outline-offset: 3px; }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      }
+      [data-methodology-open] svg { pointer-events: none; }
+
+      @media print {
+        .dashboard-nav, .skip-link, button { display: none !important; }
+        body { background: #fff; }
+        .ranking-card, section { break-inside: avoid; box-shadow: none !important; }
+        main { max-width: none !important; }
+      }
     </style>
   </head>
   <body class="bg-gray-50 text-gray-900">
+    <a href="#main-content" class="skip-link sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-slate-950 focus:px-4 focus:py-3 focus:text-sm focus:font-bold focus:text-white">Przejdź do głównej treści</a>
+
+    <header class="border-b border-slate-200/80 bg-white/85 backdrop-blur">
+      <div class="mx-auto max-w-7xl px-4 py-10 md:px-6 md:py-14">
+        <div class="grid gap-8 lg:grid-cols-[1.35fr_0.65fr] lg:items-end">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.28em] text-indigo-700">Politechnika Warszawska · dashboard rankingowy</p>
+            <h1 class="mt-4 max-w-4xl text-4xl font-extrabold tracking-tight text-slate-950 md:text-6xl">Wyniki PW w rankingach — trend, pozycja i metodyka</h1>
+            <p class="mt-5 max-w-3xl text-base leading-7 text-slate-600 md:text-lg">Jedno miejsce do porównywania wyników krajowych i międzynarodowych. Wykresy pokazują zmianę w czasie, a panele metodologiczne wyjaśniają, z czego wynikają poszczególne oceny.</p>
+          </div>
+          <div class="grid grid-cols-3 gap-3 lg:grid-cols-1">
+            <div class="rounded-2xl border border-slate-200 bg-white p-4">
+              <p class="text-2xl font-extrabold text-slate-950">10</p>
+              <p class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">interaktywnych wykresów</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-white p-4">
+              <p class="text-2xl font-extrabold text-slate-950">2020–2027</p>
+              <p class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">zakres prezentowanych edycji</p>
+            </div>
+            <div class="rounded-2xl border border-indigo-200 bg-indigo-50 p-4">
+              <p class="text-2xl font-extrabold text-indigo-700">Pozycja ↓</p>
+              <p class="mt-1 text-xs font-semibold uppercase tracking-wider text-indigo-700/75">mniejsza liczba oznacza lepszy wynik</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
     <nav class="dashboard-nav sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur" aria-label="Nawigacja po rankingach">
       <div class="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 py-3 md:px-6">
-        <a href="#trendy" class="whitespace-nowrap rounded-full px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-950" aria-current="true">Przegląd</a>
+        <a href="#przeglad" class="whitespace-nowrap rounded-full px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-950">Przegląd</a>
         <a href="#perspektywy" class="whitespace-nowrap rounded-full px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-950">Perspektywy</a>
         <a href="#qs" class="whitespace-nowrap rounded-full px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-950">QS</a>
         <a href="#the" class="whitespace-nowrap rounded-full px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-950">THE</a>
@@ -30,8 +121,25 @@
         <a href="#engirank" class="whitespace-nowrap rounded-full px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-950">EngiRank</a>
       </div>
     </nav>
-    <main class="max-w-7xl mx-auto px-4 md:px-6">
-      <section id="trendy" class="py-16 md:py-20 border-t border-gray-200">
+
+    <main id="main-content" class="max-w-7xl mx-auto px-4 md:px-6">
+      <section id="przeglad" class="pt-8 md:pt-10" aria-labelledby="reading-guide-title">
+        <div class="grid gap-4 rounded-3xl border border-indigo-100 bg-indigo-50/70 p-5 md:grid-cols-3 md:p-6">
+          <div>
+            <h2 id="reading-guide-title" class="font-extrabold text-slate-950">Jak czytać dashboard?</h2>
+            <p class="mt-2 text-sm leading-6 text-slate-600">W rankingach pozycyjnych oś jest odwrócona: wyższy punkt na wykresie oznacza lepsze miejsce.</p>
+          </div>
+          <div>
+            <p class="font-bold text-slate-900">Przedziały rankingowe</p>
+            <p class="mt-2 text-sm leading-6 text-slate-600">Zakres 601–800 nie oznacza pozycji 700. Oznacza jedynie przypisanie uczelni do danego przedziału.</p>
+          </div>
+          <div>
+            <p class="font-bold text-slate-900">Porównywalność lat</p>
+            <p class="mt-2 text-sm leading-6 text-slate-600">Zmiana wyniku może wynikać zarówno z danych PW, jak i ze zmiany metodyki lub składu rankingu.</p>
+          </div>
+        </div>
+      </section>
+      <section id="trendy" class="py-12 md:py-16">
         <header class="mb-8">
           <span class="text-xs uppercase tracking-widest text-indigo-600 font-semibold">Trendy</span>
           <h2 class="text-3xl md:text-[34px] font-extrabold leading-tight mt-2">Jak zmieniały się wyniki PW?</h2>
@@ -47,7 +155,7 @@
                 <p class="mt-4 text-sm leading-6 text-slate-300">Syntetyczne podsumowanie pozycji PW przed szczegółowymi wykresami trendów i rankingów kierunkowych.</p>
               </div>
               <div class="grid grid-cols-2 gap-4">
-                <div class="rounded-2xl border border-white/15 bg-white/8 p-5">
+                <div class="rounded-2xl border border-white/15 bg-white/[0.08] p-5">
                   <p class="text-5xl font-extrabold tracking-tight">3</p>
                   <p class="mt-2 text-xs uppercase tracking-wider text-slate-300">miejsce wśród uczelni akademickich</p>
                 </div>
@@ -119,12 +227,12 @@
           </div>
         </section>
         <div class="grid gap-6 md:grid-cols-2">
-          <div class="bg-white rounded-2xl shadow-sm p-6">
+          <div class="ranking-card bg-white rounded-2xl shadow-sm p-6">
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgba(79,70,229,0.85); border-color: rgba(79,70,229,0.85); background-color: #f8f9ff;">Aktualizacja: 26.06.2026</span>
             <div class="flex items-start justify-between gap-3">
               <div class="flex items-center gap-2">
                 <h3 class="text-lg font-semibold text-gray-900">Ranking Perspektywy</h3>
-                <button id="ruaMethodologyOpen" type="button" class="group relative inline-flex items-center justify-center p-1 transition hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" style="color:rgba(79,70,229,0.85)" aria-label="Otwórz metodykę Rankingu Uczelni Akademickich Perspektywy" aria-haspopup="dialog" title="Metodyka RUA: struktura wag, źródła danych i interpretacja WSK">
+                <button id="ruaMethodologyOpen" type="button" aria-controls="ruaMethodologyModal" class="group relative inline-flex items-center justify-center p-1 transition hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" style="color:rgba(79,70,229,0.85)" aria-label="Otwórz metodykę Rankingu Uczelni Akademickich Perspektywy" aria-haspopup="dialog" title="Metodyka RUA: struktura wag, źródła danych i interpretacja WSK">
                   <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5 shrink-0">
                     <path d="M12 8.5a3.5 3.5 0 1 1 0 7a3.5 3.5 0 0 1 0-7Z" />
                     <path d="M19.4 13.5a7.9 7.9 0 0 0 .1-1.5 7.9 7.9 0 0 0-.1-1.5l1.6-1.2a.6.6 0 0 0 .1-.8l-1.5-2.6a.6.6 0 0 0-.8-.3l-1.9.8a8.6 8.6 0 0 0-2.6-1.5l-.3-2a.6.6 0 0 0-.6-.5h-3a.6.6 0 0 0-.6.5l-.3 2a8.6 8.6 0 0 0-2.6 1.5l-1.9-.8a.6.6 0 0 0-.8.3L2.8 8.5a.6.6 0 0 0 .1.8l1.6 1.2a7.9 7.9 0 0 0-.1 1.5 7.9 7.9 0 0 0 .1 1.5l-1.6 1.2a.6.6 0 0 0-.1.8l1.5 2.6a.6.6 0 0 0 .8.3l1.9-.8a8.6 8.6 0 0 0 2.6 1.5l.3 2a.6.6 0 0 0 .6.5h3a.6.6 0 0 0 .6-.5l.3-2a8.6 8.6 0 0 0 2.6-1.5l1.9.8a.6.6 0 0 0 .8-.3l1.5-2.6a.6.6 0 0 0-.1-.8l-1.6-1.2Z" />
@@ -132,30 +240,31 @@
                   <span class="pointer-events-none absolute left-1/2 top-full z-20 mt-2 hidden w-72 -translate-x-1/2 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Metodyka RUA: kliknij, aby zobaczyć skumulowany wykres wag i krótkie wyjaśnienia wskaźników.</span>
                 </button>
               </div>
-              <button id="perspektywyToggle" type="button" class="group relative inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50/70 p-0.5 text-[11px] font-bold uppercase tracking-wide text-slate-500 transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-pressed="false" aria-label="Przełącz wykres Perspektywy między pozycją i WSK">
+              <button id="perspektywyToggle" type="button" aria-controls="chartPerspektywy" class="group relative inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50/70 p-0.5 text-[11px] font-bold uppercase tracking-wide text-slate-500 transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-pressed="false" aria-label="Przełącz wykres Perspektywy między pozycją i WSK">
                 <span data-toggle-option="position" class="rounded-full bg-white px-2.5 py-1 text-indigo-700 shadow-sm transition">poz</span>
                 <span data-toggle-option="score" class="rounded-full px-2.5 py-1 transition hover:text-indigo-700">WSK</span>
                 <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-64 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium normal-case leading-4 tracking-normal text-white shadow-xl group-hover:block group-focus:block">Przełącz widok wykresu: pozycja w rankingu albo WSK — wskaźnik rankingowy Perspektyw.</span>
               </button>
+              </div>
             </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
-            <canvas id="chartPerspektywy" class="mt-4 w-full" style="height: 330px;"></canvas>
-            <p id="perspektywyNote" class="text-xs text-gray-500 mt-4">Politechnika Warszawska utrzymuje 3 miejsce w latach 2020–2026; WSK wzrósł z 78,9 do 92,3 pkt.</p>
-            <p class="text-[11px] text-gray-400 mt-2">Źródło: Perspektywy RUA 2020–2026 z pliku rankingi.xlsx. Przełącznik: pozycja ↔ WSK (0-100).</p>
+            <canvas id="chartPerspektywy" role="img" aria-label="Trend pozycji oraz wskaźnika WSK Politechniki Warszawskiej w rankingu Perspektywy w latach 2020–2026." class="mt-4 w-full" style="height: 220px;">Trend pozycji oraz wskaźnika WSK Politechniki Warszawskiej w rankingu Perspektywy w latach 2020–2026. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <p id="perspektywyNote" aria-live="polite" class="text-xs text-gray-500 mt-4">Politechnika Warszawska utrzymuje 3 miejsce w latach 2020–2026; WSK wzrósł z 78,9 do 92,3 pkt.</p>
+            <p class="text-[11px] text-slate-500 mt-2">Źródło: Perspektywy RUA 2020–2026 z pliku rankingi.xlsx. Przełącznik: pozycja ↔ WSK (0-100).</p>
           </div>
-          <div class="bg-white rounded-2xl shadow-sm p-6">
+          <div class="ranking-card bg-white rounded-2xl shadow-sm p-6">
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgba(79,70,229,0.85); border-color: rgba(79,70,229,0.85); background-color: #f8f9ff;">Aktualizacja: 26.06.2026</span>
             <div class="flex items-start justify-between gap-3">
               <div class="flex items-center gap-2">
                 <h3 class="text-lg font-semibold text-gray-900">Ranking Kierunków Perspektywy</h3>
-                <button id="rksMethodologyOpen" type="button" class="group relative inline-flex items-center justify-center p-1 transition hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2" style="color:rgba(79,70,229,0.85)" aria-label="Otwórz metodykę Rankingu Kierunków Perspektywy" aria-haspopup="dialog" title="Metodyka RKS: kryteria wejścia, warianty wag i źródła danych">
+                <button id="rksMethodologyOpen" type="button" aria-controls="rksMethodologyModal" class="group relative inline-flex items-center justify-center p-1 transition hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2" style="color:rgba(79,70,229,0.85)" aria-label="Otwórz metodykę Rankingu Kierunków Perspektywy" aria-haspopup="dialog" title="Metodyka RKS: kryteria wejścia, warianty wag i źródła danych">
                   <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5 shrink-0">
                     <path d="M12 8.5a3.5 3.5 0 1 1 0 7a3.5 3.5 0 0 1 0-7Z" />
                     <path d="M19.4 13.5a7.9 7.9 0 0 0 .1-1.5 7.9 7.9 0 0 0-.1-1.5l1.6-1.2a.6.6 0 0 0 .1-.8l-1.5-2.6a.6.6 0 0 0-.8-.3l-1.9.8a8.6 8.6 0 0 0-2.6-1.5l-.3-2a.6.6 0 0 0-.6-.5h-3a.6.6 0 0 0-.6.5l-.3 2a8.6 8.6 0 0 0-2.6 1.5l-1.9-.8a.6.6 0 0 0-.8.3L2.8 8.5a.6.6 0 0 0 .1.8l1.6 1.2a7.9 7.9 0 0 0-.1 1.5 7.9 7.9 0 0 0 .1 1.5l-1.6 1.2a.6.6 0 0 0-.1.8l1.5 2.6a.6.6 0 0 0 .8.3l1.9-.8a8.6 8.6 0 0 0 2.6 1.5l.3 2a.6.6 0 0 0 .6.5h3a.6.6 0 0 0 .6-.5l.3-2a8.6 8.6 0 0 0 2.6-1.5l1.9.8a.6.6 0 0 0 .8-.3l1.5-2.6a.6.6 0 0 0-.1-.8l-1.6-1.2Z" />
                   </svg>
                 </button>
               </div>
-              <button id="rksToggle" type="button" class="group relative inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50/70 p-0.5 text-[11px] font-bold uppercase tracking-wide text-slate-500 transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-pressed="false" aria-label="Przełącz wykres kierunku między pozycją i punktacją">
+              <button id="rksToggle" type="button" aria-controls="chartRKS" class="group relative inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50/70 p-0.5 text-[11px] font-bold uppercase tracking-wide text-slate-500 transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-pressed="false" aria-label="Przełącz wykres kierunku między pozycją i punktacją">
                 <span data-toggle-option="position" class="rounded-full bg-white px-2.5 py-1 text-indigo-700 shadow-sm transition">poz</span>
                 <span data-toggle-option="score" class="rounded-full px-2.5 py-1 transition hover:text-indigo-700">pkt</span>
                 <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-64 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium normal-case leading-4 tracking-normal text-white shadow-xl group-hover:block group-focus:block">Przełącz widok wykresu kierunku: pozycja w rankingu albo punktacja 0–100.</span>
@@ -166,13 +275,13 @@
               <select id="rksSubjectSelect" class="mt-1 w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-indigo-500 focus:ring-indigo-500"></select>
             </label>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 220px) -->
-            <canvas id="chartRKS" class="w-full" style="margin-top: 0.25rem; height: 260px;"></canvas>
-            <p id="rksSubjectNote" class="text-xs text-gray-500 mt-4">Pozycje PW w rankingach kierunkowych Perspektyw aktualizują się po wyborze kierunku.</p>
-            <p class="text-[11px] text-gray-400 mt-2">Źródło: Perspektywy — Ranking Kierunków Studiów 2020–2026. Przełącznik: pozycja ↔ punktacja (0-100).</p>
+            <canvas id="chartRKS" role="img" aria-label="Trend pozycji wybranego kierunku Politechniki Warszawskiej w Rankingu Kierunków Studiów Perspektywy." class="w-full" style="margin-top: 0.25rem; height: 200px;">Trend pozycji wybranego kierunku Politechniki Warszawskiej w Rankingu Kierunków Studiów Perspektywy. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <p id="rksSubjectNote" aria-live="polite" class="text-xs text-gray-500 mt-4">Pozycje PW w rankingach kierunkowych Perspektyw aktualizują się po wyborze kierunku.</p>
+            <p class="text-[11px] text-slate-500 mt-2">Źródło: Perspektywy — Ranking Kierunków Studiów 2020–2026. Przełącznik: pozycja ↔ punktacja (0-100).</p>
           </div>
         </div>
 
-        <div id="rksMethodologyModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-labelledby="rksMethodologyTitle" aria-describedby="rksMethodologyDesc">
+        <div id="rksMethodologyModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="rksMethodologyTitle" aria-describedby="rksMethodologyDesc">
           <div id="rksMethodologyBackdrop" class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
           <div class="relative z-10 flex min-h-full items-center justify-center p-4">
             <section class="max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[28px] bg-white shadow-2xl ring-1 ring-slate-900/10">
@@ -270,7 +379,7 @@
           </div>
         </div>
 
-        <section aria-label="Podsumowanie QS 2027" class="mt-10 mb-6 overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm">
+        <section id="qs" aria-label="Podsumowanie QS 2027" class="mt-10 mb-6 overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm">
           <div class="grid lg:grid-cols-[0.95fr_1.35fr]">
             <div class="bg-slate-950 text-white p-8 md:p-10 flex flex-col justify-between gap-8">
               <div>
@@ -279,7 +388,7 @@
                 <p class="mt-4 text-sm leading-6 text-slate-300">Syntetyczne podsumowanie pozycji Politechniki Warszawskiej przed szczegółowymi wykresami QS.</p>
               </div>
               <div class="grid grid-cols-3 gap-3">
-                <div class="rounded-2xl border border-white/15 bg-white/8 p-4 text-center">
+                <div class="rounded-2xl border border-white/15 bg-white/[0.08] p-4 text-center">
                   <p class="text-4xl font-extrabold tracking-tight">3</p>
                   <p class="mt-2 text-[11px] uppercase tracking-wider text-slate-300">miejsce w Polsce</p>
                 </div>
@@ -287,7 +396,7 @@
                   <p class="text-4xl font-extrabold tracking-tight">7</p>
                   <p class="mt-2 text-[11px] uppercase tracking-wider text-slate-300">Europa Wschodnia</p>
                 </div>
-                <div class="rounded-2xl border border-white/15 bg-white/8 p-4 text-center">
+                <div class="rounded-2xl border border-white/15 bg-white/[0.08] p-4 text-center">
                   <p class="text-4xl font-extrabold tracking-tight">504</p>
                   <p class="mt-2 text-[11px] uppercase tracking-wider text-slate-300">miejsce na świecie</p>
                 </div>
@@ -352,111 +461,548 @@
           </div>
         </section>
         <div class="grid gap-6 md:grid-cols-2 mt-6" style="grid-auto-rows: 1fr;">
-          <div id="qs" class="bg-white rounded-2xl shadow-sm p-6">
+          <div class="ranking-card bg-white rounded-2xl shadow-sm p-6">
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgb(79,70,229); border-color: rgb(79,70,229); background-color: #f8f9ff;">Aktualizacja: 18.06.2026</span>
-            <h3 class="text-lg font-semibold text-gray-900">QS World University Rankings</h3>
-            <canvas id="chartQS" class="mt-4 w-full" style="height: 350px;"></canvas>
+            <div class="flex items-center justify-between gap-3">
+              <h3 class="text-lg font-semibold text-gray-900">QS World University Rankings</h3>
+              <button id="qsWurMethodologyOpen" type="button" data-methodology-open="qsWurMethodologyModal" aria-controls="qsWurMethodologyModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Otwórz metodykę QS World University Rankings" title="Otwórz metodykę QS World University Rankings">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0">
+  <path d="M12 8.5a3.5 3.5 0 1 1 0 7a3.5 3.5 0 0 1 0-7Z" />
+  <path d="M19.4 13.5a7.9 7.9 0 0 0 .1-1.5 7.9 7.9 0 0 0-.1-1.5l1.6-1.2a.6.6 0 0 0 .1-.8l-1.5-2.6a.6.6 0 0 0-.8-.3l-1.9.8a8.6 8.6 0 0 0-2.6-1.5l-.3-2a.6.6 0 0 0-.6-.5h-3a.6.6 0 0 0-.6.5l-.3 2a8.6 8.6 0 0 0-2.6 1.5l-1.9-.8a.6.6 0 0 0-.8.3L2.8 8.5a.6.6 0 0 0 .1.8l1.6 1.2a7.9 7.9 0 0 0-.1 1.5 7.9 7.9 0 0 0 .1 1.5l-1.6 1.2a.6.6 0 0 0-.1.8l1.5 2.6a.6.6 0 0 0 .8.3l1.9-.8a8.6 8.6 0 0 0 2.6 1.5l.3 2a.6.6 0 0 0 .6.5h3a.6.6 0 0 0 .6-.5l.3-2a8.6 8.6 0 0 0 2.6-1.5l1.9.8a.6.6 0 0 0 .8-.3l1.5-2.6a.6.6 0 0 0-.1-.8l-1.6-1.2Z" />
+</svg>
+      <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-56 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Metodyka: wagi, wskaźniki, źródła danych i zasady kwalifikacji.</span>
+    </button>
+            </div>
+            <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 340px) -->
+            <canvas id="chartQS" role="img" aria-label="Trend pozycji Politechniki Warszawskiej w QS World University Rankings w latach 2020–2027." class="mt-4 w-full" style="height: 220px;">Trend pozycji Politechniki Warszawskiej w QS World University Rankings w latach 2020–2027. Szczegółowy opis znajduje się pod wykresem.</canvas>
             <p class="text-xs text-gray-500 mt-4">PW utrzymuje się w okolicach globalnego top 500 QS; w edycji 2027 zajmuje miejsce =504.</p>
-            <p class="text-[11px] text-gray-400 mt-2">Źródło: QS World University Rankings 2020–2027.</p>
+            <p class="text-[11px] text-slate-500 mt-2">Źródło: QS World University Rankings 2020–2027.</p>
           </div>
-          <div class="bg-white rounded-2xl shadow-sm p-6">
+          <div class="ranking-card bg-white rounded-2xl shadow-sm p-6">
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgb(79,70,229); border-color: rgb(79,70,229); background-color: #f8f9ff;">Aktualizacja: 12.03.2025</span>
-            <h3 class="text-lg font-semibold text-gray-900">QS World University Rankings by Subject</h3>
+            <div class="flex items-center justify-between gap-3">
+              <h3 class="text-lg font-semibold text-gray-900">QS World University Rankings by Subject</h3>
+              <button id="qsSubjectMethodologyOpen" type="button" data-methodology-open="qsSubjectMethodologyModal" aria-controls="qsSubjectMethodologyModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Otwórz metodykę QS World University Rankings by Subject" title="Otwórz metodykę QS World University Rankings by Subject">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0">
+  <path d="M12 8.5a3.5 3.5 0 1 1 0 7a3.5 3.5 0 0 1 0-7Z" />
+  <path d="M19.4 13.5a7.9 7.9 0 0 0 .1-1.5 7.9 7.9 0 0 0-.1-1.5l1.6-1.2a.6.6 0 0 0 .1-.8l-1.5-2.6a.6.6 0 0 0-.8-.3l-1.9.8a8.6 8.6 0 0 0-2.6-1.5l-.3-2a.6.6 0 0 0-.6-.5h-3a.6.6 0 0 0-.6.5l-.3 2a8.6 8.6 0 0 0-2.6 1.5l-1.9-.8a.6.6 0 0 0-.8.3L2.8 8.5a.6.6 0 0 0 .1.8l1.6 1.2a7.9 7.9 0 0 0-.1 1.5 7.9 7.9 0 0 0 .1 1.5l-1.6 1.2a.6.6 0 0 0-.1.8l1.5 2.6a.6.6 0 0 0 .8.3l1.9-.8a8.6 8.6 0 0 0 2.6 1.5l.3 2a.6.6 0 0 0 .6.5h3a.6.6 0 0 0 .6-.5l.3-2a8.6 8.6 0 0 0 2.6-1.5l1.9.8a.6.6 0 0 0 .8-.3l1.5-2.6a.6.6 0 0 0-.1-.8l-1.6-1.2Z" />
+</svg>
+      <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-56 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Metodyka: wagi, wskaźniki, źródła danych i zasady kwalifikacji.</span>
+    </button>
+            </div>
             <label for="qsSubjectSelect" class="block mt-4">
               <span class="text-xs font-semibold text-gray-500 uppercase tracking-widest">Wybierz dyscyplinę</span>
               <select id="qsSubjectSelect" class="mt-1 w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
               </select>
             </label>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 300px) -->
-            <canvas id="chartQSSubject" class="w-full" style="margin-top: 0.25rem; height: 280px;"></canvas>
-            <p id="qsSubjectNote" class="text-xs text-gray-500 mt-4">Pozycja PW w QS by Subject aktualizuje się po wyborze dyscypliny.</p>
-            <p class="text-[11px] text-gray-400 mt-2">Źródło: QS World University Rankings by Subject 2023-2026.</p>
+            <canvas id="chartQSSubject" role="img" aria-label="Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w QS World University Rankings by Subject." class="w-full" style="margin-top: 0.25rem; height: 200px;">Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w QS World University Rankings by Subject. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <p id="qsSubjectNote" aria-live="polite" class="text-xs text-gray-500 mt-4">Pozycja PW w QS by Subject aktualizuje się po wyborze dyscypliny.</p>
+            <p class="text-[11px] text-slate-500 mt-2">Źródło: QS World University Rankings by Subject 2023-2026.</p>
           </div>
         </div>
         <div class="grid gap-6 md:grid-cols-2 mt-6">
-          <div id="the" class="bg-white rounded-2xl shadow-sm p-6">
+          <div id="the" class="ranking-card bg-white rounded-2xl shadow-sm p-6">
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgb(14,116,144); border-color: rgb(14,116,144); background-color: #e0f7ff;">Aktualizacja: 09.10.2025</span>
-            <h3 class="text-lg font-semibold text-gray-900">World University Rankings (THE)</h3>
-            <canvas id="chartTHE" class="mt-4 w-full" style="height: 288px;"></canvas>
+            <div class="flex items-center justify-between gap-3">
+              <h3 class="text-lg font-semibold text-gray-900">World University Rankings (THE)</h3>
+              <button id="theWurMethodologyOpen" type="button" data-methodology-open="theWurMethodologyModal" aria-controls="theWurMethodologyModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-cyan-700 shadow-sm transition hover:border-cyan-300 hover:bg-cyan-50 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2" aria-label="Otwórz metodykę THE World University Rankings" title="Otwórz metodykę THE World University Rankings">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0">
+  <path d="M12 8.5a3.5 3.5 0 1 1 0 7a3.5 3.5 0 0 1 0-7Z" />
+  <path d="M19.4 13.5a7.9 7.9 0 0 0 .1-1.5 7.9 7.9 0 0 0-.1-1.5l1.6-1.2a.6.6 0 0 0 .1-.8l-1.5-2.6a.6.6 0 0 0-.8-.3l-1.9.8a8.6 8.6 0 0 0-2.6-1.5l-.3-2a.6.6 0 0 0-.6-.5h-3a.6.6 0 0 0-.6.5l-.3 2a8.6 8.6 0 0 0-2.6 1.5l-1.9-.8a.6.6 0 0 0-.8.3L2.8 8.5a.6.6 0 0 0 .1.8l1.6 1.2a7.9 7.9 0 0 0-.1 1.5 7.9 7.9 0 0 0 .1 1.5l-1.6 1.2a.6.6 0 0 0-.1.8l1.5 2.6a.6.6 0 0 0 .8.3l1.9-.8a8.6 8.6 0 0 0 2.6 1.5l.3 2a.6.6 0 0 0 .6.5h3a.6.6 0 0 0 .6-.5l.3-2a8.6 8.6 0 0 0 2.6-1.5l1.9.8a.6.6 0 0 0 .8-.3l1.5-2.6a.6.6 0 0 0-.1-.8l-1.6-1.2Z" />
+</svg>
+      <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-56 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Metodyka: wagi, wskaźniki, źródła danych i zasady kwalifikacji.</span>
+    </button>
+            </div>
+            <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
+            <canvas id="chartTHE" role="img" aria-label="Trend pozycji Politechniki Warszawskiej w Times Higher Education World University Rankings." class="mt-4 w-full" style="height: 220px;">Trend pozycji Politechniki Warszawskiej w Times Higher Education World University Rankings. Szczegółowy opis znajduje się pod wykresem.</canvas>
             <p class="text-xs text-gray-500 mt-4">PW utrzymuje stabilną obecność w przedziale 1201–1500 THE.</p>
-            <p class="text-[11px] text-gray-400 mt-2">Źródło: Times Higher Education World University Rankings 2020–2026.</p>
+            <p class="text-[11px] text-slate-500 mt-2">Źródło: Times Higher Education World University Rankings 2020–2026.</p>
           </div>
-          <div class="bg-white rounded-2xl shadow-sm p-6">
+          <div class="ranking-card bg-white rounded-2xl shadow-sm p-6">
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgb(14,116,144); border-color: rgb(14,116,144); background-color: #e0f7ff;">Aktualizacja: 09.10.2025</span>
-            <h3 class="text-lg font-semibold text-gray-900">THE World University Rankings by Subject</h3>
+            <div class="flex items-center justify-between gap-3">
+              <h3 class="text-lg font-semibold text-gray-900">THE World University Rankings by Subject</h3>
+              <button id="theSubjectMethodologyOpen" type="button" data-methodology-open="theSubjectMethodologyModal" aria-controls="theSubjectMethodologyModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-cyan-700 shadow-sm transition hover:border-cyan-300 hover:bg-cyan-50 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2" aria-label="Otwórz metodykę THE World University Rankings by Subject" title="Otwórz metodykę THE World University Rankings by Subject">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0">
+  <path d="M12 8.5a3.5 3.5 0 1 1 0 7a3.5 3.5 0 0 1 0-7Z" />
+  <path d="M19.4 13.5a7.9 7.9 0 0 0 .1-1.5 7.9 7.9 0 0 0-.1-1.5l1.6-1.2a.6.6 0 0 0 .1-.8l-1.5-2.6a.6.6 0 0 0-.8-.3l-1.9.8a8.6 8.6 0 0 0-2.6-1.5l-.3-2a.6.6 0 0 0-.6-.5h-3a.6.6 0 0 0-.6.5l-.3 2a8.6 8.6 0 0 0-2.6 1.5l-1.9-.8a.6.6 0 0 0-.8.3L2.8 8.5a.6.6 0 0 0 .1.8l1.6 1.2a7.9 7.9 0 0 0-.1 1.5 7.9 7.9 0 0 0 .1 1.5l-1.6 1.2a.6.6 0 0 0-.1.8l1.5 2.6a.6.6 0 0 0 .8.3l1.9-.8a8.6 8.6 0 0 0 2.6 1.5l.3 2a.6.6 0 0 0 .6.5h3a.6.6 0 0 0 .6-.5l.3-2a8.6 8.6 0 0 0 2.6-1.5l1.9.8a.6.6 0 0 0 .8-.3l1.5-2.6a.6.6 0 0 0-.1-.8l-1.6-1.2Z" />
+</svg>
+      <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-56 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Metodyka: wagi, wskaźniki, źródła danych i zasady kwalifikacji.</span>
+    </button>
+            </div>
             <label for="theSubjectSelect" class="block mt-4">
               <span class="text-xs font-semibold text-gray-500 uppercase tracking-widest">Wybierz dyscyplinę</span>
               <select id="theSubjectSelect" class="mt-1 w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
               </select>
             </label>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 280px) -->
-            <canvas id="chartTHESubject" class="w-full" style="margin-top: 0.25rem; height: 280px;"></canvas>
-            <p id="theSubjectNote" class="text-xs text-gray-500 mt-4">Pozycja PW w THE by Subject aktualizuje się po wyborze dyscypliny.</p>
-            <p class="text-[11px] text-gray-400 mt-2">Źródło: THE World University Rankings by Subject 2020-2026.</p>
+            <canvas id="chartTHESubject" role="img" aria-label="Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w THE World University Rankings by Subject." class="w-full" style="margin-top: 0.25rem; height: 200px;">Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w THE World University Rankings by Subject. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <p id="theSubjectNote" aria-live="polite" class="text-xs text-gray-500 mt-4">Pozycja PW w THE by Subject aktualizuje się po wyborze dyscypliny.</p>
+            <p class="text-[11px] text-slate-500 mt-2">Źródło: THE World University Rankings by Subject 2020-2026.</p>
           </div>
         </div>
         <div class="grid gap-6 md:grid-cols-2 mt-6">
-          <div id="arwu" class="bg-white rounded-2xl shadow-sm p-6">
+          <div id="arwu" class="ranking-card bg-white rounded-2xl shadow-sm p-6">
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgb(220,38,38); border-color: rgb(220,38,38); background-color: #fff5f5;">Aktualizacja: 15.08.2025</span>
-            <h3 class="text-lg font-semibold text-gray-900">ARWU (Lista Szanghajska)</h3>
+            <div class="flex items-center justify-between gap-3">
+              <h3 class="text-lg font-semibold text-gray-900">ARWU (Lista Szanghajska)</h3>
+              <button id="arwuMethodologyOpen" type="button" data-methodology-open="arwuMethodologyModal" aria-controls="arwuMethodologyModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-rose-700 shadow-sm transition hover:border-rose-300 hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2" aria-label="Otwórz metodykę ARWU" title="Otwórz metodykę ARWU">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0">
+  <path d="M12 8.5a3.5 3.5 0 1 1 0 7a3.5 3.5 0 0 1 0-7Z" />
+  <path d="M19.4 13.5a7.9 7.9 0 0 0 .1-1.5 7.9 7.9 0 0 0-.1-1.5l1.6-1.2a.6.6 0 0 0 .1-.8l-1.5-2.6a.6.6 0 0 0-.8-.3l-1.9.8a8.6 8.6 0 0 0-2.6-1.5l-.3-2a.6.6 0 0 0-.6-.5h-3a.6.6 0 0 0-.6.5l-.3 2a8.6 8.6 0 0 0-2.6 1.5l-1.9-.8a.6.6 0 0 0-.8.3L2.8 8.5a.6.6 0 0 0 .1.8l1.6 1.2a7.9 7.9 0 0 0-.1 1.5 7.9 7.9 0 0 0 .1 1.5l-1.6 1.2a.6.6 0 0 0-.1.8l1.5 2.6a.6.6 0 0 0 .8.3l1.9-.8a8.6 8.6 0 0 0 2.6 1.5l.3 2a.6.6 0 0 0 .6.5h3a.6.6 0 0 0 .6-.5l.3-2a8.6 8.6 0 0 0 2.6-1.5l1.9.8a.6.6 0 0 0 .8-.3l1.5-2.6a.6.6 0 0 0-.1-.8l-1.6-1.2Z" />
+</svg>
+      <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-56 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Metodyka: wagi, wskaźniki, źródła danych i zasady kwalifikacji.</span>
+    </button>
+            </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
-            <canvas id="chartARWU" class="mt-4 w-full" style="height: 288px;"></canvas>
+            <canvas id="chartARWU" role="img" aria-label="Trend pozycji Politechniki Warszawskiej w Academic Ranking of World Universities." class="mt-4 w-full" style="height: 220px;">Trend pozycji Politechniki Warszawskiej w Academic Ranking of World Universities. Szczegółowy opis znajduje się pod wykresem.</canvas>
             <p class="text-xs text-gray-500 mt-4">PW pozostaje w globalnym TOP 1000 ARWU, utrzymując stabilne wskaźniki badań.</p>
-            <p class="text-[11px] text-gray-400 mt-2">Źródło: Academic Ranking of World Universities 2020–2025.</p>
+            <p class="text-[11px] text-slate-500 mt-2">Źródło: Academic Ranking of World Universities 2020–2025.</p>
           </div>
-          <div class="bg-white rounded-2xl shadow-sm p-6">
+          <div class="ranking-card bg-white rounded-2xl shadow-sm p-6">
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgb(220,38,38); border-color: rgb(220,38,38); background-color: #fff5f5;">Aktualizacja: 15.08.2025</span>
-            <h3 class="text-lg font-semibold text-gray-900">GRAS (Global Ranking of Academic Subjects)</h3>
+            <div class="flex items-center justify-between gap-3">
+              <h3 class="text-lg font-semibold text-gray-900">GRAS (Global Ranking of Academic Subjects)</h3>
+              <button id="grasMethodologyOpen" type="button" data-methodology-open="grasMethodologyModal" aria-controls="grasMethodologyModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-rose-700 shadow-sm transition hover:border-rose-300 hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2" aria-label="Otwórz metodykę GRAS" title="Otwórz metodykę GRAS">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0">
+  <path d="M12 8.5a3.5 3.5 0 1 1 0 7a3.5 3.5 0 0 1 0-7Z" />
+  <path d="M19.4 13.5a7.9 7.9 0 0 0 .1-1.5 7.9 7.9 0 0 0-.1-1.5l1.6-1.2a.6.6 0 0 0 .1-.8l-1.5-2.6a.6.6 0 0 0-.8-.3l-1.9.8a8.6 8.6 0 0 0-2.6-1.5l-.3-2a.6.6 0 0 0-.6-.5h-3a.6.6 0 0 0-.6.5l-.3 2a8.6 8.6 0 0 0-2.6 1.5l-1.9-.8a.6.6 0 0 0-.8.3L2.8 8.5a.6.6 0 0 0 .1.8l1.6 1.2a7.9 7.9 0 0 0-.1 1.5 7.9 7.9 0 0 0 .1 1.5l-1.6 1.2a.6.6 0 0 0-.1.8l1.5 2.6a.6.6 0 0 0 .8.3l1.9-.8a8.6 8.6 0 0 0 2.6 1.5l.3 2a.6.6 0 0 0 .6.5h3a.6.6 0 0 0 .6-.5l.3-2a8.6 8.6 0 0 0 2.6-1.5l1.9.8a.6.6 0 0 0 .8-.3l1.5-2.6a.6.6 0 0 0-.1-.8l-1.6-1.2Z" />
+</svg>
+      <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-56 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Metodyka: wagi, wskaźniki, źródła danych i zasady kwalifikacji.</span>
+    </button>
+            </div>
             <label for="grasSubjectSelect" class="block mt-4">
               <span class="text-xs font-semibold text-gray-500 uppercase tracking-widest">Wybierz dyscyplinę</span>
               <select id="grasSubjectSelect" class="mt-1 w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
               </select>
             </label>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 280px) -->
-            <canvas id="chartGRAS" class="w-full" style="margin-top: 0.25rem; height: 280px;"></canvas>
-            <p id="grasSubjectNote" class="text-xs text-gray-500 mt-4">Pozycja PW w GRAS aktualizuje się po wyborze dyscypliny.</p>
-            <p class="text-[11px] text-gray-400 mt-2">Źródło: Global Ranking of Academic Subjects 2020-2025.</p>
+            <canvas id="chartGRAS" role="img" aria-label="Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w Global Ranking of Academic Subjects." class="w-full" style="margin-top: 0.25rem; height: 200px;">Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w Global Ranking of Academic Subjects. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <p id="grasSubjectNote" aria-live="polite" class="text-xs text-gray-500 mt-4">Pozycja PW w GRAS aktualizuje się po wyborze dyscypliny.</p>
+            <p class="text-[11px] text-slate-500 mt-2">Źródło: Global Ranking of Academic Subjects 2020-2025.</p>
           </div>
         </div>
         <div class="grid gap-6 md:grid-cols-2 mt-6">
-          <div id="engirank" class="bg-white rounded-2xl shadow-sm p-6">
+          <div id="engirank" class="ranking-card bg-white rounded-2xl shadow-sm p-6">
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgba(79,70,229,0.75); border-color: rgba(79,70,229,0.75); background-color: #f8f9ff;">Aktualizacja: 22.12.2025</span>
-            <div class="flex items-baseline justify-between gap-3">
+            <div class="flex items-center justify-between gap-3">
               <h3 class="text-lg font-semibold text-gray-900">EngiRank</h3>
-              <button id="engiToggle" type="button" class="group relative inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50/70 p-0.5 text-[11px] font-bold uppercase tracking-wide text-slate-500 transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-pressed="false" aria-label="Przełącz wykres EngiRank między pozycją i WSK">
+              <div class="flex items-center gap-2">
+                <button id="engiMethodologyOpen" type="button" data-methodology-open="engiMethodologyModal" aria-controls="engiMethodologyModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Otwórz metodykę EngiRank" title="Otwórz metodykę EngiRank">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0">
+  <path d="M12 8.5a3.5 3.5 0 1 1 0 7a3.5 3.5 0 0 1 0-7Z" />
+  <path d="M19.4 13.5a7.9 7.9 0 0 0 .1-1.5 7.9 7.9 0 0 0-.1-1.5l1.6-1.2a.6.6 0 0 0 .1-.8l-1.5-2.6a.6.6 0 0 0-.8-.3l-1.9.8a8.6 8.6 0 0 0-2.6-1.5l-.3-2a.6.6 0 0 0-.6-.5h-3a.6.6 0 0 0-.6.5l-.3 2a8.6 8.6 0 0 0-2.6 1.5l-1.9-.8a.6.6 0 0 0-.8.3L2.8 8.5a.6.6 0 0 0 .1.8l1.6 1.2a7.9 7.9 0 0 0-.1 1.5 7.9 7.9 0 0 0 .1 1.5l-1.6 1.2a.6.6 0 0 0-.1.8l1.5 2.6a.6.6 0 0 0 .8.3l1.9-.8a8.6 8.6 0 0 0 2.6 1.5l.3 2a.6.6 0 0 0 .6.5h3a.6.6 0 0 0 .6-.5l.3-2a8.6 8.6 0 0 0 2.6-1.5l1.9.8a.6.6 0 0 0 .8-.3l1.5-2.6a.6.6 0 0 0-.1-.8l-1.6-1.2Z" />
+</svg>
+      <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-56 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Metodyka: wagi, wskaźniki, źródła danych i zasady kwalifikacji.</span>
+    </button>
+                <button id="engiToggle" type="button" aria-controls="chartEngi" class="group relative inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50/70 p-0.5 text-[11px] font-bold uppercase tracking-wide text-slate-500 transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-pressed="false" aria-label="Przełącz wykres EngiRank między pozycją i WSK">
                 <span data-toggle-option="position" class="rounded-full bg-white px-2.5 py-1 text-indigo-700 shadow-sm transition">poz</span>
                 <span data-toggle-option="score" class="rounded-full px-2.5 py-1 transition hover:text-indigo-700">WSK</span>
                 <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-64 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium normal-case leading-4 tracking-normal text-white shadow-xl group-hover:block group-focus:block">Przełącz widok wykresu EngiRank: pozycja albo WSK — wskaźnik punktowy 0–100.</span>
               </button>
             </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
-            <canvas id="chartEngi" class="mt-4 w-full" style="height: 288px;"></canvas>
-            <p id="engiNote" class="text-xs text-gray-500 mt-4">PW awansowała na 64 miejsce w EngiRank 2024.</p>
-            <p class="text-[11px] text-gray-400 mt-2">Źródło: EngiRank 2023-2024. Przełącznik: pozycja ↔ WSK (0-100).</p>
+            <canvas id="chartEngi" role="img" aria-label="Trend pozycji i wskaźnika punktowego Politechniki Warszawskiej w EngiRank." class="mt-4 w-full" style="height: 220px;">Trend pozycji i wskaźnika punktowego Politechniki Warszawskiej w EngiRank. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <p id="engiNote" aria-live="polite" class="text-xs text-gray-500 mt-4">PW awansowała na 64 miejsce w EngiRank 2024.</p>
+            <p class="text-[11px] text-slate-500 mt-2">Źródło: EngiRank 2023-2024. Przełącznik: pozycja ↔ WSK (0-100).</p>
           </div>
-          <div class="bg-white rounded-2xl shadow-sm p-6">
+          <div class="ranking-card bg-white rounded-2xl shadow-sm p-6">
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgba(79,70,229,0.75); border-color: rgba(79,70,229,0.75); background-color: #f8f9ff;">Aktualizacja: 22.12.2025</span>
-            <div class="flex items-baseline justify-between gap-3">
+            <div class="flex items-center justify-between gap-3">
               <h3 class="text-lg font-semibold text-gray-900">EngiRank by Subject</h3>
-              <button id="engiSubjectToggle" type="button" class="group relative inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50/70 p-0.5 text-[11px] font-bold uppercase tracking-wide text-slate-500 transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-pressed="false" aria-label="Przełącz wykres EngiRank by Subject między pozycją i punktacją">
+              <div class="flex items-center gap-2">
+                <button id="engiSubjectMethodologyOpen" type="button" data-methodology-open="engiMethodologyModal" aria-controls="engiMethodologyModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Otwórz metodykę EngiRank by Subject" title="Otwórz metodykę EngiRank by Subject">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0">
+  <path d="M12 8.5a3.5 3.5 0 1 1 0 7a3.5 3.5 0 0 1 0-7Z" />
+  <path d="M19.4 13.5a7.9 7.9 0 0 0 .1-1.5 7.9 7.9 0 0 0-.1-1.5l1.6-1.2a.6.6 0 0 0 .1-.8l-1.5-2.6a.6.6 0 0 0-.8-.3l-1.9.8a8.6 8.6 0 0 0-2.6-1.5l-.3-2a.6.6 0 0 0-.6-.5h-3a.6.6 0 0 0-.6.5l-.3 2a8.6 8.6 0 0 0-2.6 1.5l-1.9-.8a.6.6 0 0 0-.8.3L2.8 8.5a.6.6 0 0 0 .1.8l1.6 1.2a7.9 7.9 0 0 0-.1 1.5 7.9 7.9 0 0 0 .1 1.5l-1.6 1.2a.6.6 0 0 0-.1.8l1.5 2.6a.6.6 0 0 0 .8.3l1.9-.8a8.6 8.6 0 0 0 2.6 1.5l.3 2a.6.6 0 0 0 .6.5h3a.6.6 0 0 0 .6-.5l.3-2a8.6 8.6 0 0 0 2.6-1.5l1.9.8a.6.6 0 0 0 .8-.3l1.5-2.6a.6.6 0 0 0-.1-.8l-1.6-1.2Z" />
+</svg>
+      <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-56 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Metodyka: wagi, wskaźniki, źródła danych i zasady kwalifikacji.</span>
+    </button>
+                <button id="engiSubjectToggle" type="button" aria-controls="chartEngiSubject" class="group relative inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50/70 p-0.5 text-[11px] font-bold uppercase tracking-wide text-slate-500 transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-pressed="false" aria-label="Przełącz wykres EngiRank by Subject między pozycją i punktacją">
                 <span data-toggle-option="position" class="rounded-full bg-white px-2.5 py-1 text-indigo-700 shadow-sm transition">poz</span>
                 <span data-toggle-option="score" class="rounded-full px-2.5 py-1 transition hover:text-indigo-700">pkt</span>
                 <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-64 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium normal-case leading-4 tracking-normal text-white shadow-xl group-hover:block group-focus:block">Przełącz widok wykresu kierunku EngiRank: pozycja albo punktacja 0–100.</span>
               </button>
+              </div>
             </div>
             <label for="engiSubjectSelect" class="block mt-4">
               <span class="text-xs font-semibold text-gray-500 uppercase tracking-widest">Wybierz kierunek</span>
               <select id="engiSubjectSelect" class="mt-1 w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-indigo-500 focus:ring-indigo-500"></select>
             </label>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 260px) -->
-            <canvas id="chartEngiSubject" class="w-full" style="margin-top: 0.25rem; height: 260px;"></canvas>
-            <p id="engiSubjectNote" class="text-xs text-gray-500 mt-4">Pozycje PW w EngiRank by Subject aktualizują się po wyborze kierunku.</p>
-            <p class="text-[11px] text-gray-400 mt-2">Źródło: EngiRank by Subject 2023. Przełącznik: pozycja ↔ punktacja (0-100).</p>
+            <canvas id="chartEngiSubject" role="img" aria-label="Trend pozycji wybranego kierunku Politechniki Warszawskiej w EngiRank by Subject." class="w-full" style="margin-top: 0.25rem; height: 200px;">Trend pozycji wybranego kierunku Politechniki Warszawskiej w EngiRank by Subject. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <p id="engiSubjectNote" aria-live="polite" class="text-xs text-gray-500 mt-4">Pozycje PW w EngiRank by Subject aktualizują się po wyborze kierunku.</p>
+            <p class="text-[11px] text-slate-500 mt-2">Źródło: EngiRank by Subject 2023. Przełącznik: pozycja ↔ punktacja (0-100).</p>
           </div>
         </div>
       </section>
 
-    <div id="ruaMethodologyModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-labelledby="ruaMethodologyTitle" aria-describedby="ruaMethodologyDesc">
+
+    <!-- Metodyki rankingów międzynarodowych -->
+    <div id="qsWurMethodologyModal" data-methodology-modal class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="qsWurMethodologyTitle" aria-describedby="qsWurMethodologyDesc">
+      <div data-methodology-backdrop class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
+      <div class="relative z-10 flex min-h-full items-center justify-center p-4">
+        <section class="max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[28px] bg-white shadow-2xl ring-1 ring-slate-900/10">
+          <div class="flex items-start justify-between gap-6 border-b border-slate-200 p-6 md:p-8">
+            <div>
+              <p class="text-xs font-bold uppercase tracking-[0.24em] text-indigo-700">Metodyka QS World University Rankings</p>
+              <h2 id="qsWurMethodologyTitle" class="mt-2 text-2xl font-extrabold text-slate-950">Jak QS ocenia całą uczelnię?</h2>
+              <p id="qsWurMethodologyDesc" class="mt-3 max-w-3xl text-sm leading-6 text-slate-600">Ranking ogólny QS łączy reputację akademicką i pracodawców, bibliometrię, zasoby dydaktyczne, umiędzynarodowienie, rezultaty absolwentów oraz zrównoważony rozwój.</p>
+            </div>
+            <button data-methodology-close type="button" class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-label="Zamknij modal metodyki QS World University Rankings">×</button>
+          </div>
+          <div class="space-y-6 p-6 md:p-8">
+            <section class="rounded-3xl border border-slate-200 bg-slate-50 p-4 md:p-5" aria-label="Wagi QS World University Rankings">
+              <div class="mb-3 flex flex-wrap items-end justify-between gap-3">
+                <div>
+                  <h3 class="text-base font-extrabold text-slate-950">QS World University Rankings — wagi wskaźników</h3>
+                  <p class="mt-1 text-xs leading-5 text-slate-500">Dziewięć wskaźników składa się na wynik końcowy. International Student Diversity jest raportowany dodatkowo, lecz nie wpływa na punktację.</p>
+                </div>
+                <p class="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-600 ring-1 ring-slate-200">Razem 100%</p>
+              </div>
+              <div class="flex h-16 overflow-hidden rounded-2xl bg-white shadow-inner ring-1 ring-slate-200">
+                <div class="flex items-center justify-center bg-indigo-700 px-1 text-[10px] font-bold text-white" style="width:30%" title="Academic Reputation — 30%">30%</div>
+                <div class="flex items-center justify-center bg-sky-600 px-1 text-[10px] font-bold text-white" style="width:20%" title="Citations per Faculty — 20%">20%</div>
+                <div class="flex items-center justify-center bg-cyan-600 px-1 text-[10px] font-bold text-white" style="width:15%" title="Employer Reputation — 15%">15%</div>
+                <div class="flex items-center justify-center bg-emerald-600 px-1 text-[10px] font-bold text-white" style="width:10%" title="Faculty Student Ratio — 10%">10%</div>
+                <div class="bg-lime-600" style="width:5%" title="Employment Outcomes — 5%"></div>
+                <div class="bg-amber-500" style="width:5%" title="International Faculty Ratio — 5%"></div>
+                <div class="bg-orange-500" style="width:5%" title="International Research Network — 5%"></div>
+                <div class="bg-rose-500" style="width:5%" title="International Student Ratio — 5%"></div>
+                <div class="bg-violet-600" style="width:5%" title="Sustainability — 5%"></div>
+              </div>
+              <div class="mt-4 grid gap-2 text-[11px] text-slate-600 sm:grid-cols-2 lg:grid-cols-3">
+                <span><b class="text-indigo-700">■</b> Reputacja akademicka 30%</span><span><b class="text-sky-600">■</b> Cytowania na pracownika 20%</span><span><b class="text-cyan-700">■</b> Reputacja wśród pracodawców 15%</span><span><b class="text-emerald-700">■</b> Relacja kadra–studenci 10%</span><span><b class="text-lime-700">■</b> Losy absolwentów 5%</span><span><b class="text-amber-600">■</b> Kadra międzynarodowa 5%</span><span><b class="text-orange-600">■</b> Międzynarodowa sieć badań 5%</span><span><b class="text-rose-600">■</b> Studenci międzynarodowi 5%</span><span><b class="text-violet-700">■</b> Sustainability 5%</span>
+              </div>
+            </section>
+            <section class="grid gap-4 lg:grid-cols-2" aria-label="Bloki metodologiczne QS WUR">
+              <section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-indigo-700">Badania i rozpoznawalność — 50%</h4><p class="mt-3 text-xs leading-5 text-slate-600"><b>Academic Reputation (30%)</b> pochodzi z globalnego badania akademików. <b>Citations per Faculty (20%)</b> wykorzystuje dane Scopus i normalizację względem wielkości kadry oraz profilu dziedzinowego.</p></section>
+              <section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-cyan-700">Zatrudnialność i rezultaty — 20%</h4><p class="mt-3 text-xs leading-5 text-slate-600"><b>Employer Reputation (15%)</b> opiera się na badaniu pracodawców, a <b>Employment Outcomes (5%)</b> opisuje rezultaty zawodowe i wpływ absolwentów.</p></section>
+              <section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-emerald-700">Doświadczenie kształcenia — 10%</h4><p class="mt-3 text-xs leading-5 text-slate-600"><b>Faculty Student Ratio</b> porównuje liczbę pracowników akademickich z liczbą studentów i pełni funkcję wskaźnika zasobów dydaktycznych.</p></section>
+              <section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-amber-700">Globalne zaangażowanie i sustainability — 20%</h4><p class="mt-3 text-xs leading-5 text-slate-600">Obejmuje kadrę i studentów międzynarodowych, sieć współpracy badawczej oraz wynik zrównoważonego rozwoju.</p></section>
+            </section>
+            <p class="rounded-2xl bg-indigo-50 p-4 text-xs leading-5 text-indigo-950">Źródło: <a href="https://www.topuniversities.com/world-university-rankings/methodology" target="_blank" rel="noopener noreferrer" class="font-bold text-indigo-700 underline decoration-indigo-300 underline-offset-2">QS World University Rankings — Methodology</a>.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div id="qsSubjectMethodologyModal" data-methodology-modal class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="qsSubjectMethodologyTitle" aria-describedby="qsSubjectMethodologyDesc">
+      <div data-methodology-backdrop class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
+      <div class="relative z-10 flex min-h-full items-center justify-center p-4">
+        <section class="max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[28px] bg-white shadow-2xl ring-1 ring-slate-900/10">
+          <div class="flex items-start justify-between gap-6 border-b border-slate-200 p-6 md:p-8">
+            <div>
+              <p class="text-xs font-bold uppercase tracking-[0.24em] text-indigo-700">Metodyka QS World University Rankings by Subject</p>
+              <h2 id="qsSubjectMethodologyTitle" class="mt-2 text-2xl font-extrabold text-slate-950">Jak QS porównuje dyscypliny?</h2>
+              <p id="qsSubjectMethodologyDesc" class="mt-3 max-w-3xl text-sm leading-6 text-slate-600">Ranking dziedzinowy wykorzystuje reputację akademicką i pracodawców, cytowania na publikację, indeks H oraz międzynarodową sieć badań. Wagi są dopasowywane do specyfiki obszaru.</p>
+            </div>
+            <button data-methodology-close type="button" class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-label="Zamknij modal metodyki QS by Subject">×</button>
+          </div>
+          <div class="space-y-6 p-6 md:p-8">
+            <section class="rounded-3xl border border-indigo-100 bg-indigo-50/60 p-4 md:p-5" aria-label="Metodyka QS by Subject">
+              <div class="grid gap-4 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+                <div><h3 class="text-base font-extrabold text-slate-950">Profil wag wybranego obszaru lub dyscypliny</h3><p class="mt-1 text-xs leading-5 text-slate-600">Dla szerokich obszarów QS publikuje konkretne wagi. Dla wąskich dyscyplin progi publikacyjne i wagi bibliometryczne są kalibrowane do charakteru publikowania i cytowania.</p></div>
+                <label for="qsMethodologySubjectSelect" class="block"><span class="text-xs font-semibold uppercase tracking-widest text-slate-500">Dyscyplina z wykresu</span><select id="qsMethodologySubjectSelect" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:ring-indigo-500"></select></label>
+              </div>
+              <div class="mt-4 rounded-2xl border border-white bg-white p-4 shadow-inner ring-1 ring-indigo-100">
+                <div class="flex flex-wrap items-center justify-between gap-3"><p id="qsMethodologyProfileText" class="text-xs leading-5 text-slate-600">Wybierz obszar, aby zobaczyć profil wag.</p><p id="qsMethodologyProfileBadge" class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-700 ring-1 ring-indigo-100">—</p></div>
+                <div id="qsMethodologySubjectChart" class="mt-4"></div>
+                <div id="qsMethodologySubjectLegend" class="mt-4 grid gap-2 text-[11px] text-slate-600 sm:grid-cols-2 lg:grid-cols-5"></div>
+              </div>
+              <div class="mt-4 grid gap-3 text-xs leading-5 text-slate-600 md:grid-cols-2 lg:grid-cols-5">
+                <p class="rounded-xl bg-white p-3"><b>Academic Reputation</b><br>ocena środowiska akademickiego.</p><p class="rounded-xl bg-white p-3"><b>Employer Reputation</b><br>ocena absolwentów przez pracodawców.</p><p class="rounded-xl bg-white p-3"><b>Citations per Paper</b><br>wpływ cytowaniowy publikacji.</p><p class="rounded-xl bg-white p-3"><b>H-index</b><br>produktywność i trwałość wpływu.</p><p class="rounded-xl bg-white p-3"><b>IRN</b><br>zasięg międzynarodowej sieci badań.</p>
+              </div>
+            </section>
+            <section class="rounded-3xl border border-indigo-100 bg-indigo-50/70 p-5"><h3 class="font-extrabold text-slate-950">Warunki wejścia do QS by Subject</h3><p class="mt-2 text-sm leading-6 text-slate-700">Uczelnia musi prowadzić pełny program studiów w danej dziedzinie, posiadać co najmniej trzy roczniki absolwentów, przekroczyć próg publikacyjny właściwy dla dyscypliny oraz osiągnąć minimalny łączny wynik reputacyjny.</p></section>
+            <p class="rounded-2xl bg-indigo-50 p-4 text-xs leading-5 text-indigo-950">Źródło: <a href="https://support.qs.com/hc/en-gb/articles/4410488025106-QS-World-University-Rankings-by-Subject" target="_blank" rel="noopener noreferrer" class="font-bold text-indigo-700 underline decoration-indigo-300 underline-offset-2">QS World University Rankings by Subject — methodology</a>.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div id="theWurMethodologyModal" data-methodology-modal class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="theWurMethodologyTitle" aria-describedby="theWurMethodologyDesc">
+      <div data-methodology-backdrop class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
+      <div class="relative z-10 flex min-h-full items-center justify-center p-4">
+        <section class="max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[28px] bg-white shadow-2xl ring-1 ring-slate-900/10">
+          <div class="flex items-start justify-between gap-6 border-b border-slate-200 p-6 md:p-8">
+            <div>
+              <p class="text-xs font-bold uppercase tracking-[0.24em] text-cyan-700">Metodyka THE World University Rankings 2026</p>
+              <h2 id="theWurMethodologyTitle" class="mt-2 text-2xl font-extrabold text-slate-950">18 wskaźników w pięciu filarach</h2>
+              <p id="theWurMethodologyDesc" class="mt-3 max-w-3xl text-sm leading-6 text-slate-600">Ranking ogólny THE ocenia całe uczelnie badawcze w obszarach kształcenia, środowiska badawczego, jakości badań, umiędzynarodowienia i współpracy z przemysłem.</p>
+            </div>
+            <button data-methodology-close type="button" class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-500" aria-label="Zamknij modal metodyki THE World University Rankings">×</button>
+          </div>
+
+          <div class="space-y-6 p-6 md:p-8">
+            <section class="rounded-3xl border border-slate-200 bg-slate-50 p-4 md:p-5" aria-label="Wagi filarów THE World University Rankings 2026">
+              <div class="mb-3 flex flex-wrap items-end justify-between gap-3">
+                <div>
+                  <h3 class="text-base font-extrabold text-slate-950">THE World University Rankings 2026 — wagi filarów</h3>
+                  <p class="mt-1 text-xs leading-5 text-slate-500">Wewnątrz pięciu filarów znajduje się 18 wskaźników. Wskaźnik wyjazdów zagranicznych ma w tej edycji wagę 0%.</p>
+                </div>
+                <p class="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-600 ring-1 ring-slate-200">Razem 100%</p>
+              </div>
+              <div class="flex h-16 overflow-hidden rounded-2xl bg-white shadow-inner ring-1 ring-slate-200">
+                <div class="flex items-center justify-center bg-cyan-700 text-[10px] font-bold text-white" style="width:29.5%" title="Teaching — 29,5%">29,5%</div>
+                <div class="flex items-center justify-center bg-sky-600 text-[10px] font-bold text-white" style="width:29%" title="Research Environment — 29%">29%</div>
+                <div class="flex items-center justify-center bg-indigo-700 text-[10px] font-bold text-white" style="width:30%" title="Research Quality — 30%">30%</div>
+                <div class="flex items-center justify-center bg-emerald-600 text-[10px] font-bold text-white" style="width:7.5%" title="International Outlook — 7,5%">7,5%</div>
+                <div class="bg-amber-500" style="width:4%" title="Industry — 4%"></div>
+              </div>
+              <div class="mt-4 grid gap-2 text-[11px] text-slate-600 sm:grid-cols-2 lg:grid-cols-5">
+                <span><b class="text-cyan-700">■</b> Kształcenie 29,5%</span>
+                <span><b class="text-sky-700">■</b> Środowisko badań 29%</span>
+                <span><b class="text-indigo-700">■</b> Jakość badań 30%</span>
+                <span><b class="text-emerald-700">■</b> Umiędzynarodowienie 7,5%</span>
+                <span><b class="text-amber-600">■</b> Przemysł 4%</span>
+              </div>
+            </section>
+
+            <section class="grid gap-4 lg:grid-cols-2" aria-label="Wskaźniki THE World University Rankings 2026">
+              <section class="rounded-2xl border border-slate-200 bg-white p-4">
+                <h4 class="text-sm font-extrabold text-cyan-700">Teaching — 29,5%</h4>
+                <ul class="mt-3 space-y-2 text-xs leading-5 text-slate-600">
+                  <li>Reputacja dydaktyczna — 15%</li>
+                  <li>Relacja kadra–studenci — 4,5%</li>
+                  <li>Doktoraty do licencjatów — 2%</li>
+                  <li>Doktoraty do kadry — 5,5%</li>
+                  <li>Dochód instytucjonalny — 2,5%</li>
+                </ul>
+              </section>
+              <section class="rounded-2xl border border-slate-200 bg-white p-4">
+                <h4 class="text-sm font-extrabold text-sky-700">Research Environment — 29%</h4>
+                <ul class="mt-3 space-y-2 text-xs leading-5 text-slate-600">
+                  <li>Reputacja badawcza — 18%</li>
+                  <li>Przychody z badań — 5,5%</li>
+                  <li>Produktywność publikacyjna — 5,5%</li>
+                </ul>
+              </section>
+              <section class="rounded-2xl border border-slate-200 bg-white p-4">
+                <h4 class="text-sm font-extrabold text-indigo-700">Research Quality — 30%</h4>
+                <ul class="mt-3 space-y-2 text-xs leading-5 text-slate-600">
+                  <li>Wpływ cytowań — 15%</li>
+                  <li>Siła badań — 5%</li>
+                  <li>Doskonałość badań — 5%</li>
+                  <li>Wpływ badań — 5%</li>
+                </ul>
+              </section>
+              <section class="rounded-2xl border border-slate-200 bg-white p-4">
+                <h4 class="text-sm font-extrabold text-emerald-700">International Outlook i Industry — 11,5%</h4>
+                <p class="mt-3 text-xs leading-5 text-slate-600">Udział studentów i kadry zagranicznej oraz współautorstwo międzynarodowe mają po 2,5%. Przychody z przemysłu i patenty mają po 2%. Wskaźnik studiowania za granicą pozostaje przygotowany, lecz ma wagę 0%.</p>
+              </section>
+            </section>
+
+            <section class="rounded-3xl border border-cyan-100 bg-cyan-50/70 p-5">
+              <h3 class="font-extrabold text-slate-950">Warunki wejścia do rankingu ogólnego</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-700">Uczelnia musi osiągnąć minimalny wolumen publikacji w pięcioletnim oknie, publikować w każdym roku analizowanego okresu oraz prowadzić kształcenie na poziomie licencjackim. THE może wykluczyć instytucje o bardzo wąskim profilu lub niespełniające wymogów jakości danych.</p>
+            </section>
+
+            <p class="rounded-2xl bg-cyan-50 p-4 text-xs leading-5 text-cyan-950">Źródło: <a href="https://www.timeshighereducation.com/world-university-rankings/methodology" target="_blank" rel="noopener noreferrer" class="font-bold text-cyan-700 underline decoration-cyan-300 underline-offset-2">THE World University Rankings 2026 — methodology</a>.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div id="theSubjectMethodologyModal" data-methodology-modal class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="theSubjectMethodologyTitle" aria-describedby="theSubjectMethodologyDesc">
+      <div data-methodology-backdrop class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
+      <div class="relative z-10 flex min-h-full items-center justify-center p-4">
+        <section class="max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[28px] bg-white shadow-2xl ring-1 ring-slate-900/10">
+          <div class="flex items-start justify-between gap-6 border-b border-slate-200 p-6 md:p-8">
+            <div>
+              <p class="text-xs font-bold uppercase tracking-[0.24em] text-cyan-700">Metodyka THE World University Rankings by Subject 2026</p>
+              <h2 id="theSubjectMethodologyTitle" class="mt-2 text-2xl font-extrabold text-slate-950">Wagi dopasowane do specyfiki dyscypliny</h2>
+              <p id="theSubjectMethodologyDesc" class="mt-3 max-w-3xl text-sm leading-6 text-slate-600">Ranking dziedzinowy wykorzystuje tę samą rodzinę 18 wskaźników co ranking ogólny, ale ich wagi i progi kwalifikacji są kalibrowane dla poszczególnych obszarów nauki.</p>
+            </div>
+            <button data-methodology-close type="button" class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-500" aria-label="Zamknij modal metodyki THE by Subject">×</button>
+          </div>
+
+          <div class="space-y-6 p-6 md:p-8">
+            <section class="rounded-3xl border border-cyan-100 bg-cyan-50/60 p-4 md:p-5" aria-label="Wagi THE by Subject dla wybranego obszaru">
+              <div class="grid gap-4 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+                <div>
+                  <h3 class="text-base font-extrabold text-slate-950">THE by Subject 2026 — profil wybranego obszaru</h3>
+                  <p class="mt-1 text-xs leading-5 text-slate-600">Filary są agregowane z pełnej tabeli 18 wskaźników dla dyscypliny wybranej na głównym wykresie strony.</p>
+                </div>
+                <label for="theMethodologySubjectSelect" class="block">
+                  <span class="text-xs font-semibold uppercase tracking-widest text-slate-500">Obszar</span>
+                  <select id="theMethodologySubjectSelect" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-cyan-500 focus:ring-cyan-500"></select>
+                </label>
+              </div>
+              <div class="mt-4 rounded-2xl border border-white bg-white p-4 shadow-inner ring-1 ring-cyan-100">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                  <p id="theMethodologyProfileText" class="text-xs leading-5 text-slate-600">Wybierz obszar, aby zobaczyć wagi.</p>
+                  <p id="theMethodologyProfileBadge" class="rounded-full bg-cyan-50 px-3 py-1 text-xs font-bold text-cyan-700 ring-1 ring-cyan-100">—</p>
+                </div>
+                <div id="theMethodologySubjectChart" class="mt-4 flex h-16 overflow-hidden rounded-2xl bg-white shadow-inner ring-1 ring-slate-200"></div>
+                <div id="theMethodologySubjectLegend" class="mt-4 grid gap-2 text-[11px] text-slate-600 sm:grid-cols-2 lg:grid-cols-5"></div>
+              </div>
+            </section>
+
+            <section class="grid gap-4 lg:grid-cols-2" aria-label="Znaczenie filarów THE by Subject">
+              <section class="rounded-2xl border border-slate-200 bg-white p-4">
+                <h4 class="text-sm font-extrabold text-cyan-700">Teaching</h4>
+                <p class="mt-3 text-xs leading-5 text-slate-600">Reputacja dydaktyczna, proporcje kadry i studentów, kształcenie doktorantów oraz zasoby instytucji. Waga filaru jest większa w dyscyplinach silnie opartych na procesie kształcenia.</p>
+              </section>
+              <section class="rounded-2xl border border-slate-200 bg-white p-4">
+                <h4 class="text-sm font-extrabold text-sky-700">Research Environment</h4>
+                <p class="mt-3 text-xs leading-5 text-slate-600">Reputacja badawcza, przychody badawcze i produktywność publikacyjna, przeliczane w kontekście konkretnego obszaru nauki.</p>
+              </section>
+              <section class="rounded-2xl border border-slate-200 bg-white p-4">
+                <h4 class="text-sm font-extrabold text-indigo-700">Research Quality</h4>
+                <p class="mt-3 text-xs leading-5 text-slate-600">Wpływ cytowań, siła, doskonałość i szerokość oddziaływania badań. W naukach ścisłych filar ten ma zwykle większą wagę niż w obszarach społecznych.</p>
+              </section>
+              <section class="rounded-2xl border border-slate-200 bg-white p-4">
+                <h4 class="text-sm font-extrabold text-emerald-700">International Outlook i Industry</h4>
+                <p class="mt-3 text-xs leading-5 text-slate-600">Międzynarodowa kadra, studenci i współautorstwo oraz transfer wiedzy do gospodarki. Wagi tych elementów różnią się pomiędzy obszarami.</p>
+              </section>
+            </section>
+
+            <section class="rounded-3xl border border-cyan-100 bg-cyan-50/70 p-5" aria-label="Osiemnaście wskaźników THE by Subject">
+              <div class="mb-4">
+                <h3 class="text-base font-extrabold text-slate-950">THE by Subject — definicje 18 wskaźników</h3>
+                <p class="mt-1 text-xs leading-5 text-slate-600">To ten sam zestaw wskaźników, z którego korzysta ranking ogólny THE, ale w rankingu dziedzinowym ich wagi są skalibrowane do charakteru obszaru — na przykład inżynieria mocniej eksponuje transfer wiedzy, a nauki społeczne większy udział reputacji i dydaktyki.</p>
+              </div>
+              <div class="grid gap-4 lg:grid-cols-2">
+                <section class="rounded-2xl border border-slate-200 bg-white p-4">
+                  <h4 class="text-sm font-extrabold text-cyan-700">Teaching — 5 wskaźników</h4>
+                  <ul class="mt-3 space-y-3 text-xs leading-5 text-slate-600">
+                    <li><b>Teaching reputation.</b> Wynik z ankiety reputacyjnej THE dotyczący jakości nauczania w danym obszarze.</li>
+                    <li><b>Staff-to-student ratio.</b> Relacja liczby studentów do liczby pracowników akademickich — przybliżenie intensywności kontaktu dydaktycznego.</li>
+                    <li><b>Doctorate-to-bachelor ratio.</b> Liczba nadawanych doktoratów względem liczby dyplomów I stopnia — sygnał zaawansowania środowiska akademickiego.</li>
+                    <li><b>Doctorates-awarded-to-academic-staff ratio.</b> Liczba doktoratów w relacji do liczby kadry akademickiej.</li>
+                    <li><b>Institutional income.</b> Dochody instytucji przeliczone na kadrę, z korektą parytetu siły nabywczej; wskaźnik zasobów wspierających dydaktykę.</li>
+                  </ul>
+                </section>
+                <section class="rounded-2xl border border-slate-200 bg-white p-4">
+                  <h4 class="text-sm font-extrabold text-sky-700">Research Environment — 3 wskaźniki</h4>
+                  <ul class="mt-3 space-y-3 text-xs leading-5 text-slate-600">
+                    <li><b>Research reputation.</b> Ocena reputacji badawczej uczelni w badaniu ankietowym THE.</li>
+                    <li><b>Research income.</b> Dochody na badania w przeliczeniu na pracownika, korygowane do warunków krajowych i profilu obszaru.</li>
+                    <li><b>Research productivity.</b> Liczba publikacji przypadających na kadrę, liczona w kontekście normalizacji dziedzinowej.</li>
+                  </ul>
+                </section>
+                <section class="rounded-2xl border border-slate-200 bg-white p-4">
+                  <h4 class="text-sm font-extrabold text-indigo-700">Research Quality — 4 wskaźniki</h4>
+                  <ul class="mt-3 space-y-3 text-xs leading-5 text-slate-600">
+                    <li><b>Citation impact.</b> Wpływ cytowań publikacji uczelni, z normalizacją dziedzinową i czasową.</li>
+                    <li><b>Research strength.</b> Średnia siła publikacji mierzona przez wpływ cytowań, ale ważona skalą dorobku.</li>
+                    <li><b>Research excellence.</b> Udział publikacji z najwyższego poziomu oddziaływania w swojej dziedzinie.</li>
+                    <li><b>Research influence.</b> Szerokość i zasięg oddziaływania badań w globalnym obiegu wiedzy.</li>
+                  </ul>
+                </section>
+                <section class="rounded-2xl border border-slate-200 bg-white p-4">
+                  <h4 class="text-sm font-extrabold text-emerald-700">International Outlook — 3 wskaźniki</h4>
+                  <ul class="mt-3 space-y-3 text-xs leading-5 text-slate-600">
+                    <li><b>International students.</b> Udział studentów zagranicznych w całej populacji studentów.</li>
+                    <li><b>International staff.</b> Udział pracowników akademickich z zagranicy.</li>
+                    <li><b>International co-authorship.</b> Udział publikacji tworzonych we współpracy międzynarodowej.</li>
+                  </ul>
+                </section>
+                <section class="rounded-2xl border border-slate-200 bg-white p-4 lg:col-span-2">
+                  <h4 class="text-sm font-extrabold text-amber-700">Industry — 2 wskaźniki</h4>
+                  <div class="mt-3 grid gap-3 md:grid-cols-2 text-xs leading-5 text-slate-600">
+                    <p><b>Industry income.</b> Dochody z gospodarki i współpracy z otoczeniem społeczno-gospodarczym, przeliczone na pracownika.</p>
+                    <p><b>Patents.</b> Wkład uczelni w patenty cytowane przez przemysł — wskaźnik praktycznej użyteczności wiedzy i transferu technologii.</p>
+                  </div>
+                </section>
+              </div>
+            </section>
+
+            <section class="rounded-3xl border border-slate-200 bg-slate-50 p-5" aria-label="Kwalifikacja i interpretacja THE by Subject">
+              <h3 class="text-base font-extrabold text-slate-950">Kwalifikacja i interpretacja</h3>
+              <div class="mt-3 grid gap-3 lg:grid-cols-2 text-xs leading-5 text-slate-600">
+                <p><b>Progi wejścia.</b> THE stosuje minimalne progi publikacyjne i kryteria reprezentacji kadry w danej dziedzinie, dlatego nie każda uczelnia z rankingu ogólnego pojawia się w każdym obszarze.</p>
+                <p><b>Uwaga interpretacyjna.</b> Różnice rok do roku mogą wynikać nie tylko ze zmiany wyników uczelni, ale też z aktualizacji klasyfikacji obszarów, danych bibliometrycznych i kalibracji wag.</p>
+              </div>
+            </section>
+
+            <section class="rounded-3xl border border-cyan-100 bg-cyan-50/70 p-5">
+              <h3 class="font-extrabold text-slate-950">Warunki wejścia do rankingu dziedzinowego</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-700">Dla każdego obszaru THE określa odrębny minimalny próg publikacji w pięcioletnim oknie oraz minimalną liczbę pracowników przypisanych do dyscypliny. Uczelnia musi także spełnić standardy kompletności i jakości danych instytucjonalnych.</p>
+            </section>
+
+            <p class="rounded-2xl bg-cyan-50 p-4 text-xs leading-5 text-cyan-950">Źródło: <a href="https://www.timeshighereducation.com/world-university-rankings/world-university-rankings-subject-2026-methodology" target="_blank" rel="noopener noreferrer" class="font-bold text-cyan-700 underline decoration-cyan-300 underline-offset-2">THE World University Rankings by Subject 2026 — methodology</a>.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div id="arwuMethodologyModal" data-methodology-modal class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="arwuMethodologyTitle" aria-describedby="arwuMethodologyDesc">
+      <div data-methodology-backdrop class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
+      <div class="relative z-10 flex min-h-full items-center justify-center p-4">
+        <section class="max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[28px] bg-white shadow-2xl ring-1 ring-slate-900/10">
+          <div class="flex items-start justify-between gap-6 border-b border-slate-200 p-6 md:p-8">
+            <div><p class="text-xs font-bold uppercase tracking-[0.24em] text-rose-700">Metodyka ARWU 2025</p><h2 id="arwuMethodologyTitle" class="mt-2 text-2xl font-extrabold text-slate-950">Jak Lista Szanghajska ocenia całą uczelnię?</h2><p id="arwuMethodologyDesc" class="mt-3 max-w-3xl text-sm leading-6 text-slate-600">ARWU mierzy przede wszystkim skalę, jakość i prestiż dorobku badawczego instytucji, wykorzystując dane o nagrodach, najczęściej cytowanych badaczach i publikacjach.</p></div>
+            <button data-methodology-close type="button" class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500" aria-label="Zamknij modal metodyki ARWU">×</button>
+          </div>
+          <div class="space-y-6 p-6 md:p-8">
+            <section class="rounded-3xl border border-slate-200 bg-slate-50 p-4 md:p-5"><div class="mb-3 flex flex-wrap items-end justify-between gap-3"><div><h3 class="text-base font-extrabold text-slate-950">ARWU 2025 — sześć wskaźników</h3><p class="mt-1 text-xs leading-5 text-slate-500">Wynik każdego wskaźnika jest odnoszony do wyniku lidera, a następnie ważony i sumowany.</p></div><p class="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-600 ring-1 ring-slate-200">Razem 100%</p></div>
+              <div class="flex h-16 overflow-hidden rounded-2xl bg-white shadow-inner ring-1 ring-slate-200"><div class="flex items-center justify-center bg-rose-500 text-[10px] font-bold text-white" style="width:10%" title="Alumni — 10%">10%</div><div class="flex items-center justify-center bg-red-700 text-[10px] font-bold text-white" style="width:20%" title="Award — 20%">20%</div><div class="flex items-center justify-center bg-orange-600 text-[10px] font-bold text-white" style="width:20%" title="HiCi — 20%">20%</div><div class="flex items-center justify-center bg-amber-500 text-[10px] font-bold text-white" style="width:20%" title="Nature & Science — 20%">20%</div><div class="flex items-center justify-center bg-indigo-700 text-[10px] font-bold text-white" style="width:20%" title="PUB — 20%">20%</div><div class="flex items-center justify-center bg-slate-700 text-[10px] font-bold text-white" style="width:10%" title="PCP — 10%">10%</div></div>
+              <div class="mt-4 grid gap-2 text-[11px] text-slate-600 sm:grid-cols-2 lg:grid-cols-3"><span><b class="text-rose-600">■</b> Absolwenci z Nobelami/Fieldsami 10%</span><span><b class="text-red-700">■</b> Kadra z Nobelami/Fieldsami 20%</span><span><b class="text-orange-600">■</b> Highly Cited Researchers 20%</span><span><b class="text-amber-600">■</b> Nature &amp; Science 20%</span><span><b class="text-indigo-700">■</b> Publikacje WoS 20%</span><span><b class="text-slate-700">■</b> Wynik per capita 10%</span></div>
+            </section>
+            <section class="grid gap-4 lg:grid-cols-2" aria-label="Definicje wskaźników ARWU 2025"><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-rose-700">Alumni — 10%</h4><p class="mt-3 text-xs leading-5 text-slate-600"><b>Absolwenci z Nobelami i Medalami Fieldsa.</b> Wskaźnik liczy absolwentów uczelni, którzy zdobyli Nagrodę Nobla lub Medal Fieldsa. Nowsze wyróżnienia mają większą wagę niż starsze, a w przypadku studiów ukończonych w więcej niż jednej instytucji punkty są dzielone proporcjonalnie.</p></section><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-red-700">Award — 20%</h4><p class="mt-3 text-xs leading-5 text-slate-600"><b>Kadra z Nobelami i Medalami Fieldsa.</b> Obejmuje pracowników uczelni, którzy otrzymali te wyróżnienia jako członkowie kadry. Podobnie jak w Alumni, nowsze nagrody są ważone mocniej, a punkty bywają dzielone przy wielokrotnych afiliacjach.</p></section><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-orange-700">HiCi — 20%</h4><p class="mt-3 text-xs leading-5 text-slate-600"><b>Highly Cited Researchers.</b> Mierzy liczbę naukowców z uczelni ujętych na liście najczęściej cytowanych badaczy Clarivate. Wskaźnik pokazuje koncentrację badaczy o bardzo wysokim wpływie cytowań.</p></section><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-amber-700">N&amp;S — 20%</h4><p class="mt-3 text-xs leading-5 text-slate-600"><b>Publikacje w „Nature” i „Science”.</b> Liczona jest liczba artykułów opublikowanych w tych dwóch najbardziej prestiżowych czasopismach naukowych. Dla uczelni wyspecjalizowanych w humanistyce i naukach społecznych ta waga może być redystrybuowana na inne wskaźniki.</p></section><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-indigo-700">PUB — 20%</h4><p class="mt-3 text-xs leading-5 text-slate-600"><b>Publikacje indeksowane w Web of Science.</b> Obejmuje łączną liczbę prac zarejestrowanych w Science Citation Index Expanded oraz Social Sciences Citation Index. To wskaźnik skali dorobku publikacyjnego uczelni.</p></section><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-slate-700">PCP — 10%</h4><p class="mt-3 text-xs leading-5 text-slate-600"><b>Per Capita Performance.</b> Jest to wynik skorygowany o wielkość uczelni: zagregowany rezultat pięciu poprzednich wskaźników dzielony przez liczbę etatowych pracowników akademickich. Pokazuje efektywność badawczą w przeliczeniu na skalę instytucji.</p></section></section>
+            <section class="grid gap-4 lg:grid-cols-2"><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-rose-700">Dobór uczelni do ARWU</h4><p class="mt-3 text-xs leading-5 text-slate-600">Do analizy trafiają uczelnie związane z laureatami najważniejszych nagród, Highly Cited Researchers, publikacjami w Nature lub Science albo znaczącym wolumenem publikacji w indeksach SCIE i SSCI. Publikowany jest top 1000.</p></section><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-orange-700">Charakter ARWU</h4><p class="mt-3 text-xs leading-5 text-slate-600">Ranking opiera się na danych zewnętrznych i jest skoncentrowany na badaniach. Nie mierzy bezpośrednio jakości dydaktyki, opinii studentów ani zatrudnialności absolwentów.</p></section></section>
+            <p class="rounded-2xl bg-rose-50 p-4 text-xs leading-5 text-rose-950">Źródło: <a href="https://www.shanghairanking.com/methodology/arwu/2025" target="_blank" rel="noopener noreferrer" class="font-bold text-rose-700 underline decoration-rose-300 underline-offset-2">ARWU 2025 Methodology</a>.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div id="grasMethodologyModal" data-methodology-modal class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="grasMethodologyTitle" aria-describedby="grasMethodologyDesc">
+      <div data-methodology-backdrop class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
+      <div class="relative z-10 flex min-h-full items-center justify-center p-4">
+        <section class="max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[28px] bg-white shadow-2xl ring-1 ring-slate-900/10">
+          <div class="flex items-start justify-between gap-6 border-b border-slate-200 p-6 md:p-8">
+            <div><p class="text-xs font-bold uppercase tracking-[0.24em] text-rose-700">Metodyka GRAS 2025</p><h2 id="grasMethodologyTitle" class="mt-2 text-2xl font-extrabold text-slate-950">Jak ShanghaiRanking ocenia dyscypliny?</h2><p id="grasMethodologyDesc" class="mt-3 max-w-3xl text-sm leading-6 text-slate-600">Global Ranking of Academic Subjects ocenia uczelnie w konkretnych dyscyplinach za pomocą obiektywnych wskaźników jakości kadry, publikacji, wpływu badań i współpracy międzynarodowej.</p></div>
+            <button data-methodology-close type="button" class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500" aria-label="Zamknij modal metodyki GRAS">×</button>
+          </div>
+          <div class="space-y-6 p-6 md:p-8">
+            <section class="rounded-3xl border border-rose-100 bg-rose-50/60 p-4 md:p-5"><div class="grid gap-4 lg:grid-cols-[1.1fr_0.9fr] lg:items-end"><div><h3 class="text-base font-extrabold text-slate-950">GRAS 2025 — dziewięć wskaźników w pięciu kategoriach</h3><p class="mt-1 text-xs leading-5 text-slate-600">Wagi zależą od dyscypliny, dlatego nie istnieje jeden uniwersalny pasek wag dla wszystkich obszarów. Wybór synchronizuje się z wykresem GRAS.</p></div><label for="grasMethodologySubjectSelect" class="block"><span class="text-xs font-semibold uppercase tracking-widest text-slate-500">Dyscyplina</span><select id="grasMethodologySubjectSelect" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-rose-500 focus:ring-rose-500"></select></label></div>
+              <p id="grasMethodologyProfileBadge" class="mt-4 inline-flex rounded-full bg-white px-3 py-1 text-xs font-bold text-rose-700 ring-1 ring-rose-100">Wagi zależne od dyscypliny</p>
+              <div class="mt-4 rounded-2xl border border-white bg-white p-4 shadow-inner ring-1 ring-rose-100/70"><div class="mb-3 flex flex-wrap items-end justify-between gap-3"><div><h4 class="text-sm font-extrabold text-slate-950">Skumulowany wykres wag</h4><p id="grasMethodologyProfileText" class="mt-1 text-xs leading-5 text-slate-500">Wykres pokazuje znormalizowany profil wag dla wybranej dyscypliny. Wagi źródłowe są zależne od obszaru, dlatego zostały przeliczone do 100% na potrzeby czytelnej prezentacji.</p></div><p class="rounded-full bg-rose-50 px-3 py-1 text-xs font-bold text-rose-700 ring-1 ring-rose-100">Po normalizacji do 100%</p></div><div id="grasMethodologySubjectChart" class="flex h-16 overflow-hidden rounded-2xl bg-white shadow-inner ring-1 ring-slate-200" aria-label="Skumulowany wykres wag dla wybranej dyscypliny GRAS"></div><div id="grasMethodologySubjectLegend" class="mt-4 grid gap-2 text-[11px] text-slate-600 sm:grid-cols-2 lg:grid-cols-5"></div></div>
+            </section>
+            <section class="grid gap-4 lg:grid-cols-2" aria-label="Definicje dziewięciu wskaźników GRAS 2025">
+              <section class="rounded-2xl border border-rose-100 bg-white p-4"><p class="text-[10px] font-bold uppercase tracking-widest text-rose-500">World-Class Faculty</p><h4 class="mt-1 text-sm font-extrabold text-rose-700">Laureate — międzynarodowi laureaci</h4><p class="mt-3 text-xs leading-5 text-slate-600">Liczba pełnoetatowych pracowników uczelni, którzy otrzymali znaczące międzynarodowe nagrody akademickie w danej dyscyplinie. Uwzględnia się laureatów do 80. roku życia, a jedna osoba jest liczona tylko raz w ramach tej samej dyscypliny.</p></section>
+              <section class="rounded-2xl border border-rose-100 bg-white p-4"><p class="text-[10px] font-bold uppercase tracking-widest text-rose-500">World-Class Faculty</p><h4 class="mt-1 text-sm font-extrabold text-rose-700">HCR — Highly Cited Researchers</h4><p class="mt-3 text-xs leading-5 text-slate-600">Liczba badaczy z podstawową afiliacją przy uczelni, ujętych na liście Highly Cited Researchers Clarivate. Wskaźnik mierzy obecność naukowców o wyjątkowo wysokim wpływie cytowań w danej dyscyplinie.</p></section>
+              <section class="rounded-2xl border border-rose-100 bg-white p-4"><p class="text-[10px] font-bold uppercase tracking-widest text-rose-500">World-Class Faculty</p><h4 class="mt-1 text-sm font-extrabold text-rose-700">Editor — redaktorzy najważniejszych czasopism</h4><p class="mt-3 text-xs leading-5 text-slate-600">Liczba pełnoetatowych pracowników pełniących funkcję redaktora naczelnego lub zastępcy redaktora naczelnego w uznanych czasopismach indeksowanych w SCIE, SSCI lub A&amp;HCI. Funkcje naczelne otrzymują większą wagę niż zastępcze.</p></section>
+              <section class="rounded-2xl border border-rose-100 bg-white p-4"><p class="text-[10px] font-bold uppercase tracking-widest text-rose-500">World-Class Faculty</p><h4 class="mt-1 text-sm font-extrabold text-rose-700">Leadership — kierowanie organizacjami naukowymi</h4><p class="mt-3 text-xs leading-5 text-slate-600">Liczba pracowników pełniących funkcje kierownicze w kluczowych międzynarodowych organizacjach akademickich, takich jak prezydent, wiceprezydent czy sekretarz generalny. Najwyższe stanowiska mają większą wagę.</p></section>
+              <section class="rounded-2xl border border-orange-100 bg-white p-4"><p class="text-[10px] font-bold uppercase tracking-widest text-orange-500">World-Class Output</p><h4 class="mt-1 text-sm font-extrabold text-orange-700">TJ — publikacje w topowych czasopismach i konferencjach</h4><p class="mt-3 text-xs leading-5 text-slate-600">Liczba artykułów i przeglądów opublikowanych w latach 2020–2024 w czasopismach lub materiałach konferencyjnych uznanych za najważniejsze dla danej dyscypliny. Listy są ustalane w Academic Excellence Survey.</p></section>
+              <section class="rounded-2xl border border-orange-100 bg-white p-4"><p class="text-[10px] font-bold uppercase tracking-widest text-orange-500">World-Class Output</p><h4 class="mt-1 text-sm font-extrabold text-orange-700">Award — międzynarodowe nagrody za dorobek</h4><p class="mt-3 text-xs leading-5 text-slate-600">Liczba pracowników uczelni, którzy zdobyli znaczące nagrody w danej dyscyplinie. Nowsze nagrody mają większą wagę, a wynik jest dzielony, gdy laureat miał kilka afiliacji lub nagrodę otrzymało kilka osób.</p></section>
+              <section class="rounded-2xl border border-amber-100 bg-white p-4"><p class="text-[10px] font-bold uppercase tracking-widest text-amber-600">High-Quality Research</p><h4 class="mt-1 text-sm font-extrabold text-amber-700">Q1 — publikacje w pierwszym kwartylu</h4><p class="mt-3 text-xs leading-5 text-slate-600">Liczba artykułów i przeglądów z lat 2020–2024 opublikowanych w czasopismach należących do pierwszego kwartylu według Journal Impact Factor. Dane pochodzą z Web of Science i InCites.</p></section>
+              <section class="rounded-2xl border border-indigo-100 bg-white p-4"><p class="text-[10px] font-bold uppercase tracking-widest text-indigo-500">Research Impact</p><h4 class="mt-1 text-sm font-extrabold text-indigo-700">CNCI — znormalizowany wpływ cytowań</h4><p class="mt-3 text-xs leading-5 text-slate-600">Stosunek liczby cytowań publikacji uczelni do średniej dla prac z tej samej dziedziny, roku i typu dokumentu. Wartość 1 oznacza średnią światową; wynik powyżej 1 wskazuje wpływ wyższy od średniej.</p></section>
+              <section class="rounded-2xl border border-emerald-100 bg-white p-4 lg:col-span-2"><p class="text-[10px] font-bold uppercase tracking-widest text-emerald-600">International Collaboration</p><h4 class="mt-1 text-sm font-extrabold text-emerald-700">IC — współpraca międzynarodowa</h4><p class="mt-3 text-xs leading-5 text-slate-600">Udział publikacji z lat 2020–2024, których autorzy reprezentują instytucje z co najmniej dwóch krajów, w ogólnej liczbie publikacji uczelni w danej dyscyplinie. Wskaźnik pokazuje intensywność międzynarodowej współpracy badawczej.</p></section>
+            </section>
+            <section class="rounded-3xl border border-rose-100 bg-rose-50/70 p-5"><h3 class="font-extrabold text-slate-950">Kwalifikacja i sposób liczenia GRAS</h3><p class="mt-2 text-sm leading-6 text-slate-700">Do oceny trafiają uczelnie przekraczające próg publikacji właściwy dla danej dyscypliny. Dane bibliometryczne pochodzą z Web of Science i InCites. Wynik każdego wskaźnika jest odnoszony do wyniku lidera, pierwiastkowany, mnożony przez przypisaną wagę i następnie sumowany.</p></section>
+            <p class="rounded-2xl bg-rose-50 p-4 text-xs leading-5 text-rose-950">Źródło: <a href="https://www.shanghairanking.com/methodology/gras/2025" target="_blank" rel="noopener noreferrer" class="font-bold text-rose-700 underline decoration-rose-300 underline-offset-2">GRAS 2025 Methodology</a>.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div id="engiMethodologyModal" data-methodology-modal class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="engiMethodologyTitle" aria-describedby="engiMethodologyDesc">
+      <div data-methodology-backdrop class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
+      <div class="relative z-10 flex min-h-full items-center justify-center p-4">
+        <section class="max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[28px] bg-white shadow-2xl ring-1 ring-slate-900/10">
+          <div class="flex items-start justify-between gap-6 border-b border-slate-200 p-6 md:p-8"><div><p class="text-xs font-bold uppercase tracking-[0.24em] text-indigo-700">Metodyka EngiRank 2025</p><h2 id="engiMethodologyTitle" class="mt-2 text-2xl font-extrabold text-slate-950">Europejski profil uczelni inżynierskiej</h2><p id="engiMethodologyDesc" class="mt-3 max-w-3xl text-sm leading-6 text-slate-600">EngiRank łączy bibliometrię, innowacyjność, udział w programach UE, patenty, współpracę z przemysłem, umiędzynarodowienie, SDG oraz wyniki w rankingach siedmiu dyscyplin inżynierskich.</p></div><button data-methodology-close type="button" class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-label="Zamknij modal metodyki EngiRank">×</button></div>
+          <div class="space-y-6 p-6 md:p-8">
+            <section class="rounded-3xl border border-slate-200 bg-slate-50 p-4 md:p-5"><div class="mb-3 flex flex-wrap items-end justify-between gap-3"><div><h3 class="text-base font-extrabold text-slate-950">EngiRank — ranking instytucjonalny</h3><p class="mt-1 text-xs leading-5 text-slate-500">Pięć kryteriów obejmuje działalność badawczą i innowacyjną oraz zdolność uczelni do osiągania dobrych wyników w wielu dyscyplinach technicznych.</p></div><p class="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-600 ring-1 ring-slate-200">Razem 100%</p></div>
+              <div class="flex h-16 overflow-hidden rounded-2xl bg-white shadow-inner ring-1 ring-slate-200"><div class="flex items-center justify-center bg-indigo-700 text-[10px] font-bold text-white" style="width:28%" title="Research — 28%">28%</div><div class="flex items-center justify-center bg-cyan-600 text-[10px] font-bold text-white" style="width:25%" title="Innovation — 25%">25%</div><div class="flex items-center justify-center bg-emerald-600 text-[10px] font-bold text-white" style="width:10%" title="SDG 9 — 10%">10%</div><div class="flex items-center justify-center bg-amber-500 text-[10px] font-bold text-white" style="width:16%" title="Internationalisation — 16%">16%</div><div class="flex items-center justify-center bg-rose-500 text-[10px] font-bold text-white" style="width:21%" title="Multidisciplinarity — 21%">21%</div></div>
+              <div class="mt-4 grid gap-2 text-[11px] text-slate-600 sm:grid-cols-2 lg:grid-cols-5"><span><b class="text-indigo-700">■</b> Badania 28%</span><span><b class="text-cyan-700">■</b> Innowacyjność 25%</span><span><b class="text-emerald-700">■</b> SDG 9 — 10%</span><span><b class="text-amber-600">■</b> Umiędzynarodowienie 16%</span><span><b class="text-rose-600">■</b> Wielodyscyplinarność 21%</span></div>
+            </section>
+            <section class="grid gap-4 lg:grid-cols-2"><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-indigo-700">Research — 28%</h4><p class="mt-3 text-xs leading-5 text-slate-600">Publikacje 10%, publikacje w top 10% czasopism 6%, cytowania 6% i zmiana wpływu cytowaniowego 6%. Dane: Scopus/SciVal, okno 2020–2024.</p></section><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-cyan-700">Innovation — 25%</h4><p class="mt-3 text-xs leading-5 text-slate-600">Finansowanie badań i innowacji UE 10%, patenty EPO 5%, cytowania patentowe 5% i współpraca akademicko-biznesowa 5%.</p></section><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-emerald-700">SDG 9 i umiędzynarodowienie — 26%</h4><p class="mt-3 text-xs leading-5 text-slate-600">Ranking premiuje wkład w przemysł, innowacje i infrastrukturę, współautorstwo międzynarodowe oraz udział w europejskich inicjatywach badawczych i edukacyjnych.</p></section><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-rose-700">Multidisciplinarity — 21%</h4><p class="mt-3 text-xs leading-5 text-slate-600">Po 3% za wynik uczelni w każdej z siedmiu klasyfikacji dziedzinowych. Kryterium premiuje szerokość i równowagę potencjału technicznego.</p></section></section>
+
+            <section class="rounded-3xl border border-indigo-100 bg-indigo-50/60 p-4 md:p-5"><div class="grid gap-4 lg:grid-cols-[1.1fr_0.9fr] lg:items-end"><div><h3 class="text-base font-extrabold text-slate-950">EngiRank by Subject — wagi wybranego kierunku</h3><p class="mt-1 text-xs leading-5 text-slate-600">W czterech dyscyplinach standardowych pięć wskaźników ma po 16%. W inżynierii lądowej, środowiska i medycznej mają po 15%, a dodatkowe 5% przypisano właściwemu celowi SDG.</p></div><label for="engiMethodologySubjectSelect" class="block"><span class="text-xs font-semibold uppercase tracking-widest text-slate-500">Kierunek</span><select id="engiMethodologySubjectSelect" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:ring-indigo-500"></select></label></div>
+              <div class="mt-4 rounded-2xl border border-white bg-white p-4 shadow-inner ring-1 ring-indigo-100"><div class="flex flex-wrap items-center justify-between gap-3"><p id="engiMethodologyProfileText" class="text-xs leading-5 text-slate-600">Wybierz kierunek, aby zobaczyć wagi.</p><p id="engiMethodologyProfileBadge" class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-700 ring-1 ring-indigo-100">—</p></div><div id="engiMethodologySubjectChart" class="mt-4 flex h-16 overflow-hidden rounded-2xl bg-white shadow-inner ring-1 ring-slate-200"></div><div id="engiMethodologySubjectLegend" class="mt-4 grid gap-2 text-[11px] text-slate-600 sm:grid-cols-2 lg:grid-cols-4"></div></div>
+            </section>
+            <p class="rounded-2xl bg-indigo-50 p-4 text-xs leading-5 text-indigo-950">Źródło: <a href="https://engirank.eu/methodology/2025/" target="_blank" rel="noopener noreferrer" class="font-bold text-indigo-700 underline decoration-indigo-300 underline-offset-2">EngiRank 2025 Methodology</a>. Dane źródłowe obejmują m.in. Scopus/SciVal, CORDIS, Bank Światowy i EPO-PATSTAT.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div id="ruaMethodologyModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="ruaMethodologyTitle" aria-describedby="ruaMethodologyDesc">
       <div id="ruaMethodologyBackdrop" class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
       <div class="relative z-10 flex min-h-full items-center justify-center p-4">
         <section class="max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[28px] bg-white shadow-2xl ring-1 ring-slate-900/10">
@@ -583,7 +1129,17 @@
       </div>
     </div>
 
+      <noscript>
+        <p class="mb-10 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">Wykresy interaktywne wymagają włączonego JavaScriptu. Opisy tekstowe i źródła pozostają dostępne pod każdym panelem.</p>
+      </noscript>
     </main>
+
+    <footer class="border-t border-slate-200 bg-white">
+      <div class="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-8 text-sm text-slate-500 md:flex-row md:items-center md:justify-between md:px-6">
+        <p>Dashboard wyników rankingowych Politechniki Warszawskiej. Daty aktualizacji i źródła są podane przy poszczególnych wykresach.</p>
+        <a href="#przeglad" class="font-bold text-indigo-700 hover:text-indigo-900">Wróć na początek ↑</a>
+      </div>
+    </footer>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         const ruaMethodologyModal = document.getElementById('ruaMethodologyModal');
@@ -600,6 +1156,53 @@
         const rksMethodologyWeightChart = document.getElementById('rksMethodologyWeightChart');
         const rksMethodologyWeightLegend = document.getElementById('rksMethodologyWeightLegend');
 
+        const internationalMethodologyModals = [...document.querySelectorAll('[data-methodology-modal]')];
+        let activeInternationalMethodologyTrigger = null;
+
+        const closeInternationalMethodology = (modal, restoreFocus = true) => {
+          if (!modal) return;
+          modal.classList.add('hidden');
+          modal.setAttribute('aria-hidden', 'true');
+          document.body.classList.remove('overflow-hidden');
+          if (restoreFocus && activeInternationalMethodologyTrigger) activeInternationalMethodologyTrigger.focus();
+          activeInternationalMethodologyTrigger = null;
+        };
+
+        const syncMethodologySelect = (modalId) => {
+          const pairs = {
+            qsSubjectMethodologyModal: ['qsSubjectSelect', 'qsMethodologySubjectSelect'],
+            theSubjectMethodologyModal: ['theSubjectSelect', 'theMethodologySubjectSelect'],
+            grasMethodologyModal: ['grasSubjectSelect', 'grasMethodologySubjectSelect'],
+            engiMethodologyModal: ['engiSubjectSelect', 'engiMethodologySubjectSelect']
+          };
+          const pair = pairs[modalId];
+          if (!pair) return;
+          const sourceSelect = document.getElementById(pair[0]);
+          const modalSelect = document.getElementById(pair[1]);
+          if (sourceSelect && modalSelect && sourceSelect.value) {
+            modalSelect.value = sourceSelect.value;
+            modalSelect.dispatchEvent(new Event('change'));
+          }
+        };
+
+        document.querySelectorAll('[data-methodology-open]').forEach((trigger) => {
+          trigger.addEventListener('click', () => {
+            const modal = document.getElementById(trigger.dataset.methodologyOpen);
+            if (!modal) return;
+            activeInternationalMethodologyTrigger = trigger;
+            syncMethodologySelect(modal.id);
+            modal.classList.remove('hidden');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('overflow-hidden');
+            modal.querySelector('[data-methodology-close]')?.focus();
+          });
+        });
+
+        internationalMethodologyModals.forEach((modal) => {
+          modal.querySelector('[data-methodology-close]')?.addEventListener('click', () => closeInternationalMethodology(modal));
+          modal.querySelector('[data-methodology-backdrop]')?.addEventListener('click', () => closeInternationalMethodology(modal));
+        });
+
         const updateSegmentedToggle = (button, activeMode) => {
           if (!button) return;
           button.setAttribute('aria-pressed', (activeMode !== 'position').toString());
@@ -615,6 +1218,7 @@
         const openRuaMethodology = () => {
           if (!ruaMethodologyModal) return;
           ruaMethodologyModal.classList.remove('hidden');
+          ruaMethodologyModal.setAttribute('aria-hidden', 'false');
           document.body.classList.add('overflow-hidden');
           ruaMethodologyClose?.focus();
         };
@@ -622,6 +1226,7 @@
         const closeRuaMethodology = () => {
           if (!ruaMethodologyModal) return;
           ruaMethodologyModal.classList.add('hidden');
+          ruaMethodologyModal.setAttribute('aria-hidden', 'true');
           document.body.classList.remove('overflow-hidden');
           ruaMethodologyOpen?.focus();
         };
@@ -634,6 +1239,7 @@
             rksMethodologySubjectSelect.dispatchEvent(new Event('change'));
           }
           rksMethodologyModal.classList.remove('hidden');
+          rksMethodologyModal.setAttribute('aria-hidden', 'false');
           document.body.classList.add('overflow-hidden');
           rksMethodologyClose?.focus();
         };
@@ -641,6 +1247,7 @@
         const closeRksMethodology = () => {
           if (!rksMethodologyModal) return;
           rksMethodologyModal.classList.add('hidden');
+          rksMethodologyModal.setAttribute('aria-hidden', 'true');
           document.body.classList.remove('overflow-hidden');
           rksMethodologyOpen?.focus();
         };
@@ -659,8 +1266,52 @@
             if (rksMethodologyModal && !rksMethodologyModal.classList.contains('hidden')) {
               closeRksMethodology();
             }
+            internationalMethodologyModals.forEach((modal) => {
+              if (!modal.classList.contains('hidden')) closeInternationalMethodology(modal);
+            });
           }
         });
+
+        const trapFocus = (modal, event) => {
+          if (!modal || modal.classList.contains('hidden') || event.key !== 'Tab') return;
+          const focusable = [...modal.querySelectorAll('a[href], button:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])')]
+            .filter((element) => element.offsetParent !== null);
+          if (!focusable.length) return;
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        };
+
+        document.addEventListener('keydown', (event) => {
+          trapFocus(ruaMethodologyModal, event);
+          trapFocus(rksMethodologyModal, event);
+          internationalMethodologyModals.forEach((modal) => trapFocus(modal, event));
+        });
+
+        const navLinks = [...document.querySelectorAll('.dashboard-nav a[href^="#"]')];
+        const observedSections = navLinks
+          .map((link) => document.querySelector(link.getAttribute('href')))
+          .filter(Boolean);
+        if ('IntersectionObserver' in window && observedSections.length) {
+          const sectionObserver = new IntersectionObserver((entries) => {
+            const visible = entries
+              .filter((entry) => entry.isIntersecting)
+              .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+            if (!visible) return;
+            navLinks.forEach((link) => {
+              const active = link.getAttribute('href') === `#${visible.target.id}`;
+              link.setAttribute('aria-current', active ? 'true' : 'false');
+            });
+          }, { rootMargin: '-18% 0px -68% 0px', threshold: [0.05, 0.2, 0.5] });
+          observedSections.forEach((section) => sectionObserver.observe(section));
+        }
+
 
         if (typeof Chart === 'undefined') {
           return;
@@ -668,6 +1319,7 @@
 
         Chart.defaults.font.family = 'Inter, system-ui, sans-serif';
         Chart.defaults.color = '#4B5563';
+        Chart.defaults.maintainAspectRatio = false;
 
         const qsSubjectData = JSON.parse(`{
   "years": [
@@ -3884,25 +4536,169 @@
             });
           }
         }
-        const navLinks = [...document.querySelectorAll('.dashboard-nav a[href^="#"]')];
-        const navSections = navLinks
-          .map((link) => document.querySelector(link.getAttribute('href')))
-          .filter(Boolean);
-        const setActiveNav = (id) => navLinks.forEach((link) => {
-          link.toggleAttribute('aria-current', link.getAttribute('href') === `#${id}`);
-        });
-        if ('IntersectionObserver' in window && navSections.length) {
-          const navObserver = new IntersectionObserver((entries) => {
-            const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-            if (visible[0]) setActiveNav(visible[0].target.id);
-          }, { rootMargin: '-5.5rem 0px -55% 0px', threshold: [0.1, 0.5, 0.9] });
-          navSections.forEach((section) => navObserver.observe(section));
-        }
+
+
+        // Dynamiczne profile wag w modalach metodyk międzynarodowych.
+        const populateMethodologySelect = (sourceSelectId, targetSelectId) => {
+          const source = document.getElementById(sourceSelectId);
+          const target = document.getElementById(targetSelectId);
+          if (!source || !target) return;
+          const rebuild = () => {
+            const previous = target.value || source.value;
+            target.innerHTML = '';
+            [...source.options].forEach((option) => target.add(new Option(option.textContent, option.value)));
+            target.value = [...target.options].some((option) => option.value === previous) ? previous : source.value;
+          };
+          rebuild();
+          let synchronising = false;
+          source.addEventListener('change', () => {
+            if (synchronising) return;
+            if ([...target.options].some((option) => option.value === source.value)) {
+              synchronising = true;
+              target.value = source.value;
+              target.dispatchEvent(new Event('change'));
+              synchronising = false;
+            }
+          });
+          target.addEventListener('change', () => {
+            if (synchronising) return;
+            if ([...source.options].some((option) => option.value === target.value)) {
+              synchronising = true;
+              source.value = target.value;
+              source.dispatchEvent(new Event('change'));
+              synchronising = false;
+            }
+          });
+        };
+
+        const renderWeightBar = (container, legend, items, textClass = 'text-white') => {
+          if (!container || !legend) return;
+          const colors = ['bg-indigo-700','bg-cyan-600','bg-sky-600','bg-emerald-600','bg-amber-500','bg-rose-500','bg-violet-600','bg-orange-500'];
+          container.className = 'mt-4 flex h-16 overflow-hidden rounded-2xl bg-white shadow-inner ring-1 ring-slate-200';
+          container.innerHTML = items.map((item, index) => {
+            const showLabel = item.value >= 7.5;
+            return `<div class="flex items-center justify-center ${colors[index % colors.length]} px-1 text-[10px] font-bold ${textClass}" style="width:${item.value}%" title="${item.label} — ${String(item.value).replace('.', ',')}%">${showLabel ? String(item.value).replace('.', ',') + '%' : ''}</div>`;
+          }).join('');
+          legend.innerHTML = items.map((item, index) => `<span><b class="${colors[index % colors.length].replace('bg-','text-')}">■</b> ${item.label} ${String(item.value).replace('.', ',')}%</span>`).join('');
+        };
+
+        populateMethodologySelect('qsSubjectSelect', 'qsMethodologySubjectSelect');
+        const qsMethodologySelect = document.getElementById('qsMethodologySubjectSelect');
+        const qsMethodologyChart = document.getElementById('qsMethodologySubjectChart');
+        const qsMethodologyLegend = document.getElementById('qsMethodologySubjectLegend');
+        const qsMethodologyText = document.getElementById('qsMethodologyProfileText');
+        const qsMethodologyBadge = document.getElementById('qsMethodologyProfileBadge');
+        const qsFacultyProfiles = {
+          'Engineering & Technology': [40,30,10,10,10],
+          'Natural Sciences': [40,20,15,15,10]
+        };
+        const qsLabels = ['Reputacja akademicka','Reputacja pracodawców','Cytowania na publikację','H-index','IRN'];
+        const renderQsMethodology = () => {
+          if (!qsMethodologySelect || !qsMethodologyChart || !qsMethodologyLegend) return;
+          const subject = qsMethodologySelect.value;
+          const weights = qsFacultyProfiles[subject];
+          if (weights) {
+            renderWeightBar(qsMethodologyChart, qsMethodologyLegend, qsLabels.map((label, i) => ({label, value: weights[i]})));
+            qsMethodologyText.textContent = 'To oficjalny profil wag szerokiego obszaru QS. Wagi sumują się do 100%.';
+            qsMethodologyBadge.textContent = subject;
+          } else {
+            qsMethodologyChart.className = 'mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-5';
+            qsMethodologyChart.innerHTML = qsLabels.map((label) => `<div class="rounded-xl border border-indigo-100 bg-indigo-50 px-3 py-4 text-center text-xs font-bold text-indigo-800">${label}<span class="mt-1 block text-[10px] font-medium text-indigo-500">waga kalibrowana</span></div>`).join('');
+            qsMethodologyLegend.innerHTML = '';
+            qsMethodologyText.textContent = 'Dla wąskiej dyscypliny QS dostosowuje progi publikacyjne i wagi bibliometryczne do wzorców publikowania i cytowania w tej dziedzinie.';
+            qsMethodologyBadge.textContent = 'Profil dyscyplinowy — wagi zmienne';
+          }
+        };
+        qsMethodologySelect?.addEventListener('change', renderQsMethodology);
+        renderQsMethodology();
+
+        populateMethodologySelect('theSubjectSelect', 'theMethodologySubjectSelect');
+        const theMethodologySelect = document.getElementById('theMethodologySubjectSelect');
+        const theMethodologyChart = document.getElementById('theMethodologySubjectChart');
+        const theMethodologyLegend = document.getElementById('theMethodologySubjectLegend');
+        const theMethodologyText = document.getElementById('theMethodologyProfileText');
+        const theMethodologyBadge = document.getElementById('theMethodologyProfileBadge');
+        const theProfiles = {
+          'Biznes i Ekonomia (Business and Economics)': [30.4,31.6,25,9,4],
+          'Informatyka (Computer Science)': [28,29,27.5,7.5,8],
+          'Inżynieria (Engineering)': [28,29,27.5,7.5,8],
+          'Nauki ścisłe (Physical Sciences)': [26.8,26.5,35.2,7.5,4],
+          'Nauki społeczne (Social Sciences)': [31.9,31.6,25,7.5,4]
+        };
+        const theLabels = ['Kształcenie','Środowisko badań','Jakość badań','Umiędzynarodowienie','Przemysł'];
+        const renderTheMethodology = () => {
+          if (!theMethodologySelect) return;
+          const subject = theMethodologySelect.value;
+          const weights = theProfiles[subject] || theProfiles['Inżynieria (Engineering)'];
+          renderWeightBar(theMethodologyChart, theMethodologyLegend, theLabels.map((label, i) => ({label, value: weights[i]})));
+          theMethodologyText.textContent = 'Wagi filarów obliczono przez zsumowanie oficjalnych wag 18 wskaźników THE dla wybranego obszaru.';
+          theMethodologyBadge.textContent = subject || 'THE by Subject';
+        };
+        theMethodologySelect?.addEventListener('change', renderTheMethodology);
+        renderTheMethodology();
+
+        populateMethodologySelect('grasSubjectSelect', 'grasMethodologySubjectSelect');
+        const grasMethodologySelect = document.getElementById('grasMethodologySubjectSelect');
+        const grasMethodologyChart = document.getElementById('grasMethodologySubjectChart');
+        const grasMethodologyLegend = document.getElementById('grasMethodologySubjectLegend');
+        const grasMethodologyText = document.getElementById('grasMethodologyProfileText');
+        const grasMethodologyBadge = document.getElementById('grasMethodologyProfileBadge');
+        const grasProfiles = {
+          'Elektrotechnika i elektronika (Electrical & Electronic Engineering)': [23.8, 23.8, 4.8, 23.8, 23.8],
+          'Energetyka (Energy Science & Engineering)': [29.4, 29.4, 5.9, 29.4, 5.9],
+          'Fizyka (Physics)': [23.8, 23.8, 4.8, 23.8, 23.8],
+          'Inżynieria mechaniczna (Mechanical Engineering)': [23.8, 23.8, 4.8, 23.8, 23.8],
+          'Inżynieria metalurgiczna (Metallurgical Engineering)': [31.3, 31.3, 6.1, 31.3, 0],
+          'Matematyka (Mathematics)': [29.4, 5.9, 5.9, 29.4, 29.4],
+          'Nauka i technologie instrumentacji (Instruments Science & Technology)': [31.3, 31.3, 6.1, 31.3, 0],
+          'Telekomunikacja (Telecommunication Engineering)': [23.8, 23.8, 4.8, 23.8, 23.8]
+        };
+        const grasLabels = ['Q1', 'CNCI', 'IC', 'Top / TJ', 'Award'];
+        const renderGrasMethodology = () => {
+          if (!grasMethodologySelect || !grasMethodologyBadge || !grasMethodologyChart || !grasMethodologyLegend || !grasMethodologyText) return;
+          const subject = grasMethodologySelect.value;
+          const weights = grasProfiles[subject] || grasProfiles['Telekomunikacja (Telecommunication Engineering)'];
+          renderWeightBar(grasMethodologyChart, grasMethodologyLegend, grasLabels.map((label, i) => ({ label, value: weights[i] })));
+          grasMethodologyBadge.textContent = `${subject || 'GRAS'} — wagi zależne od dyscypliny`;
+          grasMethodologyText.textContent = 'Wykres pokazuje znormalizowany profil wag dla wybranej dyscypliny GRAS. Wagi źródłowe różnią się między obszarami, dlatego na pasku zostały przeliczone do 100% dla czytelnego porównania.';
+        };
+        grasMethodologySelect?.addEventListener('change', renderGrasMethodology);
+        renderGrasMethodology();
+
+        populateMethodologySelect('engiSubjectSelect', 'engiMethodologySubjectSelect');
+        const engiMethodologySelect = document.getElementById('engiMethodologySubjectSelect');
+        const engiMethodologyChart = document.getElementById('engiMethodologySubjectChart');
+        const engiMethodologyLegend = document.getElementById('engiMethodologySubjectLegend');
+        const engiMethodologyText = document.getElementById('engiMethodologyProfileText');
+        const engiMethodologyBadge = document.getElementById('engiMethodologyProfileBadge');
+        const renderEngiMethodology = () => {
+          if (!engiMethodologySelect) return;
+          const subject = engiMethodologySelect.value;
+          const isCivil = subject.includes('lądowa');
+          const isEnvironmental = subject.includes('środowiska');
+          const isMedical = subject.includes('medyczna');
+          const special = isCivil || isEnvironmental || isMedical;
+          const base = special ? 15 : 16;
+          const items = [
+            {label:'Publikacje',value:base},
+            {label:'Top 10% czasopism',value:base},
+            {label:'Cytowania',value:base},
+            {label:'Zmiana wpływu',value:base},
+            {label:'Współpraca z biznesem',value:base},
+            {label:'Finansowanie UE',value:10},
+            {label:'Akredytacje',value:10}
+          ];
+          if (special) items.push({label: isCivil ? 'SDG 11' : isEnvironmental ? 'SDG 6' : 'SDG 3', value:5});
+          renderWeightBar(engiMethodologyChart, engiMethodologyLegend, items);
+          engiMethodologyText.textContent = special ? 'Profil rozszerzony: pięć wskaźników po 15% oraz 5% za cel SDG właściwy dla dyscypliny.' : 'Profil standardowy: pięć wskaźników po 16%, finansowanie UE 10% i akredytacje 10%.';
+          engiMethodologyBadge.textContent = subject || 'EngiRank by Subject';
+        };
+        engiMethodologySelect?.addEventListener('change', renderEngiMethodology);
+        renderEngiMethodology();
       });
     </script>
   </body>
 </html>
-
 
 
 
