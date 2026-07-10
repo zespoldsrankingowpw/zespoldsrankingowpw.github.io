@@ -39,33 +39,7 @@
         color: #4338ca;
         box-shadow: inset 0 0 0 1px #c7d2fe;
       }
-      canvas[role="img"] {
-        min-height: 0 !important;
-        height: 220px !important;
-        max-height: 220px !important;
-      }
-      #chartRKS,
-      #chartQSSubject,
-      #chartTHESubject,
-      #chartGRAS,
-      #chartEngiSubject {
-        height: 200px !important;
-        max-height: 200px !important;
-      }
-      @media (max-width: 640px) {
-        canvas[role="img"] {
-          height: 190px !important;
-          max-height: 190px !important;
-        }
-        #chartRKS,
-        #chartQSSubject,
-        #chartTHESubject,
-        #chartGRAS,
-        #chartEngiSubject {
-          height: 180px !important;
-          max-height: 180px !important;
-        }
-      }
+
       .chart-shell { position: relative; width: 100%; }
       :focus-visible { outline: 3px solid rgba(79, 70, 229, .35); outline-offset: 3px; }
       @media (prefers-reduced-motion: reduce) {
@@ -248,7 +222,7 @@
               </div>
             </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
-            <canvas id="chartPerspektywy" role="img" aria-label="Trend pozycji oraz wskaźnika WSK Politechniki Warszawskiej w rankingu Perspektywy w latach 2020–2026." class="mt-4 w-full" style="height: 220px;">Trend pozycji oraz wskaźnika WSK Politechniki Warszawskiej w rankingu Perspektywy w latach 2020–2026. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <canvas id="chartPerspektywy" role="img" aria-label="Trend pozycji oraz wskaźnika WSK Politechniki Warszawskiej w rankingu Perspektywy w latach 2020–2026." class="mt-4 w-full" style="height: 330px;">Trend pozycji oraz wskaźnika WSK Politechniki Warszawskiej w rankingu Perspektywy w latach 2020–2026. Szczegółowy opis znajduje się pod wykresem.</canvas>
             <p id="perspektywyNote" aria-live="polite" class="text-xs text-gray-500 mt-4">Politechnika Warszawska utrzymuje 3 miejsce w latach 2020–2026; WSK wzrósł z 78,9 do 92,3 pkt.</p>
             <p class="text-[11px] text-slate-500 mt-2">Źródło: Perspektywy RUA 2020–2026 z pliku rankingi.xlsx. Przełącznik: pozycja ↔ WSK (0-100).</p>
           </div>
@@ -275,7 +249,7 @@
               <select id="rksSubjectSelect" class="mt-1 w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-indigo-500 focus:ring-indigo-500"></select>
             </label>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 220px) -->
-            <canvas id="chartRKS" role="img" aria-label="Trend pozycji wybranego kierunku Politechniki Warszawskiej w Rankingu Kierunków Studiów Perspektywy." class="w-full" style="margin-top: 0.25rem; height: 200px;">Trend pozycji wybranego kierunku Politechniki Warszawskiej w Rankingu Kierunków Studiów Perspektywy. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <canvas id="chartRKS" role="img" aria-label="Trend pozycji wybranego kierunku Politechniki Warszawskiej w Rankingu Kierunków Studiów Perspektywy." class="w-full" style="margin-top: 0.25rem; height: 260px;">Trend pozycji wybranego kierunku Politechniki Warszawskiej w Rankingu Kierunków Studiów Perspektywy. Szczegółowy opis znajduje się pod wykresem.</canvas>
             <p id="rksSubjectNote" aria-live="polite" class="text-xs text-gray-500 mt-4">Pozycje PW w rankingach kierunkowych Perspektyw aktualizują się po wyborze kierunku.</p>
             <p class="text-[11px] text-slate-500 mt-2">Źródło: Perspektywy — Ranking Kierunków Studiów 2020–2026. Przełącznik: pozycja ↔ punktacja (0-100).</p>
           </div>
@@ -474,7 +448,7 @@
     </button>
             </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 340px) -->
-            <canvas id="chartQS" role="img" aria-label="Trend pozycji Politechniki Warszawskiej w QS World University Rankings w latach 2020–2027." class="mt-4 w-full" style="height: 220px;">Trend pozycji Politechniki Warszawskiej w QS World University Rankings w latach 2020–2027. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <canvas id="chartQS" role="img" aria-label="Trend pozycji Politechniki Warszawskiej w QS World University Rankings w latach 2020–2027." class="mt-4 w-full" style="height: 350px;">Trend pozycji Politechniki Warszawskiej w QS World University Rankings w latach 2020–2027. Szczegółowy opis znajduje się pod wykresem.</canvas>
             <p class="text-xs text-gray-500 mt-4">PW utrzymuje się w okolicach globalnego top 500 QS; w edycji 2027 zajmuje miejsce =504.</p>
             <p class="text-[11px] text-slate-500 mt-2">Źródło: QS World University Rankings 2020–2027.</p>
           </div>
@@ -496,7 +470,7 @@
               </select>
             </label>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 300px) -->
-            <canvas id="chartQSSubject" role="img" aria-label="Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w QS World University Rankings by Subject." class="w-full" style="margin-top: 0.25rem; height: 200px;">Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w QS World University Rankings by Subject. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <canvas id="chartQSSubject" role="img" aria-label="Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w QS World University Rankings by Subject." class="w-full" style="margin-top: 0.25rem; height: 280px;">Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w QS World University Rankings by Subject. Szczegółowy opis znajduje się pod wykresem.</canvas>
             <p id="qsSubjectNote" aria-live="polite" class="text-xs text-gray-500 mt-4">Pozycja PW w QS by Subject aktualizuje się po wyborze dyscypliny.</p>
             <p class="text-[11px] text-slate-500 mt-2">Źródło: QS World University Rankings by Subject 2023-2026.</p>
           </div>
@@ -515,7 +489,7 @@
     </button>
             </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
-            <canvas id="chartTHE" role="img" aria-label="Trend pozycji Politechniki Warszawskiej w Times Higher Education World University Rankings." class="mt-4 w-full" style="height: 220px;">Trend pozycji Politechniki Warszawskiej w Times Higher Education World University Rankings. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <canvas id="chartTHE" role="img" aria-label="Trend pozycji Politechniki Warszawskiej w Times Higher Education World University Rankings." class="mt-4 w-full" style="height: 288px;">Trend pozycji Politechniki Warszawskiej w Times Higher Education World University Rankings. Szczegółowy opis znajduje się pod wykresem.</canvas>
             <p class="text-xs text-gray-500 mt-4">PW utrzymuje stabilną obecność w przedziale 1201–1500 THE.</p>
             <p class="text-[11px] text-slate-500 mt-2">Źródło: Times Higher Education World University Rankings 2020–2026.</p>
           </div>
@@ -537,7 +511,7 @@
               </select>
             </label>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 280px) -->
-            <canvas id="chartTHESubject" role="img" aria-label="Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w THE World University Rankings by Subject." class="w-full" style="margin-top: 0.25rem; height: 200px;">Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w THE World University Rankings by Subject. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <canvas id="chartTHESubject" role="img" aria-label="Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w THE World University Rankings by Subject." class="w-full" style="margin-top: 0.25rem; height: 280px;">Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w THE World University Rankings by Subject. Szczegółowy opis znajduje się pod wykresem.</canvas>
             <p id="theSubjectNote" aria-live="polite" class="text-xs text-gray-500 mt-4">Pozycja PW w THE by Subject aktualizuje się po wyborze dyscypliny.</p>
             <p class="text-[11px] text-slate-500 mt-2">Źródło: THE World University Rankings by Subject 2020-2026.</p>
           </div>
@@ -556,7 +530,7 @@
     </button>
             </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
-            <canvas id="chartARWU" role="img" aria-label="Trend pozycji Politechniki Warszawskiej w Academic Ranking of World Universities." class="mt-4 w-full" style="height: 220px;">Trend pozycji Politechniki Warszawskiej w Academic Ranking of World Universities. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <canvas id="chartARWU" role="img" aria-label="Trend pozycji Politechniki Warszawskiej w Academic Ranking of World Universities." class="mt-4 w-full" style="height: 288px;">Trend pozycji Politechniki Warszawskiej w Academic Ranking of World Universities. Szczegółowy opis znajduje się pod wykresem.</canvas>
             <p class="text-xs text-gray-500 mt-4">PW pozostaje w globalnym TOP 1000 ARWU, utrzymując stabilne wskaźniki badań.</p>
             <p class="text-[11px] text-slate-500 mt-2">Źródło: Academic Ranking of World Universities 2020–2025.</p>
           </div>
@@ -578,7 +552,7 @@
               </select>
             </label>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 280px) -->
-            <canvas id="chartGRAS" role="img" aria-label="Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w Global Ranking of Academic Subjects." class="w-full" style="margin-top: 0.25rem; height: 200px;">Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w Global Ranking of Academic Subjects. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <canvas id="chartGRAS" role="img" aria-label="Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w Global Ranking of Academic Subjects." class="w-full" style="margin-top: 0.25rem; height: 280px;">Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w Global Ranking of Academic Subjects. Szczegółowy opis znajduje się pod wykresem.</canvas>
             <p id="grasSubjectNote" aria-live="polite" class="text-xs text-gray-500 mt-4">Pozycja PW w GRAS aktualizuje się po wyborze dyscypliny.</p>
             <p class="text-[11px] text-slate-500 mt-2">Źródło: Global Ranking of Academic Subjects 2020-2025.</p>
           </div>
@@ -603,7 +577,7 @@
               </button>
             </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
-            <canvas id="chartEngi" role="img" aria-label="Trend pozycji i wskaźnika punktowego Politechniki Warszawskiej w EngiRank." class="mt-4 w-full" style="height: 220px;">Trend pozycji i wskaźnika punktowego Politechniki Warszawskiej w EngiRank. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <canvas id="chartEngi" role="img" aria-label="Trend pozycji i wskaźnika punktowego Politechniki Warszawskiej w EngiRank." class="mt-4 w-full" style="height: 288px;">Trend pozycji i wskaźnika punktowego Politechniki Warszawskiej w EngiRank. Szczegółowy opis znajduje się pod wykresem.</canvas>
             <p id="engiNote" aria-live="polite" class="text-xs text-gray-500 mt-4">PW awansowała na 64 miejsce w EngiRank 2024.</p>
             <p class="text-[11px] text-slate-500 mt-2">Źródło: EngiRank 2023-2024. Przełącznik: pozycja ↔ WSK (0-100).</p>
           </div>
@@ -631,7 +605,7 @@
               <select id="engiSubjectSelect" class="mt-1 w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-indigo-500 focus:ring-indigo-500"></select>
             </label>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 260px) -->
-            <canvas id="chartEngiSubject" role="img" aria-label="Trend pozycji wybranego kierunku Politechniki Warszawskiej w EngiRank by Subject." class="w-full" style="margin-top: 0.25rem; height: 200px;">Trend pozycji wybranego kierunku Politechniki Warszawskiej w EngiRank by Subject. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <canvas id="chartEngiSubject" role="img" aria-label="Trend pozycji wybranego kierunku Politechniki Warszawskiej w EngiRank by Subject." class="w-full" style="margin-top: 0.25rem; height: 260px;">Trend pozycji wybranego kierunku Politechniki Warszawskiej w EngiRank by Subject. Szczegółowy opis znajduje się pod wykresem.</canvas>
             <p id="engiSubjectNote" aria-live="polite" class="text-xs text-gray-500 mt-4">Pozycje PW w EngiRank by Subject aktualizują się po wyborze kierunku.</p>
             <p class="text-[11px] text-slate-500 mt-2">Źródło: EngiRank by Subject 2023. Przełącznik: pozycja ↔ punktacja (0-100).</p>
           </div>
@@ -2587,7 +2561,8 @@
             ]
           },
           options: {
-            responsive: true,
+            responsive: false,
+            maintainAspectRatio: false,
             interaction: { mode: 'index', intersect: false },
             plugins: {
               legend: {
@@ -2687,7 +2662,8 @@
               ]
             },
             options: {
-              responsive: true,
+              responsive: false,
+            maintainAspectRatio: false,
               interaction: { mode: 'index', intersect: false },
               plugins: {
                 legend: {
@@ -2844,7 +2820,8 @@
               ]
             },
             options: {
-              responsive: true,
+              responsive: false,
+            maintainAspectRatio: false,
               interaction: { mode: 'index', intersect: false },
               plugins: {
                 legend: {
@@ -3104,7 +3081,8 @@
               ]
             },
             options: {
-              responsive: true,
+              responsive: false,
+            maintainAspectRatio: false,
               interaction: { mode: 'index', intersect: false },
               plugins: {
                 legend: {
@@ -3326,7 +3304,8 @@
               ]
             },
             options: {
-              responsive: true,
+              responsive: false,
+            maintainAspectRatio: false,
               interaction: { mode: 'index', intersect: false },
               plugins: {
                 legend: {
@@ -3542,7 +3521,8 @@
               ]
             },
             options: {
-              responsive: true,
+              responsive: false,
+            maintainAspectRatio: false,
               interaction: { mode: 'index', intersect: false },
               plugins: {
                 legend: { display: false },
@@ -3689,7 +3669,8 @@
               ]
             },
             options: {
-              responsive: true,
+              responsive: false,
+            maintainAspectRatio: false,
               interaction: { mode: 'index', intersect: false },
               plugins: {
                 legend: {
@@ -4117,7 +4098,8 @@
             ]
           },
           options: {
-            responsive: true,
+            responsive: false,
+            maintainAspectRatio: false,
             interaction: { mode: 'index', intersect: false },
             plugins: {
               legend: {
@@ -4196,7 +4178,8 @@
             ]
           },
           options: {
-            responsive: true,
+            responsive: false,
+            maintainAspectRatio: false,
             interaction: { mode: 'index', intersect: false },
             plugins: {
               legend: {
@@ -4324,7 +4307,8 @@
               ]
             },
             options: {
-              responsive: true,
+              responsive: false,
+            maintainAspectRatio: false,
               plugins: {
                 legend: { display: false },
                 tooltip: {
@@ -4446,7 +4430,8 @@
               ]
             },
             options: {
-              responsive: true,
+              responsive: false,
+            maintainAspectRatio: false,
               plugins: {
                 legend: { display: false },
                 tooltip: {
