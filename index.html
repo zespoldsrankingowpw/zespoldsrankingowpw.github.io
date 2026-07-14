@@ -557,13 +557,24 @@
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgb(79,70,229); border-color: rgb(79,70,229); background-color: #f8f9ff;">Aktualizacja: 18.06.2026</span>
             <div class="flex items-center justify-between gap-3">
               <h3 class="text-lg font-semibold text-gray-900">QS World University Rankings</h3>
-              <button id="qsWurMethodologyOpen" type="button" data-methodology-open="qsWurMethodologyModal" aria-controls="qsWurMethodologyModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Otwórz metodykę QS World University Rankings" title="Otwórz metodykę QS World University Rankings">
-      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0">
-  <path d="M12 8.5a3.5 3.5 0 1 1 0 7a3.5 3.5 0 0 1 0-7Z" />
-  <path d="M19.4 13.5a7.9 7.9 0 0 0 .1-1.5 7.9 7.9 0 0 0-.1-1.5l1.6-1.2a.6.6 0 0 0 .1-.8l-1.5-2.6a.6.6 0 0 0-.8-.3l-1.9.8a8.6 8.6 0 0 0-2.6-1.5l-.3-2a.6.6 0 0 0-.6-.5h-3a.6.6 0 0 0-.6.5l-.3 2a8.6 8.6 0 0 0-2.6 1.5l-1.9-.8a.6.6 0 0 0-.8.3L2.8 8.5a.6.6 0 0 0 .1.8l1.6 1.2a7.9 7.9 0 0 0-.1 1.5 7.9 7.9 0 0 0 .1 1.5l-1.6 1.2a.6.6 0 0 0-.1.8l1.5 2.6a.6.6 0 0 0 .8.3l1.9-.8a8.6 8.6 0 0 0 2.6 1.5l.3 2a.6.6 0 0 0 .6.5h3a.6.6 0 0 0 .6-.5l.3-2a8.6 8.6 0 0 0 2.6-1.5l1.9.8a.6.6 0 0 0 .8-.3l1.5-2.6a.6.6 0 0 0-.1-.8l-1.6-1.2Z" />
-</svg>
-      <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-56 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Metodyka: wagi, wskaźniki, źródła danych i zasady kwalifikacji.</span>
-    </button>
+              <div class="flex items-center gap-2">
+                <button id="qsWurDetailsOpen" type="button" data-methodology-open="qsWurDetailsModal" aria-controls="qsWurDetailsModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Otwórz szczegółowe wyniki QS World University Rankings 2024–2026" title="Szczegółowe wyniki QS WUR 2024–2026">
+                  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0">
+                    <path d="M4 19V5" />
+                    <path d="M4 19h16" />
+                    <path d="m7 15 4-4 3 3 5-7" />
+                    <path d="M16 7h3v3" />
+                  </svg>
+                  <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-64 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Szczegóły: wyniki i pozycje PW dla wskaźników QS WUR w latach 2024–2026.</span>
+                </button>
+                <button id="qsWurMethodologyOpen" type="button" data-methodology-open="qsWurMethodologyModal" aria-controls="qsWurMethodologyModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Otwórz metodykę QS World University Rankings" title="Otwórz metodykę QS World University Rankings">
+                  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0">
+                    <path d="M12 8.5a3.5 3.5 0 1 1 0 7a3.5 3.5 0 0 1 0-7Z" />
+                    <path d="M19.4 13.5a7.9 7.9 0 0 0 .1-1.5 7.9 7.9 0 0 0-.1-1.5l1.6-1.2a.6.6 0 0 0 .1-.8l-1.5-2.6a.6.6 0 0 0-.8-.3l-1.9.8a8.6 8.6 0 0 0-2.6-1.5l-.3-2a.6.6 0 0 0-.6-.5h-3a.6.6 0 0 0-.6.5l-.3 2a8.6 8.6 0 0 0-2.6 1.5l-1.9-.8a.6.6 0 0 0-.8.3L2.8 8.5a.6.6 0 0 0 .1.8l1.6 1.2a7.9 7.9 0 0 0-.1 1.5 7.9 7.9 0 0 0 .1 1.5l-1.6 1.2a.6.6 0 0 0-.1.8l1.5 2.6a.6.6 0 0 0 .8.3l1.9-.8a8.6 8.6 0 0 0 2.6 1.5l.3 2a.6.6 0 0 0 .6.5h3a.6.6 0 0 0 .6-.5l.3-2a8.6 8.6 0 0 0 2.6-1.5l1.9.8a.6.6 0 0 0 .8-.3l1.5-2.6a.6.6 0 0 0-.1-.8l-1.6-1.2Z" />
+                  </svg>
+                  <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-56 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Metodyka: wagi, wskaźniki, źródła danych i zasady kwalifikacji.</span>
+                </button>
+              </div>
             </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 340px) -->
             <canvas id="chartQS" role="img" aria-label="Trend pozycji Politechniki Warszawskiej w QS World University Rankings w latach 2020–2027." class="mt-4 w-full" style="height: 350px;">Trend pozycji Politechniki Warszawskiej w QS World University Rankings w latach 2020–2027. Szczegółowy opis znajduje się pod wykresem.</canvas>
@@ -778,6 +789,66 @@
 
       </section>
 
+
+    <!-- Szczegółowe wyniki QS World University Rankings -->
+    <div id="qsWurDetailsModal" data-methodology-modal class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="qsWurDetailsTitle" aria-describedby="qsWurDetailsDesc">
+      <div data-methodology-backdrop class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
+      <div class="relative z-10 flex min-h-full items-center justify-center p-4">
+        <section class="max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[28px] bg-white shadow-2xl ring-1 ring-slate-900/10">
+          <div class="flex items-start justify-between gap-6 border-b border-slate-200 p-6 md:p-8">
+            <div>
+              <p class="text-xs font-bold uppercase tracking-[0.24em] text-indigo-700">QS World University Rankings | 2024–2026</p>
+              <h2 id="qsWurDetailsTitle" class="mt-2 text-2xl font-extrabold text-slate-950">Wyniki i pozycje Politechniki Warszawskiej</h2>
+              <p id="qsWurDetailsDesc" class="mt-3 max-w-3xl text-sm leading-6 text-slate-600">Wybierz wskaźnik, aby porównać jego wynik punktowy i pozycję PW w trzech kolejnych edycjach rankingu.</p>
+            </div>
+            <button data-methodology-close type="button" class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-label="Zamknij szczegółowe wyniki QS World University Rankings">×</button>
+          </div>
+          <div class="space-y-6 p-6 md:p-8">
+            <section class="rounded-3xl border border-indigo-100 bg-indigo-50/70 p-4 md:p-5" aria-label="Wybór wskaźnika QS WUR">
+              <div class="grid gap-4 lg:grid-cols-[1fr_1.2fr] lg:items-end">
+                <div>
+                  <h3 class="text-base font-extrabold text-slate-950">Zmiana wskaźnika w czasie</h3>
+                  <p class="mt-1 text-xs leading-5 text-slate-600">Wynik jest podawany w skali 0–100; niższa wartość pozycji oznacza lepsze miejsce w zestawieniu.</p>
+                </div>
+                <label for="qsWurIndicatorSelect" class="block">
+                  <span class="text-xs font-semibold uppercase tracking-widest text-slate-500">Wybierz wskaźnik</span>
+                  <select id="qsWurIndicatorSelect" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-indigo-500 focus:ring-indigo-500">
+                    <option>Academic Reputation</option>
+                    <option>Employer Reputation</option>
+                    <option>Faculty Student Ratio</option>
+                    <option>Citations per Faculty</option>
+                    <option>International Faculty</option>
+                    <option>International Students</option>
+                    <option>International Research Network</option>
+                    <option>Employment Outcomes</option>
+                    <option>Sustainability</option>
+                    <option>International Students Diversity</option>
+                    <option>Overall Score</option>
+                  </select>
+                </label>
+              </div>
+              <div id="qsWurDetailsYearCards" class="mt-5 grid gap-3 sm:grid-cols-3" aria-live="polite"></div>
+            </section>
+            <section class="rounded-3xl border border-slate-200 bg-white p-4 md:p-5" aria-labelledby="qsWurDetailsChartTitle">
+              <div class="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <h3 id="qsWurDetailsChartTitle" class="text-base font-extrabold text-slate-950">Academic Reputation — trend 2024–2026</h3>
+                  <p id="qsWurDetailsChartNote" class="mt-1 text-xs leading-5 text-slate-500">Linie pokazują wynik punktowy i pozycję PW w danej edycji.</p>
+                </div>
+                <div class="flex flex-wrap gap-2 text-[11px] font-semibold">
+                  <span class="rounded-full bg-indigo-50 px-3 py-1 text-indigo-700 ring-1 ring-indigo-100">Wynik 0–100</span>
+                  <span class="rounded-full bg-cyan-50 px-3 py-1 text-cyan-700 ring-1 ring-cyan-100">Pozycja — niżej = lepiej</span>
+                </div>
+              </div>
+              <div class="mt-4" style="height: 330px;">
+                <canvas id="chartQSWurDetails" role="img" aria-label="Trend wyniku i pozycji Politechniki Warszawskiej dla wybranego wskaźnika QS World University Rankings w latach 2024–2026.">Trend wyniku i pozycji PW dla wybranego wskaźnika QS World University Rankings w latach 2024–2026.</canvas>
+              </div>
+            </section>
+            <p class="rounded-2xl bg-slate-50 p-4 text-xs leading-5 text-slate-600">Źródło: arkusz <b>QS WUR 2024-2026 Long(3).xlsx</b>, zakładka <b>Źródło QS Long</b>. International Students Diversity jest raportowany dla PW od edycji 2026.</p>
+          </div>
+        </section>
+      </div>
+    </div>
 
     <!-- Metodyki rankingów międzynarodowych -->
     <div id="qsWurMethodologyModal" data-methodology-modal class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="qsWurMethodologyTitle" aria-describedby="qsWurMethodologyDesc">
@@ -1356,6 +1427,144 @@
           }
         };
 
+        const qsWurDetailsYears = [2024, 2025, 2026];
+        const qsWurDetailsData = {
+          'Academic Reputation': { scores: [22.8, 23.3, 28.4], ranks: [382, 380, 442], rankLabels: ['382', '380', '442'] },
+          'Employer Reputation': { scores: [49.8, 51.9, 72.4], ranks: [172, 168, 137], rankLabels: ['172', '168', '137'] },
+          'Faculty Student Ratio': { scores: [38.7, 42.6, 55.7], ranks: [408, 366, 337], rankLabels: ['408', '366', '337'] },
+          'Citations per Faculty': { scores: [4.3, 4.7, 9.5], ranks: [701, 701, 801], rankLabels: ['701+', '701', '801'] },
+          'International Faculty': { scores: [1.8, 2.4, 3.4], ranks: [701, 701, 801], rankLabels: ['701+', '701+', '801+'] },
+          'International Students': { scores: [10.3, 10.3, 17.6], ranks: [701, 701, 771], rankLabels: ['701+', '701', '771'] },
+          'International Research Network': { scores: [9.7, 60.6, 63.8], ranks: [676, 627, 638], rankLabels: ['676', '627', '638'] },
+          'Employment Outcomes': { scores: [11.5, 9.8, 15.9], ranks: [701, 701, 801], rankLabels: ['701+', '701', '801'] },
+          'Sustainability': { scores: [2.1, 1.4, 38.4], ranks: [701, 701, 801], rankLabels: ['701+', '701+', '801+'] },
+          'International Students Diversity': { scores: [null, null, 23.7], ranks: [null, null, 710], rankLabels: [null, null, '710'] },
+          'Overall Score': { scores: [20.7, 23.2, 32.8], ranks: [571, 527, 487], rankLabels: ['=571', '527', '487'] }
+        };
+        const qsWurIndicatorSelect = document.getElementById('qsWurIndicatorSelect');
+        const qsWurDetailsYearCards = document.getElementById('qsWurDetailsYearCards');
+        const qsWurDetailsChartTitle = document.getElementById('qsWurDetailsChartTitle');
+        const qsWurDetailsChartNote = document.getElementById('qsWurDetailsChartNote');
+        const qsWurDetailsCanvas = document.getElementById('chartQSWurDetails');
+        let qsWurDetailsChart = null;
+        const formatQsWurScore = (value) => value == null ? '—' : new Intl.NumberFormat('pl-PL', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(value);
+
+        const renderQsWurDetails = () => {
+          const indicator = qsWurIndicatorSelect?.value || 'Academic Reputation';
+          const series = qsWurDetailsData[indicator];
+          if (!series) return;
+
+          if (qsWurDetailsYearCards) {
+            qsWurDetailsYearCards.innerHTML = qsWurDetailsYears.map((year, index) => {
+              const score = formatQsWurScore(series.scores[index]);
+              const rank = series.rankLabels[index] || '—';
+              const unavailable = series.scores[index] == null;
+              return `<article class="rounded-2xl border ${unavailable ? 'border-slate-200 bg-white/60' : 'border-indigo-100 bg-white'} p-4 shadow-sm">
+                <p class="text-xs font-bold uppercase tracking-[0.2em] ${unavailable ? 'text-slate-400' : 'text-indigo-700'}">${year}</p>
+                <div class="mt-3 grid grid-cols-2 gap-3">
+                  <div><p class="text-[10px] uppercase tracking-wider text-slate-400">Wynik</p><p class="mt-1 text-2xl font-extrabold ${unavailable ? 'text-slate-400' : 'text-slate-950'}">${score}</p></div>
+                  <div><p class="text-[10px] uppercase tracking-wider text-slate-400">Pozycja</p><p class="mt-1 text-2xl font-extrabold ${unavailable ? 'text-slate-400' : 'text-cyan-700'}">${rank}</p></div>
+                </div>
+              </article>`;
+            }).join('');
+          }
+
+          if (qsWurDetailsChartTitle) qsWurDetailsChartTitle.textContent = `${indicator} — trend 2024–2026`;
+          if (qsWurDetailsChartNote) {
+            qsWurDetailsChartNote.textContent = indicator === 'International Students Diversity'
+              ? 'Wskaźnik International Students Diversity jest dostępny dla PW od edycji 2026.'
+              : 'Linie pokazują wynik punktowy i pozycję PW w danej edycji.';
+          }
+          if (qsWurDetailsCanvas) {
+            qsWurDetailsCanvas.setAttribute('aria-label', `${indicator}: trend wyniku i pozycji Politechniki Warszawskiej w QS World University Rankings w latach 2024–2026.`);
+          }
+          if (!qsWurDetailsCanvas || typeof Chart === 'undefined') return;
+
+          const validRanks = series.ranks.filter((value) => value != null);
+          const rankMin = Math.min(...validRanks);
+          const rankMax = Math.max(...validRanks);
+          const rankSpread = Math.max(20, rankMax - rankMin);
+          const rankPadding = Math.ceil(rankSpread * 0.18);
+          qsWurDetailsChart?.destroy();
+          qsWurDetailsChart = new Chart(qsWurDetailsCanvas, {
+            type: 'line',
+            data: {
+              labels: qsWurDetailsYears,
+              datasets: [
+                {
+                  label: 'Wynik',
+                  data: series.scores,
+                  yAxisID: 'yScore',
+                  borderColor: 'rgb(79, 70, 229)',
+                  backgroundColor: 'rgba(79, 70, 229, 0.12)',
+                  pointBackgroundColor: 'rgb(79, 70, 229)',
+                  pointBorderColor: '#fff',
+                  pointBorderWidth: 2,
+                  pointRadius: 5,
+                  pointHoverRadius: 7,
+                  borderWidth: 3,
+                  tension: 0.28,
+                  spanGaps: false
+                },
+                {
+                  label: 'Pozycja',
+                  data: series.ranks,
+                  yAxisID: 'yRank',
+                  borderColor: 'rgb(8, 145, 178)',
+                  backgroundColor: 'rgba(8, 145, 178, 0.10)',
+                  pointBackgroundColor: 'rgb(8, 145, 178)',
+                  pointBorderColor: '#fff',
+                  pointBorderWidth: 2,
+                  pointRadius: 5,
+                  pointHoverRadius: 7,
+                  borderWidth: 3,
+                  borderDash: [7, 5],
+                  tension: 0.28,
+                  spanGaps: false
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              interaction: { mode: 'index', intersect: false },
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: (context) => context.dataset.yAxisID === 'yScore'
+                      ? `Wynik: ${formatQsWurScore(context.raw)}`
+                      : `Pozycja: ${series.rankLabels[context.dataIndex] || '—'}`
+                  }
+                }
+              },
+              scales: {
+                x: { grid: { display: false }, ticks: { color: '#475569', font: { weight: '600' } } },
+                yScore: {
+                  type: 'linear',
+                  position: 'left',
+                  min: 0,
+                  max: 100,
+                  title: { display: true, text: 'Wynik (0–100)', color: '#4338ca', font: { weight: '700' } },
+                  ticks: { color: '#4338ca' },
+                  grid: { color: 'rgba(148, 163, 184, 0.18)' }
+                },
+                yRank: {
+                  type: 'linear',
+                  position: 'right',
+                  reverse: true,
+                  min: Math.max(1, rankMin - rankPadding),
+                  max: rankMax + rankPadding,
+                  title: { display: true, text: 'Pozycja', color: '#0e7490', font: { weight: '700' } },
+                  ticks: { color: '#0e7490', precision: 0 },
+                  grid: { drawOnChartArea: false }
+                }
+              }
+            }
+          });
+        };
+        qsWurIndicatorSelect?.addEventListener('change', renderQsWurDetails);
+
         document.querySelectorAll('[data-methodology-open]').forEach((trigger) => {
           trigger.addEventListener('click', () => {
             const modal = document.getElementById(trigger.dataset.methodologyOpen);
@@ -1366,6 +1575,7 @@
             modal.setAttribute('aria-hidden', 'false');
             document.body.classList.add('overflow-hidden');
             modal.querySelector('[data-methodology-close]')?.focus();
+            if (modal.id === 'qsWurDetailsModal') requestAnimationFrame(renderQsWurDetails);
           });
         });
 
