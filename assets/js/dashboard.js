@@ -103,15 +103,20 @@ document.addEventListener('DOMContentLoaded', function () {
   let renderEngiSubjectDetails = () => {};
   const qsSubjectDetailsModal = document.getElementById('qsSubjectDetailsModal');
   const qsSubjectDetailsSelect = document.getElementById('qsSubjectDetailsSelect');
+  const qsSubjectDetailsMetricSelect = document.getElementById('qsSubjectDetailsMetricSelect');
   const qsSubjectDetailsLatestPosition = document.getElementById('qsSubjectDetailsLatestPosition');
   const qsSubjectDetailsBestPosition = document.getElementById('qsSubjectDetailsBestPosition');
   const qsSubjectDetailsChange = document.getElementById('qsSubjectDetailsChange');
   const qsSubjectDetailsCoverage = document.getElementById('qsSubjectDetailsCoverage');
+  const qsSubjectDetailsStatLabels = [1, 2, 3, 4].map((index) => document.getElementById(`qsSubjectDetailsStat${index}Label`));
+  const qsSubjectDetailsMetricContext = document.getElementById('qsSubjectDetailsMetricContext');
   const qsSubjectDetailsYearCards = document.getElementById('qsSubjectDetailsYearCards');
   const qsSubjectDetailsChartTitle = document.getElementById('qsSubjectDetailsChartTitle');
   const qsSubjectDetailsChartNote = document.getElementById('qsSubjectDetailsChartNote');
+  const qsSubjectDetailsLegend = document.getElementById('qsSubjectDetailsLegend');
   const qsSubjectDetailsCanvas = document.getElementById('chartQSSubjectDetails');
   const qsSubjectDetailsMethodologyOpen = document.getElementById('qsSubjectDetailsMethodologyOpen');
+  const qsSubjectDetailsSourceLink = document.getElementById('qsSubjectDetailsSourceLink');
   const qsSubjectMethodologyOpenButton = document.getElementById('qsSubjectMethodologyOpen');
   let renderQSSubjectDetails = () => {};
   const grasDetailsModal = document.getElementById('grasDetailsModal');
@@ -1217,6 +1222,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     let qsSubjectDetailsChart = null;
+    const qsSubjectIndicatorData = window.QSSubjectIndicatorData || {
+      years: [],
+      metricOrder: [],
+      metrics: {},
+      subjects: {}
+    };
+    const qsSubjectDetailsYears = [2020, 2021, 2022, 2023, 2024, 2025, 2026];
     const qsSubjectChart = new Chart(qsSubjectCanvas, {
       type: 'line',
       data: {
@@ -1353,8 +1365,95 @@ document.addEventListener('DOMContentLoaded', function () {
       return typeof upper === 'number' && upper !== lower ? lower + '–' + upper : String(lower);
     };
 
-    const createQSSubjectYearCard = (year, lower, upper) => {
-      const hasPosition = typeof lower === 'number';
+    const parseQSSubjectRankLabel = (label) => {
+      if (label == null) return { raw: null, lower: null, upper: null, tied: false };
+      const normalized = String(label).trim();
+      const numeric = normalized.replace(/=/g, '').replace(/–/g, '-');
+      const range = numeric.match(/^(\d+)-(\d+)$/);
+      if (range) {
+        return { raw: range[1] + '–' + range[2], lower: Number(range[1]), upper: Number(range[2]), tied: false };
+      }
+      const value = Number.parseInt(numeric, 10);
+      if (!Number.isFinite(value)) return { raw: null, lower: null, upper: null, tied: false };
+      return {
+        raw: normalized.includes('=') ? '=' + value : String(value),
+        lower: value,
+        upper: value,
+        tied: normalized.includes('=')
+      };
+    };
+
+    const formatQSSubjectScore = (value) => typeof value === 'number'
+      ? value.toLocaleString('pl-PL', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+      : '—';
+
+    const getQSSubjectPositionSnapshot = (subjectName, year) => {
+      const archived = qsSubjectIndicatorData.subjects?.[subjectName]?.editions?.[String(year)];
+      if (archived?.rank) return parseQSSubjectRankLabel(archived.rank);
+      const currentIndex = qsSubjectData.years.indexOf(year);
+      if (currentIndex < 0) return { raw: null, lower: null, upper: null, tied: false };
+      const current = qsSubjectData.subjects?.[subjectName];
+      const lower = current?.lower?.[currentIndex];
+      const upper = current?.upper?.[currentIndex];
+      return {
+        raw: formatQSSubjectBand(lower, upper),
+        lower: typeof lower === 'number' ? lower : null,
+        upper: typeof upper === 'number' ? upper : null,
+        tied: false
+      };
+    };
+
+    const getQSSubjectMetricSnapshot = (subjectName, year, metricKey) => {
+      const edition = qsSubjectIndicatorData.subjects?.[subjectName]?.editions?.[String(year)];
+      const value = metricKey === 'score' ? edition?.score : edition?.metrics?.[metricKey];
+      return {
+        value: typeof value === 'number' ? value : null,
+        sourceEdition: Boolean(edition)
+      };
+    };
+
+    const getQSSubjectMetricCatalog = (subjectName) => {
+      const subject = qsSubjectIndicatorData.subjects?.[subjectName];
+      const editions = Object.values(subject?.editions || {});
+      const catalog = [{ key: 'position', label: 'Pozycja / przedział pozycji' }];
+      if (editions.some((edition) => typeof edition.score === 'number')) {
+        catalog.push({ key: 'score', label: 'Wynik ogólny (0–100)' });
+      }
+      (qsSubjectIndicatorData.metricOrder || []).forEach((key) => {
+        if (editions.some((edition) => typeof edition.metrics?.[key] === 'number')) {
+          catalog.push({ key, label: qsSubjectIndicatorData.metrics?.[key] || key });
+        }
+      });
+      return catalog;
+    };
+
+    const updateQSSubjectMetricOptions = (subjectName) => {
+      if (!qsSubjectDetailsMetricSelect) return 'position';
+      if (qsSubjectDetailsMetricSelect.dataset.subject === subjectName && qsSubjectDetailsMetricSelect.options.length) {
+        return qsSubjectDetailsMetricSelect.value;
+      }
+      const previous = qsSubjectDetailsMetricSelect.value;
+      const catalog = getQSSubjectMetricCatalog(subjectName);
+      const positionOption = document.createElement('option');
+      positionOption.value = 'position';
+      positionOption.textContent = catalog[0].label;
+      const resultGroup = document.createElement('optgroup');
+      resultGroup.label = 'Opublikowane wyniki 0–100';
+      catalog.slice(1).forEach(({ key, label }) => {
+        const option = document.createElement('option');
+        option.value = key;
+        option.textContent = label;
+        resultGroup.append(option);
+      });
+      qsSubjectDetailsMetricSelect.replaceChildren(positionOption, resultGroup);
+      const available = new Set(catalog.map(({ key }) => key));
+      qsSubjectDetailsMetricSelect.value = available.has(previous) ? previous : 'position';
+      qsSubjectDetailsMetricSelect.dataset.subject = subjectName;
+      return qsSubjectDetailsMetricSelect.value;
+    };
+
+    const createQSSubjectYearCard = (year, snapshot) => {
+      const hasPosition = typeof snapshot.lower === 'number';
       const card = document.createElement('article');
       card.className = 'rks-details-year' + (hasPosition ? '' : ' missing');
       card.setAttribute('role', 'listitem');
@@ -1363,19 +1462,65 @@ document.addEventListener('DOMContentLoaded', function () {
       yearLabel.textContent = year;
       const position = document.createElement('div');
       position.className = 'position';
-      position.textContent = formatQSSubjectBand(lower, upper);
+      position.textContent = snapshot.raw || '—';
       const positionLabel = document.createElement('span');
       positionLabel.className = 'position-label';
       positionLabel.textContent = hasPosition
-        ? (typeof upper === 'number' && upper !== lower ? 'przedział pozycji' : 'pozycja')
+        ? (snapshot.upper !== snapshot.lower ? 'przedział pozycji' : 'pozycja')
         : 'brak danych';
       const range = document.createElement('span');
       range.className = 'score';
-      range.textContent = hasPosition && typeof upper === 'number' && upper !== lower
-        ? (upper - lower + 1) + ' miejsc w przedziale'
-        : (hasPosition ? 'pozycja dokładna' : 'nieklasyfikowana');
+      range.textContent = hasPosition && snapshot.upper !== snapshot.lower
+        ? (snapshot.upper - snapshot.lower + 1) + ' miejsc w przedziale'
+        : (hasPosition ? (snapshot.tied ? 'pozycja ex aequo' : 'pozycja dokładna') : 'nieklasyfikowana');
       card.append(yearLabel, position, positionLabel, range);
       return card;
+    };
+
+    const createQSSubjectMetricYearCard = (year, snapshot, isOverallScore) => {
+      const hasValue = typeof snapshot.value === 'number';
+      const card = document.createElement('article');
+      card.className = 'rks-details-year' + (hasValue ? '' : ' missing');
+      card.setAttribute('role', 'listitem');
+      const yearLabel = document.createElement('div');
+      yearLabel.className = 'year';
+      yearLabel.textContent = year;
+      const value = document.createElement('div');
+      value.className = 'position';
+      value.textContent = formatQSSubjectScore(snapshot.value);
+      const valueLabel = document.createElement('span');
+      valueLabel.className = 'position-label';
+      valueLabel.textContent = hasValue ? (isOverallScore ? 'wynik ogólny' : 'wynik 0–100') : 'brak wartości';
+      const availability = document.createElement('span');
+      availability.className = 'score';
+      availability.textContent = hasValue ? 'wartość opublikowana' : 'nie interpolujemy';
+      card.append(yearLabel, value, valueLabel, availability);
+      return card;
+    };
+
+    const setQSSubjectDetailsStat = (index, label, value) => {
+      if (qsSubjectDetailsStatLabels[index]) qsSubjectDetailsStatLabels[index].textContent = label;
+      const values = [
+        qsSubjectDetailsLatestPosition,
+        qsSubjectDetailsBestPosition,
+        qsSubjectDetailsChange,
+        qsSubjectDetailsCoverage
+      ];
+      if (values[index]) values[index].textContent = value;
+    };
+
+    const createQSSubjectLegendItem = (label, color, dashed = false) => {
+      const item = document.createElement('span');
+      item.className = 'inline-flex items-center gap-2';
+      const line = document.createElement('i');
+      line.className = 'h-0.5 w-7';
+      if (dashed) {
+        line.style.borderTop = '2px dashed ' + color;
+      } else {
+        line.style.backgroundColor = color;
+      }
+      item.append(line, document.createTextNode(label));
+      return item;
     };
 
     const classifyQSSubjectChange = (firstLower, firstUpper, latestLower, latestUpper) => {
@@ -1389,50 +1534,107 @@ document.addEventListener('DOMContentLoaded', function () {
     renderQSSubjectDetails = () => {
       if (!qsSubjectDetailsCanvas || !qsSubjectDetailsSelect) return;
       const subjectName = qsSubjectDetailsSelect.value || currentSubject || subjectNames[0];
-      const data = qsSubjectData.subjects[subjectName];
-      if (!data) return;
+      if (!qsSubjectData.subjects[subjectName]) return;
 
-      const lowerSeries = Array.isArray(data.lower) ? data.lower.slice() : [];
-      const upperSeries = Array.isArray(data.upper) ? data.upper.slice() : [];
-      const latestIndex = qsSubjectData.years.length - 1;
-      const validIndices = qsSubjectData.years
-        .map((year, index) => index)
-        .filter((index) => typeof lowerSeries[index] === 'number');
-      const bestIndex = validIndices.reduce((best, index) => {
-        if (best === null) return index;
-        if (lowerSeries[index] < lowerSeries[best]) return index;
-        if (lowerSeries[index] === lowerSeries[best] && upperSeries[index] < upperSeries[best]) return index;
-        return best;
-      }, null);
-      const bestBand = bestIndex === null ? '—' : formatQSSubjectBand(lowerSeries[bestIndex], upperSeries[bestIndex]);
-      const bestYears = bestIndex === null
+      const metricKey = updateQSSubjectMetricOptions(subjectName);
+      const isPosition = metricKey === 'position';
+      const isOverallScore = metricKey === 'score';
+      const metricLabel = getQSSubjectMetricCatalog(subjectName).find(({ key }) => key === metricKey)?.label || metricKey;
+      const positionSnapshots = qsSubjectDetailsYears.map((year) => getQSSubjectPositionSnapshot(subjectName, year));
+      const metricSnapshots = isPosition
         ? []
-        : qsSubjectData.years.filter((year, index) =>
-          lowerSeries[index] === lowerSeries[bestIndex] && upperSeries[index] === upperSeries[bestIndex]);
+        : qsSubjectDetailsYears.map((year) => getQSSubjectMetricSnapshot(subjectName, year, metricKey));
 
-      if (qsSubjectDetailsLatestPosition) qsSubjectDetailsLatestPosition.textContent = formatQSSubjectBand(lowerSeries[latestIndex], upperSeries[latestIndex]);
-      if (qsSubjectDetailsBestPosition) qsSubjectDetailsBestPosition.textContent = bestBand;
-      if (qsSubjectDetailsChange) {
-        qsSubjectDetailsChange.textContent = classifyQSSubjectChange(
-          lowerSeries[0], upperSeries[0], lowerSeries[latestIndex], upperSeries[latestIndex]);
+      if (isPosition) {
+        const validEntries = positionSnapshots
+          .map((snapshot, index) => ({ ...snapshot, index }))
+          .filter(({ lower }) => typeof lower === 'number');
+        const best = validEntries.reduce((currentBest, entry) => {
+          if (!currentBest || entry.lower < currentBest.lower) return entry;
+          if (entry.lower === currentBest.lower && entry.upper < currentBest.upper) return entry;
+          return currentBest;
+        }, null);
+        const latest = validEntries.at(-1);
+        const first = validEntries[0];
+        const latestSnapshot = positionSnapshots.at(-1);
+        setQSSubjectDetailsStat(0, 'Pozycja 2026', latestSnapshot?.raw || '—');
+        setQSSubjectDetailsStat(1, 'Najlepszy wynik', best?.raw || '—');
+        setQSSubjectDetailsStat(
+          2,
+          first ? 'Zmiana od ' + qsSubjectDetailsYears[first.index] : 'Zmiana',
+          first && latest ? classifyQSSubjectChange(first.lower, first.upper, latest.lower, latest.upper) : 'brak porównania'
+        );
+        setQSSubjectDetailsStat(3, 'Edycje z pozycją', validEntries.length + ' / ' + qsSubjectDetailsYears.length);
+        qsSubjectDetailsYearCards?.replaceChildren(...qsSubjectDetailsYears.map((year, index) =>
+          createQSSubjectYearCard(year, positionSnapshots[index])
+        ));
+        if (qsSubjectDetailsMetricContext) {
+          const missing = qsSubjectDetailsYears.filter((year, index) => typeof positionSnapshots[index].lower !== 'number');
+          qsSubjectDetailsMetricContext.textContent = 'Pasmo pokazuje pełny przedział publikowany przez QS, a nie estymowaną pozycję PW.'
+            + (missing.length ? ' Brak klasyfikacji: ' + missing.join(', ') + '.' : ' Pozycja jest dostępna we wszystkich edycjach.');
+        }
+      } else {
+        const numericEntries = metricSnapshots
+          .map((snapshot, index) => ({ ...snapshot, index }))
+          .filter(({ value }) => typeof value === 'number');
+        const first = numericEntries[0];
+        const latest = numericEntries.at(-1);
+        const best = numericEntries.length ? Math.max(...numericEntries.map(({ value }) => value)) : null;
+        const delta = first && latest ? latest.value - first.value : null;
+        const deltaText = delta === null
+          ? 'brak porównania'
+          : Math.abs(delta) < 0.05
+            ? 'bez zmian'
+            : (delta > 0 ? '+' : '−') + formatQSSubjectScore(Math.abs(delta)) + ' pkt';
+        setQSSubjectDetailsStat(0, latest ? 'Wynik ' + qsSubjectDetailsYears[latest.index] : 'Najnowszy wynik', formatQSSubjectScore(latest?.value));
+        setQSSubjectDetailsStat(1, 'Najlepszy wynik', formatQSSubjectScore(best));
+        setQSSubjectDetailsStat(2, first ? 'Zmiana od ' + qsSubjectDetailsYears[first.index] : 'Zmiana', deltaText);
+        setQSSubjectDetailsStat(3, 'Edycje z wynikiem', numericEntries.length + ' / ' + qsSubjectDetailsYears.length);
+        qsSubjectDetailsYearCards?.replaceChildren(...qsSubjectDetailsYears.map((year, index) =>
+          createQSSubjectMetricYearCard(year, metricSnapshots[index], isOverallScore)
+        ));
+        if (qsSubjectDetailsMetricContext) {
+          const available = numericEntries.map(({ index }) => qsSubjectDetailsYears[index]);
+          const missing = qsSubjectDetailsYears.filter((year, index) => typeof metricSnapshots[index].value !== 'number');
+          qsSubjectDetailsMetricContext.textContent = metricLabel + '. Opublikowane wartości PW: '
+            + (available.length ? available.join(', ') : 'brak') + '.'
+            + (missing.length ? ' Brak wartości: ' + missing.join(', ') + '.' : '')
+            + ' Wyników brakujących nie interpolujemy.';
+        }
       }
-      if (qsSubjectDetailsCoverage) qsSubjectDetailsCoverage.textContent = validIndices.length + ' / ' + qsSubjectData.years.length;
-      qsSubjectDetailsYearCards?.replaceChildren(...qsSubjectData.years.map((year, index) =>
-        createQSSubjectYearCard(year, lowerSeries[index], upperSeries[index])));
 
-      if (qsSubjectDetailsChartTitle) qsSubjectDetailsChartTitle.textContent = subjectName + ' — pozycja 2023–2026';
+      const metricColor = isOverallScore ? '#059669' : '#0891b2';
+      if (qsSubjectDetailsChartTitle) {
+        qsSubjectDetailsChartTitle.textContent = subjectName + ' — '
+          + (isPosition ? 'pozycja' : metricLabel) + ' 2020–2026';
+      }
       if (qsSubjectDetailsChartNote) {
-        const missingYears = qsSubjectData.years.filter((year, index) => typeof lowerSeries[index] !== 'number');
-        qsSubjectDetailsChartNote.textContent = 'Najlepszy opublikowany wynik: ' + bestBand
-          + (bestYears.length ? ' (' + bestYears.join(', ') + ')' : '') + '.'
-          + (missingYears.length ? ' Brak wyniku w edycjach: ' + missingYears.join(', ') + '.' : ' Wynik dostępny we wszystkich czterech edycjach.');
+        if (isPosition) {
+          const numericPositions = positionSnapshots.filter(({ lower }) => typeof lower === 'number');
+          const bestLower = numericPositions.length ? Math.min(...numericPositions.map(({ lower }) => lower)) : null;
+          qsSubjectDetailsChartNote.textContent = bestLower === null
+            ? 'Brak opublikowanych pozycji PW.'
+            : 'Niższa wartość oznacza lepszą pozycję; wypełnione pasmo pokazuje zakres miejsca ex aequo.';
+        } else {
+          qsSubjectDetailsChartNote.textContent = 'Wynik 0–100; wyższa wartość oznacza lepszy rezultat. Przerwy oznaczają brak opublikowanej wartości.';
+        }
       }
-      qsSubjectDetailsCanvas.setAttribute('aria-label', subjectName + ': przedział pozycji PW w QS World University Rankings by Subject 2023–2026');
+      if (qsSubjectDetailsLegend) {
+        qsSubjectDetailsLegend.replaceChildren(...(isPosition
+          ? [
+            createQSSubjectLegendItem('Początek przedziału', '#4f46e5'),
+            createQSSubjectLegendItem('Koniec przedziału', '#818cf8', true)
+          ]
+          : [createQSSubjectLegendItem(metricLabel + ' 0–100', metricColor)]));
+      }
+      qsSubjectDetailsCanvas.setAttribute('aria-label', subjectName + ': '
+        + (isPosition ? 'przedział pozycji' : metricLabel)
+        + ' w QS World University Rankings by Subject 2020–2026');
 
       if (!qsSubjectDetailsChart) {
         qsSubjectDetailsChart = new Chart(qsSubjectDetailsCanvas, {
           type: 'line',
-          data: { labels: qsSubjectData.years, datasets: [] },
+          data: { labels: qsSubjectDetailsYears, datasets: [] },
           options: {
             responsive: true,
             maintainAspectRatio: false,
@@ -1442,10 +1644,14 @@ document.addEventListener('DOMContentLoaded', function () {
               tooltip: {
                 callbacks: {
                   label: (context) => {
-                    if (context.datasetIndex !== 0) return null;
-                    const lower = qsSubjectDetailsChart.$lowerSeries?.[context.dataIndex];
-                    const upper = qsSubjectDetailsChart.$upperSeries?.[context.dataIndex];
-                    return typeof lower === 'number' ? 'Pozycja: ' + formatQSSubjectBand(lower, upper) : 'Brak danych';
+                    if (qsSubjectDetailsChart.$mode === 'position') {
+                      if (context.datasetIndex !== 0) return null;
+                      const snapshot = qsSubjectDetailsChart.$positionSnapshots?.[context.dataIndex];
+                      return typeof snapshot?.lower === 'number' ? 'Pozycja: ' + snapshot.raw : 'Brak danych';
+                    }
+                    return typeof context.parsed.y === 'number'
+                      ? qsSubjectDetailsChart.$metricLabel + ': ' + formatQSSubjectScore(context.parsed.y)
+                      : 'Brak danych';
                   }
                 }
               }
@@ -1453,40 +1659,76 @@ document.addEventListener('DOMContentLoaded', function () {
             scales: {
               x: { grid: { display: false }, ticks: { color: '#475569', font: { weight: '600' } } },
               y: {
-                reverse: true,
                 grid: { color: 'rgba(148,163,184,0.2)' },
-                ticks: { color: '#475569', callback: (value) => Math.round(value) },
-                title: { display: true, text: 'Pozycja (niższa wartość = lepiej)' }
+                ticks: { color: '#475569' },
+                title: { display: true, text: '' }
               }
             }
           }
         });
       }
 
-      qsSubjectDetailsChart.data.labels = qsSubjectData.years;
-      qsSubjectDetailsChart.$lowerSeries = lowerSeries;
-      qsSubjectDetailsChart.$upperSeries = upperSeries;
-      qsSubjectDetailsChart.data.datasets = [
-        {
-          label: 'Początek przedziału', data: lowerSeries, borderColor: '#4f46e5',
-          backgroundColor: 'rgba(79,70,229,0.13)', fill: '+1', pointBackgroundColor: '#4f46e5',
-          pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4, pointHoverRadius: 6,
-          borderWidth: 2.5, tension: 0.2, spanGaps: false
-        },
-        {
-          label: 'Koniec przedziału', data: upperSeries, borderColor: 'rgba(79,70,229,0.55)',
-          backgroundColor: 'transparent', fill: false, pointBackgroundColor: '#a5b4fc',
-          pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4, pointHoverRadius: 6,
-          borderWidth: 2, borderDash: [6, 4], tension: 0.2, spanGaps: false
-        }
-      ];
-      const numericValues = lowerSeries.concat(upperSeries).filter((value) => typeof value === 'number');
-      const minValue = numericValues.length ? Math.min(...numericValues) : 1;
-      const maxValue = numericValues.length ? Math.max(...numericValues) : 600;
-      const padding = Math.max(Math.ceil((maxValue - minValue) * 0.1), 10);
+      qsSubjectDetailsChart.data.labels = qsSubjectDetailsYears;
+      qsSubjectDetailsChart.$mode = isPosition ? 'position' : 'metric';
+      qsSubjectDetailsChart.$metricLabel = metricLabel;
+      qsSubjectDetailsChart.$positionSnapshots = positionSnapshots;
       const yAxis = qsSubjectDetailsChart.options.scales.y;
-      yAxis.suggestedMin = Math.max(1, minValue - padding);
-      yAxis.suggestedMax = maxValue + padding;
+      delete yAxis.min;
+      delete yAxis.max;
+      delete yAxis.suggestedMin;
+      delete yAxis.suggestedMax;
+
+      if (isPosition) {
+        const lowerSeries = positionSnapshots.map(({ lower }) => lower);
+        const upperSeries = positionSnapshots.map(({ upper }) => upper);
+        qsSubjectDetailsChart.data.datasets = [
+          {
+            label: 'Początek przedziału', data: lowerSeries, borderColor: '#4f46e5',
+            backgroundColor: 'rgba(79,70,229,0.13)', fill: '+1', pointBackgroundColor: '#4f46e5',
+            pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4, pointHoverRadius: 6,
+            borderWidth: 2.5, tension: 0.2, spanGaps: false
+          },
+          {
+            label: 'Koniec przedziału', data: upperSeries, borderColor: 'rgba(79,70,229,0.55)',
+            backgroundColor: 'transparent', fill: false, pointBackgroundColor: '#a5b4fc',
+            pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4, pointHoverRadius: 6,
+            borderWidth: 2, borderDash: [6, 4], tension: 0.2, spanGaps: false
+          }
+        ];
+        const numericValues = lowerSeries.concat(upperSeries).filter((value) => typeof value === 'number');
+        const minValue = numericValues.length ? Math.min(...numericValues) : 1;
+        const maxValue = numericValues.length ? Math.max(...numericValues) : 600;
+        const padding = Math.max(Math.ceil((maxValue - minValue) * 0.1), 10);
+        yAxis.reverse = true;
+        yAxis.suggestedMin = Math.max(1, minValue - padding);
+        yAxis.suggestedMax = maxValue + padding;
+        yAxis.ticks.stepSize = undefined;
+        yAxis.ticks.callback = (value) => Math.round(value);
+        yAxis.title.text = 'Pozycja (niższa wartość = lepiej)';
+      } else {
+        qsSubjectDetailsChart.data.datasets = [{
+          label: metricLabel,
+          data: metricSnapshots.map(({ value }) => value),
+          borderColor: metricColor,
+          backgroundColor: isOverallScore ? 'rgba(5,150,105,0.12)' : 'rgba(8,145,178,0.12)',
+          pointBackgroundColor: metricColor,
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          borderWidth: 2.5,
+          tension: 0.2,
+          spanGaps: false,
+          clip: 8,
+          fill: false
+        }];
+        yAxis.reverse = false;
+        yAxis.min = 0;
+        yAxis.max = 105;
+        yAxis.ticks.stepSize = 10;
+        yAxis.ticks.callback = (value) => value > 100 ? '' : Number(value).toLocaleString('pl-PL');
+        yAxis.title.text = isOverallScore ? 'Wynik ogólny (0–100)' : 'Wynik wskaźnika (0–100)';
+      }
       qsSubjectDetailsChart.update();
       qsSubjectDetailsChart.resize();
     };
@@ -1504,6 +1746,7 @@ document.addEventListener('DOMContentLoaded', function () {
       qsSubjectSelect.value = currentSubject;
       updateQSSubjectChart(currentSubject);
     });
+    qsSubjectDetailsMetricSelect?.addEventListener('change', renderQSSubjectDetails);
     qsSubjectDetailsMethodologyOpen?.addEventListener('click', () => {
       closeInternationalMethodology(qsSubjectDetailsModal, false);
       requestAnimationFrame(() => qsSubjectMethodologyOpenButton?.click());

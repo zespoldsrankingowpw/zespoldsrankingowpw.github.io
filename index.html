@@ -1076,15 +1076,15 @@
         </section>
       </div>
     </div>
-    <div id="qsSubjectDetailsModal" data-methodology-modal class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="qsSubjectDetailsTitle" aria-describedby="qsSubjectDetailsDesc">
+    <div id="qsSubjectDetailsModal" data-methodology-modal class="ranking-details-modal--compact fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="qsSubjectDetailsTitle" aria-describedby="qsSubjectDetailsDesc">
       <div data-methodology-backdrop class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
       <div class="relative z-10 flex min-h-full items-center justify-center p-0 sm:p-4">
         <section class="max-h-screen w-full max-w-6xl overflow-y-auto bg-white shadow-2xl ring-1 ring-slate-900/10 sm:max-h-[94vh] sm:rounded-2xl">
           <header class="sticky top-0 z-10 flex items-start justify-between gap-6 border-b border-slate-200 bg-white/95 p-5 backdrop-blur sm:p-6 md:p-7">
             <div>
-              <p class="text-[11px] font-extrabold uppercase tracking-[0.2em] text-indigo-700">QS World University Rankings by Subject | 2023–2026</p>
+              <p class="text-[11px] font-extrabold uppercase tracking-[0.2em] text-indigo-700">QS World University Rankings by Subject | 2020–2026</p>
               <h2 id="qsSubjectDetailsTitle" class="mt-2 text-xl font-extrabold text-slate-950 sm:text-2xl">Wyniki i pozycje dyscyplin PW</h2>
-              <p id="qsSubjectDetailsDesc" class="mt-2 max-w-3xl text-xs leading-5 text-slate-600 sm:text-sm">Porównaj opublikowaną pozycję lub przedział pozycji Politechniki Warszawskiej w czterech kolejnych edycjach rankingu QS by Subject.</p>
+              <p id="qsSubjectDetailsDesc" class="mt-2 max-w-3xl text-xs leading-5 text-slate-600 sm:text-sm">Porównaj pozycję, wynik ogólny oraz opublikowane wartości pięciu wskaźników PW w edycjach QS by Subject 2020–2026.</p>
             </div>
             <button type="button" data-methodology-close class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-label="Zamknij szczegółowe wyniki QS by Subject">×</button>
           </header>
@@ -1092,35 +1092,34 @@
           <div class="space-y-5 p-5 sm:p-6 md:p-7">
             <section class="grid gap-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-xs leading-5 text-amber-950 sm:grid-cols-[1.35rem_1fr]" aria-label="Informacja o interpretacji pozycji QS by Subject">
               <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-amber-700"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.7 2.6 17a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 3.7a2 2 0 0 0-3.4 0Z"/></svg>
-              <div><b>QS publikuje część wyników jako przedziały pozycji.</b> Pasmo na wykresie pokazuje cały opublikowany przedział, a nie estymowaną pozycję PW. Brakujące lata pozostają luką. Nie rekonstruujemy nieudostępnionej punktacji dyscypliny.</div>
+              <div><b>Zakres publicznych danych różni się między edycjami.</b> Pozycje są dostępne do 2026, natomiast odczytane wartości wskaźników obejmują edycje do 2024. Brakujące wyniki pozostają luką; nie rekonstruujemy ani nie interpolujemy nieudostępnionej punktacji.</div>
             </section>
 
-            <section aria-label="Wybór dyscypliny QS by Subject">
+            <section class="rks-details-controls rks-details-controls--indicators" aria-label="Wybór dyscypliny i zakresu danych QS by Subject">
               <label for="qsSubjectDetailsSelect" class="block"><span class="rks-control-label">Obszar lub dyscyplina PW</span><select id="qsSubjectDetailsSelect" class="h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"></select></label>
+              <label for="qsSubjectDetailsMetricSelect" class="block"><span class="rks-control-label">Zakres danych</span><select id="qsSubjectDetailsMetricSelect" class="h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"></select></label>
             </section>
 
             <section class="rks-details-stats" aria-label="Podsumowanie pozycji wybranej dyscypliny QS by Subject">
-              <div><span>Pozycja 2026</span><b id="qsSubjectDetailsLatestPosition">—</b></div>
-              <div><span>Najlepszy wynik</span><b id="qsSubjectDetailsBestPosition">—</b></div>
-              <div><span>Zmiana vs 2023</span><b id="qsSubjectDetailsChange">—</b></div>
-              <div><span>Edycje z wynikiem</span><b id="qsSubjectDetailsCoverage">—</b></div>
+              <div><span id="qsSubjectDetailsStat1Label">Pozycja 2026</span><b id="qsSubjectDetailsLatestPosition">—</b></div>
+              <div><span id="qsSubjectDetailsStat2Label">Najlepszy wynik</span><b id="qsSubjectDetailsBestPosition">—</b></div>
+              <div><span id="qsSubjectDetailsStat3Label">Zmiana</span><b id="qsSubjectDetailsChange">—</b></div>
+              <div><span id="qsSubjectDetailsStat4Label">Edycje z wynikiem</span><b id="qsSubjectDetailsCoverage">—</b></div>
             </section>
 
-            <div class="overflow-x-auto"><div id="qsSubjectDetailsYearCards" class="rks-details-years qs-subject-details-years" role="list"></div></div>
+            <p id="qsSubjectDetailsMetricContext" class="rounded-lg border border-indigo-100 bg-indigo-50 px-4 py-3 text-xs leading-5 text-slate-700"></p>
+            <div class="overflow-x-auto"><div id="qsSubjectDetailsYearCards" class="rks-details-years" role="list"></div></div>
 
             <section class="border-t border-slate-200 pt-5" aria-labelledby="qsSubjectDetailsChartTitle">
               <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
                 <div><h3 id="qsSubjectDetailsChartTitle" class="text-base font-extrabold text-slate-950"></h3><p id="qsSubjectDetailsChartNote" class="mt-1 text-xs leading-5 text-slate-500"></p></div>
-                <div id="qsSubjectDetailsLegend" class="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] font-bold text-slate-600">
-                  <span class="inline-flex items-center gap-2"><i class="h-0.5 w-7 bg-indigo-600"></i>Początek przedziału</span>
-                  <span class="inline-flex items-center gap-2"><i class="h-0.5 w-7 border-t-2 border-dashed border-indigo-400"></i>Koniec przedziału</span>
-                </div>
+                <div id="qsSubjectDetailsLegend" class="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] font-bold text-slate-600"></div>
               </div>
-              <div class="chart-frame chart-frame--rks-details mt-3"><canvas id="chartQSSubjectDetails" role="img" aria-label="Trend pozycji wybranej dyscypliny PW w QS World University Rankings by Subject 2023–2026"></canvas></div>
+              <div class="chart-frame chart-frame--rks-details mt-3"><canvas id="chartQSSubjectDetails" role="img" aria-label="Trend pozycji lub wyniku wybranej dyscypliny PW w QS World University Rankings by Subject 2020–2026"></canvas></div>
             </section>
 
             <footer class="flex flex-col gap-3 border-t border-slate-200 pt-4 text-[11px] leading-5 text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-              <p>Źródło: <a href="https://www.topuniversities.com/subject-rankings" target="_blank" rel="noopener noreferrer" class="font-bold text-indigo-700 underline decoration-indigo-300 underline-offset-2">QS World University Rankings by Subject 2026</a> oraz zestawienia <a href="https://www.pw.edu.pl/aktualnosci/pw-w-rankingu-qs-wur-subject-2026" target="_blank" rel="noopener noreferrer" class="font-bold text-indigo-700 underline decoration-indigo-300 underline-offset-2">Politechniki Warszawskiej</a>.</p>
+              <p>Źródło: archiwalne dane wskaźnikowe QS 2020–2024 oraz <a id="qsSubjectDetailsSourceLink" href="https://www.topuniversities.com/subject-rankings" target="_blank" rel="noopener noreferrer" class="font-bold text-indigo-700 underline decoration-indigo-300 underline-offset-2">QS World University Rankings by Subject 2026</a>; pozycje 2026 potwierdza <a href="https://eng.pw.edu.pl/engpw/News/WUT-in-the-QS-World-University-Rankings-by-Subject-2026" target="_blank" rel="noopener noreferrer" class="font-bold text-indigo-700 underline decoration-indigo-300 underline-offset-2">zestawienie PW</a>.</p>
               <button id="qsSubjectDetailsMethodologyOpen" type="button" class="inline-flex min-h-9 items-center justify-center rounded-lg border border-indigo-200 bg-indigo-50 px-3 text-xs font-bold text-indigo-800 transition hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">Wskaźniki i wagi →</button>
             </footer>
           </div>
@@ -1848,9 +1847,10 @@
     <script src="assets/js/ranking-data.js?v=20260720-engi-subject-indicators"></script>
     <script src="assets/js/perspektywy-indicators.js?v=20260720-engi-subject-indicators"></script>
     <script src="assets/js/rks-indicators.js?v=20260720-engi-subject-indicators"></script>
-    <script src="assets/js/engirank-subject-indicators.js?v=20260720-engi-subject-indicators"></script>
+    <script src="assets/js/engirank-subject-indicators.js?v=20260720-qs-subject-results"></script>
+    <script src="assets/js/qs-subject-indicators.js?v=20260720-qs-subject-results"></script>
     <script src="assets/js/perspektywy-methodology.js?v=20260720-engi-subject-indicators"></script>
-    <script src="assets/js/dashboard.js?v=20260720-ranking-chart-padding"></script>
+    <script src="assets/js/dashboard.js?v=20260720-qs-subject-results"></script>
   </body>
 </html>
 
