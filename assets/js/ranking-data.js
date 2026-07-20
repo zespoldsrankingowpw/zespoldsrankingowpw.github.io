@@ -1,0 +1,1507 @@
+window.RankingData = (() => {
+  'use strict';
+
+  const qsWurDetailsYears = [2024, 2025, 2026];
+
+  const qsWurDetailsData = {
+    'Academic Reputation': { scores: [22.8, 23.3, 28.4], ranks: [382, 380, 442], rankLabels: ['382', '380', '442'] },
+    'Employer Reputation': { scores: [49.8, 51.9, 72.4], ranks: [172, 168, 137], rankLabels: ['172', '168', '137'] },
+    'Faculty Student Ratio': { scores: [38.7, 42.6, 55.7], ranks: [408, 366, 337], rankLabels: ['408', '366', '337'] },
+    'Citations per Faculty': { scores: [4.3, 4.7, 9.5], ranks: [701, 701, 801], rankLabels: ['701+', '701', '801'] },
+    'International Faculty': { scores: [1.8, 2.4, 3.4], ranks: [701, 701, 801], rankLabels: ['701+', '701+', '801+'] },
+    'International Students': { scores: [10.3, 10.3, 17.6], ranks: [701, 701, 771], rankLabels: ['701+', '701', '771'] },
+    'International Research Network': { scores: [9.7, 60.6, 63.8], ranks: [676, 627, 638], rankLabels: ['676', '627', '638'] },
+    'Employment Outcomes': { scores: [11.5, 9.8, 15.9], ranks: [701, 701, 801], rankLabels: ['701+', '701', '801'] },
+    'Sustainability': { scores: [2.1, 1.4, 38.4], ranks: [701, 701, 801], rankLabels: ['701+', '701+', '801+'] },
+    'International Students Diversity': { scores: [null, null, 23.7], ranks: [null, null, 710], rankLabels: [null, null, '710'] },
+    'Overall Score': { scores: [20.7, 23.2, 32.8], ranks: [571, 527, 487], rankLabels: ['=571', '527', '487'] }
+  };
+
+  const qsSubjectData = {
+    "years": [
+      2023,
+      2024,
+      2025,
+      2026
+    ],
+    "subjects": {
+      "Architecture & Built Environment": {
+        "lower": [
+          151,
+          201,
+          201,
+          151
+        ],
+        "upper": [
+          200,
+          240,
+          260,
+          200
+        ]
+      },
+      "Business & Management Studies": {
+        "lower": [
+          551,
+          551,
+          501,
+          501
+        ],
+        "upper": [
+          580,
+          600,
+          550,
+          550
+        ]
+      },
+      "Chemistry": {
+        "lower": [
+          301,
+          301,
+          301,
+          351
+        ],
+        "upper": [
+          350,
+          350,
+          350,
+          400
+        ]
+      },
+      "Computer Science & Information Systems": {
+        "lower": [
+          251,
+          251,
+          201,
+          251
+        ],
+        "upper": [
+          300,
+          300,
+          250,
+          300
+        ]
+      },
+      "Engineering & Technology": {
+        "lower": [
+          231,
+          232,
+          null,
+          231
+        ],
+        "upper": [
+          231,
+          232,
+          null,
+          231
+        ]
+      },
+      "Engineering - Chemical": {
+        "lower": [
+          201,
+          251,
+          201,
+          251
+        ],
+        "upper": [
+          250,
+          300,
+          250,
+          300
+        ]
+      },
+      "Engineering - Civil & Structural": {
+        "lower": [
+          151,
+          null,
+          151,
+          201
+        ],
+        "upper": [
+          200,
+          null,
+          200,
+          275
+        ]
+      },
+      "Engineering - Electrical & Electronic": {
+        "lower": [
+          151,
+          201,
+          151,
+          201
+        ],
+        "upper": [
+          200,
+          250,
+          200,
+          250
+        ]
+      },
+      "Engineering - Mechanical, Aeronautical & Manufacturing": {
+        "lower": [
+          151,
+          151,
+          151,
+          151
+        ],
+        "upper": [
+          200,
+          200,
+          200,
+          200
+        ]
+      },
+      "Materials Science": {
+        "lower": [
+          201,
+          201,
+          201,
+          201
+        ],
+        "upper": [
+          250,
+          250,
+          250,
+          250
+        ]
+      },
+      "Mathematics": {
+        "lower": [
+          301,
+          301,
+          251,
+          251
+        ],
+        "upper": [
+          350,
+          350,
+          300,
+          300
+        ]
+      },
+      "Natural Sciences": {
+        "lower": [
+          275,
+          null,
+          null,
+          350
+        ],
+        "upper": [
+          275,
+          null,
+          null,
+          350
+        ]
+      },
+      "Physics & Astronomy": {
+        "lower": [
+          251,
+          251,
+          251,
+          251
+        ],
+        "upper": [
+          300,
+          300,
+          300,
+          300
+        ]
+      }
+    }
+  };
+
+  const rksSubjectData = {
+    "years": [
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025,
+      2026
+    ],
+    "subjects": {
+      "AI & Data Science": {
+        "lower": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          1
+        ],
+        "upper": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          1
+        ],
+        "raw": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          "1",
+          "1"
+        ],
+        "score": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          100,
+          100
+        ]
+      },
+      "Administracja": {
+        "lower": [
+          6,
+          null,
+          null,
+          5,
+          6,
+          7,
+          4
+        ],
+        "upper": [
+          6,
+          null,
+          null,
+          5,
+          6,
+          7,
+          4
+        ],
+        "raw": [
+          "6",
+          null,
+          null,
+          "5",
+          "6",
+          "7",
+          "4"
+        ],
+        "score": [
+          70.5,
+          null,
+          null,
+          81.1,
+          80.8,
+          76.7,
+          84.9
+        ]
+      },
+      "Architektura": {
+        "lower": [
+          1,
+          1,
+          1,
+          3,
+          5,
+          5,
+          5
+        ],
+        "upper": [
+          1,
+          1,
+          1,
+          3,
+          5,
+          5,
+          5
+        ],
+        "raw": [
+          "1",
+          "1",
+          "1",
+          "3=",
+          "5",
+          "5",
+          "5"
+        ],
+        "score": [
+          100,
+          100,
+          100,
+          91.8,
+          87.1,
+          86.2,
+          88.9
+        ]
+      },
+      "Automatyka i robotyka": {
+        "lower": [
+          null,
+          1,
+          1,
+          2,
+          1,
+          3,
+          3
+        ],
+        "upper": [
+          null,
+          1,
+          1,
+          2,
+          1,
+          3,
+          3
+        ],
+        "raw": [
+          null,
+          "1",
+          "1",
+          "2",
+          "1=",
+          "3",
+          "3"
+        ],
+        "score": [
+          null,
+          100,
+          100,
+          97.6,
+          100,
+          90,
+          94.7
+        ]
+      },
+      "Biotechnologia (mgr inż.)": {
+        "lower": [
+          null,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "upper": [
+          null,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "raw": [
+          null,
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1"
+        ],
+        "score": [
+          null,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100
+        ]
+      },
+      "Budownictwo": {
+        "lower": [
+          null,
+          2,
+          1,
+          1,
+          2,
+          3,
+          1
+        ],
+        "upper": [
+          null,
+          2,
+          1,
+          1,
+          2,
+          3,
+          1
+        ],
+        "raw": [
+          null,
+          "2",
+          "1=",
+          "1=",
+          "2=",
+          "3=",
+          "1="
+        ],
+        "score": [
+          null,
+          99,
+          99.5,
+          99.9,
+          98.3,
+          98.1,
+          100
+        ]
+      },
+      "Ekonomia": {
+        "lower": [
+          null,
+          null,
+          22,
+          29,
+          34,
+          31,
+          30
+        ],
+        "upper": [
+          null,
+          null,
+          22,
+          29,
+          34,
+          31,
+          30
+        ],
+        "raw": [
+          null,
+          null,
+          "22",
+          "29=",
+          "34",
+          "31=",
+          "30"
+        ],
+        "score": [
+          null,
+          null,
+          40.8,
+          36,
+          36.6,
+          38.2,
+          37.6
+        ]
+      },
+      "Elektronika i telekomunikacja": {
+        "lower": [
+          null,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2
+        ],
+        "upper": [
+          null,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2
+        ],
+        "raw": [
+          null,
+          "1",
+          "1",
+          "1",
+          "1=",
+          "2",
+          "2"
+        ],
+        "score": [
+          null,
+          100,
+          100,
+          100,
+          99.6,
+          94.6,
+          93.6
+        ]
+      },
+      "Elektrotechnika": {
+        "lower": [
+          null,
+          null,
+          1,
+          1,
+          1,
+          1,
+          3
+        ],
+        "upper": [
+          null,
+          null,
+          1,
+          1,
+          1,
+          1,
+          3
+        ],
+        "raw": [
+          null,
+          null,
+          "1",
+          "1",
+          "1",
+          "1=",
+          "3"
+        ],
+        "score": [
+          null,
+          null,
+          100,
+          100,
+          100,
+          99.5,
+          98.3
+        ]
+      },
+      "Energetyka": {
+        "lower": [
+          null,
+          null,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "upper": [
+          null,
+          null,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "raw": [
+          null,
+          null,
+          "1",
+          "1",
+          "1",
+          "1",
+          "1"
+        ],
+        "score": [
+          null,
+          null,
+          100,
+          100,
+          100,
+          100,
+          100
+        ]
+      },
+      "Fizyka techniczna": {
+        "lower": [
+          null,
+          null,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "upper": [
+          null,
+          null,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "raw": [
+          null,
+          null,
+          "2",
+          "2",
+          "2",
+          "2",
+          "2"
+        ],
+        "score": [
+          null,
+          null,
+          96.6,
+          98.7,
+          93.9,
+          90.4,
+          92.9
+        ]
+      },
+      "Geodezja i kartografia": {
+        "lower": [
+          null,
+          null,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "upper": [
+          null,
+          null,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "raw": [
+          null,
+          null,
+          "1",
+          "1",
+          "1",
+          "1",
+          "1"
+        ],
+        "score": [
+          null,
+          null,
+          100,
+          100,
+          100,
+          100,
+          100
+        ]
+      },
+      "Gospodarka przestrzenna": {
+        "lower": [
+          3,
+          3,
+          null,
+          1,
+          4,
+          5,
+          1
+        ],
+        "upper": [
+          3,
+          3,
+          null,
+          1,
+          4,
+          5,
+          1
+        ],
+        "raw": [
+          "3",
+          "3",
+          null,
+          "1=",
+          "4",
+          "5",
+          "1="
+        ],
+        "score": [
+          85.2,
+          82.5,
+          null,
+          100,
+          90.9,
+          87.5,
+          99.9
+        ]
+      },
+      "Informatyka (mgr inż.)": {
+        "lower": [
+          null,
+          null,
+          null,
+          1,
+          1,
+          1,
+          1
+        ],
+        "upper": [
+          null,
+          null,
+          null,
+          1,
+          1,
+          1,
+          1
+        ],
+        "raw": [
+          null,
+          null,
+          null,
+          "1",
+          "1",
+          "1",
+          "1"
+        ],
+        "score": [
+          null,
+          null,
+          null,
+          100,
+          100,
+          100,
+          100
+        ]
+      },
+      "Inżynieria biomedyczna": {
+        "lower": [
+          null,
+          null,
+          null,
+          1,
+          2,
+          2,
+          2
+        ],
+        "upper": [
+          null,
+          null,
+          null,
+          1,
+          2,
+          2,
+          2
+        ],
+        "raw": [
+          null,
+          null,
+          null,
+          "1",
+          "2=",
+          "2",
+          "2"
+        ],
+        "score": [
+          null,
+          null,
+          null,
+          100,
+          90.4,
+          92.5,
+          96.7
+        ]
+      },
+      "Inżynieria chemiczna": {
+        "lower": [
+          1,
+          null,
+          null,
+          2,
+          2,
+          2,
+          2
+        ],
+        "upper": [
+          1,
+          null,
+          null,
+          2,
+          2,
+          2,
+          2
+        ],
+        "raw": [
+          "1",
+          null,
+          null,
+          "2",
+          "2",
+          "2",
+          "2"
+        ],
+        "score": [
+          100,
+          null,
+          null,
+          89.9,
+          90.5,
+          93.9,
+          92.9
+        ]
+      },
+      "Inżynieria materiałowa": {
+        "lower": [
+          1,
+          null,
+          null,
+          1,
+          1,
+          1,
+          1
+        ],
+        "upper": [
+          1,
+          null,
+          null,
+          1,
+          1,
+          1,
+          1
+        ],
+        "raw": [
+          "1",
+          null,
+          null,
+          "1",
+          "1",
+          "1",
+          "1"
+        ],
+        "score": [
+          100,
+          null,
+          null,
+          100,
+          100,
+          100,
+          100
+        ]
+      },
+      "Inżynieria środowiska": {
+        "lower": [
+          1,
+          null,
+          null,
+          3,
+          2,
+          4,
+          5
+        ],
+        "upper": [
+          1,
+          null,
+          null,
+          3,
+          2,
+          4,
+          5
+        ],
+        "raw": [
+          "1",
+          null,
+          null,
+          "3",
+          "2=",
+          "4=",
+          "5"
+        ],
+        "score": [
+          100,
+          null,
+          null,
+          88.6,
+          85.8,
+          85,
+          84.4
+        ]
+      },
+      "Lotnictwo i kosmonautyka": {
+        "lower": [
+          1,
+          1,
+          null,
+          1,
+          1,
+          1,
+          1
+        ],
+        "upper": [
+          1,
+          1,
+          null,
+          1,
+          1,
+          1,
+          1
+        ],
+        "raw": [
+          "1",
+          "1",
+          null,
+          "1",
+          "1",
+          "1",
+          "1"
+        ],
+        "score": [
+          100,
+          100,
+          null,
+          100,
+          100,
+          100,
+          100
+        ]
+      },
+      "Matematyka": {
+        "lower": [
+          3,
+          null,
+          null,
+          2,
+          2,
+          2,
+          2
+        ],
+        "upper": [
+          3,
+          null,
+          null,
+          2,
+          2,
+          2,
+          2
+        ],
+        "raw": [
+          "3",
+          null,
+          null,
+          "2",
+          "2",
+          "2",
+          "2"
+        ],
+        "score": [
+          75.1,
+          null,
+          null,
+          84.3,
+          87.6,
+          92.9,
+          97.3
+        ]
+      },
+      "Mechanika i budowa maszyn": {
+        "lower": [
+          1,
+          1,
+          null,
+          1,
+          1,
+          1,
+          2
+        ],
+        "upper": [
+          1,
+          1,
+          null,
+          1,
+          1,
+          1,
+          2
+        ],
+        "raw": [
+          "1",
+          "1",
+          null,
+          "1",
+          "1",
+          "1=",
+          "2"
+        ],
+        "score": [
+          100,
+          100,
+          null,
+          100,
+          100,
+          99.7,
+          97.6
+        ]
+      },
+      "Mechatronika": {
+        "lower": [
+          2,
+          2,
+          null,
+          2,
+          2,
+          2,
+          4
+        ],
+        "upper": [
+          2,
+          2,
+          null,
+          2,
+          2,
+          2,
+          4
+        ],
+        "raw": [
+          "2",
+          "2",
+          null,
+          "2",
+          "2",
+          "2=",
+          "4"
+        ],
+        "score": [
+          85,
+          91.4,
+          null,
+          88.9,
+          90.6,
+          85.7,
+          85.2
+        ]
+      },
+      "Ochrona środowiska": {
+        "lower": [
+          4,
+          8,
+          null,
+          8,
+          7,
+          7,
+          6
+        ],
+        "upper": [
+          4,
+          8,
+          null,
+          8,
+          7,
+          7,
+          6
+        ],
+        "raw": [
+          "4",
+          "8",
+          null,
+          "8",
+          "7=",
+          "7",
+          "6"
+        ],
+        "score": [
+          82.6,
+          76.5,
+          null,
+          79.1,
+          80.5,
+          83.8,
+          93.2
+        ]
+      },
+      "Technologia chemiczna": {
+        "lower": [
+          1,
+          1,
+          null,
+          1,
+          1,
+          4,
+          3
+        ],
+        "upper": [
+          1,
+          1,
+          null,
+          1,
+          1,
+          4,
+          3
+        ],
+        "raw": [
+          "1",
+          "1",
+          null,
+          "1=",
+          "1=",
+          "4",
+          "3"
+        ],
+        "score": [
+          100,
+          100,
+          null,
+          100,
+          100,
+          95.8,
+          94.5
+        ]
+      },
+      "Transport": {
+        "lower": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "upper": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "raw": [
+          "1",
+          "1",
+          "1",
+          "1",
+          "1=",
+          "1",
+          "1"
+        ],
+        "score": [
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100
+        ]
+      },
+      "Zarządzanie": {
+        "lower": [
+          null,
+          null,
+          null,
+          5,
+          6,
+          7,
+          11
+        ],
+        "upper": [
+          null,
+          null,
+          null,
+          5,
+          6,
+          7,
+          11
+        ],
+        "raw": [
+          null,
+          null,
+          null,
+          "5=",
+          "6=",
+          "7=",
+          "11"
+        ],
+        "score": [
+          null,
+          null,
+          null,
+          81.4,
+          83.4,
+          82.7,
+          75.9
+        ]
+      },
+      "Zarządzanie i inżynieria produkcji": {
+        "lower": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "upper": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "raw": [
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1=",
+          "1"
+        ],
+        "score": [
+          100,
+          100,
+          100,
+          100,
+          100,
+          99.6,
+          100
+        ]
+      }
+    }
+  };
+
+  const qsYears = [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027];
+
+  const qsMin = [521, 511, 501, 521, 571, 527, 487, 504];
+
+  const qsMax = [530, 520, 510, 530, 571, 527, 487, 504];
+
+  const theSubjectData = {
+    "years": [
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025,
+      2026
+    ],
+    "subjects": {
+      "Biznes i Ekonomia (Business and Economics)": {
+        "lower": [
+          null,
+          null,
+          null,
+          801,
+          801,
+          801,
+          801
+        ],
+        "upper": [
+          null,
+          null,
+          null,
+          801,
+          801,
+          801,
+          1000
+        ]
+      },
+      "Informatyka (Computer Science)": {
+        "lower": [
+          501,
+          501,
+          601,
+          601,
+          601,
+          601,
+          601
+        ],
+        "upper": [
+          501,
+          501,
+          601,
+          601,
+          601,
+          601,
+          800
+        ]
+      },
+      "Inżynieria (Engineering)": {
+        "lower": [
+          601,
+          601,
+          801,
+          801,
+          801,
+          801,
+          1001
+        ],
+        "upper": [
+          601,
+          601,
+          801,
+          801,
+          801,
+          801,
+          1250
+        ]
+      },
+      "Nauki ścisłe (Physical Sciences)": {
+        "lower": [
+          601,
+          801,
+          801,
+          1001,
+          1001,
+          1001,
+          801
+        ],
+        "upper": [
+          601,
+          801,
+          801,
+          1001,
+          1001,
+          1001,
+          1000
+        ]
+      },
+      "Nauki społeczne (Social Sciences)": {
+        "lower": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          801
+        ],
+        "upper": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1000
+        ]
+      }
+    }
+  };
+
+  const grasSubjectData = {
+    years: [2020, 2021, 2022, 2023, 2024, 2025],
+    subjects: {
+      "Elektrotechnika i elektronika (Electrical & Electronic Engineering)": {
+        lower: [301, 401, 401, null, null, null],
+        upper: [400, 500, 500, null, null, null]
+      },
+      "Energetyka (Energy Science & Engineering)": {
+        lower: [301, null, null, null, null, null],
+        upper: [400, null, null, null, null, null]
+      },
+      "Fizyka (Physics)": {
+        lower: [301, 301, 201, 301, 401, 401],
+        upper: [400, 400, 300, 400, 500, 500]
+      },
+      "Inżynieria mechaniczna (Mechanical Engineering)": {
+        lower: [201, 301, null, null, 301, null],
+        upper: [300, 400, null, null, 400, null]
+      },
+      "Inżynieria metalurgiczna (Metallurgical Engineering)": {
+        lower: [null, null, null, null, 151, 101],
+        upper: [null, null, null, null, 200, 150]
+      },
+      "Matematyka (Mathematics)": {
+        lower: [301, null, null, null, null, null],
+        upper: [400, null, null, null, null, null]
+      },
+      "Nauka i technologie instrumentacji (Instruments Science & Technology)": {
+        lower: [151, 151, 101, null, 201, 201],
+        upper: [200, 200, 150, null, 300, 300]
+      },
+      "Telekomunikacja (Telecommunication Engineering)": {
+        lower: [201, null, null, null, null, null],
+        upper: [300, null, null, null, null, null]
+      }
+    }
+  };
+
+  const engiSubjectData = {
+    years: [2023, 2024, 2025],
+    subjects: {
+      "Inżynieria chemiczna (Chemical Engineering)": {
+        lower: [77, 49, 56],
+        upper: [77, 49, 56],
+        raw: ["77", "49", "56"],
+        score: [63.13, 100.0, 100.0]
+      },
+      "Inżynieria lądowa (Civil Engineering)": {
+        lower: [77, 70, 84],
+        upper: [77, 70, 84],
+        raw: ["77", "70", "84"],
+        score: [58.87, 85.71, 100.0]
+      },
+      "Elektronika, elektrotechnika i inżynieria informacyjna": {
+        lower: [95, 71, 62],
+        upper: [95, 71, 62],
+        raw: ["95", "71", "62"],
+        score: [64.72, 25.0, 62.5]
+      },
+      "Inżynieria środowiska (Environmental engineering)": {
+        lower: [74, 86, 130],
+        upper: [74, 86, 130],
+        raw: ["74", "86", "130"],
+        score: [60.85, 26.67, 0.0]
+      },
+      "Inżynieria materiałowa (Materials Engineering)": {
+        lower: [95, 47, 50],
+        upper: [95, 47, 50],
+        raw: ["95", "47", "50"],
+        score: [65.95, 50.0, 50.0]
+      },
+      "Inżynieria mechaniczna (Mechanical engineering)": {
+        lower: [63, 76, 80],
+        upper: [63, 76, 80],
+        raw: ["63", "76", "80"],
+        score: [72.77, 50.0, 62.5]
+      },
+      "Inżynieria medyczna": {
+        lower: [63, 59, 73],
+        upper: [63, 59, 73],
+        raw: ["63", "59", "73"],
+        score: [71.63, 0.0, 0.0]
+      }
+    }
+  };
+
+  const theYears = [2020, 2021, 2022, 2023, 2024, 2025, 2026];
+
+  const theLower = [1001, 1001, 1201, 1201, 1201, 1201, 1201];
+
+  const theUpper = [1001, 1001, 1201, 1500, 1500, 1500, 1500];
+
+  const arwuYears = [2020, 2021, 2022, 2023, 2024, 2025];
+
+  const arwuLower = [801, 901, 901, 901, 901, 901];
+
+  const arwuUpper = [900, 1000, 1000, 1000, 1000, 1000];
+
+  const perspektywyYears = [2020, 2021, 2022, 2023, 2024, 2025, 2026];
+
+  const perspektywyPositions = [3, 3, 3, 3, 3, 3, 3];
+
+  const perspektywyScores = [78.9, 83.4, 84, 88, 85, 89.9, 92.3];
+
+  const engiYears = [2023, 2024, 2025];
+
+  const engiPositions = [69, 64, 72];
+
+  const engiScores = [60.17, 62.2, 63.82];
+
+  return Object.freeze({
+    qsWurDetailsYears,
+    qsWurDetailsData,
+    qsSubjectData,
+    rksSubjectData,
+    qsYears,
+    qsMin,
+    qsMax,
+    theSubjectData,
+    grasSubjectData,
+    engiSubjectData,
+    theYears,
+    theLower,
+    theUpper,
+    arwuYears,
+    arwuLower,
+    arwuUpper,
+    perspektywyYears,
+    perspektywyPositions,
+    perspektywyScores,
+    engiYears,
+    engiPositions,
+    engiScores
+  });
+})();
