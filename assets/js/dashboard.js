@@ -109,6 +109,20 @@ document.addEventListener('DOMContentLoaded', function () {
   const qsSubjectDetailsMethodologyOpen = document.getElementById('qsSubjectDetailsMethodologyOpen');
   const qsSubjectMethodologyOpenButton = document.getElementById('qsSubjectMethodologyOpen');
   let renderQSSubjectDetails = () => {};
+  const grasDetailsModal = document.getElementById('grasDetailsModal');
+  const grasDetailsSubjectSelect = document.getElementById('grasDetailsSubjectSelect');
+  const grasDetailsLatestPosition = document.getElementById('grasDetailsLatestPosition');
+  const grasDetailsLastListed = document.getElementById('grasDetailsLastListed');
+  const grasDetailsBestPosition = document.getElementById('grasDetailsBestPosition');
+  const grasDetailsCoverage = document.getElementById('grasDetailsCoverage');
+  const grasDetailsYearCards = document.getElementById('grasDetailsYearCards');
+  const grasDetailsMissingNotice = document.getElementById('grasDetailsMissingNotice');
+  const grasDetailsChartTitle = document.getElementById('grasDetailsChartTitle');
+  const grasDetailsChartNote = document.getElementById('grasDetailsChartNote');
+  const grasDetailsCanvas = document.getElementById('chartGrasDetails');
+  const grasDetailsMethodologyOpen = document.getElementById('grasDetailsMethodologyOpen');
+  const grasMethodologyOpenButton = document.getElementById('grasMethodologyOpen');
+  let renderGrasDetails = () => {};
   const rksDetailsModal = document.getElementById('rksDetailsModal');
   const rksDetailsSubjectSelect = document.getElementById('rksDetailsSubjectSelect');
   const rksDetailsModeControl = document.getElementById('rksDetailsModeControl');
@@ -939,6 +953,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (modal.id === 'arwuDetailsModal') requestAnimationFrame(renderArwuDetails);
       if (modal.id === 'qsWurDetailsModal') requestAnimationFrame(renderQsWurDetails);
       if (modal.id === 'qsSubjectDetailsModal') requestAnimationFrame(renderQSSubjectDetails);
+      if (modal.id === 'grasDetailsModal') requestAnimationFrame(renderGrasDetails);
       if (modal.id === 'perspektywyDetailsModal') requestAnimationFrame(renderPerspektywyDetails);
       if (modal.id === 'rksDetailsModal') requestAnimationFrame(renderRKSDetails);
       if (modal.id === 'engiSubjectDetailsModal') requestAnimationFrame(renderEngiSubjectDetails);
@@ -1831,9 +1846,11 @@ document.addEventListener('DOMContentLoaded', function () {
   if (grasCanvas && grasSelect && grasSubjectData && grasSubjectData.subjects) {
     const subjectNames = Object.keys(grasSubjectData.subjects).sort((a, b) => a.localeCompare(b, 'pl-PL'));
 
-    grasSelect.innerHTML = subjectNames
+    const grasSubjectOptions = subjectNames
       .map((subject) => `<option value="${subject}">${subject}</option>`)
       .join('');
+    grasSelect.innerHTML = grasSubjectOptions;
+    if (grasDetailsSubjectSelect) grasDetailsSubjectSelect.innerHTML = grasSubjectOptions;
 
     let currentSubject = grasSelect.value || subjectNames[0] || null;
     if (!grasSelect.value && currentSubject) {
@@ -1992,6 +2009,147 @@ document.addEventListener('DOMContentLoaded', function () {
 
          grasNote.textContent = noteText;
       }
+      if (grasDetailsSubjectSelect && grasDetailsSubjectSelect.value !== subjectName) {
+        grasDetailsSubjectSelect.value = subjectName;
+      }
+      if (grasDetailsModal && !grasDetailsModal.classList.contains('hidden')) {
+        renderGrasDetails();
+      }
+    };
+
+    let grasDetailsChart;
+    const formatGrasDetailsBand = (lower, upper) => {
+      if (typeof lower !== 'number') return '—';
+      return typeof upper === 'number' && upper !== lower ? lower + '–' + upper : String(lower);
+    };
+
+    const createGrasDetailsYearCard = (year, lower, upper) => {
+      const hasPosition = typeof lower === 'number';
+      const card = document.createElement('article');
+      card.className = 'rks-details-year' + (hasPosition ? '' : ' missing');
+      card.setAttribute('role', 'listitem');
+      const yearLabel = document.createElement('div');
+      yearLabel.className = 'year';
+      yearLabel.textContent = year;
+      const position = document.createElement('div');
+      position.className = 'position';
+      position.textContent = formatGrasDetailsBand(lower, upper);
+      const positionLabel = document.createElement('span');
+      positionLabel.className = 'position-label';
+      positionLabel.textContent = hasPosition ? 'pozycja światowa' : 'poza listą';
+      const range = document.createElement('span');
+      range.className = 'score';
+      range.textContent = hasPosition && typeof upper === 'number' && upper !== lower
+        ? (upper - lower + 1) + ' miejsc w przedziale'
+        : (hasPosition ? 'pozycja dokładna' : 'brak opublikowanej pozycji');
+      card.append(yearLabel, position, positionLabel, range);
+      return card;
+    };
+
+    renderGrasDetails = () => {
+      if (!grasDetailsCanvas || !grasDetailsSubjectSelect) return;
+      const subjectName = grasDetailsSubjectSelect.value || currentSubject || subjectNames[0];
+      const data = grasSubjectData.subjects[subjectName];
+      if (!data) return;
+
+      const lowerSeries = Array.isArray(data.lower) ? data.lower.slice() : [];
+      const upperSeries = Array.isArray(data.upper) ? data.upper.slice() : [];
+      const latestIndex = grasSubjectData.years.length - 1;
+      const validIndices = grasSubjectData.years
+        .map((year, index) => index)
+        .filter((index) => typeof lowerSeries[index] === 'number');
+      const lastListedIndex = validIndices.length ? validIndices[validIndices.length - 1] : null;
+      const bestIndex = validIndices.reduce((best, index) => {
+        if (best === null) return index;
+        if (lowerSeries[index] < lowerSeries[best]) return index;
+        if (lowerSeries[index] === lowerSeries[best] && upperSeries[index] < upperSeries[best]) return index;
+        return best;
+      }, null);
+      const bestBand = bestIndex === null ? '—' : formatGrasDetailsBand(lowerSeries[bestIndex], upperSeries[bestIndex]);
+      const bestYears = bestIndex === null
+        ? []
+        : grasSubjectData.years.filter((year, index) => lowerSeries[index] === lowerSeries[bestIndex] && upperSeries[index] === upperSeries[bestIndex]);
+      const latestBand = formatGrasDetailsBand(lowerSeries[latestIndex], upperSeries[latestIndex]);
+      const lastListedBand = lastListedIndex === null ? '—' : formatGrasDetailsBand(lowerSeries[lastListedIndex], upperSeries[lastListedIndex]);
+
+      if (grasDetailsLatestPosition) grasDetailsLatestPosition.textContent = latestBand === '—' ? 'poza listą' : latestBand;
+      if (grasDetailsLastListed) grasDetailsLastListed.textContent = lastListedIndex === null ? '—' : grasSubjectData.years[lastListedIndex] + ' · ' + lastListedBand;
+      if (grasDetailsBestPosition) grasDetailsBestPosition.textContent = bestBand;
+      if (grasDetailsCoverage) grasDetailsCoverage.textContent = validIndices.length + ' / ' + grasSubjectData.years.length;
+      grasDetailsYearCards?.replaceChildren(...grasSubjectData.years.map((year, index) =>
+        createGrasDetailsYearCard(year, lowerSeries[index], upperSeries[index])));
+      grasDetailsMissingNotice?.classList.toggle('hidden', typeof lowerSeries[latestIndex] === 'number');
+
+      const missingYears = grasSubjectData.years.filter((year, index) => typeof lowerSeries[index] !== 'number');
+      if (grasDetailsChartTitle) grasDetailsChartTitle.textContent = subjectName + ' — pozycja 2020–2025';
+      if (grasDetailsChartNote) {
+        grasDetailsChartNote.textContent = 'Najlepszy opublikowany wynik: ' + bestBand
+          + (bestYears.length ? ' (' + bestYears.join(', ') + ')' : '') + '.'
+          + (lastListedIndex === null ? ' Brak opublikowanych pozycji.' : ' Ostatnia obecność: ' + grasSubjectData.years[lastListedIndex] + ', ' + lastListedBand + '.')
+          + (missingYears.length ? ' Poza listą w edycjach: ' + missingYears.join(', ') + '.' : ' Wynik dostępny we wszystkich sześciu edycjach.');
+      }
+      grasDetailsCanvas.setAttribute('aria-label', subjectName + ': przedział pozycji PW w GRAS 2020–2025');
+
+      if (!grasDetailsChart) {
+        grasDetailsChart = new Chart(grasDetailsCanvas, {
+          type: 'line',
+          data: { labels: grasSubjectData.years, datasets: [] },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: (context) => {
+                    if (context.datasetIndex !== 0) return null;
+                    const lower = grasDetailsChart.$lowerSeries?.[context.dataIndex];
+                    const upper = grasDetailsChart.$upperSeries?.[context.dataIndex];
+                    return typeof lower === 'number' ? 'Pozycja: ' + formatGrasDetailsBand(lower, upper) : 'Brak pozycji';
+                  }
+                }
+              }
+            },
+            scales: {
+              x: { grid: { display: false }, ticks: { color: '#475569', font: { weight: '600' } } },
+              y: {
+                reverse: true,
+                grid: { color: 'rgba(148,163,184,0.2)' },
+                ticks: { color: '#475569', callback: (value) => Math.round(value) },
+                title: { display: true, text: 'Pozycja (niższa wartość = lepiej)' }
+              }
+            }
+          }
+        });
+      }
+
+      grasDetailsChart.data.labels = grasSubjectData.years;
+      grasDetailsChart.$lowerSeries = lowerSeries;
+      grasDetailsChart.$upperSeries = upperSeries;
+      grasDetailsChart.data.datasets = [
+        {
+          label: 'Początek przedziału', data: lowerSeries, borderColor: '#e11d48',
+          backgroundColor: 'rgba(225,29,72,0.13)', fill: '+1', pointBackgroundColor: '#e11d48',
+          pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4, pointHoverRadius: 6,
+          borderWidth: 2.5, tension: 0.2, spanGaps: false
+        },
+        {
+          label: 'Koniec przedziału', data: upperSeries, borderColor: 'rgba(225,29,72,0.5)',
+          backgroundColor: 'transparent', fill: false, pointBackgroundColor: '#fda4af',
+          pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4, pointHoverRadius: 6,
+          borderWidth: 2, borderDash: [6, 4], tension: 0.2, spanGaps: false
+        }
+      ];
+      const numericValues = lowerSeries.concat(upperSeries).filter((value) => typeof value === 'number');
+      const minValue = numericValues.length ? Math.min(...numericValues) : 1;
+      const maxValue = numericValues.length ? Math.max(...numericValues) : 500;
+      const padding = Math.max(Math.ceil((maxValue - minValue) * 0.1), 20);
+      const yAxis = grasDetailsChart.options.scales.y;
+      yAxis.suggestedMin = Math.max(1, minValue - padding);
+      yAxis.suggestedMax = maxValue + padding;
+      grasDetailsChart.update();
+      grasDetailsChart.resize();
     };
 
     if (currentSubject) {
@@ -2001,6 +2159,15 @@ document.addEventListener('DOMContentLoaded', function () {
     grasSelect.addEventListener('change', (event) => {
       currentSubject = event.target.value;
       updateGRASChart(currentSubject);
+    });
+    grasDetailsSubjectSelect?.addEventListener('change', (event) => {
+      currentSubject = event.target.value;
+      grasSelect.value = currentSubject;
+      updateGRASChart(currentSubject);
+    });
+    grasDetailsMethodologyOpen?.addEventListener('click', () => {
+      closeInternationalMethodology(grasDetailsModal, false);
+      requestAnimationFrame(() => grasMethodologyOpenButton?.click());
     });
   }
 
