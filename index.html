@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
-    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260720-arwu-details" />
+    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260720-arwu-methodology" />
   </head>
   <body id="top" class="bg-gray-50 text-gray-900">
     <a href="#main-content" class="skip-link sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-slate-950 focus:px-4 focus:py-3 focus:text-sm focus:font-bold focus:text-white">Przejdź do głównej treści</a>
@@ -1395,25 +1395,77 @@
 
     <div id="arwuMethodologyModal" data-methodology-modal class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="arwuMethodologyTitle" aria-describedby="arwuMethodologyDesc">
       <div data-methodology-backdrop class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
-      <div class="relative z-10 flex min-h-full items-center justify-center p-4">
-        <section class="max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[28px] bg-white shadow-2xl ring-1 ring-slate-900/10">
-          <div class="flex items-start justify-between gap-6 border-b border-slate-200 p-6 md:p-8">
-            <div><p class="text-xs font-bold uppercase tracking-[0.24em] text-rose-700">Metodyka ARWU 2025</p><h2 id="arwuMethodologyTitle" class="mt-2 text-2xl font-extrabold text-slate-950">Jak Lista Szanghajska ocenia całą uczelnię?</h2><p id="arwuMethodologyDesc" class="mt-3 max-w-3xl text-sm leading-6 text-slate-600">ARWU mierzy przede wszystkim skalę, jakość i prestiż dorobku badawczego instytucji, wykorzystując dane o nagrodach, najczęściej cytowanych badaczach i publikacjach.</p></div>
+      <div class="relative z-10 flex min-h-full items-center justify-center p-0 sm:p-4">
+        <section class="rks-explorer-modal max-h-screen w-full max-w-6xl overflow-y-auto bg-white shadow-2xl ring-1 ring-slate-900/10 sm:max-h-[94vh] sm:rounded-2xl">
+          <header class="rks-explorer-header flex items-start justify-between gap-6 border-b border-slate-200 bg-white p-5 sm:p-6 md:p-7">
+            <div>
+              <p class="text-[11px] font-extrabold uppercase tracking-[0.2em] text-rose-700">Academic Ranking of World Universities | metodyka 2025</p>
+              <h2 id="arwuMethodologyTitle" class="mt-2 text-xl font-extrabold text-slate-950 sm:text-2xl">Jak ARWU ocenia całą uczelnię?</h2>
+              <p id="arwuMethodologyDesc" class="mt-2 max-w-3xl text-xs leading-5 text-slate-600 sm:text-sm">Sześć wskaźników opisuje nagrody naukowe, najbardziej wpływowych badaczy, publikacje oraz wynik przeliczony na wielkość kadry.</p>
+            </div>
             <button data-methodology-close type="button" class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500" aria-label="Zamknij modal metodyki ARWU">×</button>
-          </div>
-          <div class="space-y-6 p-6 md:p-8">
-            <section class="rounded-3xl border border-slate-200 bg-slate-50 p-4 md:p-5"><div class="mb-3 flex flex-wrap items-end justify-between gap-3"><div><h3 class="text-base font-extrabold text-slate-950">ARWU 2025 — sześć wskaźników</h3><p class="mt-1 text-xs leading-5 text-slate-500">Wynik każdego wskaźnika jest odnoszony do wyniku lidera, a następnie ważony i sumowany.</p></div><p class="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-600 ring-1 ring-slate-200">Razem 100%</p></div>
-              <div class="flex h-16 overflow-hidden rounded-2xl bg-white shadow-inner ring-1 ring-slate-200"><div class="flex items-center justify-center bg-rose-500 text-[10px] font-bold text-white" style="width:10%" title="Alumni — 10%">10%</div><div class="flex items-center justify-center bg-red-700 text-[10px] font-bold text-white" style="width:20%" title="Award — 20%">20%</div><div class="flex items-center justify-center bg-orange-600 text-[10px] font-bold text-white" style="width:20%" title="HiCi — 20%">20%</div><div class="flex items-center justify-center bg-amber-500 text-[10px] font-bold text-white" style="width:20%" title="Nature & Science — 20%">20%</div><div class="flex items-center justify-center bg-indigo-700 text-[10px] font-bold text-white" style="width:20%" title="PUB — 20%">20%</div><div class="flex items-center justify-center bg-slate-700 text-[10px] font-bold text-white" style="width:10%" title="PCP — 10%">10%</div></div>
-              <div class="mt-4 grid gap-2 text-[11px] text-slate-600 sm:grid-cols-2 lg:grid-cols-3"><span><b class="text-rose-600">■</b> Absolwenci z Nobelami/Fieldsami 10%</span><span><b class="text-red-700">■</b> Kadra z Nobelami/Fieldsami 20%</span><span><b class="text-orange-600">■</b> Highly Cited Researchers 20%</span><span><b class="text-amber-600">■</b> Nature &amp; Science 20%</span><span><b class="text-indigo-700">■</b> Publikacje WoS 20%</span><span><b class="text-slate-700">■</b> Wynik per capita 10%</span></div>
+          </header>
+
+          <div class="p-5 sm:p-6 md:p-7">
+            <section class="rks-subject-bar" aria-label="Podsumowanie metodyki ARWU 2025">
+              <div>
+                <span class="rks-control-label">Ranking instytucjonalny</span>
+                <h3 class="text-base font-extrabold text-slate-950">ARWU 2025</h3>
+                <p class="mt-2 text-xs leading-5 text-slate-600">Ranking badawczy oparty na zewnętrznych danych o osiągnięciach naukowych. Nie ocenia bezpośrednio jakości dydaktyki, opinii studentów ani zatrudnialności absolwentów.</p>
+              </div>
+              <div class="rks-profile-facts" aria-label="Najważniejsze fakty o metodologii ARWU">
+                <div class="rks-profile-fact"><b>ARWU 2025</b><span>edycja</span></div>
+                <div class="rks-profile-fact"><b id="arwuMethodologyIndicatorCount">6</b><span>wskaźników</span></div>
+                <div class="rks-profile-fact"><b>1000</b><span>opublikowanych uczelni</span></div>
+                <div class="rks-profile-fact"><b>901–1000</b><span>pozycja PW 2025</span></div>
+              </div>
             </section>
-            <section class="grid gap-4 lg:grid-cols-2" aria-label="Definicje wskaźników ARWU 2025"><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-rose-700">Alumni — 10%</h4><p class="mt-3 text-xs leading-5 text-slate-600"><b>Absolwenci z Nobelami i Medalami Fieldsa.</b> Wskaźnik liczy absolwentów uczelni, którzy zdobyli Nagrodę Nobla lub Medal Fieldsa. Nowsze wyróżnienia mają większą wagę niż starsze, a w przypadku studiów ukończonych w więcej niż jednej instytucji punkty są dzielone proporcjonalnie.</p></section><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-red-700">Award — 20%</h4><p class="mt-3 text-xs leading-5 text-slate-600"><b>Kadra z Nobelami i Medalami Fieldsa.</b> Obejmuje pracowników uczelni, którzy otrzymali te wyróżnienia jako członkowie kadry. Podobnie jak w Alumni, nowsze nagrody są ważone mocniej, a punkty bywają dzielone przy wielokrotnych afiliacjach.</p></section><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-orange-700">HiCi — 20%</h4><p class="mt-3 text-xs leading-5 text-slate-600"><b>Highly Cited Researchers.</b> Mierzy liczbę naukowców z uczelni ujętych na liście najczęściej cytowanych badaczy Clarivate. Wskaźnik pokazuje koncentrację badaczy o bardzo wysokim wpływie cytowań.</p></section><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-amber-700">N&amp;S — 20%</h4><p class="mt-3 text-xs leading-5 text-slate-600"><b>Publikacje w „Nature” i „Science”.</b> Liczona jest liczba artykułów opublikowanych w tych dwóch najbardziej prestiżowych czasopismach naukowych. Dla uczelni wyspecjalizowanych w humanistyce i naukach społecznych ta waga może być redystrybuowana na inne wskaźniki.</p></section><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-indigo-700">PUB — 20%</h4><p class="mt-3 text-xs leading-5 text-slate-600"><b>Publikacje indeksowane w Web of Science.</b> Obejmuje łączną liczbę prac zarejestrowanych w Science Citation Index Expanded oraz Social Sciences Citation Index. To wskaźnik skali dorobku publikacyjnego uczelni.</p></section><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-slate-700">PCP — 10%</h4><p class="mt-3 text-xs leading-5 text-slate-600"><b>Per Capita Performance.</b> Jest to wynik skorygowany o wielkość uczelni: zagregowany rezultat pięciu poprzednich wskaźników dzielony przez liczbę etatowych pracowników akademickich. Pokazuje efektywność badawczą w przeliczeniu na skalę instytucji.</p></section></section>
-            <section class="grid gap-4 lg:grid-cols-2"><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-rose-700">Dobór uczelni do ARWU</h4><p class="mt-3 text-xs leading-5 text-slate-600">Do analizy trafiają uczelnie związane z laureatami najważniejszych nagród, Highly Cited Researchers, publikacjami w Nature lub Science albo znaczącym wolumenem publikacji w indeksach SCIE i SSCI. Publikowany jest top 1000.</p></section><section class="rounded-2xl border border-slate-200 bg-white p-4"><h4 class="text-sm font-extrabold text-orange-700">Charakter ARWU</h4><p class="mt-3 text-xs leading-5 text-slate-600">Ranking opiera się na danych zewnętrznych i jest skoncentrowany na badaniach. Nie mierzy bezpośrednio jakości dydaktyki, opinii studentów ani zatrudnialności absolwentów.</p></section></section>
-            <p class="rounded-2xl bg-rose-50 p-4 text-xs leading-5 text-rose-950">Źródło: <a href="https://www.shanghairanking.com/methodology/arwu/2025" target="_blank" rel="noopener noreferrer" class="font-bold text-rose-700 underline decoration-rose-300 underline-offset-2">ARWU 2025 Methodology</a>.</p>
+
+            <section class="rks-variant-band">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="m7 8 5-5 5 5"/><path d="m7 16 5 5 5-5"/></svg>
+              <div><strong>90% skala działalności + 10% wynik per capita</strong><p>Pięć pierwszych wskaźników mierzy bezwzględną skalę osiągnięć. PCP odnosi ich ważony wynik do liczby pracowników akademickich FTE.</p></div>
+              <span class="rks-variant-tag">5 × WSK + PCP</span>
+            </section>
+
+            <section class="rks-weights" aria-labelledby="arwuMethodologyWeightsTitle">
+              <div class="rks-section-head">
+                <div><h3 id="arwuMethodologyWeightsTitle">Wagi wskaźników ARWU</h3><p>Kliknij segment lub pozycję legendy, aby zobaczyć definicję, zasady naliczania i wynik PW w edycji 2025.</p></div>
+                <span>Suma: 100%</span>
+              </div>
+              <div id="arwuMethodologyWeightChart" class="rks-weight-bar" role="img" aria-label="Rozkład wag sześciu wskaźników ARWU 2025"></div>
+              <div id="arwuMethodologyWeightLegend" class="rks-weight-legend"></div>
+            </section>
+
+            <section class="rks-indicator-explorer" aria-label="Definicje wskaźników ARWU 2025">
+              <nav class="rks-criteria-nav" aria-label="Wskaźniki ARWU">
+                <h3>Wskaźniki</h3>
+                <div id="arwuMethodologyIndicatorButtons" class="rks-criteria-buttons"></div>
+              </nav>
+              <div>
+                <header class="rks-detail-head">
+                  <div><div class="rks-detail-title"><span id="arwuMethodologyDetailSwatch"></span><h3 id="arwuMethodologyDetailTitle"></h3></div><p id="arwuMethodologyDetailCopy"></p></div>
+                  <div id="arwuMethodologyIndicatorWeight" class="rks-criterion-total"></div>
+                </header>
+                <div id="arwuMethodologyIndicatorList"></div>
+              </div>
+            </section>
+
+            <nav class="rks-info-tabs" aria-label="Dodatkowe informacje o metodologii ARWU">
+              <button type="button" class="active" data-arwu-panel="arwuMethodologyEligibilityPanel">Kwalifikacja</button>
+              <button type="button" data-arwu-panel="arwuMethodologyNormalizationPanel">Normalizacja</button>
+              <button type="button" data-arwu-panel="arwuMethodologyPublicationPanel">Publikacja wyników</button>
+              <button type="button" data-arwu-panel="arwuMethodologySourcesPanel">Źródła</button>
+            </nav>
+            <div>
+              <div id="arwuMethodologyEligibilityPanel" class="rks-info-panel">Do analizy trafiają uczelnie związane z laureatami Nagród Nobla lub Medali Fieldsa, badaczami z listy Highly Cited Researchers, artykułami w „Nature” lub „Science”, a także instytucje ze znaczącym wolumenem publikacji w SCIE i SSCI. Ocenianych jest ponad 2500 uczelni, a publikowanych 1000 najlepszych.</div>
+              <div id="arwuMethodologyNormalizationPanel" class="rks-info-panel hidden">Najlepsza uczelnia w każdym wskaźniku otrzymuje 100 punktów, a pozostałe wynik proporcjonalny do lidera. Rozkład danych jest sprawdzany i w razie istotnych zniekształceń korygowany statystycznie. Po zastosowaniu wag wyniki są sumowane; lider wyniku ogólnego otrzymuje 100, a pozostałe uczelnie wynik proporcjonalny. Dla instytucji wyspecjalizowanych w naukach humanistycznych i społecznych wskaźnik N&amp;S jest wyłączany, a jego waga rozdzielana na pozostałe wskaźniki.</div>
+              <div id="arwuMethodologyPublicationPanel" class="rks-info-panel hidden">Dokładne miejsca publikuje się dla pozycji 1–100. Dalej stosowane są pasma 101–150 i 151–200, a następnie pasma po 100 miejsc aż do 901–1000. Uczelnie wewnątrz jednego pasma są prezentowane alfabetycznie, dlatego pasmo nie wskazuje dokładnego miejsca. W 2025 r. PW zajmuje pozycję 901–1000 na świecie i 4–7 w Polsce.</div>
+              <div id="arwuMethodologySourcesPanel" class="rks-info-panel hidden">Nagrody: oficjalne serwisy Nobel Prize i International Mathematical Union; Highly Cited Researchers: Clarivate; publikacje: „Nature”, „Science” i Web of Science; dane kadrowe: krajowe i regionalne instytucje statystyczne. <a href="https://www.shanghairanking.com/methodology/arwu/2025" target="_blank" rel="noopener noreferrer">Otwórz oficjalną metodologię ARWU 2025</a>, <a href="https://www.shanghairanking.com/rankings/arwu/2025.html" target="_blank" rel="noopener noreferrer">wyniki ARWU 2025</a> oraz <a href="https://www.shanghairanking.com/universities/warsaw-university-of-technology" target="_blank" rel="noopener noreferrer">profil Politechniki Warszawskiej</a>.</div>
+            </div>
           </div>
         </section>
       </div>
     </div>
-
     <div id="grasMethodologyModal" data-methodology-modal class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="grasMethodologyTitle" aria-describedby="grasMethodologyDesc">
       <div data-methodology-backdrop class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
       <div class="relative z-10 flex min-h-full items-center justify-center p-4">
@@ -1689,10 +1741,10 @@
         <a href="#top" class="font-bold text-indigo-700 hover:text-indigo-900">Wróć na początek ↑</a>
       </div>
     </footer>
-    <script src="assets/js/ranking-data.js?v=20260720-arwu-details"></script>
-    <script src="assets/js/perspektywy-indicators.js?v=20260720-arwu-details"></script>
-    <script src="assets/js/perspektywy-methodology.js?v=20260720-arwu-details"></script>
-    <script src="assets/js/dashboard.js?v=20260720-arwu-details"></script>
+    <script src="assets/js/ranking-data.js?v=20260720-arwu-methodology"></script>
+    <script src="assets/js/perspektywy-indicators.js?v=20260720-arwu-methodology"></script>
+    <script src="assets/js/perspektywy-methodology.js?v=20260720-arwu-methodology"></script>
+    <script src="assets/js/dashboard.js?v=20260720-arwu-methodology"></script>
   </body>
 </html>
 

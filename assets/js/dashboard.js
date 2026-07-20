@@ -4457,6 +4457,174 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
   renderQsSubjectMethodology();
+  const arwuMethodologyWeightChart = document.getElementById('arwuMethodologyWeightChart');
+  const arwuMethodologyWeightLegend = document.getElementById('arwuMethodologyWeightLegend');
+  const arwuMethodologyIndicatorButtons = document.getElementById('arwuMethodologyIndicatorButtons');
+  const arwuMethodologyDetailSwatch = document.getElementById('arwuMethodologyDetailSwatch');
+  const arwuMethodologyDetailTitle = document.getElementById('arwuMethodologyDetailTitle');
+  const arwuMethodologyDetailCopy = document.getElementById('arwuMethodologyDetailCopy');
+  const arwuMethodologyIndicatorWeight = document.getElementById('arwuMethodologyIndicatorWeight');
+  const arwuMethodologyIndicatorList = document.getElementById('arwuMethodologyIndicatorList');
+  const arwuMethodologyIndicatorCount = document.getElementById('arwuMethodologyIndicatorCount');
+  const arwuMethodologyInfoTabs = [...document.querySelectorAll('[data-arwu-panel]')];
+
+  const arwuMethodologyIndicators = [
+    {
+      code: 'Alumni', dataKey: 'alumni', name: 'Absolwenci z Noblem lub Medalem Fieldsa', weight: 10, color: '#e11d48',
+      source: 'Oficjalne serwisy Nobel Prize i International Mathematical Union.', period: 'nagrody i dyplomy od 1921 r.',
+      description: 'Liczba absolwentów uczelni, którzy otrzymali Nagrodę Nobla lub Medal Fieldsa. Za absolwenta uznaje się osobę, która uzyskała w instytucji stopień licencjacki, magisterski lub doktorski.',
+      calculation: 'Dyplomy uzyskane po 2011 r. mają wagę 100%, a starsze są ważone dekadami aż do 10% dla lat 1921–1930. Każda osoba jest liczona tylko raz.'
+    },
+    {
+      code: 'Award', dataKey: 'award', name: 'Kadra z Noblem lub Medalem Fieldsa', weight: 20, color: '#b91c1c',
+      source: 'Oficjalne serwisy Nobel Prize i International Mathematical Union.', period: 'nagrody od 1931 r.',
+      description: 'Liczba pracowników uczelni, którzy otrzymali Nagrodę Nobla w dziedzinie fizyki, chemii, medycyny lub ekonomii albo Medal Fieldsa.',
+      calculation: 'Nagrody po 2021 r. mają wagę 100%, a starsze są ważone dekadami aż do 10% dla lat 1931–1940. Punkty są dzielone przy wielu afiliacjach i proporcjonalnie przy wspólnie przyznanych Nagrodach Nobla.'
+    },
+    {
+      code: 'HiCi', dataKey: 'hici', name: 'Najczęściej cytowani badacze', weight: 20, color: '#ea580c',
+      source: 'Clarivate Highly Cited Researchers, lista opublikowana w listopadzie 2024 r.', period: 'lista HCR 2024',
+      description: 'Liczba badaczy z główną afiliacją w uczelni, ujętych przez Clarivate wśród Highly Cited Researchers.',
+      calculation: 'Uwzględnia się wyłącznie główne afiliacje. Badacz wskazany przez Clarivate w więcej niż jednej kategorii Essential Science Indicators jest liczony osobno w każdej z nich.'
+    },
+    {
+      code: 'N&S', dataKey: 'ns', name: 'Publikacje w Nature i Science', weight: 20, color: '#d97706',
+      source: 'Serwisy czasopism „Nature” i „Science”.', period: 'artykuły 2020–2024',
+      description: 'Liczba artykułów badawczych opublikowanych w czasopismach „Nature” i „Science” w pięcioletnim oknie.',
+      calculation: 'Waga afiliacji wynosi 100% dla autora korespondencyjnego, 50% dla pierwszego autora, 25% dla kolejnego autora i 10% dla pozostałych. Uwzględniany jest wyłącznie typ dokumentu Article.'
+    },
+    {
+      code: 'PUB', dataKey: 'pub', name: 'Publikacje w SCIE i SSCI', weight: 20, color: '#4f46e5',
+      source: 'Clarivate Web of Science: Science Citation Index Expanded i Social Sciences Citation Index.', period: 'artykuły z 2024 r.',
+      description: 'Łączna liczba publikacji uczelni indeksowanych w SCIE i SSCI w roku objętym pomiarem.',
+      calculation: 'Uwzględniany jest wyłącznie typ dokumentu Article. Publikacje indeksowane w Social Sciences Citation Index otrzymują podwójną wagę.'
+    },
+    {
+      code: 'PCP', dataKey: 'pcp', name: 'Wynik per capita', weight: 10, color: '#475569',
+      source: 'Wyniki pięciu pozostałych wskaźników oraz krajowe lub regionalne dane o kadrze akademickiej FTE.', period: 'dane właściwe dla edycji 2025',
+      description: 'Ważony wynik pięciu pozostałych wskaźników podzielony przez liczbę pracowników akademickich w przeliczeniu na pełne etaty.',
+      calculation: 'Gdy dla kraju nie ma danych o liczbie kadry, ARWU wykorzystuje średnią liczbę pracowników uczelni ze światowego TOP 1000. W edycji 2025 Polska znajduje się w grupie krajów z dostępnymi danymi kadrowymi.'
+    }
+  ];
+
+  const formatArwuMethodologyWeight = (value) => Number(value).toLocaleString('pl-PL') + '%';
+  const formatArwuMethodologyScore = (value) => Number(value).toLocaleString('pl-PL', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  let activeArwuMethodologyIndicator = 'Alumni';
+
+  const renderArwuMethodologyExplorer = () => {
+    if (!arwuMethodologyWeightChart || !arwuMethodologyIndicatorList) return;
+    const activeIndicator = arwuMethodologyIndicators.find((indicator) => indicator.code === activeArwuMethodologyIndicator) || arwuMethodologyIndicators[0];
+
+    const selectIndicator = (code) => {
+      activeArwuMethodologyIndicator = code;
+      renderArwuMethodologyExplorer();
+    };
+
+    const makeIndicatorItem = (indicator, legend = false) => {
+      const active = indicator.code === activeArwuMethodologyIndicator;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = (legend ? 'rks-legend-button' : 'rks-weight-segment') + (active ? ' active' : '');
+      button.setAttribute('aria-label', indicator.code + ', ' + indicator.name + ', ' + formatArwuMethodologyWeight(indicator.weight));
+      if (legend) {
+        const dot = document.createElement('span');
+        dot.className = 'rks-legend-dot';
+        dot.style.background = indicator.color;
+        const name = document.createElement('span');
+        name.className = 'rks-legend-name';
+        name.textContent = indicator.code;
+        const weight = document.createElement('span');
+        weight.className = 'rks-legend-weight';
+        weight.textContent = formatArwuMethodologyWeight(indicator.weight);
+        button.append(dot, name, weight);
+      } else {
+        button.style.width = indicator.weight + '%';
+        button.style.background = indicator.color;
+        button.style.color = '#fff';
+        button.textContent = formatArwuMethodologyWeight(indicator.weight);
+        button.title = indicator.code + ' — ' + indicator.name;
+      }
+      button.addEventListener('click', () => selectIndicator(indicator.code));
+      return button;
+    };
+
+    arwuMethodologyWeightChart.replaceChildren(...arwuMethodologyIndicators.map((indicator) => makeIndicatorItem(indicator)));
+    arwuMethodologyWeightLegend?.replaceChildren(...arwuMethodologyIndicators.map((indicator) => makeIndicatorItem(indicator, true)));
+
+    const indicatorButtons = arwuMethodologyIndicators.map((indicator) => {
+      const active = indicator.code === activeArwuMethodologyIndicator;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'rks-criterion-button' + (active ? ' active' : '');
+      button.setAttribute('aria-pressed', active.toString());
+      const dot = document.createElement('span');
+      dot.className = 'rks-legend-dot';
+      dot.style.background = indicator.color;
+      const name = document.createElement('span');
+      name.className = 'rks-criterion-name';
+      name.textContent = indicator.code + ' — ' + indicator.name;
+      const weight = document.createElement('span');
+      weight.className = 'rks-criterion-weight';
+      weight.textContent = formatArwuMethodologyWeight(indicator.weight);
+      button.append(dot, name, weight);
+      button.addEventListener('click', () => selectIndicator(indicator.code));
+      return button;
+    });
+    arwuMethodologyIndicatorButtons?.replaceChildren(...indicatorButtons);
+
+    if (arwuMethodologyDetailSwatch) arwuMethodologyDetailSwatch.style.background = activeIndicator.color;
+    if (arwuMethodologyDetailTitle) arwuMethodologyDetailTitle.textContent = activeIndicator.code + ' — ' + activeIndicator.name;
+    if (arwuMethodologyDetailCopy) arwuMethodologyDetailCopy.textContent = activeIndicator.description;
+    if (arwuMethodologyIndicatorWeight) {
+      const caption = document.createElement('small');
+      caption.textContent = 'waga wskaźnika';
+      arwuMethodologyIndicatorWeight.replaceChildren(formatArwuMethodologyWeight(activeIndicator.weight), caption);
+    }
+
+    const latestScore = arwuDetailsData?.indicators?.[activeIndicator.dataKey]?.values?.at(-1) ?? 0;
+    const createDetailRow = (titleText, descriptionText, valueText, captionText, tagText, sourceText = '') => {
+      const row = document.createElement('article');
+      row.className = 'rks-indicator';
+      const copy = document.createElement('div');
+      const title = document.createElement('h4');
+      title.textContent = titleText;
+      const description = document.createElement('p');
+      description.textContent = descriptionText;
+      copy.append(title, description);
+      if (sourceText) {
+        const source = document.createElement('span');
+        source.className = 'rks-source-line';
+        source.textContent = sourceText;
+        copy.append(source);
+      }
+      const value = document.createElement('div');
+      value.className = 'rks-indicator-weight';
+      const caption = document.createElement('small');
+      caption.textContent = captionText;
+      value.append(valueText, caption);
+      const tag = document.createElement('span');
+      tag.className = 'rks-indicator-delta';
+      tag.textContent = tagText;
+      row.append(copy, value, tag);
+      return row;
+    };
+
+    arwuMethodologyIndicatorList.replaceChildren(
+      createDetailRow('Źródło danych', activeIndicator.source, formatArwuMethodologyWeight(activeIndicator.weight), 'waga', 'źródło oficjalne', 'ARWU 2025 Methodology'),
+      createDetailRow('Okres i sposób naliczania', activeIndicator.calculation, '2025', 'edycja', activeIndicator.period),
+      createDetailRow('Wynik Politechniki Warszawskiej', 'Wartość opublikowana w profilu PW. Wynik wskaźnika jest znormalizowany względem najlepszej uczelni w tej samej edycji.', formatArwuMethodologyScore(latestScore), 'wynik PW', 'skala 0–100')
+    );
+
+    if (arwuMethodologyIndicatorCount) arwuMethodologyIndicatorCount.textContent = arwuMethodologyIndicators.length;
+  };
+
+  arwuMethodologyInfoTabs.forEach((button) => {
+    button.addEventListener('click', () => {
+      arwuMethodologyInfoTabs.forEach((tab) => tab.classList.toggle('active', tab === button));
+      arwuMethodologyInfoTabs.forEach((tab) => document.getElementById(tab.dataset.arwuPanel)?.classList.toggle('hidden', tab !== button));
+    });
+  });
+  renderArwuMethodologyExplorer();
   const theWurMethodologyPillarChart = document.getElementById('theWurMethodologyPillarChart');
   const theWurMethodologyPillarLegend = document.getElementById('theWurMethodologyPillarLegend');
   const theWurMethodologyPillarButtons = document.getElementById('theWurMethodologyPillarButtons');
