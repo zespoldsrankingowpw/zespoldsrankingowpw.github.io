@@ -4819,28 +4819,184 @@ document.addEventListener('DOMContentLoaded', function () {
   const grasMethodologyLegend = document.getElementById('grasMethodologySubjectLegend');
   const grasMethodologyText = document.getElementById('grasMethodologyProfileText');
   const grasMethodologyBadge = document.getElementById('grasMethodologyProfileBadge');
-  const grasProfiles = {
-    'Elektrotechnika i elektronika (Electrical & Electronic Engineering)': [23.8, 23.8, 4.8, 23.8, 23.8],
-    'Energetyka (Energy Science & Engineering)': [29.4, 29.4, 5.9, 29.4, 5.9],
-    'Fizyka (Physics)': [23.8, 23.8, 4.8, 23.8, 23.8],
-    'Inżynieria mechaniczna (Mechanical Engineering)': [23.8, 23.8, 4.8, 23.8, 23.8],
-    'Inżynieria metalurgiczna (Metallurgical Engineering)': [31.3, 31.3, 6.1, 31.3, 0],
-    'Matematyka (Mathematics)': [29.4, 5.9, 5.9, 29.4, 29.4],
-    'Nauka i technologie instrumentacji (Instruments Science & Technology)': [31.3, 31.3, 6.1, 31.3, 0],
-    'Telekomunikacja (Telecommunication Engineering)': [23.8, 23.8, 4.8, 23.8, 23.8]
-  };
-  const grasLabels = ['Q1', 'CNCI', 'IC', 'Top / TJ', 'Award'];
-  const renderGrasMethodology = () => {
-    if (!grasMethodologySelect || !grasMethodologyBadge || !grasMethodologyChart || !grasMethodologyLegend || !grasMethodologyText) return;
-    const subject = grasMethodologySelect.value;
-    const weights = grasProfiles[subject] || grasProfiles['Telekomunikacja (Telecommunication Engineering)'];
-    renderWeightBar(grasMethodologyChart, grasMethodologyLegend, grasLabels.map((label, i) => ({ label, value: weights[i] })));
-    grasMethodologyBadge.textContent = `${subject || 'GRAS'} — wagi zależne od dyscypliny`;
-    grasMethodologyText.textContent = 'Wykres pokazuje znormalizowany profil wag dla wybranej dyscypliny GRAS. Wagi źródłowe różnią się między obszarami, dlatego na pasku zostały przeliczone do 100% dla czytelnego porównania.';
-  };
-  grasMethodologySelect?.addEventListener('change', renderGrasMethodology);
-  renderGrasMethodology();
+  const grasMethodologyListedTag = document.getElementById('grasMethodologyListedTag');
+  const grasMethodologyWeightTotal = document.getElementById('grasMethodologyWeightTotal');
+  const grasMethodologyIndicatorCount = document.getElementById('grasMethodologyIndicatorCount');
+  const grasMethodologyPublicationThreshold = document.getElementById('grasMethodologyPublicationThreshold');
+  const grasMethodologyLatestPosition = document.getElementById('grasMethodologyLatestPosition');
+  const grasMethodologyGroupButtons = document.getElementById('grasMethodologyGroupButtons');
+  const grasMethodologyDetailSwatch = document.getElementById('grasMethodologyDetailSwatch');
+  const grasMethodologyDetailTitle = document.getElementById('grasMethodologyDetailTitle');
+  const grasMethodologyDetailCopy = document.getElementById('grasMethodologyDetailCopy');
+  const grasMethodologyGroupTotal = document.getElementById('grasMethodologyGroupTotal');
+  const grasMethodologyIndicatorList = document.getElementById('grasMethodologyIndicatorList');
+  const grasMethodologyEligibilityDetail = document.getElementById('grasMethodologyEligibilityDetail');
+  const grasMethodologyPublicationDetail = document.getElementById('grasMethodologyPublicationDetail');
+  const grasMethodologyInfoTabs = [...document.querySelectorAll('[data-gras-panel]')];
 
+  const grasMethodologyProfiles = {
+    'Elektrotechnika i elektronika (Electrical & Electronic Engineering)': { threshold: 150, listed: 500, weights: [40, 20, 40, 10, 40, 80, 100, 50, 20] },
+    'Energetyka (Energy Science & Engineering)': { threshold: 200, listed: 400, weights: [20, 20, 60, 0, 100, 20, 100, 50, 20] },
+    'Fizyka (Physics)': { threshold: 300, listed: 500, weights: [60, 60, 60, 20, 100, 100, 100, 50, 20] },
+    'Inżynieria mechaniczna (Mechanical Engineering)': { threshold: 100, listed: 400, weights: [40, 20, 60, 0, 60, 60, 100, 50, 20] },
+    'Inżynieria metalurgiczna (Metallurgical Engineering)': { threshold: 100, listed: 300, weights: [0, 0, 40, 0, 100, 0, 100, 50, 20] },
+    'Matematyka (Mathematics)': { threshold: 100, listed: 500, weights: [40, 0, 60, 20, 100, 100, 100, 50, 20] },
+    'Nauka i technologie instrumentacji (Instruments Science & Technology)': { threshold: 100, listed: 400, weights: [0, 0, 20, 0, 100, 0, 100, 50, 20] },
+    'Telekomunikacja (Telecommunication Engineering)': { threshold: 100, listed: 400, weights: [40, 20, 20, 20, 100, 60, 100, 50, 20] }
+  };
+
+  const grasMethodologyGroups = [
+    { name: 'Kadra światowej klasy', english: 'World-Class Faculty', color: '#be123c', description: 'Osiągnięcia i role obecnych pracowników: laureaci prestiżowych nagród, Highly Cited Researchers, redaktorzy naczelni oraz władze organizacji naukowych.' },
+    { name: 'Dorobek światowej klasy', english: 'World-Class Output', color: '#ea580c', description: 'Publikacje w najważniejszych czasopismach i konferencjach oraz nagrody otrzymane przez pracowników w czasie afiliacji z uczelnią.' },
+    { name: 'Badania wysokiej jakości', english: 'High-Quality Research', color: '#d97706', description: 'Wolumen artykułów i prac przeglądowych opublikowanych w czasopismach należących do pierwszego kwartyla Journal Impact Factor.' },
+    { name: 'Wpływ badań', english: 'Research Impact', color: '#4f46e5', description: 'Wpływ cytowaniowy publikacji skorygowany o dyscyplinę, rok i typ dokumentu.' },
+    { name: 'Współpraca międzynarodowa', english: 'International Collaboration', color: '#059669', description: 'Udział publikacji, w których adresach autorów występują co najmniej dwa różne kraje.' }
+  ];
+
+  const grasMethodologyIndicators = [
+    { code: 'Laureate', name: 'Laureaci międzynarodowych nagród', group: 'Kadra światowej klasy', source: 'Academic Excellence Survey i oficjalne strony nagród', period: 'nagrody 1981–2024; stan kadry: VI 2025', description: 'Pełnoetatowi pracownicy do 80. roku życia, którzy otrzymali jedną z prestiżowych nagród wskazanych dla dyscypliny. Jedna osoba jest liczona raz w tej samej dyscyplinie.' },
+    { code: 'HCR', name: 'Highly Cited Researchers', group: 'Kadra światowej klasy', source: 'Clarivate Highly Cited Researchers', period: 'lista wydana w I 2025', description: 'Badacze o wyjątkowo wysokim wpływie cytowań. Uwzględniane są tylko główne afiliacje; wyróżnienie w kilku dyscyplinach jest liczone osobno.' },
+    { code: 'Editor', name: 'Redaktorzy naczelni czasopism', group: 'Kadra światowej klasy', source: 'JCR 2023 i oficjalne strony czasopism', period: 'funkcje pełnione w 2025 r.', description: 'Redaktorzy naczelni i ich zastępcy w czasopismach SCIE, SSCI i A&HCI. Funkcja naczelna ma wagę 200%, zastępcy 100%; wyłączono czasopisma Hindawi, MDPI, Frontiers i ESCI.' },
+    { code: 'Leadership', name: 'Władze organizacji naukowych', group: 'Kadra światowej klasy', source: 'Academic Excellence Survey i strony organizacji', period: 'stan na VII 2025', description: 'Pracownicy pełniący funkcje kierownicze w kluczowych organizacjach międzynarodowych. Prezydent i sekretarz generalny mają wagę 200%, a pozostałe wskazane funkcje 100%.' },
+    { code: 'TJ', name: 'Publikacje w topowych źródłach', group: 'Dorobek światowej klasy', source: 'Academic Excellence Survey, Web of Science i strony źródeł', period: 'publikacje 2020–2024', description: 'Artykuły i prace przeglądowe w najważniejszych czasopismach lub konferencjach. Dla informatyki i AI stosuje się także 26 konferencji, a w sześciu dyscyplinach zastępczo czasopisma Q1.' },
+    { code: 'Award', name: 'Międzynarodowe nagrody akademickie', group: 'Dorobek światowej klasy', source: 'Academic Excellence Survey i oficjalne strony nagród', period: 'nagrody 1901–2024', description: 'Nagrody zdobyte przez pracowników pełnoetatowych w czasie afiliacji. Punkty są dzielone między laureatów i afiliacje, a wagi maleją dla starszych nagród: 100% za 2021–2024, 75% za 2011–2020, 50% za 2001–2010 i 25% za 1991–2000.' },
+    { code: 'Q1', name: 'Publikacje w pierwszym kwartylu', group: 'Badania wysokiej jakości', source: 'Clarivate Web of Science i InCites', period: 'publikacje 2020–2024', description: 'Liczba artykułów i prac przeglądowych opublikowanych w czasopismach Q1 według Journal Impact Factor, po przypisaniu kategorii Web of Science do dyscyplin GRAS.' },
+    { code: 'CNCI', name: 'Znormalizowany wpływ cytowań', group: 'Wpływ badań', source: 'Clarivate InCites', period: 'publikacje 2020–2024', description: 'Stosunek liczby cytowań do średniej dla tej samej kategorii, roku i typu dokumentu. Wartość 1 oznacza średnią światową; dla skrajnych wyników stosowany jest limit opisany w zasadach liczenia.' },
+    { code: 'IC', name: 'Współpraca międzynarodowa', group: 'Współpraca międzynarodowa', source: 'Clarivate InCites', period: 'publikacje 2020–2024', description: 'Udział artykułów i prac przeglądowych, których adresy autorów obejmują instytucje z co najmniej dwóch krajów, w całym dorobku uczelni w dyscyplinie.' }
+  ];
+
+  let activeGrasMethodologyGroup = 'Kadra światowej klasy';
+  const formatGrasPosition = (subject) => {
+    const data = grasSubjectData?.subjects?.[subject];
+    const latestIndex = grasSubjectData?.years?.length - 1;
+    if (!data || latestIndex < 0 || data.lower[latestIndex] == null) return 'poza listą';
+    return data.lower[latestIndex] === data.upper[latestIndex] ? '=' + data.lower[latestIndex] : data.lower[latestIndex] + '–' + data.upper[latestIndex];
+  };
+
+  const renderGrasMethodology = () => {
+    if (!grasMethodologySelect || !grasMethodologyChart || !grasMethodologyIndicatorList) return;
+    const subject = grasMethodologySelect.value;
+    const profile = grasMethodologyProfiles[subject] || grasMethodologyProfiles['Telekomunikacja (Telecommunication Engineering)'];
+    const weightedIndicators = grasMethodologyIndicators.map((indicator, index) => ({ ...indicator, weight: profile.weights[index] }));
+    const totalWeight = profile.weights.reduce((sum, weight) => sum + weight, 0);
+    const activeGroup = grasMethodologyGroups.find((group) => group.name === activeGrasMethodologyGroup) || grasMethodologyGroups[0];
+
+    const selectGroup = (groupName) => {
+      activeGrasMethodologyGroup = groupName;
+      renderGrasMethodology();
+    };
+
+    const makeIndicatorItem = (indicator, legend = false) => {
+      const group = grasMethodologyGroups.find((item) => item.name === indicator.group);
+      const active = indicator.group === activeGrasMethodologyGroup;
+      const share = totalWeight ? indicator.weight / totalWeight * 100 : 0;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = (legend ? 'rks-legend-button' : 'rks-weight-segment') + (active ? ' active' : '');
+      button.setAttribute('aria-label', indicator.code + ', waga ' + indicator.weight + ' punktów');
+      if (legend) {
+        const dot = document.createElement('span');
+        dot.className = 'rks-legend-dot';
+        dot.style.background = group.color;
+        const name = document.createElement('span');
+        name.className = 'rks-legend-name';
+        name.textContent = indicator.code;
+        const weight = document.createElement('span');
+        weight.className = 'rks-legend-weight';
+        weight.textContent = indicator.weight + ' pkt';
+        button.append(dot, name, weight);
+      } else {
+        button.style.width = share + '%';
+        button.style.background = group.color;
+        button.style.color = '#fff';
+        button.textContent = share >= 6 ? String(indicator.weight) : '';
+        button.title = indicator.code + ' — waga ' + indicator.weight + ' pkt';
+      }
+      button.addEventListener('click', () => selectGroup(indicator.group));
+      return button;
+    };
+
+    grasMethodologyChart.replaceChildren(...weightedIndicators.map((indicator) => makeIndicatorItem(indicator)));
+    grasMethodologyLegend?.replaceChildren(...weightedIndicators.map((indicator) => makeIndicatorItem(indicator, true)));
+
+    const groupButtons = grasMethodologyGroups.map((group) => {
+      const groupWeight = weightedIndicators.filter((indicator) => indicator.group === group.name).reduce((sum, indicator) => sum + indicator.weight, 0);
+      const active = group.name === activeGrasMethodologyGroup;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'rks-criterion-button' + (active ? ' active' : '');
+      button.setAttribute('aria-pressed', active.toString());
+      const dot = document.createElement('span');
+      dot.className = 'rks-legend-dot';
+      dot.style.background = group.color;
+      const name = document.createElement('span');
+      name.className = 'rks-criterion-name';
+      name.textContent = group.name;
+      const weight = document.createElement('span');
+      weight.className = 'rks-criterion-weight';
+      weight.textContent = groupWeight + ' pkt';
+      button.append(dot, name, weight);
+      button.addEventListener('click', () => selectGroup(group.name));
+      return button;
+    });
+    grasMethodologyGroupButtons?.replaceChildren(...groupButtons);
+
+    const selectedIndicators = weightedIndicators.filter((indicator) => indicator.group === activeGroup.name);
+    const selectedWeight = selectedIndicators.reduce((sum, indicator) => sum + indicator.weight, 0);
+    if (grasMethodologyDetailSwatch) grasMethodologyDetailSwatch.style.background = activeGroup.color;
+    if (grasMethodologyDetailTitle) grasMethodologyDetailTitle.textContent = activeGroup.name + ' (' + activeGroup.english + ')';
+    if (grasMethodologyDetailCopy) grasMethodologyDetailCopy.textContent = activeGroup.description;
+    if (grasMethodologyGroupTotal) {
+      const caption = document.createElement('small');
+      caption.textContent = 'suma wag kategorii';
+      grasMethodologyGroupTotal.replaceChildren(selectedWeight + ' pkt', caption);
+    }
+
+    const rows = selectedIndicators.map((indicator) => {
+      const row = document.createElement('article');
+      row.className = 'rks-indicator';
+      const copy = document.createElement('div');
+      const title = document.createElement('h4');
+      title.textContent = indicator.code + ' — ' + indicator.name;
+      const description = document.createElement('p');
+      description.textContent = indicator.description;
+      const source = document.createElement('span');
+      source.className = 'rks-source-line';
+      source.textContent = indicator.source;
+      copy.append(title, description, source);
+      const weight = document.createElement('div');
+      weight.className = 'rks-indicator-weight';
+      const weightCaption = document.createElement('small');
+      weightCaption.textContent = indicator.weight === 0 ? 'nieaktywny w profilu' : 'waga punktowa';
+      weight.append(String(indicator.weight), weightCaption);
+      const period = document.createElement('span');
+      period.className = 'rks-indicator-delta' + (indicator.weight === 0 ? ' new' : '');
+      period.textContent = indicator.period;
+      row.append(copy, weight, period);
+      return row;
+    });
+    grasMethodologyIndicatorList.replaceChildren(...rows);
+
+    const latestPosition = formatGrasPosition(subject);
+    if (grasMethodologyBadge) grasMethodologyBadge.textContent = 'Wagi punktowe zależne od dyscypliny';
+    if (grasMethodologyText) grasMethodologyText.textContent = 'Szerokości segmentów pokazują udział wskaźnika w sumie wag profilu. Etykiety podają oficjalne wagi punktowe, a nie procenty.';
+    if (grasMethodologyListedTag) grasMethodologyListedTag.textContent = profile.listed + ' UCZELNI';
+    if (grasMethodologyWeightTotal) grasMethodologyWeightTotal.textContent = 'Suma wag: ' + totalWeight + ' pkt';
+    if (grasMethodologyIndicatorCount) grasMethodologyIndicatorCount.textContent = grasMethodologyIndicators.length;
+    if (grasMethodologyPublicationThreshold) grasMethodologyPublicationThreshold.textContent = profile.threshold;
+    if (grasMethodologyLatestPosition) grasMethodologyLatestPosition.textContent = latestPosition;
+    if (grasMethodologyEligibilityDetail) grasMethodologyEligibilityDetail.textContent = 'Próg dla wybranej dyscypliny: ' + profile.threshold + ' publikacji z lat 2020–2024; liczba publikowanych uczelni: ' + profile.listed + '.';
+    if (grasMethodologyPublicationDetail) grasMethodologyPublicationDetail.textContent = 'W tej dyscyplinie publikowanych jest ' + profile.listed + ' uczelni. Pozycja PW w edycji 2025: ' + latestPosition + '.';
+  };
+
+  grasMethodologySelect?.addEventListener('change', renderGrasMethodology);
+  grasMethodologyInfoTabs.forEach((button) => {
+    button.addEventListener('click', () => {
+      grasMethodologyInfoTabs.forEach((tab) => tab.classList.toggle('active', tab === button));
+      grasMethodologyInfoTabs.forEach((tab) => document.getElementById(tab.dataset.grasPanel)?.classList.toggle('hidden', tab !== button));
+    });
+  });
+  renderGrasMethodology();
   const engiInstitutionCriterionChart = document.getElementById('engiInstitutionCriterionChart');
   const engiInstitutionCriterionLegend = document.getElementById('engiInstitutionCriterionLegend');
   const engiInstitutionCriteriaButtons = document.getElementById('engiInstitutionCriteriaButtons');

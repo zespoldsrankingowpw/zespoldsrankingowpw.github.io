@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
-    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260720-arwu-methodology" />
+    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260720-gras-methodology" />
   </head>
   <body id="top" class="bg-gray-50 text-gray-900">
     <a href="#main-content" class="skip-link sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-slate-950 focus:px-4 focus:py-3 focus:text-sm focus:font-bold focus:text-white">Przejdź do głównej treści</a>
@@ -1468,35 +1468,78 @@
     </div>
     <div id="grasMethodologyModal" data-methodology-modal class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="grasMethodologyTitle" aria-describedby="grasMethodologyDesc">
       <div data-methodology-backdrop class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
-      <div class="relative z-10 flex min-h-full items-center justify-center p-4">
-        <section class="max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[28px] bg-white shadow-2xl ring-1 ring-slate-900/10">
-          <div class="flex items-start justify-between gap-6 border-b border-slate-200 p-6 md:p-8">
-            <div><p class="text-xs font-bold uppercase tracking-[0.24em] text-rose-700">Metodyka GRAS 2025</p><h2 id="grasMethodologyTitle" class="mt-2 text-2xl font-extrabold text-slate-950">Jak ShanghaiRanking ocenia dyscypliny?</h2><p id="grasMethodologyDesc" class="mt-3 max-w-3xl text-sm leading-6 text-slate-600">Global Ranking of Academic Subjects ocenia uczelnie w konkretnych dyscyplinach za pomocą obiektywnych wskaźników jakości kadry, publikacji, wpływu badań i współpracy międzynarodowej.</p></div>
+      <div class="relative z-10 flex min-h-full items-center justify-center p-0 sm:p-4">
+        <section class="rks-explorer-modal max-h-screen w-full max-w-6xl overflow-y-auto bg-white shadow-2xl ring-1 ring-slate-900/10 sm:max-h-[94vh] sm:rounded-2xl">
+          <header class="rks-explorer-header flex items-start justify-between gap-6 border-b border-slate-200 bg-white p-5 sm:p-6 md:p-7">
+            <div>
+              <p class="text-[11px] font-extrabold uppercase tracking-[0.2em] text-rose-700">Global Ranking of Academic Subjects | metodyka 2025</p>
+              <h2 id="grasMethodologyTitle" class="mt-2 text-xl font-extrabold text-slate-950 sm:text-2xl">Jak GRAS ocenia dyscypliny?</h2>
+              <p id="grasMethodologyDesc" class="mt-2 max-w-3xl text-xs leading-5 text-slate-600 sm:text-sm">Dziewięć obiektywnych wskaźników w pięciu kategoriach opisuje kadrę światowej klasy, dorobek, jakość, wpływ i umiędzynarodowienie badań.</p>
+            </div>
             <button data-methodology-close type="button" class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500" aria-label="Zamknij modal metodyki GRAS">×</button>
-          </div>
-          <div class="space-y-6 p-6 md:p-8">
-            <section class="rounded-3xl border border-rose-100 bg-rose-50/60 p-4 md:p-5"><div class="grid gap-4 lg:grid-cols-[1.1fr_0.9fr] lg:items-end"><div><h3 class="text-base font-extrabold text-slate-950">GRAS 2025 — dziewięć wskaźników w pięciu kategoriach</h3><p class="mt-1 text-xs leading-5 text-slate-600">Wagi zależą od dyscypliny, dlatego nie istnieje jeden uniwersalny pasek wag dla wszystkich obszarów. Wybór synchronizuje się z wykresem GRAS.</p></div><label for="grasMethodologySubjectSelect" class="block"><span class="text-xs font-semibold uppercase tracking-widest text-slate-500">Dyscyplina</span><select id="grasMethodologySubjectSelect" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-rose-500 focus:ring-rose-500"></select></label></div>
-              <p id="grasMethodologyProfileBadge" class="mt-4 inline-flex rounded-full bg-white px-3 py-1 text-xs font-bold text-rose-700 ring-1 ring-rose-100">Wagi zależne od dyscypliny</p>
-              <div class="mt-4 rounded-2xl border border-white bg-white p-4 shadow-inner ring-1 ring-rose-100/70"><div class="mb-3 flex flex-wrap items-end justify-between gap-3"><div><h4 class="text-sm font-extrabold text-slate-950">Skumulowany wykres wag</h4><p id="grasMethodologyProfileText" class="mt-1 text-xs leading-5 text-slate-500">Wykres pokazuje znormalizowany profil wag dla wybranej dyscypliny. Wagi źródłowe są zależne od obszaru, dlatego zostały przeliczone do 100% na potrzeby czytelnej prezentacji.</p></div><p class="rounded-full bg-rose-50 px-3 py-1 text-xs font-bold text-rose-700 ring-1 ring-rose-100">Po normalizacji do 100%</p></div><div id="grasMethodologySubjectChart" class="flex h-16 overflow-hidden rounded-2xl bg-white shadow-inner ring-1 ring-slate-200" aria-label="Skumulowany wykres wag dla wybranej dyscypliny GRAS"></div><div id="grasMethodologySubjectLegend" class="mt-4 grid gap-2 text-[11px] text-slate-600 sm:grid-cols-2 lg:grid-cols-5"></div></div>
+          </header>
+
+          <div class="p-5 sm:p-6 md:p-7">
+            <section class="rks-subject-bar" aria-label="Profil wybranej dyscypliny GRAS 2025">
+              <label for="grasMethodologySubjectSelect">
+                <span class="rks-control-label">Dyscyplina z wykresu PW</span>
+                <select id="grasMethodologySubjectSelect" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-700 focus:border-rose-500 focus:ring-rose-500"></select>
+              </label>
+              <div class="rks-profile-facts" aria-label="Najważniejsze fakty o wybranym profilu GRAS">
+                <div class="rks-profile-fact"><b>GRAS 2025</b><span>edycja</span></div>
+                <div class="rks-profile-fact"><b id="grasMethodologyIndicatorCount">9</b><span>wskaźników</span></div>
+                <div class="rks-profile-fact"><b id="grasMethodologyPublicationThreshold">—</b><span>próg publikacji / 5 lat</span></div>
+                <div class="rks-profile-fact"><b id="grasMethodologyLatestPosition">—</b><span>pozycja PW 2025</span></div>
+              </div>
             </section>
-            <section class="grid gap-4 lg:grid-cols-2" aria-label="Definicje dziewięciu wskaźników GRAS 2025">
-              <section class="rounded-2xl border border-rose-100 bg-white p-4"><p class="text-[10px] font-bold uppercase tracking-widest text-rose-500">World-Class Faculty</p><h4 class="mt-1 text-sm font-extrabold text-rose-700">Laureate — międzynarodowi laureaci</h4><p class="mt-3 text-xs leading-5 text-slate-600">Liczba pełnoetatowych pracowników uczelni, którzy otrzymali znaczące międzynarodowe nagrody akademickie w danej dyscyplinie. Uwzględnia się laureatów do 80. roku życia, a jedna osoba jest liczona tylko raz w ramach tej samej dyscypliny.</p></section>
-              <section class="rounded-2xl border border-rose-100 bg-white p-4"><p class="text-[10px] font-bold uppercase tracking-widest text-rose-500">World-Class Faculty</p><h4 class="mt-1 text-sm font-extrabold text-rose-700">HCR — Highly Cited Researchers</h4><p class="mt-3 text-xs leading-5 text-slate-600">Liczba badaczy z podstawową afiliacją przy uczelni, ujętych na liście Highly Cited Researchers Clarivate. Wskaźnik mierzy obecność naukowców o wyjątkowo wysokim wpływie cytowań w danej dyscyplinie.</p></section>
-              <section class="rounded-2xl border border-rose-100 bg-white p-4"><p class="text-[10px] font-bold uppercase tracking-widest text-rose-500">World-Class Faculty</p><h4 class="mt-1 text-sm font-extrabold text-rose-700">Editor — redaktorzy najważniejszych czasopism</h4><p class="mt-3 text-xs leading-5 text-slate-600">Liczba pełnoetatowych pracowników pełniących funkcję redaktora naczelnego lub zastępcy redaktora naczelnego w uznanych czasopismach indeksowanych w SCIE, SSCI lub A&amp;HCI. Funkcje naczelne otrzymują większą wagę niż zastępcze.</p></section>
-              <section class="rounded-2xl border border-rose-100 bg-white p-4"><p class="text-[10px] font-bold uppercase tracking-widest text-rose-500">World-Class Faculty</p><h4 class="mt-1 text-sm font-extrabold text-rose-700">Leadership — kierowanie organizacjami naukowymi</h4><p class="mt-3 text-xs leading-5 text-slate-600">Liczba pracowników pełniących funkcje kierownicze w kluczowych międzynarodowych organizacjach akademickich, takich jak prezydent, wiceprezydent czy sekretarz generalny. Najwyższe stanowiska mają większą wagę.</p></section>
-              <section class="rounded-2xl border border-orange-100 bg-white p-4"><p class="text-[10px] font-bold uppercase tracking-widest text-orange-500">World-Class Output</p><h4 class="mt-1 text-sm font-extrabold text-orange-700">TJ — publikacje w topowych czasopismach i konferencjach</h4><p class="mt-3 text-xs leading-5 text-slate-600">Liczba artykułów i przeglądów opublikowanych w latach 2020–2024 w czasopismach lub materiałach konferencyjnych uznanych za najważniejsze dla danej dyscypliny. Listy są ustalane w Academic Excellence Survey.</p></section>
-              <section class="rounded-2xl border border-orange-100 bg-white p-4"><p class="text-[10px] font-bold uppercase tracking-widest text-orange-500">World-Class Output</p><h4 class="mt-1 text-sm font-extrabold text-orange-700">Award — międzynarodowe nagrody za dorobek</h4><p class="mt-3 text-xs leading-5 text-slate-600">Liczba pracowników uczelni, którzy zdobyli znaczące nagrody w danej dyscyplinie. Nowsze nagrody mają większą wagę, a wynik jest dzielony, gdy laureat miał kilka afiliacji lub nagrodę otrzymało kilka osób.</p></section>
-              <section class="rounded-2xl border border-amber-100 bg-white p-4"><p class="text-[10px] font-bold uppercase tracking-widest text-amber-600">High-Quality Research</p><h4 class="mt-1 text-sm font-extrabold text-amber-700">Q1 — publikacje w pierwszym kwartylu</h4><p class="mt-3 text-xs leading-5 text-slate-600">Liczba artykułów i przeglądów z lat 2020–2024 opublikowanych w czasopismach należących do pierwszego kwartylu według Journal Impact Factor. Dane pochodzą z Web of Science i InCites.</p></section>
-              <section class="rounded-2xl border border-indigo-100 bg-white p-4"><p class="text-[10px] font-bold uppercase tracking-widest text-indigo-500">Research Impact</p><h4 class="mt-1 text-sm font-extrabold text-indigo-700">CNCI — znormalizowany wpływ cytowań</h4><p class="mt-3 text-xs leading-5 text-slate-600">Stosunek liczby cytowań publikacji uczelni do średniej dla prac z tej samej dziedziny, roku i typu dokumentu. Wartość 1 oznacza średnią światową; wynik powyżej 1 wskazuje wpływ wyższy od średniej.</p></section>
-              <section class="rounded-2xl border border-emerald-100 bg-white p-4 lg:col-span-2"><p class="text-[10px] font-bold uppercase tracking-widest text-emerald-600">International Collaboration</p><h4 class="mt-1 text-sm font-extrabold text-emerald-700">IC — współpraca międzynarodowa</h4><p class="mt-3 text-xs leading-5 text-slate-600">Udział publikacji z lat 2020–2024, których autorzy reprezentują instytucje z co najmniej dwóch krajów, w ogólnej liczbie publikacji uczelni w danej dyscyplinie. Wskaźnik pokazuje intensywność międzynarodowej współpracy badawczej.</p></section>
+
+            <section class="rks-variant-band">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="m7 8 5-5 5 5"/><path d="m7 16 5 5 5-5"/></svg>
+              <div><strong id="grasMethodologyProfileBadge">Wagi punktowe zależne od dyscypliny</strong><p id="grasMethodologyProfileText">Szerokości segmentów pokazują udział wskaźnika w sumie wag wybranego profilu. Etykiety podają oficjalne wagi punktowe, a nie procenty.</p></div>
+              <span id="grasMethodologyListedTag" class="rks-variant-tag">— UCZELNI</span>
             </section>
-            <section class="rounded-3xl border border-rose-100 bg-rose-50/70 p-5"><h3 class="font-extrabold text-slate-950">Kwalifikacja i sposób liczenia GRAS</h3><p class="mt-2 text-sm leading-6 text-slate-700">Do oceny trafiają uczelnie przekraczające próg publikacji właściwy dla danej dyscypliny. Dane bibliometryczne pochodzą z Web of Science i InCites. Wynik każdego wskaźnika jest odnoszony do wyniku lidera, pierwiastkowany, mnożony przez przypisaną wagę i następnie sumowany.</p></section>
-            <p class="rounded-2xl bg-rose-50 p-4 text-xs leading-5 text-rose-950">Źródło: <a href="https://www.shanghairanking.com/methodology/gras/2025" target="_blank" rel="noopener noreferrer" class="font-bold text-rose-700 underline decoration-rose-300 underline-offset-2">GRAS 2025 Methodology</a>.</p>
+
+            <section class="rks-weights" aria-labelledby="grasMethodologyWeightsTitle">
+              <div class="rks-section-head">
+                <div><h3 id="grasMethodologyWeightsTitle">Profil dziewięciu wskaźników</h3><p>Kliknij segment lub pozycję legendy, aby przejść do kategorii i sprawdzić definicję, okres oraz źródło danych.</p></div>
+                <span id="grasMethodologyWeightTotal">Suma wag: —</span>
+              </div>
+              <div id="grasMethodologySubjectChart" class="rks-weight-bar" role="img" aria-label="Profil wag dziewięciu wskaźników wybranej dyscypliny GRAS 2025"></div>
+              <div id="grasMethodologySubjectLegend" class="rks-weight-legend"></div>
+            </section>
+
+            <section class="rks-indicator-explorer" aria-label="Definicje kategorii i wskaźników GRAS 2025">
+              <nav class="rks-criteria-nav" aria-label="Kategorie oceny GRAS">
+                <h3>Kategorie oceny</h3>
+                <div id="grasMethodologyGroupButtons" class="rks-criteria-buttons"></div>
+              </nav>
+              <div>
+                <header class="rks-detail-head">
+                  <div><div class="rks-detail-title"><span id="grasMethodologyDetailSwatch"></span><h3 id="grasMethodologyDetailTitle"></h3></div><p id="grasMethodologyDetailCopy"></p></div>
+                  <div id="grasMethodologyGroupTotal" class="rks-criterion-total"></div>
+                </header>
+                <div id="grasMethodologyIndicatorList"></div>
+              </div>
+            </section>
+
+            <nav class="rks-info-tabs" aria-label="Dodatkowe informacje o metodologii GRAS">
+              <button type="button" class="active" data-gras-panel="grasMethodologyEligibilityPanel">Kwalifikacja</button>
+              <button type="button" data-gras-panel="grasMethodologyScoringPanel">Liczenie wyniku</button>
+              <button type="button" data-gras-panel="grasMethodologyDataPanel">Dane i zakres</button>
+              <button type="button" data-gras-panel="grasMethodologyPublicationPanel">Publikacja wyników</button>
+              <button type="button" data-gras-panel="grasMethodologySourcesPanel">Źródła</button>
+            </nav>
+            <div>
+              <div id="grasMethodologyEligibilityPanel" class="rks-info-panel"><strong id="grasMethodologyEligibilityDetail">Wybierz dyscyplinę.</strong> Do oceny trafiają uczelnie, które w latach 2020–2024 przekroczyły próg publikacyjny właściwy dla danej dyscypliny. Kategorie Web of Science są mapowane do 57 dyscyplin GRAS.</div>
+              <div id="grasMethodologyScoringPanel" class="rks-info-panel hidden">Dla każdego wskaźnika wynik uczelni jest dzielony przez wynik lidera i wyrażany jako udział w jego wyniku. Następnie z tego udziału wyciąga się pierwiastek kwadratowy i mnoży przez oficjalną wagę wskaźnika. Suma dziewięciu tak obliczonych wartości tworzy wynik końcowy. Dla CNCI stosowany jest dodatkowy limit: maksimum stanowi niższa z dwóch wartości, czyli dwukrotność średniego CNCI w dyscyplinie albo faktyczne maksimum.</div>
+              <div id="grasMethodologyDataPanel" class="rks-info-panel hidden">Bibliometria Q1, CNCI i IC obejmuje artykuły oraz prace przeglądowe z lat 2020–2024 i pochodzi z Web of Science oraz InCites. Listy nagród, topowych czasopism, konferencji i organizacji są ustalane w Academic Excellence Survey. Dane HCR, redaktorów i władz organizacji mają własne daty referencyjne opisane przy wskaźnikach.</div>
+              <div id="grasMethodologyPublicationPanel" class="rks-info-panel hidden"><strong id="grasMethodologyPublicationDetail">Liczba publikowanych uczelni zależy od dyscypliny.</strong> GRAS 2025 obejmuje 57 dyscyplin w pięciu szerokich dziedzinach. W całym rankingu prezentowanych jest około 20 tys. jednostek dyscyplinowych z około 2 tys. uczelni ze stu państw i regionów. Brak PW w danej edycji oznacza brak pozycji na opublikowanej liście, a nie wynik równy zero.</div>
+              <div id="grasMethodologySourcesPanel" class="rks-info-panel hidden">Wagi, progi i definicje: ShanghaiRanking; bibliometria: Clarivate Web of Science i InCites; HCR: Clarivate; listy jakościowe: ShanghaiRanking Academic Excellence Survey oraz oficjalne strony nagród, czasopism i organizacji. <a href="https://www.shanghairanking.com/methodology/gras/2025" target="_blank" rel="noopener noreferrer">Otwórz oficjalną metodologię GRAS 2025</a>, <a href="https://www.shanghairanking.com/rankings/gras/2025" target="_blank" rel="noopener noreferrer">wyniki GRAS 2025</a> oraz <a href="https://www.shanghairanking.com/activities/aes" target="_blank" rel="noopener noreferrer">Academic Excellence Survey</a>.</div>
+            </div>
           </div>
         </section>
       </div>
     </div>
-
     <div id="engiDetailsModal" data-methodology-modal class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="engiDetailsTitle" aria-describedby="engiDetailsDesc">
       <div data-methodology-backdrop class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
       <div class="relative z-10 flex min-h-full items-center justify-center p-0 sm:p-4">
@@ -1741,10 +1784,10 @@
         <a href="#top" class="font-bold text-indigo-700 hover:text-indigo-900">Wróć na początek ↑</a>
       </div>
     </footer>
-    <script src="assets/js/ranking-data.js?v=20260720-arwu-methodology"></script>
-    <script src="assets/js/perspektywy-indicators.js?v=20260720-arwu-methodology"></script>
-    <script src="assets/js/perspektywy-methodology.js?v=20260720-arwu-methodology"></script>
-    <script src="assets/js/dashboard.js?v=20260720-arwu-methodology"></script>
+    <script src="assets/js/ranking-data.js?v=20260720-gras-methodology"></script>
+    <script src="assets/js/perspektywy-indicators.js?v=20260720-gras-methodology"></script>
+    <script src="assets/js/perspektywy-methodology.js?v=20260720-gras-methodology"></script>
+    <script src="assets/js/dashboard.js?v=20260720-gras-methodology"></script>
   </body>
 </html>
 
