@@ -1337,128 +1337,79 @@
     </div>
     <div id="theSubjectMethodologyModal" data-methodology-modal class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="theSubjectMethodologyTitle" aria-describedby="theSubjectMethodologyDesc">
       <div data-methodology-backdrop class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
-      <div class="relative z-10 flex min-h-full items-center justify-center p-4">
-        <section class="max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[28px] bg-white shadow-2xl ring-1 ring-slate-900/10">
-          <div class="flex items-start justify-between gap-6 border-b border-slate-200 p-6 md:p-8">
+      <div class="relative z-10 flex min-h-full items-center justify-center p-0 sm:p-4">
+        <section class="rks-explorer-modal max-h-screen w-full max-w-6xl overflow-y-auto bg-white shadow-2xl ring-1 ring-slate-900/10 sm:max-h-[94vh] sm:rounded-2xl">
+          <header class="rks-explorer-header flex items-start justify-between gap-6 border-b border-slate-200 bg-white p-5 sm:p-6 md:p-7">
             <div>
-              <p class="text-xs font-bold uppercase tracking-[0.24em] text-cyan-700">Metodyka THE World University Rankings by Subject 2026</p>
-              <h2 id="theSubjectMethodologyTitle" class="mt-2 text-2xl font-extrabold text-slate-950">Wagi dopasowane do specyfiki dyscypliny</h2>
-              <p id="theSubjectMethodologyDesc" class="mt-3 max-w-3xl text-sm leading-6 text-slate-600">Ranking dziedzinowy wykorzystuje tę samą rodzinę 18 wskaźników co ranking ogólny, ale ich wagi i progi kwalifikacji są kalibrowane dla poszczególnych obszarów nauki.</p>
+              <p class="text-[11px] font-extrabold uppercase tracking-[0.2em] text-cyan-700">THE World University Rankings by Subject | metodyka 2026</p>
+              <h2 id="theSubjectMethodologyTitle" class="mt-2 text-xl font-extrabold text-slate-950 sm:text-2xl">Jak THE ocenia uczelnię w wybranym obszarze?</h2>
+              <p id="theSubjectMethodologyDesc" class="mt-2 max-w-3xl text-xs leading-5 text-slate-600 sm:text-sm">Pięć filarów i 18 wskaźników wspólnych z rankingiem ogólnym, ale z wagami oraz progami kwalifikacji dostosowanymi do kultury badawczej każdej dziedziny.</p>
             </div>
             <button data-methodology-close type="button" class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-500" aria-label="Zamknij modal metodyki THE by Subject">×</button>
-          </div>
+          </header>
 
-          <div class="space-y-6 p-6 md:p-8">
-            <section class="rounded-3xl border border-cyan-100 bg-cyan-50/60 p-4 md:p-5" aria-label="Wagi THE by Subject dla wybranego obszaru">
-              <div class="grid gap-4 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
-                <div>
-                  <h3 class="text-base font-extrabold text-slate-950">THE by Subject 2026 — profil wybranego obszaru</h3>
-                  <p class="mt-1 text-xs leading-5 text-slate-600">Filary są agregowane z pełnej tabeli 18 wskaźników dla dyscypliny wybranej na głównym wykresie strony.</p>
-                </div>
-                <label for="theMethodologySubjectSelect" class="block">
-                  <span class="text-xs font-semibold uppercase tracking-widest text-slate-500">Obszar</span>
-                  <select id="theMethodologySubjectSelect" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-cyan-500 focus:ring-cyan-500"></select>
-                </label>
+          <div class="p-5 sm:p-6 md:p-7">
+            <section class="rks-subject-bar" aria-label="Profil metodyki wybranego obszaru THE by Subject 2026">
+              <div>
+                <label for="theMethodologySubjectSelect" class="rks-control-label">Obszar rankingu</label>
+                <select id="theMethodologySubjectSelect" class="h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-200"></select>
+                <p id="theMethodologyProfileText" class="mt-2 text-xs leading-5 text-slate-600">Wybierz obszar, aby zobaczyć jego wagi i progi kwalifikacji.</p>
               </div>
-              <div class="mt-4 rounded-2xl border border-white bg-white p-4 shadow-inner ring-1 ring-cyan-100">
-                <div class="flex flex-wrap items-center justify-between gap-3">
-                  <p id="theMethodologyProfileText" class="text-xs leading-5 text-slate-600">Wybierz obszar, aby zobaczyć wagi.</p>
-                  <p id="theMethodologyProfileBadge" class="rounded-full bg-cyan-50 px-3 py-1 text-xs font-bold text-cyan-700 ring-1 ring-cyan-100">—</p>
-                </div>
-                <div id="theMethodologySubjectChart" class="mt-4 flex h-16 overflow-hidden rounded-2xl bg-white shadow-inner ring-1 ring-slate-200"></div>
-                <div id="theMethodologySubjectLegend" class="mt-4 grid gap-2 text-[11px] text-slate-600 sm:grid-cols-2 lg:grid-cols-5"></div>
+              <div class="rks-profile-facts" aria-label="Najważniejsze fakty o wybranym rankingu dziedzinowym THE">
+                <div class="rks-profile-fact"><b id="theSubjectMethodologyProfileName">—</b><span>profil wag</span></div>
+                <div class="rks-profile-fact"><b id="theSubjectMethodologyIndicatorCount">18</b><span>wskaźników</span></div>
+                <div class="rks-profile-fact"><b id="theSubjectMethodologyPublicationThreshold">—</b><span>publikacji 2020–2024</span></div>
+                <div class="rks-profile-fact"><b id="theSubjectMethodologyStaffThreshold">—</b><span>kadra: udział lub FTE</span></div>
               </div>
             </section>
 
-            <section class="grid gap-4 lg:grid-cols-2" aria-label="Znaczenie filarów THE by Subject">
-              <section class="rounded-2xl border border-slate-200 bg-white p-4">
-                <h4 class="text-sm font-extrabold text-cyan-700">Teaching</h4>
-                <p class="mt-3 text-xs leading-5 text-slate-600">Reputacja dydaktyczna, proporcje kadry i studentów, kształcenie doktorantów oraz zasoby instytucji. Waga filaru jest większa w dyscyplinach silnie opartych na procesie kształcenia.</p>
-              </section>
-              <section class="rounded-2xl border border-slate-200 bg-white p-4">
-                <h4 class="text-sm font-extrabold text-sky-700">Research Environment</h4>
-                <p class="mt-3 text-xs leading-5 text-slate-600">Reputacja badawcza, przychody badawcze i produktywność publikacyjna, przeliczane w kontekście konkretnego obszaru nauki.</p>
-              </section>
-              <section class="rounded-2xl border border-slate-200 bg-white p-4">
-                <h4 class="text-sm font-extrabold text-indigo-700">Research Quality</h4>
-                <p class="mt-3 text-xs leading-5 text-slate-600">Wpływ cytowań, siła, doskonałość i szerokość oddziaływania badań. W naukach ścisłych filar ten ma zwykle większą wagę niż w obszarach społecznych.</p>
-              </section>
-              <section class="rounded-2xl border border-slate-200 bg-white p-4">
-                <h4 class="text-sm font-extrabold text-emerald-700">International Outlook i Industry</h4>
-                <p class="mt-3 text-xs leading-5 text-slate-600">Międzynarodowa kadra, studenci i współautorstwo oraz transfer wiedzy do gospodarki. Wagi tych elementów różnią się pomiędzy obszarami.</p>
-              </section>
+            <section class="rks-variant-band">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M7 4v6"/><path d="M4 17h16"/><path d="M17 14v6"/></svg>
+              <div><strong>Wagi zmieniają się wraz z obszarem</strong><p id="theSubjectMethodologyEmphasis">THE kalibruje udział reputacji, bibliometrii, umiędzynarodowienia i współpracy z gospodarką do specyfiki dziedziny. Studying Abroad pozostaje wskaźnikiem raportowanym z wagą 0%.</p></div>
+              <span id="theSubjectMethodologyLatestPosition" class="rks-variant-tag">PW 2026: —</span>
             </section>
 
-            <section class="rounded-3xl border border-cyan-100 bg-cyan-50/70 p-5" aria-label="Osiemnaście wskaźników THE by Subject">
-              <div class="mb-4">
-                <h3 class="text-base font-extrabold text-slate-950">THE by Subject — definicje 18 wskaźników</h3>
-                <p class="mt-1 text-xs leading-5 text-slate-600">To ten sam zestaw wskaźników, z którego korzysta ranking ogólny THE, ale w rankingu dziedzinowym ich wagi są skalibrowane do charakteru obszaru — na przykład inżynieria mocniej eksponuje transfer wiedzy, a nauki społeczne większy udział reputacji i dydaktyki.</p>
+            <section class="rks-weights" aria-labelledby="theSubjectMethodologyWeightsTitle">
+              <div class="rks-section-head">
+                <div><h3 id="theSubjectMethodologyWeightsTitle">Wagi filarów oceny</h3><p>Kliknij segment lub pozycję legendy, aby zobaczyć wskaźniki, definicje, okres danych i dokładne wagi w wybranym obszarze.</p></div>
+                <span>Suma: 100%</span>
               </div>
-              <div class="grid gap-4 lg:grid-cols-2">
-                <section class="rounded-2xl border border-slate-200 bg-white p-4">
-                  <h4 class="text-sm font-extrabold text-cyan-700">Teaching — 5 wskaźników</h4>
-                  <ul class="mt-3 space-y-3 text-xs leading-5 text-slate-600">
-                    <li><b>Teaching reputation.</b> Wynik z ankiety reputacyjnej THE dotyczący jakości nauczania w danym obszarze.</li>
-                    <li><b>Staff-to-student ratio.</b> Relacja liczby studentów do liczby pracowników akademickich — przybliżenie intensywności kontaktu dydaktycznego.</li>
-                    <li><b>Doctorate-to-bachelor ratio.</b> Liczba nadawanych doktoratów względem liczby dyplomów I stopnia — sygnał zaawansowania środowiska akademickiego.</li>
-                    <li><b>Doctorates-awarded-to-academic-staff ratio.</b> Liczba doktoratów w relacji do liczby kadry akademickiej.</li>
-                    <li><b>Institutional income.</b> Dochody instytucji przeliczone na kadrę, z korektą parytetu siły nabywczej; wskaźnik zasobów wspierających dydaktykę.</li>
-                  </ul>
-                </section>
-                <section class="rounded-2xl border border-slate-200 bg-white p-4">
-                  <h4 class="text-sm font-extrabold text-sky-700">Research Environment — 3 wskaźniki</h4>
-                  <ul class="mt-3 space-y-3 text-xs leading-5 text-slate-600">
-                    <li><b>Research reputation.</b> Ocena reputacji badawczej uczelni w badaniu ankietowym THE.</li>
-                    <li><b>Research income.</b> Dochody na badania w przeliczeniu na pracownika, korygowane do warunków krajowych i profilu obszaru.</li>
-                    <li><b>Research productivity.</b> Liczba publikacji przypadających na kadrę, liczona w kontekście normalizacji dziedzinowej.</li>
-                  </ul>
-                </section>
-                <section class="rounded-2xl border border-slate-200 bg-white p-4">
-                  <h4 class="text-sm font-extrabold text-indigo-700">Research Quality — 4 wskaźniki</h4>
-                  <ul class="mt-3 space-y-3 text-xs leading-5 text-slate-600">
-                    <li><b>Citation impact.</b> Wpływ cytowań publikacji uczelni, z normalizacją dziedzinową i czasową.</li>
-                    <li><b>Research strength.</b> Średnia siła publikacji mierzona przez wpływ cytowań, ale ważona skalą dorobku.</li>
-                    <li><b>Research excellence.</b> Udział publikacji z najwyższego poziomu oddziaływania w swojej dziedzinie.</li>
-                    <li><b>Research influence.</b> Szerokość i zasięg oddziaływania badań w globalnym obiegu wiedzy.</li>
-                  </ul>
-                </section>
-                <section class="rounded-2xl border border-slate-200 bg-white p-4">
-                  <h4 class="text-sm font-extrabold text-emerald-700">International Outlook — 3 wskaźniki</h4>
-                  <ul class="mt-3 space-y-3 text-xs leading-5 text-slate-600">
-                    <li><b>International students.</b> Udział studentów zagranicznych w całej populacji studentów.</li>
-                    <li><b>International staff.</b> Udział pracowników akademickich z zagranicy.</li>
-                    <li><b>International co-authorship.</b> Udział publikacji tworzonych we współpracy międzynarodowej.</li>
-                  </ul>
-                </section>
-                <section class="rounded-2xl border border-slate-200 bg-white p-4 lg:col-span-2">
-                  <h4 class="text-sm font-extrabold text-amber-700">Industry — 2 wskaźniki</h4>
-                  <div class="mt-3 grid gap-3 md:grid-cols-2 text-xs leading-5 text-slate-600">
-                    <p><b>Industry income.</b> Dochody z gospodarki i współpracy z otoczeniem społeczno-gospodarczym, przeliczone na pracownika.</p>
-                    <p><b>Patents.</b> Wkład uczelni w patenty cytowane przez przemysł — wskaźnik praktycznej użyteczności wiedzy i transferu technologii.</p>
-                  </div>
-                </section>
+              <div id="theMethodologySubjectChart" class="rks-weight-bar" role="img" aria-label="Rozkład wag pięciu filarów THE World University Rankings by Subject 2026"></div>
+              <div id="theMethodologySubjectLegend" class="rks-weight-legend"></div>
+            </section>
+
+            <section class="rks-indicator-explorer" aria-label="Definicje filarów i wskaźników THE by Subject">
+              <nav class="rks-criteria-nav" aria-label="Filary oceny THE by Subject">
+                <h3>Filary oceny</h3>
+                <div id="theSubjectMethodologyPillarButtons" class="rks-criteria-buttons"></div>
+              </nav>
+              <div>
+                <header class="rks-detail-head">
+                  <div><div class="rks-detail-title"><span id="theSubjectMethodologyDetailSwatch"></span><h3 id="theSubjectMethodologyDetailTitle"></h3></div><p id="theSubjectMethodologyDetailCopy"></p></div>
+                  <div id="theSubjectMethodologyPillarTotal" class="rks-criterion-total"></div>
+                </header>
+                <div id="theSubjectMethodologyIndicatorList"></div>
               </div>
             </section>
 
-            <section class="rounded-3xl border border-slate-200 bg-slate-50 p-5" aria-label="Kwalifikacja i interpretacja THE by Subject">
-              <h3 class="text-base font-extrabold text-slate-950">Kwalifikacja i interpretacja</h3>
-              <div class="mt-3 grid gap-3 lg:grid-cols-2 text-xs leading-5 text-slate-600">
-                <p><b>Progi wejścia.</b> THE stosuje minimalne progi publikacyjne i kryteria reprezentacji kadry w danej dziedzinie, dlatego nie każda uczelnia z rankingu ogólnego pojawia się w każdym obszarze.</p>
-                <p><b>Uwaga interpretacyjna.</b> Różnice rok do roku mogą wynikać nie tylko ze zmiany wyników uczelni, ale też z aktualizacji klasyfikacji obszarów, danych bibliometrycznych i kalibracji wag.</p>
-              </div>
-            </section>
-
-            <section class="rounded-3xl border border-cyan-100 bg-cyan-50/70 p-5">
-              <h3 class="font-extrabold text-slate-950">Warunki wejścia do rankingu dziedzinowego</h3>
-              <p class="mt-2 text-sm leading-6 text-slate-700">Dla każdego obszaru THE określa odrębny minimalny próg publikacji w pięcioletnim oknie oraz minimalną liczbę pracowników przypisanych do dyscypliny. Uczelnia musi także spełnić standardy kompletności i jakości danych instytucjonalnych.</p>
-            </section>
-
-            <p class="rounded-2xl bg-cyan-50 p-4 text-xs leading-5 text-cyan-950">Źródło: <a href="https://www.timeshighereducation.com/world-university-rankings/world-university-rankings-subject-2026-methodology" target="_blank" rel="noopener noreferrer" class="font-bold text-cyan-700 underline decoration-cyan-300 underline-offset-2">THE World University Rankings by Subject 2026 — methodology</a>.</p>
+            <nav class="rks-info-tabs" aria-label="Dodatkowe informacje o metodologii THE by Subject">
+              <button type="button" class="active" data-the-subject-panel="theSubjectMethodologyEligibilityPanel">Kwalifikacja</button>
+              <button type="button" data-the-subject-panel="theSubjectMethodologyDisciplinesPanel">Zakres dziedzin</button>
+              <button type="button" data-the-subject-panel="theSubjectMethodologyDataPanel">Dane i normalizacja</button>
+              <button type="button" data-the-subject-panel="theSubjectMethodologyPublicationPanel">Interpretacja</button>
+              <button type="button" data-the-subject-panel="theSubjectMethodologySourcesPanel">Źródła</button>
+            </nav>
+            <div>
+              <div id="theSubjectMethodologyEligibilityPanel" class="rks-info-panel"><strong id="theSubjectMethodologyEligibilityDetail">Wybierz obszar.</strong> Uczelnia musi najpierw kwalifikować się do rankingu ogólnego THE WUR, być aktywna w danej dziedzinie oraz spełnić jednocześnie próg publikacyjny i wymóg kadrowy określony dla tego obszaru.</div>
+              <div id="theSubjectMethodologyDisciplinesPanel" class="rks-info-panel hidden"><strong id="theSubjectMethodologyDisciplinesDetail">Wybierz obszar.</strong></div>
+              <div id="theSubjectMethodologyDataPanel" class="rks-info-panel hidden">Edycja 2026 wykorzystuje publikacje z lat 2020–2024. Dane instytucjonalne, reputacyjne i bibliometryczne są przypisywane do dziedzin, a następnie normalizowane z uwzględnieniem różnic w kulturze publikacyjnej. Zestaw wskaźników pozostaje zgodny z rankingiem ogólnym THE WUR 2026; zmianie ulegają ich wagi.</div>
+              <div id="theSubjectMethodologyPublicationPanel" class="rks-info-panel hidden">Wyniki należy porównywać w obrębie tego samego obszaru. Różne profile wag sprawiają, że identyczna wartość wskaźnika może mieć inny wpływ na wynik końcowy w Inżynierii, Naukach ścisłych lub Biznesie. Zmiana pozycji rok do roku może również wynikać ze składu tabeli i aktualizacji danych.</div>
+              <div id="theSubjectMethodologySourcesPanel" class="rks-info-panel hidden">Metodyka, wagi i progi: <a href="https://www.timeshighereducation.com/world-university-rankings/world-university-rankings-subject-2026-methodology" target="_blank" rel="noopener noreferrer">THE World University Rankings by Subject 2026: methodology</a>. Wyniki: <a href="https://www.timeshighereducation.com/world-university-rankings/by-subject" target="_blank" rel="noopener noreferrer">oficjalne rankingi THE by Subject 2026</a>.</div>
+            </div>
           </div>
         </section>
       </div>
     </div>
-
     <div id="arwuMethodologyModal" data-methodology-modal class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="arwuMethodologyTitle" aria-describedby="arwuMethodologyDesc">
       <div data-methodology-backdrop class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
       <div class="relative z-10 flex min-h-full items-center justify-center p-0 sm:p-4">
@@ -1913,7 +1864,7 @@
     <script src="assets/js/qs-subject-indicators.js?v=20260720-the-subject-results"></script>
     <script src="assets/js/the-subject-indicators.js?v=20260720-the-subject-results"></script>
     <script src="assets/js/perspektywy-methodology.js?v=20260720-engi-subject-indicators"></script>
-    <script src="assets/js/dashboard.js?v=20260720-the-subject-results"></script>
+    <script src="assets/js/dashboard.js?v=20260720-the-subject-methodology"></script>
   </body>
 </html>
 

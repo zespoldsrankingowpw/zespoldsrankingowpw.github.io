@@ -184,6 +184,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const theSubjectMethodologyOpenButton = document.getElementById('theSubjectMethodologyOpen');
   const theSubjectIndicatorData = window.THESubjectIndicatorData || { years: [], metricOrder: [], metrics: {}, subjects: {} };
   let renderTheSubjectDetails = () => {};
+  let renderTheSubjectMethodology = () => {};
 
   const arwuDetailsModal = document.getElementById('arwuDetailsModal');
   const arwuDetailsMetricSelect = document.getElementById('arwuDetailsMetricSelect');
@@ -983,6 +984,7 @@ document.addEventListener('DOMContentLoaded', function () {
       modal.querySelector('[data-methodology-close]')?.focus();
       if (modal.id === 'theWurDetailsModal') requestAnimationFrame(renderTheWurDetails);
       if (modal.id === 'theSubjectDetailsModal') requestAnimationFrame(renderTheSubjectDetails);
+      if (modal.id === 'theSubjectMethodologyModal') requestAnimationFrame(renderTheSubjectMethodology);
       if (modal.id === 'arwuDetailsModal') requestAnimationFrame(renderArwuDetails);
       if (modal.id === 'qsWurDetailsModal') requestAnimationFrame(renderQsWurDetails);
       if (modal.id === 'qsSubjectDetailsModal') requestAnimationFrame(renderQSSubjectDetails);
@@ -5999,26 +6001,183 @@ document.addEventListener('DOMContentLoaded', function () {
   const theMethodologyChart = document.getElementById('theMethodologySubjectChart');
   const theMethodologyLegend = document.getElementById('theMethodologySubjectLegend');
   const theMethodologyText = document.getElementById('theMethodologyProfileText');
-  const theMethodologyBadge = document.getElementById('theMethodologyProfileBadge');
-  const theProfiles = {
-    'Biznes i Ekonomia (Business and Economics)': [30.4,31.6,25,9,4],
-    'Informatyka (Computer Science)': [28,29,27.5,7.5,8],
-    'Inżynieria (Engineering)': [28,29,27.5,7.5,8],
-    'Nauki ścisłe (Physical Sciences)': [26.8,26.5,35.2,7.5,4],
-    'Nauki społeczne (Social Sciences)': [31.9,31.6,25,7.5,4]
-  };
-  const theLabels = ['Kształcenie','Środowisko badań','Jakość badań','Umiędzynarodowienie','Przemysł'];
-  const renderTheMethodology = () => {
-    if (!theMethodologySelect) return;
-    const subject = theMethodologySelect.value;
-    const weights = theProfiles[subject] || theProfiles['Inżynieria (Engineering)'];
-    renderWeightBar(theMethodologyChart, theMethodologyLegend, theLabels.map((label, i) => ({label, value: weights[i]})));
-    theMethodologyText.textContent = 'Wagi filarów obliczono przez zsumowanie oficjalnych wag 18 wskaźników THE dla wybranego obszaru.';
-    theMethodologyBadge.textContent = subject || 'THE by Subject';
-  };
-  theMethodologySelect?.addEventListener('change', renderTheMethodology);
-  renderTheMethodology();
+  const theSubjectMethodologyProfileName = document.getElementById('theSubjectMethodologyProfileName');
+  const theSubjectMethodologyIndicatorCount = document.getElementById('theSubjectMethodologyIndicatorCount');
+  const theSubjectMethodologyPublicationThreshold = document.getElementById('theSubjectMethodologyPublicationThreshold');
+  const theSubjectMethodologyStaffThreshold = document.getElementById('theSubjectMethodologyStaffThreshold');
+  const theSubjectMethodologyEmphasis = document.getElementById('theSubjectMethodologyEmphasis');
+  const theSubjectMethodologyLatestPosition = document.getElementById('theSubjectMethodologyLatestPosition');
+  const theSubjectMethodologyPillarButtons = document.getElementById('theSubjectMethodologyPillarButtons');
+  const theSubjectMethodologyDetailSwatch = document.getElementById('theSubjectMethodologyDetailSwatch');
+  const theSubjectMethodologyDetailTitle = document.getElementById('theSubjectMethodologyDetailTitle');
+  const theSubjectMethodologyDetailCopy = document.getElementById('theSubjectMethodologyDetailCopy');
+  const theSubjectMethodologyPillarTotal = document.getElementById('theSubjectMethodologyPillarTotal');
+  const theSubjectMethodologyIndicatorList = document.getElementById('theSubjectMethodologyIndicatorList');
+  const theSubjectMethodologyEligibilityDetail = document.getElementById('theSubjectMethodologyEligibilityDetail');
+  const theSubjectMethodologyDisciplinesDetail = document.getElementById('theSubjectMethodologyDisciplinesDetail');
+  const theSubjectMethodologyInfoTabs = [...document.querySelectorAll('[data-the-subject-panel]')];
 
+  const theSubjectMethodologyProfiles = {
+    'Biznes i Ekonomia (Business and Economics)': {
+      english: 'Business and Economics', publicationThreshold: 200, staffPercent: 5, staffCount: 50,
+      weights: [21.1, 3.3, 0, 4.2, 1.8, 22.8, 4.4, 4.4, 13, 4, 4, 4, 3, 3, 3, 0, 2, 2],
+      disciplines: ['Business and management', 'Accounting and finance', 'Economics and econometrics'],
+      emphasis: 'Największy udział mają Środowisko badań (31,6%) i Kształcenie (30,4%); wskaźniki reputacyjne odpowiadają łącznie za 43,9% wyniku.'
+    },
+    'Informatyka (Computer Science)': {
+      english: 'Computer Science', publicationThreshold: 500, staffPercent: 1, staffCount: 20,
+      weights: [19.5, 3, 1, 3, 1.5, 21, 4, 4, 13.7, 4.6, 4.6, 4.6, 2.5, 2.5, 2.5, 0, 4, 4],
+      disciplines: ['Computer Science — samodzielny obszar bez listy węższych dyscyplin'],
+      emphasis: 'Profil wzmacnia produktywność badań oraz współpracę z gospodarką: Industry ma 8%, dwukrotnie więcej niż w rankingu ogólnym THE WUR.'
+    },
+    'Inżynieria (Engineering)': {
+      english: 'Engineering', publicationThreshold: 500, staffPercent: 4, staffCount: 40,
+      weights: [19.5, 3, 1, 3, 1.5, 21, 4, 4, 13.7, 4.6, 4.6, 4.6, 2.5, 2.5, 2.5, 0, 4, 4],
+      disciplines: ['General engineering', 'Electrical and electronic engineering', 'Mechanical and aerospace engineering', 'Civil engineering', 'Chemical engineering'],
+      emphasis: 'Inżynieria mocniej eksponuje produktywność badawczą i transfer wiedzy: Industry ma 8%, a każdy z dwóch wskaźników przemysłowych waży 4%.'
+    },
+    'Nauki ścisłe (Physical Sciences)': {
+      english: 'Physical Sciences', publicationThreshold: 500, staffPercent: 5, staffCount: 50,
+      weights: [17.9, 2.8, 1.2, 3.3, 1.6, 19.3, 3.6, 3.6, 17.5, 5.9, 5.9, 5.9, 2.5, 2.5, 2.5, 0, 2, 2],
+      disciplines: ['Mathematics and statistics', 'Physics and astronomy', 'Chemistry', 'Geology, environmental, earth and marine sciences'],
+      emphasis: 'Jakość badań jest najważniejszym filarem (35,2%); sam Citation Impact odpowiada za 17,5% wyniku obszaru.'
+    },
+    'Nauki społeczne (Social Sciences)': {
+      english: 'Social Sciences', publicationThreshold: 200, staffPercent: 4, staffCount: 40,
+      weights: [21.1, 3.3, 1.4, 4.3, 1.8, 22.8, 4.4, 4.4, 12.4, 4.2, 4.2, 4.2, 2.5, 2.5, 2.5, 0, 2, 2],
+      disciplines: ['Communication and media studies', 'Politics and international studies, including development studies', 'Sociology', 'Geography'],
+      emphasis: 'Największy udział mają Kształcenie (31,9%) i Środowisko badań (31,6%); reputacja dydaktyczna i badawcza sumują się do 43,9%.'
+    }
+  };
+
+  const formatTheSubjectMethodologyWeight = (value) => Number(value).toLocaleString('pl-PL', { maximumFractionDigits: 1 }) + '%';
+  let activeTheSubjectMethodologyPillar = 'Kształcenie';
+
+  renderTheSubjectMethodology = () => {
+    if (!theMethodologySelect || !theMethodologyChart || !theSubjectMethodologyIndicatorList) return;
+    const subject = theMethodologySelect.value;
+    const profile = theSubjectMethodologyProfiles[subject] || theSubjectMethodologyProfiles['Inżynieria (Engineering)'];
+    const indicators = theWurMethodologyIndicators.map((indicator, index) => ({ ...indicator, weight: profile.weights[index] }));
+    const pillars = theWurMethodologyPillars.map((pillar) => ({
+      ...pillar,
+      weight: indicators.filter((indicator) => indicator.pillar === pillar.name).reduce((sum, indicator) => sum + indicator.weight, 0)
+    }));
+    const activePillar = pillars.find((pillar) => pillar.name === activeTheSubjectMethodologyPillar) || pillars[0];
+
+    const selectPillar = (pillarName) => {
+      activeTheSubjectMethodologyPillar = pillarName;
+      renderTheSubjectMethodology();
+    };
+
+    const makePillarItem = (pillar, legend = false) => {
+      const active = pillar.name === activeTheSubjectMethodologyPillar;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = (legend ? 'rks-legend-button' : 'rks-weight-segment') + (active ? ' active' : '');
+      button.setAttribute('aria-label', pillar.name + ', ' + formatTheSubjectMethodologyWeight(pillar.weight));
+      if (legend) {
+        const dot = document.createElement('span');
+        dot.className = 'rks-legend-dot';
+        dot.style.background = pillar.color;
+        const name = document.createElement('span');
+        name.className = 'rks-legend-name';
+        name.textContent = pillar.name;
+        const weight = document.createElement('span');
+        weight.className = 'rks-legend-weight';
+        weight.textContent = formatTheSubjectMethodologyWeight(pillar.weight);
+        button.append(dot, name, weight);
+      } else {
+        button.style.width = pillar.weight + '%';
+        button.style.background = pillar.color;
+        button.style.color = '#fff';
+        button.textContent = formatTheSubjectMethodologyWeight(pillar.weight);
+        button.title = pillar.name + ' — ' + formatTheSubjectMethodologyWeight(pillar.weight);
+      }
+      button.addEventListener('click', () => selectPillar(pillar.name));
+      return button;
+    };
+
+    theMethodologyChart.replaceChildren(...pillars.map((pillar) => makePillarItem(pillar)));
+    theMethodologyLegend?.replaceChildren(...pillars.map((pillar) => makePillarItem(pillar, true)));
+    theMethodologyChart.setAttribute('aria-label', 'Wagi filarów THE by Subject 2026 dla obszaru ' + profile.english);
+
+    const pillarButtons = pillars.map((pillar) => {
+      const active = pillar.name === activeTheSubjectMethodologyPillar;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'rks-criterion-button' + (active ? ' active' : '');
+      button.setAttribute('aria-pressed', active.toString());
+      const dot = document.createElement('span');
+      dot.className = 'rks-legend-dot';
+      dot.style.background = pillar.color;
+      const name = document.createElement('span');
+      name.className = 'rks-criterion-name';
+      name.textContent = pillar.name;
+      const weight = document.createElement('span');
+      weight.className = 'rks-criterion-weight';
+      weight.textContent = formatTheSubjectMethodologyWeight(pillar.weight);
+      button.append(dot, name, weight);
+      button.addEventListener('click', () => selectPillar(pillar.name));
+      return button;
+    });
+    theSubjectMethodologyPillarButtons?.replaceChildren(...pillarButtons);
+
+    if (theSubjectMethodologyDetailSwatch) theSubjectMethodologyDetailSwatch.style.background = activePillar.color;
+    if (theSubjectMethodologyDetailTitle) theSubjectMethodologyDetailTitle.textContent = activePillar.name + ' (' + activePillar.english + ')';
+    if (theSubjectMethodologyDetailCopy) theSubjectMethodologyDetailCopy.textContent = activePillar.description;
+    if (theSubjectMethodologyPillarTotal) {
+      const caption = document.createElement('small');
+      caption.textContent = 'waga filaru';
+      theSubjectMethodologyPillarTotal.replaceChildren(formatTheSubjectMethodologyWeight(activePillar.weight), caption);
+    }
+
+    const rows = indicators.filter((indicator) => indicator.pillar === activePillar.name).map((indicator) => {
+      const row = document.createElement('article');
+      row.className = 'rks-indicator';
+      const copy = document.createElement('div');
+      const title = document.createElement('h4');
+      title.textContent = indicator.polish + ' (' + indicator.label + ')';
+      const description = document.createElement('p');
+      description.textContent = indicator.description;
+      const source = document.createElement('span');
+      source.className = 'rks-source-line';
+      source.textContent = indicator.source;
+      copy.append(title, description, source);
+      const weight = document.createElement('div');
+      weight.className = 'rks-indicator-weight';
+      const weightCaption = document.createElement('small');
+      weightCaption.textContent = indicator.weight === 0 ? 'nie wpływa na wynik' : 'waga';
+      weight.append(formatTheSubjectMethodologyWeight(indicator.weight), weightCaption);
+      const period = document.createElement('span');
+      period.className = 'rks-indicator-delta' + (indicator.weight === 0 ? ' new' : '');
+      period.textContent = indicator.period;
+      row.append(copy, weight, period);
+      return row;
+    });
+    theSubjectMethodologyIndicatorList.replaceChildren(...rows);
+
+    if (theMethodologyText) theMethodologyText.textContent = profile.emphasis;
+    if (theSubjectMethodologyProfileName) theSubjectMethodologyProfileName.textContent = profile.english;
+    if (theSubjectMethodologyIndicatorCount) theSubjectMethodologyIndicatorCount.textContent = '17 + 1';
+    if (theSubjectMethodologyPublicationThreshold) theSubjectMethodologyPublicationThreshold.textContent = profile.publicationThreshold.toLocaleString('pl-PL');
+    if (theSubjectMethodologyStaffThreshold) theSubjectMethodologyStaffThreshold.textContent = profile.staffPercent + '% lub ' + profile.staffCount + ' FTE';
+    if (theSubjectMethodologyEmphasis) theSubjectMethodologyEmphasis.textContent = profile.emphasis + ' Studying Abroad jest raportowany z wagą 0%.';
+    if (theSubjectMethodologyEligibilityDetail) theSubjectMethodologyEligibilityDetail.textContent = profile.english + ': co najmniej ' + profile.publicationThreshold.toLocaleString('pl-PL') + ' publikacji w latach 2020–2024 oraz co najmniej ' + profile.staffPercent + '% kadry akademickiej w obszarze albo ' + profile.staffCount + ' pracowników FTE.';
+    if (theSubjectMethodologyDisciplinesDetail) theSubjectMethodologyDisciplinesDetail.textContent = profile.english + ' obejmuje: ' + profile.disciplines.join('; ') + '.';
+
+    const subjectResult = theSubjectIndicatorData.subjects?.[subject];
+    const latestRank = subjectResult?.rankLabels?.[subjectResult.rankLabels.length - 1] || '—';
+    if (theSubjectMethodologyLatestPosition) theSubjectMethodologyLatestPosition.textContent = 'PW 2026: ' + latestRank;
+  };
+
+  theSubjectMethodologyInfoTabs.forEach((button) => {
+    button.addEventListener('click', () => {
+      theSubjectMethodologyInfoTabs.forEach((tab) => tab.classList.toggle('active', tab === button));
+      theSubjectMethodologyInfoTabs.forEach((tab) => document.getElementById(tab.dataset.theSubjectPanel)?.classList.toggle('hidden', tab !== button));
+    });
+  });
+  theMethodologySelect?.addEventListener('change', renderTheSubjectMethodology);
+  renderTheSubjectMethodology();
   populateMethodologySelect('grasSubjectSelect', 'grasMethodologySubjectSelect');
   const grasMethodologySelect = document.getElementById('grasMethodologySubjectSelect');
   const grasMethodologyChart = document.getElementById('grasMethodologySubjectChart');
