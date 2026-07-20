@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const {
     qsWurDetailsYears,
     qsWurDetailsData,
+    theWurDetailsData,
     qsSubjectData,
     rksSubjectData,
     qsYears,
@@ -122,6 +123,21 @@ document.addEventListener('DOMContentLoaded', function () {
   const rksDetailsCanvas = document.getElementById('chartRKSDetails');
   const rksDetailsMethodologyOpen = document.getElementById('rksDetailsMethodologyOpen');
   let renderRKSDetails = () => {};
+
+  const theWurDetailsModal = document.getElementById('theWurDetailsModal');
+  const theWurDetailsMetricSelect = document.getElementById('theWurDetailsMetricSelect');
+  const theWurDetailsLatestPosition = document.getElementById('theWurDetailsLatestPosition');
+  const theWurDetailsStrongestPillar = document.getElementById('theWurDetailsStrongestPillar');
+  const theWurDetailsBestBand = document.getElementById('theWurDetailsBestBand');
+  const theWurDetailsCoverage = document.getElementById('theWurDetailsCoverage');
+  const theWurDetailsYearCards = document.getElementById('theWurDetailsYearCards');
+  const theWurDetailsChangeNotice = document.getElementById('theWurDetailsChangeNotice');
+  const theWurDetailsChartTitle = document.getElementById('theWurDetailsChartTitle');
+  const theWurDetailsChartNote = document.getElementById('theWurDetailsChartNote');
+  const theWurDetailsLegend = document.getElementById('theWurDetailsLegend');
+  const theWurDetailsCanvas = document.getElementById('chartTheWurDetails');
+  const theWurDetailsMethodologyOpen = document.getElementById('theWurDetailsMethodologyOpen');
+  let renderTheWurDetails = () => {};
 
   const internationalMethodologyModals = [...document.querySelectorAll('[data-methodology-modal]')];
   let activeInternationalMethodologyTrigger = null;
@@ -900,7 +916,10 @@ document.addEventListener('DOMContentLoaded', function () {
       modal.classList.remove('hidden');
       modal.setAttribute('aria-hidden', 'false');
       document.body.classList.add('overflow-hidden');
+      const scrollPanel = modal.querySelector(':scope > .relative > section');
+      if (scrollPanel) scrollPanel.scrollTop = 0;
       modal.querySelector('[data-methodology-close]')?.focus();
+      if (modal.id === 'theWurDetailsModal') requestAnimationFrame(renderTheWurDetails);
       if (modal.id === 'qsWurDetailsModal') requestAnimationFrame(renderQsWurDetails);
       if (modal.id === 'qsSubjectDetailsModal') requestAnimationFrame(renderQSSubjectDetails);
       if (modal.id === 'perspektywyDetailsModal') requestAnimationFrame(renderPerspektywyDetails);
@@ -3031,6 +3050,172 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  let theWurDetailsChart = null;
+
+  const formatTheWurScore = (value) => typeof value === 'number'
+    ? value.toLocaleString('pl-PL', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+    : '—';
+
+  const createTheWurYearCard = (year, index, metricKey) => {
+    const isPosition = metricKey === 'position';
+    const pillar = isPosition ? null : theWurDetailsData.pillars[metricKey];
+    const value = pillar?.values[index];
+    const card = document.createElement('article');
+    card.className = 'rks-details-year';
+    card.setAttribute('role', 'listitem');
+
+    const yearLabel = document.createElement('div');
+    yearLabel.className = 'year';
+    yearLabel.textContent = year;
+
+    const primary = document.createElement('div');
+    primary.className = 'position';
+    primary.textContent = isPosition ? theWurDetailsData.rankLabels[index] : formatTheWurScore(value);
+
+    const primaryLabel = document.createElement('span');
+    primaryLabel.className = 'position-label';
+    primaryLabel.textContent = isPosition ? 'opublikowane pasmo' : 'wynik filaru 0–100';
+
+    const secondary = document.createElement('span');
+    secondary.className = 'score';
+    secondary.textContent = isPosition
+      ? 'wynik pasma ' + formatTheWurScore(theWurDetailsData.scoreRangeLower[index]) + '–' + formatTheWurScore(theWurDetailsData.scoreRangeUpper[index])
+      : 'pozycja ' + theWurDetailsData.rankLabels[index];
+
+    card.append(yearLabel, primary, primaryLabel, secondary);
+    return card;
+  };
+
+  renderTheWurDetails = () => {
+    if (!theWurDetailsCanvas || !theWurDetailsData?.years?.length) return;
+    const metricKey = theWurDetailsMetricSelect?.value || 'position';
+    const isPosition = metricKey === 'position';
+    const pillar = isPosition ? null : theWurDetailsData.pillars[metricKey];
+    const years = theWurDetailsData.years;
+    const latestIndex = years.length - 1;
+    const latestPillars = Object.values(theWurDetailsData.pillars)
+      .map((item) => ({ label: item.sourceLabel, value: item.values[latestIndex] }))
+      .sort((a, b) => b.value - a.value);
+    const strongest = latestPillars[0];
+
+    if (theWurDetailsLatestPosition) theWurDetailsLatestPosition.textContent = theWurDetailsData.rankLabels[latestIndex];
+    if (theWurDetailsStrongestPillar) theWurDetailsStrongestPillar.textContent = strongest ? strongest.label + ' ' + formatTheWurScore(strongest.value) : '—';
+    if (theWurDetailsBestBand) theWurDetailsBestBand.textContent = theWurDetailsData.rankLabels[0];
+    if (theWurDetailsCoverage) theWurDetailsCoverage.textContent = years.length + ' / ' + years.length;
+    theWurDetailsYearCards?.replaceChildren(...years.map((year, index) => createTheWurYearCard(year, index, metricKey)));
+    theWurDetailsChangeNotice?.classList.toggle('hidden', !pillar?.changedIn2024);
+
+    const legendLine = theWurDetailsLegend?.querySelector('span:first-child');
+    const legendText = theWurDetailsLegend?.querySelector('span:last-child');
+    const color = isPosition ? '#0e7490' : '#4f46e5';
+    if (legendLine) legendLine.style.backgroundColor = color;
+    if (legendText) legendText.textContent = isPosition ? 'Opublikowane pasmo' : pillar.sourceLabel + ' · wynik 0–100';
+
+    if (isPosition) {
+      if (theWurDetailsChartTitle) theWurDetailsChartTitle.textContent = 'Pozycja globalna PW — pasma 2020–2026';
+      if (theWurDetailsChartNote) theWurDetailsChartNote.textContent = 'W edycjach 2020–2022 znak „+” wyznacza tylko początek otwartego pasma. Od 2023 PW znajduje się w paśmie 1201–1500.';
+      theWurDetailsCanvas.setAttribute('aria-label', 'Opublikowane pasma pozycji Politechniki Warszawskiej w THE World University Rankings 2020–2026');
+    } else {
+      const firstValue = pillar.values[0];
+      const latestValue = pillar.values[latestIndex];
+      const change = latestValue - firstValue;
+      if (theWurDetailsChartTitle) theWurDetailsChartTitle.textContent = pillar.label + ' — wynik 2020–2026';
+      if (theWurDetailsChartNote) {
+        theWurDetailsChartNote.textContent = pillar.changedIn2024
+          ? pillar.sourceLabel + ': od edycji 2024 obowiązuje szersza definicja filaru, dlatego seria nie jest w pełni porównywalna w czasie.'
+          : 'Zmiana względem 2020: ' + (change >= 0 ? '+' : '−') + formatTheWurScore(Math.abs(change)) + ' pkt. Wyższy wynik oznacza lepszą ocenę.';
+      }
+      theWurDetailsCanvas.setAttribute('aria-label', pillar.label + ': wynik Politechniki Warszawskiej w THE World University Rankings 2020–2026');
+    }
+
+    if (!theWurDetailsChart) {
+      theWurDetailsChart = new Chart(theWurDetailsCanvas, {
+        type: 'line',
+        data: { labels: years, datasets: [] },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  if (theWurDetailsChart.$mode === 'position') {
+                    return context.datasetIndex === 0
+                      ? 'Pozycja: ' + theWurDetailsChart.$rankLabels[context.dataIndex]
+                      : null;
+                  }
+                  return typeof context.parsed.y === 'number'
+                    ? 'Wynik: ' + formatTheWurScore(context.parsed.y)
+                    : 'Brak danych';
+                }
+              }
+            }
+          },
+          scales: {
+            x: { grid: { display: false }, ticks: { color: '#475569', font: { weight: '600' } } },
+            y: {
+              grid: { color: 'rgba(148,163,184,0.2)' },
+              ticks: { color: '#475569' },
+              title: { display: true, text: '' }
+            }
+          }
+        }
+      });
+    }
+
+    theWurDetailsChart.$mode = metricKey;
+    theWurDetailsChart.$rankLabels = theWurDetailsData.rankLabels;
+    theWurDetailsChart.data.labels = years;
+    const yAxis = theWurDetailsChart.options.scales.y;
+
+    if (isPosition) {
+      theWurDetailsChart.data.datasets = [
+        {
+          label: 'Początek pasma', data: theWurDetailsData.rankLower, borderColor: '#0e7490',
+          backgroundColor: 'rgba(14,116,144,0.13)', fill: '+1', pointBackgroundColor: '#0e7490',
+          pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4, pointHoverRadius: 6,
+          borderWidth: 2.5, tension: 0.2, spanGaps: false
+        },
+        {
+          label: 'Koniec pasma', data: theWurDetailsData.rankUpper, borderColor: 'rgba(14,116,144,0.5)',
+          backgroundColor: 'transparent', fill: false, pointBackgroundColor: '#67e8f9',
+          pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4, pointHoverRadius: 6,
+          borderWidth: 2, borderDash: [6, 4], tension: 0.2, spanGaps: false
+        }
+      ];
+      yAxis.reverse = true;
+      yAxis.min = 900;
+      yAxis.max = 1550;
+      yAxis.ticks.stepSize = 100;
+      yAxis.ticks.callback = (value) => Math.round(value);
+      yAxis.title.text = 'Pozycja (niższa wartość = lepiej)';
+    } else {
+      theWurDetailsChart.data.datasets = [{
+        label: pillar.sourceLabel, data: pillar.values, borderColor: '#4f46e5',
+        backgroundColor: 'rgba(79,70,229,0.1)', fill: false, pointBackgroundColor: '#4f46e5',
+        pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4, pointHoverRadius: 6,
+        borderWidth: 2.5, tension: 0.22, spanGaps: false
+      }];
+      yAxis.reverse = false;
+      yAxis.min = 0;
+      yAxis.max = 100;
+      yAxis.ticks.stepSize = 10;
+      yAxis.ticks.callback = (value) => Number(value).toLocaleString('pl-PL');
+      yAxis.title.text = 'Wynik filaru (0–100)';
+    }
+
+    theWurDetailsChart.update();
+    theWurDetailsChart.resize();
+  };
+
+  theWurDetailsMetricSelect?.addEventListener('change', renderTheWurDetails);
+  theWurDetailsMethodologyOpen?.addEventListener('click', () => {
+    closeInternationalMethodology(theWurDetailsModal, false);
+    requestAnimationFrame(() => document.getElementById('theWurMethodologyOpen')?.click());
+  });
+
   new Chart(document.getElementById('chartTHE'), {
     type: 'line',
     data: {
@@ -3082,9 +3267,9 @@ document.addEventListener('DOMContentLoaded', function () {
               if (context.dataset.label !== 'Granica dolna') {
                 return null;
               }
-              if (lower === upper) {
-                return `Pozycja: ${Math.round(lower)}`;
-              }
+              const publishedLabel = theWurDetailsData?.rankLabels?.[index];
+              if (publishedLabel) return `Pozycja: ${publishedLabel}`;
+              if (lower === upper || typeof upper !== 'number') return `Pozycja: ${Math.round(lower)}+`;
               return `Pozycja: ${Math.round(lower)}-${Math.round(upper)}`;
             }
           }

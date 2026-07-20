@@ -17,6 +17,22 @@ window.RankingData = (() => {
     'Overall Score': { scores: [20.7, 23.2, 32.8], ranks: [571, 527, 487], rankLabels: ['=571', '527', '487'] }
   };
 
+  const theWurDetailsData = {
+    years: [2020, 2021, 2022, 2023, 2024, 2025, 2026],
+    rankLabels: ['1001+', '1001+', '1201+', '1201–1500', '1201–1500', '1201–1500', '1201–1500'],
+    rankLower: [1001, 1001, 1201, 1201, 1201, 1201, 1201],
+    rankUpper: [null, null, null, 1500, 1500, 1500, 1500],
+    scoreRangeLower: [10.7, 10.3, 10.6, 18.4, 22.8, 25.2, 27.3],
+    scoreRangeUpper: [22.1, 25.0, 22.3, 24.3, 28.2, 30.6, 32.0],
+    pillars: {
+      teaching: { label: 'Kształcenie', sourceLabel: 'Teaching', values: [19.2, 20.3, 19.7, 18.4, 22.0, 25.7, 28.3] },
+      researchEnvironment: { label: 'Środowisko badawcze', sourceLabel: 'Research / Research Environment', values: [11.8, 12.3, 15.9, 17.6, 19.6, 17.6, 17.7], changedIn2024: true },
+      researchQuality: { label: 'Jakość badań', sourceLabel: 'Citations / Research Quality', values: [30.7, 23.8, 19.0, 15.8, 33.3, 30.8, 32.9], changedIn2024: true },
+      industry: { label: 'Współpraca z przemysłem', sourceLabel: 'Industry', values: [39.8, 38.4, 39.1, 41.0, 53.5, 54.9, 61.1] },
+      internationalOutlook: { label: 'Umiędzynarodowienie', sourceLabel: 'International Outlook', values: [25.1, 26.0, 28.2, 28.6, 31.7, 32.8, 33.9] }
+    }
+  };
+
   const qsSubjectData = {
     "years": [
       2023,
@@ -1460,7 +1476,7 @@ window.RankingData = (() => {
 
   const theLower = [1001, 1001, 1201, 1201, 1201, 1201, 1201];
 
-  const theUpper = [1001, 1001, 1201, 1500, 1500, 1500, 1500];
+  const theUpper = [null, null, null, 1500, 1500, 1500, 1500];
 
   const arwuYears = [2020, 2021, 2022, 2023, 2024, 2025];
 
@@ -1483,6 +1499,7 @@ window.RankingData = (() => {
   return Object.freeze({
     qsWurDetailsYears,
     qsWurDetailsData,
+    theWurDetailsData,
     qsSubjectData,
     rksSubjectData,
     qsYears,
