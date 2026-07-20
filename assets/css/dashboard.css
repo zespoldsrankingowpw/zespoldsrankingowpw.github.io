@@ -297,3 +297,14 @@ body { background: radial-gradient(circle at 50% -10%, #eef2ff 0, #f8fafc 34rem)
   .rks-details-stats > div:nth-child(-n+2) { border-bottom: 1px solid #dbe3ee; }
   .chart-frame--rks-details { height: 16rem; }
 }
+
+/* Compact result modals: RKS and EngiRank by Subject */
+.ranking-details-modal--compact .chart-frame--rks-details { height: 9rem; }
+@media (min-width: 641px) {
+  .ranking-details-modal--compact > .relative > section > header { padding: 1rem 1.25rem; }
+  .ranking-details-modal--compact > .relative > section > .space-y-5 { padding: 1rem 1.25rem; }
+  .ranking-details-modal--compact > .relative > section > .space-y-5 > :not([hidden]) ~ :not([hidden]) { margin-top: .75rem; }
+}
+@media (max-width: 640px) {
+  .ranking-details-modal--compact .chart-frame--rks-details { height: 11rem; }
+}

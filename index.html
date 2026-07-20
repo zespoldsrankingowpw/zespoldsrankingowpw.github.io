@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
-    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260720-rks-indicators" />
+    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260720-compact-ranking-details" />
   </head>
   <body id="top" class="bg-gray-50 text-gray-900">
     <a href="#main-content" class="skip-link sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-slate-950 focus:px-4 focus:py-3 focus:text-sm focus:font-bold focus:text-white">Przejdź do głównej treści</a>
@@ -235,7 +235,7 @@
             </section>
           </div>
         </div>
-        <div id="rksDetailsModal" data-methodology-modal class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="rksDetailsTitle" aria-describedby="rksDetailsDesc">
+        <div id="rksDetailsModal" data-methodology-modal class="ranking-details-modal--compact fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="rksDetailsTitle" aria-describedby="rksDetailsDesc">
           <div data-methodology-backdrop class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
           <div class="relative z-10 flex min-h-full items-center justify-center p-0 sm:p-4">
             <section class="max-h-screen w-full max-w-6xl overflow-y-auto bg-white shadow-2xl ring-1 ring-slate-900/10 sm:max-h-[94vh] sm:rounded-2xl">
@@ -1693,12 +1693,12 @@
         </section>
       </div>
     </div>
-    <div id="engiSubjectDetailsModal" data-methodology-modal class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="engiSubjectDetailsTitle" aria-describedby="engiSubjectDetailsDesc">
+    <div id="engiSubjectDetailsModal" data-methodology-modal class="ranking-details-modal--compact fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="engiSubjectDetailsTitle" aria-describedby="engiSubjectDetailsDesc">
       <div data-methodology-backdrop class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
       <div class="relative z-10 flex min-h-full items-center justify-center p-0 sm:p-4">
         <section class="max-h-screen w-full max-w-6xl overflow-y-auto bg-white shadow-2xl ring-1 ring-slate-900/10 sm:max-h-[94vh] sm:rounded-2xl">
           <header class="sticky top-0 z-10 flex items-start justify-between gap-6 border-b border-slate-200 bg-white/95 p-5 backdrop-blur sm:p-6 md:p-7">
-            <div><p class="text-[11px] font-extrabold uppercase tracking-[0.2em] text-indigo-700">EngiRank by Subject | 2023–2025</p><h2 id="engiSubjectDetailsTitle" class="mt-2 text-xl font-extrabold text-slate-950 sm:text-2xl">Wyniki dyscyplin Politechniki Warszawskiej</h2><p id="engiSubjectDetailsDesc" class="mt-2 max-w-3xl text-xs leading-5 text-slate-600 sm:text-sm">Porównaj pozycję i punktację wybranej dyscypliny PW w trzech edycjach europejskiego rankingu uczelni technicznych.</p></div>
+            <div><p class="text-[11px] font-extrabold uppercase tracking-[0.2em] text-indigo-700">EngiRank by Subject | 2023–2025</p><h2 id="engiSubjectDetailsTitle" class="mt-2 text-xl font-extrabold text-slate-950 sm:text-2xl">Wyniki dyscyplin Politechniki Warszawskiej</h2><p id="engiSubjectDetailsDesc" class="mt-2 max-w-3xl text-xs leading-5 text-slate-600 sm:text-sm">Porównaj pozycję, wynik ogólny i wszystkie wskaźniki wybranej dyscypliny PW w trzech edycjach europejskiego rankingu uczelni technicznych.</p></div>
             <button type="button" data-methodology-close class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-label="Zamknij szczegółowe wyniki EngiRank by Subject">×</button>
           </header>
 
@@ -1708,15 +1708,17 @@
               <div><b>Pozycja i punktacja pokazują dwa różne aspekty wyniku.</b> Pozycja zależy również od rezultatów pozostałych uczelni, natomiast punktacja opisuje wynik PW według modelu danej edycji. Przy porównywaniu lat należy uwzględniać zmiany grupy odniesienia i danych źródłowych.</div>
             </section>
 
-            <section class="rks-details-controls" aria-label="Wybór dyscypliny i rodzaju wyniku EngiRank">
+            <section class="rks-details-controls rks-details-controls--indicators" aria-label="Wybór dyscypliny, wskaźnika i rodzaju wyniku EngiRank">
               <label for="engiSubjectDetailsSelect"><span class="rks-control-label">Dyscyplina PW</span><select id="engiSubjectDetailsSelect" class="h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"></select></label>
-              <div><span class="rks-control-label">Widok wykresu</span><div id="engiSubjectDetailsModeControl" class="inline-flex h-11 items-center rounded-lg border border-slate-200 bg-slate-100 p-1" role="group" aria-label="Wybierz rodzaj wyniku"><button type="button" data-engi-details-mode="position" aria-pressed="true">POZ</button><button type="button" data-engi-details-mode="score" aria-pressed="false">PKT</button></div></div>
+              <label for="engiSubjectDetailsMetricSelect"><span class="rks-control-label">Zakres danych</span><select id="engiSubjectDetailsMetricSelect" class="h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"></select></label>
+              <div id="engiSubjectDetailsViewControl"><span class="rks-control-label">Widok wykresu</span><div id="engiSubjectDetailsModeControl" class="inline-flex h-11 items-center rounded-lg border border-slate-200 bg-slate-100 p-1" role="group" aria-label="Wybierz rodzaj wyniku"><button type="button" data-engi-details-mode="position" aria-pressed="true">POZ</button><button type="button" data-engi-details-mode="score" aria-pressed="false">PKT</button></div></div>
             </section>
 
             <section class="rks-details-stats" aria-label="Podsumowanie wyników wybranej dyscypliny EngiRank">
-              <div><span>Pozycja 2025</span><b id="engiSubjectDetailsLatestPosition">—</b></div><div><span>Punktacja 2025</span><b id="engiSubjectDetailsLatestScore">—</b></div><div><span>Najlepsza pozycja</span><b id="engiSubjectDetailsBestPosition">—</b></div><div><span>Edycje w TOP 100</span><b id="engiSubjectDetailsTop100">—</b></div>
+              <div><span id="engiSubjectDetailsStat1Label">Pozycja 2025</span><b id="engiSubjectDetailsLatestPosition">—</b></div><div><span id="engiSubjectDetailsStat2Label">Wynik ogólny 2025</span><b id="engiSubjectDetailsLatestScore">—</b></div><div><span id="engiSubjectDetailsStat3Label">Najlepsza pozycja</span><b id="engiSubjectDetailsBestPosition">—</b></div><div><span id="engiSubjectDetailsStat4Label">Edycje w TOP 100</span><b id="engiSubjectDetailsTop100">—</b></div>
             </section>
 
+            <p id="engiSubjectDetailsMetricContext" class="rounded-lg border border-indigo-100 bg-indigo-50 px-4 py-3 text-xs leading-5 text-slate-700"></p>
             <div class="overflow-x-auto"><div id="engiSubjectDetailsYearCards" class="rks-details-years engi-details-years" role="list"></div></div>
 
             <section class="border-t border-slate-200 pt-5" aria-labelledby="engiSubjectDetailsChartTitle">
@@ -1724,7 +1726,7 @@
               <div class="chart-frame chart-frame--rks-details mt-3"><canvas id="chartEngiSubjectDetails" role="img" aria-label="Trend wyniku wybranej dyscypliny PW w EngiRank by Subject"></canvas></div>
             </section>
 
-            <footer class="flex flex-col gap-3 border-t border-slate-200 pt-4 text-[11px] leading-5 text-slate-500 sm:flex-row sm:items-center sm:justify-between"><p>Źródło: <a href="https://engirank.eu/ranking/2025/all/" target="_blank" rel="noopener noreferrer" class="font-bold text-indigo-700 underline decoration-indigo-300 underline-offset-2">oficjalne wyniki EngiRank 2023–2025</a>.</p><button id="engiSubjectDetailsMethodologyOpen" type="button" class="inline-flex min-h-9 items-center justify-center rounded-lg border border-indigo-200 bg-indigo-50 px-3 text-xs font-bold text-indigo-800 transition hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">Wskaźniki i wagi →</button></footer>
+            <footer class="flex flex-col gap-3 border-t border-slate-200 pt-4 text-[11px] leading-5 text-slate-500 sm:flex-row sm:items-center sm:justify-between"><p>Źródło: <a id="engiSubjectDetailsSourceLink" href="https://engirank.eu/institution/warsaw-university-of-technology/2025" target="_blank" rel="noopener noreferrer" class="font-bold text-indigo-700 underline decoration-indigo-300 underline-offset-2">oficjalny profil PW w EngiRank 2023–2025</a>.</p><button id="engiSubjectDetailsMethodologyOpen" type="button" class="inline-flex min-h-9 items-center justify-center rounded-lg border border-indigo-200 bg-indigo-50 px-3 text-xs font-bold text-indigo-800 transition hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">Wskaźniki i wagi →</button></footer>
           </div>
         </section>
       </div>
@@ -1843,11 +1845,12 @@
         <a href="#top" class="font-bold text-indigo-700 hover:text-indigo-900">Wróć na początek ↑</a>
       </div>
     </footer>
-    <script src="assets/js/ranking-data.js?v=20260720-rks-indicators"></script>
-    <script src="assets/js/perspektywy-indicators.js?v=20260720-rks-indicators"></script>
-    <script src="assets/js/rks-indicators.js?v=20260720-rks-indicators"></script>
-    <script src="assets/js/perspektywy-methodology.js?v=20260720-rks-indicators"></script>
-    <script src="assets/js/dashboard.js?v=20260720-rks-indicators"></script>
+    <script src="assets/js/ranking-data.js?v=20260720-engi-subject-indicators"></script>
+    <script src="assets/js/perspektywy-indicators.js?v=20260720-engi-subject-indicators"></script>
+    <script src="assets/js/rks-indicators.js?v=20260720-engi-subject-indicators"></script>
+    <script src="assets/js/engirank-subject-indicators.js?v=20260720-engi-subject-indicators"></script>
+    <script src="assets/js/perspektywy-methodology.js?v=20260720-engi-subject-indicators"></script>
+    <script src="assets/js/dashboard.js?v=20260720-ranking-chart-padding"></script>
   </body>
 </html>
 

@@ -83,17 +83,22 @@ document.addEventListener('DOMContentLoaded', function () {
   let renderEngiDetails = () => {};
   const engiSubjectDetailsModal = document.getElementById('engiSubjectDetailsModal');
   const engiSubjectDetailsSelect = document.getElementById('engiSubjectDetailsSelect');
+  const engiSubjectDetailsMetricSelect = document.getElementById('engiSubjectDetailsMetricSelect');
+  const engiSubjectDetailsViewControl = document.getElementById('engiSubjectDetailsViewControl');
   const engiSubjectDetailsModeButtons = [...document.querySelectorAll('[data-engi-details-mode]')];
   const engiSubjectDetailsLatestPosition = document.getElementById('engiSubjectDetailsLatestPosition');
   const engiSubjectDetailsLatestScore = document.getElementById('engiSubjectDetailsLatestScore');
   const engiSubjectDetailsBestPosition = document.getElementById('engiSubjectDetailsBestPosition');
   const engiSubjectDetailsTop100 = document.getElementById('engiSubjectDetailsTop100');
+  const engiSubjectDetailsStatLabels = [1, 2, 3, 4].map((index) => document.getElementById(`engiSubjectDetailsStat${index}Label`));
+  const engiSubjectDetailsMetricContext = document.getElementById('engiSubjectDetailsMetricContext');
   const engiSubjectDetailsYearCards = document.getElementById('engiSubjectDetailsYearCards');
   const engiSubjectDetailsChartTitle = document.getElementById('engiSubjectDetailsChartTitle');
   const engiSubjectDetailsChartNote = document.getElementById('engiSubjectDetailsChartNote');
   const engiSubjectDetailsLegend = document.getElementById('engiSubjectDetailsLegend');
   const engiSubjectDetailsCanvas = document.getElementById('chartEngiSubjectDetails');
   const engiSubjectDetailsMethodologyOpen = document.getElementById('engiSubjectDetailsMethodologyOpen');
+  const engiSubjectDetailsSourceLink = document.getElementById('engiSubjectDetailsSourceLink');
   const engiSubjectMethodologyOpenButton = document.getElementById('engiSubjectMethodologyOpen');
   let renderEngiSubjectDetails = () => {};
   const qsSubjectDetailsModal = document.getElementById('qsSubjectDetailsModal');
@@ -2194,6 +2199,12 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentEngiSubject = defaultSubject;
     let engiSubjectDetailsMode = 'position';
     let engiSubjectDetailsChart = null;
+    const engiSubjectIndicatorData = window.EngiRankSubjectIndicatorData || {
+      years: engiSubjectYears,
+      metricOrder: [],
+      metrics: {},
+      subjects: {}
+    };
     if (defaultSubject) {
       engiSubjectSelect.value = defaultSubject;
       if (engiSubjectDetailsSelect) engiSubjectDetailsSelect.value = defaultSubject;
@@ -2296,6 +2307,41 @@ document.addEventListener('DOMContentLoaded', function () {
       if (engiSubjectDetailsModal && !engiSubjectDetailsModal.classList.contains('hidden')) renderEngiSubjectDetails();
     };
 
+    const metricLabelForEngiSubject = (subject, metricKey) => (
+      metricKey === 'sdg' && subject?.sdgLabel
+        ? subject.sdgLabel
+        : (engiSubjectIndicatorData.metrics?.[metricKey] || metricKey)
+    );
+
+    const updateEngiSubjectMetricOptions = (subjectName) => {
+      if (!engiSubjectDetailsMetricSelect) return 'overall';
+      if (engiSubjectDetailsMetricSelect.dataset.subject === subjectName && engiSubjectDetailsMetricSelect.options.length) {
+        return engiSubjectDetailsMetricSelect.value;
+      }
+      const subject = engiSubjectIndicatorData.subjects?.[subjectName];
+      const previous = engiSubjectDetailsMetricSelect.value;
+      const metricKeys = (engiSubjectIndicatorData.metricOrder || []).filter((key) =>
+        Object.values(subject?.editions || {}).some((edition) => edition.metrics?.[key])
+      );
+      const overallOption = document.createElement('option');
+      overallOption.value = 'overall';
+      overallOption.textContent = 'Wynik ogólny (pozycja / wynik)';
+      const indicatorGroup = document.createElement('optgroup');
+      indicatorGroup.label = 'Wskaźniki dyscypliny (0–100)';
+      metricKeys.forEach((key) => {
+        const option = document.createElement('option');
+        option.value = key;
+        option.textContent = metricLabelForEngiSubject(subject, key);
+        indicatorGroup.append(option);
+      });
+      engiSubjectDetailsMetricSelect.replaceChildren(overallOption, indicatorGroup);
+      engiSubjectDetailsMetricSelect.value = metricKeys.includes(previous)
+        ? previous
+        : (previous === 'overall' ? 'overall' : (metricKeys[0] || 'overall'));
+      engiSubjectDetailsMetricSelect.dataset.subject = subjectName;
+      return engiSubjectDetailsMetricSelect.value;
+    };
+
     const createEngiSubjectYearCard = (year, rawPosition, score) => {
       const hasPosition = typeof rawPosition === 'string' || typeof rawPosition === 'number';
       const card = document.createElement('article');
@@ -2312,59 +2358,143 @@ document.addEventListener('DOMContentLoaded', function () {
       positionLabel.textContent = hasPosition ? 'pozycja' : 'brak danych';
       const scoreLabel = document.createElement('span');
       scoreLabel.className = 'score';
-      scoreLabel.textContent = typeof score === 'number' ? `${formatEngiScore(score)} pkt` : 'brak punktacji';
+      scoreLabel.textContent = typeof score === 'number' ? formatEngiScore(score) + ' pkt' : 'brak wyniku';
       card.append(yearLabel, position, positionLabel, scoreLabel);
       return card;
+    };
+
+    const createEngiSubjectIndicatorYearCard = (year, snapshot) => {
+      const hasValue = typeof snapshot.value === 'number';
+      const card = document.createElement('article');
+      card.className = 'rks-details-year' + (hasValue ? '' : ' missing');
+      card.setAttribute('role', 'listitem');
+      const yearLabel = document.createElement('div');
+      yearLabel.className = 'year';
+      yearLabel.textContent = year;
+      const value = document.createElement('div');
+      value.className = 'position';
+      value.textContent = hasValue ? formatEngiScore(snapshot.value) : '—';
+      const valueLabel = document.createElement('span');
+      valueLabel.className = 'position-label';
+      valueLabel.textContent = hasValue ? 'wynik 0–100' : 'wskaźnik nie występował';
+      const weight = document.createElement('span');
+      weight.className = 'score';
+      weight.textContent = typeof snapshot.weight === 'number' ? 'waga ' + snapshot.weight + '%' : '—';
+      card.append(yearLabel, value, valueLabel, weight);
+      return card;
+    };
+
+    const setEngiSubjectDetailsStat = (index, label, value) => {
+      if (engiSubjectDetailsStatLabels[index]) engiSubjectDetailsStatLabels[index].textContent = label;
+      const values = [
+        engiSubjectDetailsLatestPosition,
+        engiSubjectDetailsLatestScore,
+        engiSubjectDetailsBestPosition,
+        engiSubjectDetailsTop100
+      ];
+      if (values[index]) values[index].textContent = value;
     };
 
     renderEngiSubjectDetails = () => {
       if (!engiSubjectDetailsCanvas || !engiSubjectDetailsSelect) return;
       const subjectName = engiSubjectDetailsSelect.value || currentEngiSubject || defaultSubject;
-      const data = engiSubjectData.subjects[subjectName];
-      if (!data) return;
+      const fallbackData = engiSubjectData.subjects[subjectName];
+      const officialSubject = engiSubjectIndicatorData.subjects?.[subjectName];
+      if (!fallbackData || !officialSubject) return;
 
-      const lowerSeries = Array.isArray(data.lower) ? data.lower.slice() : [];
-      const upperSeries = Array.isArray(data.upper) ? data.upper.slice() : [];
-      const rawSeries = Array.isArray(data.raw) ? data.raw.slice() : [];
-      const scoreSeries = Array.isArray(data.score) ? data.score.slice() : [];
+      const metricKey = updateEngiSubjectMetricOptions(subjectName);
+      const isIndicator = metricKey !== 'overall';
+      const metricLabel = metricLabelForEngiSubject(officialSubject, metricKey);
+      const editions = officialSubject.editions || {};
+      const rawSeries = engiSubjectYears.map((year, index) => editions[String(year)]?.rank ?? fallbackData.raw?.[index] ?? null);
+      const positionSeries = rawSeries.map((value, index) => {
+        const parsed = Number.parseInt(value, 10);
+        return Number.isFinite(parsed) ? parsed : (fallbackData.lower?.[index] ?? null);
+      });
+      const scoreSeries = engiSubjectYears.map((year, index) => editions[String(year)]?.score ?? fallbackData.score?.[index] ?? null);
+      const snapshots = isIndicator
+        ? engiSubjectYears.map((year) => {
+          const metric = editions[String(year)]?.metrics?.[metricKey];
+          return {
+            value: typeof metric?.value === 'number' ? metric.value : null,
+            weight: typeof metric?.weight === 'number' ? metric.weight : null
+          };
+        })
+        : [];
       const latestIndex = engiSubjectYears.length - 1;
-      const numericPositions = lowerSeries.filter((value) => typeof value === 'number');
-      const bestPosition = numericPositions.length ? Math.min(...numericPositions) : null;
-      const top100Count = upperSeries.filter((value) => typeof value === 'number' && value <= 100).length;
-      const bestYears = bestPosition === null ? [] : engiSubjectYears.filter((year, index) => lowerSeries[index] === bestPosition);
 
-      if (engiSubjectDetailsLatestPosition) engiSubjectDetailsLatestPosition.textContent = rawSeries[latestIndex] ?? '—';
-      if (engiSubjectDetailsLatestScore) engiSubjectDetailsLatestScore.textContent = formatEngiScore(scoreSeries[latestIndex]);
-      if (engiSubjectDetailsBestPosition) engiSubjectDetailsBestPosition.textContent = bestPosition === null ? '—' : `${bestPosition}.`;
-      if (engiSubjectDetailsTop100) engiSubjectDetailsTop100.textContent = `${top100Count} / ${engiSubjectYears.length}`;
-      engiSubjectDetailsYearCards?.replaceChildren(...engiSubjectYears.map((year, index) =>
-        createEngiSubjectYearCard(year, rawSeries[index], scoreSeries[index])));
+      engiSubjectDetailsViewControl?.classList.toggle('hidden', isIndicator);
       engiSubjectDetailsModeButtons.forEach((button) => {
         button.setAttribute('aria-pressed', (button.dataset.engiDetailsMode === engiSubjectDetailsMode).toString());
       });
 
-      const isScore = engiSubjectDetailsMode === 'score';
-      const chartColor = isScore ? '#059669' : '#4f46e5';
-      const firstPosition = lowerSeries.find((value) => typeof value === 'number');
-      const latestPosition = lowerSeries[latestIndex];
-      const positionChange = typeof firstPosition === 'number' && typeof latestPosition === 'number' ? firstPosition - latestPosition : null;
-      const trendText = positionChange === null
-        ? 'Brak pełnych danych do oceny zmiany pozycji.'
-        : positionChange > 0
-          ? `Poprawa o ${positionChange} ${positionChange === 1 ? 'miejsce' : 'miejsc'} względem 2023.`
-          : positionChange < 0
-            ? `Spadek o ${Math.abs(positionChange)} ${Math.abs(positionChange) === 1 ? 'miejsce' : 'miejsc'} względem 2023.`
-            : 'Pozycja bez zmiany względem 2023.';
+      if (isIndicator) {
+        const numericEntries = snapshots
+          .map((snapshot, index) => ({ ...snapshot, index }))
+          .filter(({ value }) => typeof value === 'number');
+        const latest = numericEntries.at(-1);
+        const best = numericEntries.length ? Math.max(...numericEntries.map(({ value }) => value)) : null;
+        const weights = [...new Set(numericEntries.map(({ weight }) => weight).filter((weight) => typeof weight === 'number'))];
+        setEngiSubjectDetailsStat(0, latest ? 'Wynik ' + engiSubjectYears[latest.index] : 'Najnowszy wynik', formatEngiScore(latest?.value));
+        setEngiSubjectDetailsStat(1, 'Waga wskaźnika', weights.length === 1 ? weights[0] + '%' : '—');
+        setEngiSubjectDetailsStat(2, 'Najlepszy wynik', formatEngiScore(best));
+        setEngiSubjectDetailsStat(3, 'Edycje z wynikiem', numericEntries.length + ' / ' + engiSubjectYears.length);
+        engiSubjectDetailsYearCards?.replaceChildren(...engiSubjectYears.map((year, index) =>
+          createEngiSubjectIndicatorYearCard(year, snapshots[index])
+        ));
+        if (engiSubjectDetailsMetricContext) {
+          const availableYears = numericEntries.map(({ index }) => engiSubjectYears[index]).join(', ');
+          engiSubjectDetailsMetricContext.textContent = metricLabel + '. Dostępne wyniki PW: ' + availableYears
+            + '. Wartości są normalizowane w skali 0–100 względem najlepszego wyniku w danym wskaźniku i edycji.';
+        }
+      } else {
+        const numericPositions = positionSeries.filter((value) => typeof value === 'number');
+        const bestPosition = numericPositions.length ? Math.min(...numericPositions) : null;
+        const top100Count = numericPositions.filter((value) => value <= 100).length;
+        setEngiSubjectDetailsStat(0, 'Pozycja 2025', rawSeries[latestIndex] ?? '—');
+        setEngiSubjectDetailsStat(1, 'Wynik ogólny 2025', formatEngiScore(scoreSeries[latestIndex]));
+        setEngiSubjectDetailsStat(2, 'Najlepsza pozycja', bestPosition === null ? '—' : bestPosition + '.');
+        setEngiSubjectDetailsStat(3, 'Edycje w TOP 100', top100Count + ' / ' + engiSubjectYears.length);
+        engiSubjectDetailsYearCards?.replaceChildren(...engiSubjectYears.map((year, index) =>
+          createEngiSubjectYearCard(year, rawSeries[index], scoreSeries[index])
+        ));
+        if (engiSubjectDetailsMetricContext) {
+          engiSubjectDetailsMetricContext.textContent = 'Oficjalny wynik ogólny łączy znormalizowane wyniki wskaźników z wagami właściwymi dla dyscypliny. Znak „=” przy pozycji oznacza miejsce ex aequo.';
+        }
+      }
 
-      if (engiSubjectDetailsChartTitle) engiSubjectDetailsChartTitle.textContent = `${subjectName} — ${isScore ? 'punktacja' : 'pozycja'} 2023–2025`;
-      if (engiSubjectDetailsChartNote) engiSubjectDetailsChartNote.textContent = isScore
-        ? 'Punktacja 0–100 opisuje wynik dyscypliny PW według modelu danej edycji EngiRank.'
-        : `${trendText} Najlepszy wynik: ${bestPosition ?? '—'}. miejsce${bestYears.length ? ` (${bestYears.join(', ')})` : ''}.`;
+      const isScore = !isIndicator && engiSubjectDetailsMode === 'score';
+      const chartColor = isIndicator ? '#0891b2' : (isScore ? '#059669' : '#4f46e5');
+      const chartSeries = isIndicator ? snapshots.map(({ value }) => value) : (isScore ? scoreSeries : positionSeries);
+      const numericPositions = positionSeries.filter((value) => typeof value === 'number');
+      const bestPosition = numericPositions.length ? Math.min(...numericPositions) : null;
+      const bestYears = bestPosition === null ? [] : engiSubjectYears.filter((year, index) => positionSeries[index] === bestPosition);
+
+      if (engiSubjectDetailsChartTitle) {
+        engiSubjectDetailsChartTitle.textContent = subjectName + ' — '
+          + (isIndicator ? metricLabel : (isScore ? 'wynik ogólny' : 'pozycja')) + ' 2023–2025';
+      }
+      if (engiSubjectDetailsChartNote) {
+        engiSubjectDetailsChartNote.textContent = isIndicator
+          ? 'Wynik wskaźnika w skali 0–100. Brak punktu oznacza, że wskaźnik nie występował w modelu danej dyscypliny.'
+          : (isScore
+            ? 'Oficjalny Overall score EngiRank w skali 0–100; wyższa wartość oznacza lepszy wynik.'
+            : 'Najlepsza pozycja: ' + (bestPosition ?? '—') + '.'
+              + (bestYears.length ? ' (' + bestYears.join(', ') + ').' : '')
+              + ' Niższa wartość oznacza lepsze miejsce.');
+      }
       const legendLine = engiSubjectDetailsLegend?.querySelector('span:first-child');
       const legendText = engiSubjectDetailsLegend?.querySelector('span:last-child');
       if (legendLine) legendLine.style.backgroundColor = chartColor;
-      if (legendText) legendText.textContent = isScore ? 'Punktacja 0–100' : 'Pozycja';
-      engiSubjectDetailsCanvas.setAttribute('aria-label', `${subjectName}: ${isScore ? 'punktacja' : 'pozycja'} w EngiRank by Subject 2023–2025`);
+      if (legendText) legendText.textContent = isIndicator ? metricLabel + ' 0–100' : (isScore ? 'Wynik ogólny 0–100' : 'Pozycja');
+      engiSubjectDetailsCanvas.setAttribute('aria-label', subjectName + ': '
+        + (isIndicator ? metricLabel : (isScore ? 'wynik ogólny' : 'pozycja'))
+        + ' w EngiRank by Subject 2023–2025');
+
+      if (engiSubjectDetailsSourceLink) {
+        engiSubjectDetailsSourceLink.href = 'https://engirank.eu/ranking/2025/' + officialSubject.slug + '/';
+        engiSubjectDetailsSourceLink.textContent = 'oficjalne wyniki EngiRank: ' + subjectName + ', edycje 2023–2025';
+      }
 
       if (!engiSubjectDetailsChart) {
         engiSubjectDetailsChart = new Chart(engiSubjectDetailsCanvas, {
@@ -2379,12 +2509,17 @@ document.addEventListener('DOMContentLoaded', function () {
               tooltip: {
                 callbacks: {
                   label: (context) => {
-                    if (context.datasetIndex !== 0) return null;
-                    if (engiSubjectDetailsChart.$mode === 'score') {
-                      return typeof context.parsed.y === 'number' ? `Punktacja: ${formatEngiScore(context.parsed.y)}` : 'Brak danych';
+                    if (typeof context.parsed.y !== 'number') return 'Brak danych';
+                    if (engiSubjectDetailsChart.$mode === 'indicator') {
+                      const weight = engiSubjectDetailsChart.$weightSeries?.[context.dataIndex];
+                      return typeof weight === 'number'
+                        ? ['Wynik: ' + formatEngiScore(context.parsed.y), 'Waga: ' + weight + '%']
+                        : 'Wynik: ' + formatEngiScore(context.parsed.y);
                     }
-                    const rawValue = engiSubjectDetailsChart.$rawSeries?.[context.dataIndex];
-                    return rawValue == null ? 'Brak danych' : `Pozycja: ${rawValue}`;
+                    if (engiSubjectDetailsChart.$mode === 'score') {
+                      return 'Wynik ogólny: ' + formatEngiScore(context.parsed.y);
+                    }
+                    return 'Pozycja: ' + (engiSubjectDetailsChart.$rawSeries?.[context.dataIndex] ?? context.parsed.y);
                   }
                 }
               }
@@ -2398,37 +2533,56 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       engiSubjectDetailsChart.data.labels = engiSubjectYears;
-      engiSubjectDetailsChart.$mode = engiSubjectDetailsMode;
+      engiSubjectDetailsChart.$mode = isIndicator ? 'indicator' : engiSubjectDetailsMode;
       engiSubjectDetailsChart.$rawSeries = rawSeries;
+      engiSubjectDetailsChart.$weightSeries = isIndicator ? snapshots.map(({ weight }) => weight) : [];
+      engiSubjectDetailsChart.data.datasets = [{
+        label: isIndicator ? metricLabel : (isScore ? 'Wynik ogólny 0–100' : 'Pozycja'),
+        data: chartSeries,
+        borderColor: chartColor,
+        backgroundColor: isIndicator ? 'rgba(8,145,178,0.12)' : (isScore ? 'rgba(5,150,105,0.12)' : 'rgba(79,70,229,0.12)'),
+        pointBackgroundColor: chartColor,
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        borderWidth: 2.5,
+        tension: 0.25,
+        spanGaps: false,
+        clip: 8,
+        fill: false
+      }];
+
       const yAxis = engiSubjectDetailsChart.options.scales.y;
-      if (isScore) {
-        engiSubjectDetailsChart.data.datasets = [{
-          label: 'Punktacja 0–100', data: scoreSeries, borderColor: '#059669', backgroundColor: 'rgba(5,150,105,0.12)',
-          pointBackgroundColor: '#059669', pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4,
-          pointHoverRadius: 6, borderWidth: 2.5, tension: 0.25, spanGaps: true, fill: false
-        }];
-        const numericScores = scoreSeries.filter((value) => typeof value === 'number');
-        const minScore = numericScores.length ? Math.min(...numericScores) : 0;
-        const maxScore = numericScores.length ? Math.max(...numericScores) : 100;
-        const padding = Math.max((maxScore - minScore) * 0.15, 4);
+      delete yAxis.min;
+      delete yAxis.max;
+      delete yAxis.suggestedMin;
+      delete yAxis.suggestedMax;
+      if (isIndicator) {
         yAxis.reverse = false;
-        yAxis.suggestedMin = Math.max(0, minScore - padding);
-        yAxis.suggestedMax = Math.min(100, maxScore + padding);
+        yAxis.min = 0;
+        yAxis.max = 105;
+        yAxis.ticks.stepSize = 10;
+        yAxis.ticks.callback = (value) => value > 100 ? '' : Number(value).toLocaleString('pl-PL');
+        yAxis.title.text = 'Wynik wskaźnika (0–100)';
+      } else if (isScore) {
+        const values = scoreSeries.filter((value) => typeof value === 'number');
+        const minValue = values.length ? Math.min(...values) : 0;
+        const maxValue = values.length ? Math.max(...values) : 100;
+        const padding = Math.max((maxValue - minValue) * 0.15, 4);
+        yAxis.reverse = false;
+        yAxis.suggestedMin = Math.max(0, minValue - padding);
+        yAxis.suggestedMax = Math.min(100, maxValue + padding);
         yAxis.ticks.stepSize = undefined;
         yAxis.ticks.callback = (value) => Number(value).toLocaleString('pl-PL');
-        yAxis.title.text = 'Punktacja (0–100)';
+        yAxis.title.text = 'Wynik ogólny (0–100)';
       } else {
-        engiSubjectDetailsChart.data.datasets = [{
-          label: 'Pozycja', data: lowerSeries, borderColor: '#4f46e5', backgroundColor: 'rgba(79,70,229,0.12)',
-          pointBackgroundColor: '#4f46e5', pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4,
-          pointHoverRadius: 6, borderWidth: 2.5, tension: 0.25, spanGaps: true, fill: false
-        }];
-        const minPosition = numericPositions.length ? Math.min(...numericPositions) : 1;
-        const maxPosition = numericPositions.length ? Math.max(...numericPositions) : 150;
-        const padding = Math.max(Math.ceil((maxPosition - minPosition) * 0.12), 4);
+        const minValue = numericPositions.length ? Math.min(...numericPositions) : 1;
+        const maxValue = numericPositions.length ? Math.max(...numericPositions) : 150;
+        const padding = Math.max(Math.ceil((maxValue - minValue) * 0.12), 4);
         yAxis.reverse = true;
-        yAxis.suggestedMin = Math.max(1, minPosition - padding);
-        yAxis.suggestedMax = maxPosition + padding;
+        yAxis.suggestedMin = Math.max(1, minValue - padding);
+        yAxis.suggestedMax = maxValue + padding;
         yAxis.ticks.stepSize = undefined;
         yAxis.ticks.callback = (value) => Math.round(value);
         yAxis.title.text = 'Pozycja (niżej = lepiej)';
@@ -2441,6 +2595,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     engiSubjectSelect.addEventListener('change', (event) => updateEngiSubjectChart(event.target.value));
     engiSubjectDetailsSelect?.addEventListener('change', (event) => updateEngiSubjectChart(event.target.value));
+    engiSubjectDetailsMetricSelect?.addEventListener('change', renderEngiSubjectDetails);
 
     engiSubjectToggle?.addEventListener('click', () => {
       engiSubjectMode = engiSubjectMode === 'position' ? 'score' : 'position';
@@ -3343,9 +3498,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }];
         yAxis.reverse = false;
         yAxis.min = 0;
-        yAxis.max = 100;
+        yAxis.max = 105;
         yAxis.ticks.stepSize = 10;
-        yAxis.ticks.callback = (value) => Number(value).toLocaleString('pl-PL');
+        yAxis.ticks.callback = (value) => value > 100 ? '' : Number(value).toLocaleString('pl-PL');
         yAxis.title.text = 'Wynik wskaźnika (0–100)';
       } else if (isScore) {
         rksDetailsChart.data.datasets = [{
