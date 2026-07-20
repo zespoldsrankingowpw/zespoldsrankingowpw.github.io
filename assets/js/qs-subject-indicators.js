@@ -3,10 +3,10 @@
   const metricOrder = ['academic', 'employer', 'citations', 'hIndex', 'irn'];
   const metrics = {
     academic: 'Reputacja akademicka',
-    employer: 'Reputacja pracodawc�w',
-    citations: 'Cytowania na publikacj�',
+    employer: 'Reputacja pracodawców',
+    citations: 'Cytowania na publikację',
     hIndex: 'H-index',
-    irn: 'Mi�dzynarodowa sie� badawcza'
+    irn: 'Międzynarodowa sieć badawcza'
   };
   const rawSubjects = {
   "Architecture & Built Environment": [
