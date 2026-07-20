@@ -4059,6 +4059,169 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
   renderQsSubjectMethodology();
+  const theWurMethodologyPillarChart = document.getElementById('theWurMethodologyPillarChart');
+  const theWurMethodologyPillarLegend = document.getElementById('theWurMethodologyPillarLegend');
+  const theWurMethodologyPillarButtons = document.getElementById('theWurMethodologyPillarButtons');
+  const theWurMethodologyDetailSwatch = document.getElementById('theWurMethodologyDetailSwatch');
+  const theWurMethodologyDetailTitle = document.getElementById('theWurMethodologyDetailTitle');
+  const theWurMethodologyDetailCopy = document.getElementById('theWurMethodologyDetailCopy');
+  const theWurMethodologyPillarTotal = document.getElementById('theWurMethodologyPillarTotal');
+  const theWurMethodologyIndicatorList = document.getElementById('theWurMethodologyIndicatorList');
+  const theWurMethodologyIndicatorCount = document.getElementById('theWurMethodologyIndicatorCount');
+  const theWurMethodologyPillarCount = document.getElementById('theWurMethodologyPillarCount');
+  const theWurMethodologyLatestPosition = document.getElementById('theWurMethodologyLatestPosition');
+  const theWurMethodologyInfoTabs = [...document.querySelectorAll('[data-the-wur-panel]')];
+
+  const theWurMethodologyPillars = [
+    { name: 'Kształcenie', english: 'Teaching', weight: 29.5, color: '#0e7490', description: 'Środowisko kształcenia mierzone reputacją dydaktyczną, dostępnością kadry, intensywnością kształcenia doktorskiego i zasobami instytucji.' },
+    { name: 'Środowisko badań', english: 'Research Environment', weight: 29, color: '#4f46e5', description: 'Skala i warunki prowadzenia badań: reputacja, przychody badawcze oraz produktywność publikacyjna w relacji do kadry.' },
+    { name: 'Jakość badań', english: 'Research Quality', weight: 30, color: '#059669', description: 'Wpływ i jakość dorobku mierzone średnim oddziaływaniem cytowaniowym, siłą reprezentatywnego dorobku, doskonałością i wpływem sieciowym.' },
+    { name: 'Umiędzynarodowienie', english: 'International Outlook', weight: 7.5, color: '#d97706', description: 'Międzynarodowy skład studentów i kadry oraz udział publikacji ze współautorami zagranicznymi. Mobilność wyjazdowa jest raportowana z wagą 0%.' },
+    { name: 'Przemysł', english: 'Industry', weight: 4, color: '#e11d48', description: 'Transfer wiedzy do gospodarki mierzony przychodami z przemysłu oraz wykorzystaniem badań uczelni w patentach.' }
+  ];
+
+  const theWurMethodologyIndicators = [
+    { label: 'Teaching Reputation', polish: 'Reputacja dydaktyczna', pillar: 'Kształcenie', weight: 15, source: 'THE Academic Reputation Survey', period: 'badania 2024 i 2025', description: 'Liczba wskazań uczelni jako wyróżniającej się w kształceniu. Odpowiedzi są ważone według kraju i dyscypliny, a wynik łączy dwie ostatnie edycje badania.' },
+    { label: 'Student Staff Ratio', polish: 'Relacja kadra–studenci', pillar: 'Kształcenie', weight: 4.5, source: 'Dane instytucjonalne THE', period: 'rok kończący się w 2023', description: 'Liczba pracowników akademickich FTE w relacji do liczby studentów FTE na wszystkich programach prowadzących do kwalifikacji.' },
+    { label: 'Doctorate Bachelor Ratio', polish: 'Doktoraty do dyplomów licencjackich', pillar: 'Kształcenie', weight: 2, source: 'Dane instytucjonalne THE', period: 'rok kończący się w 2023', description: 'Liczba nadanych doktoratów podzielona przez liczbę nadanych dyplomów pierwszego stopnia.' },
+    { label: 'Doctorate Staff Ratio', polish: 'Doktoraty do kadry', pillar: 'Kształcenie', weight: 5.5, source: 'Dane instytucjonalne THE', period: 'rok kończący się w 2023', description: 'Ważona dyscyplinowo liczba doktoratów w relacji do ważonej liczby pracowników akademickich, z korektą różnic między dziedzinami.' },
+    { label: 'Institutional Income', polish: 'Dochód instytucjonalny', pillar: 'Kształcenie', weight: 2.5, source: 'Dane THE / Bank Światowy', period: 'rok kończący się w 2023', description: 'Całkowity dochód instytucji skorygowany parytetem siły nabywczej i podzielony przez liczbę pracowników akademickich.' },
+
+    { label: 'Research Reputation', polish: 'Reputacja badawcza', pillar: 'Środowisko badań', weight: 18, source: 'THE Academic Reputation Survey', period: 'badania 2024 i 2025', description: 'Globalne wskazania uczelni prowadzących najlepsze badania, ważone według kraju i dyscypliny oraz agregowane z dwóch edycji badania.' },
+    { label: 'Research Income', polish: 'Przychody z badań', pillar: 'Środowisko badań', weight: 5.5, source: 'Dane THE / Bank Światowy', period: 'rok kończący się w 2023', description: 'Przychody badawcze skorygowane PPP i profilem dyscyplin, podzielone przez ważoną liczbę pracowników akademickich.' },
+    { label: 'Research Productivity', polish: 'Produktywność publikacyjna', pillar: 'Środowisko badań', weight: 5.5, source: 'Elsevier Scopus / dane kadrowe', period: 'publikacje 2020–2024', description: 'Ważona dyscyplinowo liczba publikacji Scopus w relacji do pracowników akademickich i badawczych FTE.' },
+
+    { label: 'Citation Impact', polish: 'Wpływ cytowań', pillar: 'Jakość badań', weight: 15, source: 'Elsevier Scopus', period: 'publikacje 2020–2024; cytowania 2020–2025', description: 'Średni wpływ cytowaniowy publikacji, normalizowany według dyscypliny i łączący w równych częściach wynik korygowany oraz niekorygowany o kraj.' },
+    { label: 'Research Strength', polish: 'Siła badań', pillar: 'Jakość badań', weight: 5, source: 'Elsevier Scopus', period: 'publikacje 2020–2024; cytowania 2020–2025', description: '75. percentyl FWCI wszystkich publikacji uczelni, ograniczający wpływ pojedynczych prac o wyjątkowo wysokiej cytowalności.' },
+    { label: 'Research Excellence', polish: 'Doskonałość badań', pillar: 'Jakość badań', weight: 5, source: 'Elsevier Scopus', period: 'publikacje 2020–2024', description: 'Liczba publikacji uczelni należących do światowego TOP 10% według FWCI, skorygowana o rok, dyscyplinę oraz wielkość kadry.' },
+    { label: 'Research Influence', polish: 'Wpływ badań', pillar: 'Jakość badań', weight: 5, source: 'Elsevier Scopus', period: 'publikacje 2020–2024; cytowania 2020–2025', description: 'Znaczenie publikacji określane również przez znaczenie prac, które je cytują; wynik jest korygowany o rok, dyscyplinę i wielkość kadry.' },
+
+    { label: 'International Students', polish: 'Studenci międzynarodowi', pillar: 'Umiędzynarodowienie', weight: 2.5, source: 'Dane instytucjonalne THE', period: 'rok kończący się w 2023', description: 'Udział studentów FTE o obywatelstwie innym niż kraj siedziby uczelni, normalizowany z uwzględnieniem wielkości populacji kraju.' },
+    { label: 'International Staff', polish: 'Kadra międzynarodowa', pillar: 'Umiędzynarodowienie', weight: 2.5, source: 'Dane instytucjonalne THE', period: 'rok kończący się w 2023', description: 'Udział międzynarodowych pracowników akademickich FTE, normalizowany z uwzględnieniem wielkości populacji kraju.' },
+    { label: 'International Co-authorship', polish: 'Współautorstwo międzynarodowe', pillar: 'Umiędzynarodowienie', weight: 2.5, source: 'Elsevier Scopus', period: 'publikacje 2020–2024', description: 'Udział ważonych dyscyplinowo publikacji z co najmniej jednym współautorem zagranicznym, korygowany o wielkość kraju.' },
+    { label: 'Studying Abroad', polish: 'Studia za granicą', pillar: 'Umiędzynarodowienie', weight: 0, source: 'Dane instytucjonalne THE', period: 'raportowany, waga 0%', description: 'Liczba studentów wyjeżdżających na wymianę w relacji do wszystkich studentów FTE, ważona dyscyplinowo i korygowana o wielkość kraju. Nie wpływa na wynik 2026.' },
+
+    { label: 'Industry Income', polish: 'Przychody z przemysłu', pillar: 'Przemysł', weight: 2, source: 'Dane instytucjonalne / Bank Światowy', period: 'rok kończący się w 2023', description: 'Przychody badawcze od przemysłu, skorygowane PPP i podzielone przez liczbę pracowników akademickich FTE.' },
+    { label: 'Patents', polish: 'Patenty', pillar: 'Przemysł', weight: 2, source: 'Elsevier / dane patentowe', period: 'cykl WUR 2026', description: 'Liczba patentów cytujących publikacje uczelni, ważona według dyscypliny i normalizowana przez łączną liczbę pracowników akademickich i badawczych.' }
+  ];
+
+  const formatTheWurMethodologyWeight = (value) => Number(value).toLocaleString('pl-PL') + '%';
+  let activeTheWurMethodologyPillar = 'Kształcenie';
+
+  const renderTheWurMethodologyExplorer = () => {
+    if (!theWurMethodologyPillarChart || !theWurMethodologyIndicatorList) return;
+    const activePillar = theWurMethodologyPillars.find((pillar) => pillar.name === activeTheWurMethodologyPillar) || theWurMethodologyPillars[0];
+
+    const selectPillar = (pillarName) => {
+      activeTheWurMethodologyPillar = pillarName;
+      renderTheWurMethodologyExplorer();
+    };
+
+    const makePillarItem = (pillar, legend = false) => {
+      const active = pillar.name === activeTheWurMethodologyPillar;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = (legend ? 'rks-legend-button' : 'rks-weight-segment') + (active ? ' active' : '');
+      button.setAttribute('aria-label', pillar.name + ', ' + formatTheWurMethodologyWeight(pillar.weight));
+      if (legend) {
+        const dot = document.createElement('span');
+        dot.className = 'rks-legend-dot';
+        dot.style.background = pillar.color;
+        const name = document.createElement('span');
+        name.className = 'rks-legend-name';
+        name.textContent = pillar.name;
+        const weight = document.createElement('span');
+        weight.className = 'rks-legend-weight';
+        weight.textContent = formatTheWurMethodologyWeight(pillar.weight);
+        button.append(dot, name, weight);
+      } else {
+        button.style.width = pillar.weight + '%';
+        button.style.background = pillar.color;
+        button.style.color = '#fff';
+        button.textContent = formatTheWurMethodologyWeight(pillar.weight);
+        button.title = pillar.name + ' — ' + formatTheWurMethodologyWeight(pillar.weight);
+      }
+      button.addEventListener('click', () => selectPillar(pillar.name));
+      return button;
+    };
+
+    theWurMethodologyPillarChart.replaceChildren(...theWurMethodologyPillars.map((pillar) => makePillarItem(pillar)));
+    theWurMethodologyPillarLegend?.replaceChildren(...theWurMethodologyPillars.map((pillar) => makePillarItem(pillar, true)));
+
+    const pillarButtons = theWurMethodologyPillars.map((pillar) => {
+      const active = pillar.name === activeTheWurMethodologyPillar;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'rks-criterion-button' + (active ? ' active' : '');
+      button.setAttribute('aria-pressed', active.toString());
+      const dot = document.createElement('span');
+      dot.className = 'rks-legend-dot';
+      dot.style.background = pillar.color;
+      const name = document.createElement('span');
+      name.className = 'rks-criterion-name';
+      name.textContent = pillar.name;
+      const weight = document.createElement('span');
+      weight.className = 'rks-criterion-weight';
+      weight.textContent = formatTheWurMethodologyWeight(pillar.weight);
+      button.append(dot, name, weight);
+      button.addEventListener('click', () => selectPillar(pillar.name));
+      return button;
+    });
+    theWurMethodologyPillarButtons?.replaceChildren(...pillarButtons);
+
+    if (theWurMethodologyDetailSwatch) theWurMethodologyDetailSwatch.style.background = activePillar.color;
+    if (theWurMethodologyDetailTitle) theWurMethodologyDetailTitle.textContent = activePillar.name + ' (' + activePillar.english + ')';
+    if (theWurMethodologyDetailCopy) theWurMethodologyDetailCopy.textContent = activePillar.description;
+    if (theWurMethodologyPillarTotal) {
+      const caption = document.createElement('small');
+      caption.textContent = 'waga filaru';
+      theWurMethodologyPillarTotal.replaceChildren(formatTheWurMethodologyWeight(activePillar.weight), caption);
+    }
+
+    const rows = theWurMethodologyIndicators.filter((indicator) => indicator.pillar === activePillar.name).map((indicator) => {
+      const row = document.createElement('article');
+      row.className = 'rks-indicator';
+      const copy = document.createElement('div');
+      const title = document.createElement('h4');
+      title.textContent = indicator.polish + ' (' + indicator.label + ')';
+      const description = document.createElement('p');
+      description.textContent = indicator.description;
+      const source = document.createElement('span');
+      source.className = 'rks-source-line';
+      source.textContent = indicator.source;
+      copy.append(title, description, source);
+      const weight = document.createElement('div');
+      weight.className = 'rks-indicator-weight';
+      const weightCaption = document.createElement('small');
+      weightCaption.textContent = indicator.weight === 0 ? 'nie wpływa na wynik' : 'waga';
+      weight.append(formatTheWurMethodologyWeight(indicator.weight), weightCaption);
+      const period = document.createElement('span');
+      period.className = 'rks-indicator-delta' + (indicator.weight === 0 ? ' new' : '');
+      period.textContent = indicator.period;
+      row.append(copy, weight, period);
+      return row;
+    });
+    theWurMethodologyIndicatorList.replaceChildren(...rows);
+
+    const weightedCount = theWurMethodologyIndicators.filter((indicator) => indicator.weight > 0).length;
+    const unweightedCount = theWurMethodologyIndicators.filter((indicator) => indicator.weight === 0).length;
+    if (theWurMethodologyIndicatorCount) theWurMethodologyIndicatorCount.textContent = weightedCount + ' + ' + unweightedCount;
+    if (theWurMethodologyPillarCount) theWurMethodologyPillarCount.textContent = theWurMethodologyPillars.length;
+    if (theWurMethodologyLatestPosition && theLower?.length) {
+      const latestIndex = theLower.length - 1;
+      theWurMethodologyLatestPosition.textContent = theLower[latestIndex] === theUpper[latestIndex]
+        ? '=' + theLower[latestIndex]
+        : theLower[latestIndex] + '–' + theUpper[latestIndex];
+    }
+  };
+
+  theWurMethodologyInfoTabs.forEach((button) => {
+    button.addEventListener('click', () => {
+      theWurMethodologyInfoTabs.forEach((tab) => tab.classList.toggle('active', tab === button));
+      theWurMethodologyInfoTabs.forEach((tab) => document.getElementById(tab.dataset.theWurPanel)?.classList.toggle('hidden', tab !== button));
+    });
+  });
+  renderTheWurMethodologyExplorer();
   populateMethodologySelect('theSubjectSelect', 'theMethodologySubjectSelect');
   const theMethodologySelect = document.getElementById('theMethodologySubjectSelect');
   const theMethodologyChart = document.getElementById('theMethodologySubjectChart');

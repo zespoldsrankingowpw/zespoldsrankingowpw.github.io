@@ -1050,87 +1050,79 @@
     </div>
     <div id="theWurMethodologyModal" data-methodology-modal class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="theWurMethodologyTitle" aria-describedby="theWurMethodologyDesc">
       <div data-methodology-backdrop class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
-      <div class="relative z-10 flex min-h-full items-center justify-center p-4">
-        <section class="max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[28px] bg-white shadow-2xl ring-1 ring-slate-900/10">
-          <div class="flex items-start justify-between gap-6 border-b border-slate-200 p-6 md:p-8">
+      <div class="relative z-10 flex min-h-full items-center justify-center p-0 sm:p-4">
+        <section class="rks-explorer-modal max-h-screen w-full max-w-6xl overflow-y-auto bg-white shadow-2xl ring-1 ring-slate-900/10 sm:max-h-[94vh] sm:rounded-2xl">
+          <header class="rks-explorer-header flex items-start justify-between gap-6 border-b border-slate-200 bg-white p-5 sm:p-6 md:p-7">
             <div>
-              <p class="text-xs font-bold uppercase tracking-[0.24em] text-cyan-700">Metodyka THE World University Rankings 2026</p>
-              <h2 id="theWurMethodologyTitle" class="mt-2 text-2xl font-extrabold text-slate-950">18 wskaźników w pięciu filarach</h2>
-              <p id="theWurMethodologyDesc" class="mt-3 max-w-3xl text-sm leading-6 text-slate-600">Ranking ogólny THE ocenia całe uczelnie badawcze w obszarach kształcenia, środowiska badawczego, jakości badań, umiędzynarodowienia i współpracy z przemysłem.</p>
+              <p class="text-[11px] font-extrabold uppercase tracking-[0.2em] text-cyan-700">THE World University Rankings | metodyka 2026</p>
+              <h2 id="theWurMethodologyTitle" class="mt-2 text-xl font-extrabold text-slate-950 sm:text-2xl">Jak THE ocenia całą uczelnię?</h2>
+              <p id="theWurMethodologyDesc" class="mt-2 max-w-3xl text-xs leading-5 text-slate-600 sm:text-sm">Pięć filarów, 18 wskaźników, reguły kwalifikacji oraz zasady przetwarzania danych instytucjonalnych, reputacyjnych i bibliometrycznych.</p>
             </div>
             <button data-methodology-close type="button" class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-500" aria-label="Zamknij modal metodyki THE World University Rankings">×</button>
-          </div>
+          </header>
 
-          <div class="space-y-6 p-6 md:p-8">
-            <section class="rounded-3xl border border-slate-200 bg-slate-50 p-4 md:p-5" aria-label="Wagi filarów THE World University Rankings 2026">
-              <div class="mb-3 flex flex-wrap items-end justify-between gap-3">
-                <div>
-                  <h3 class="text-base font-extrabold text-slate-950">THE World University Rankings 2026 — wagi filarów</h3>
-                  <p class="mt-1 text-xs leading-5 text-slate-500">Wewnątrz pięciu filarów znajduje się 18 wskaźników. Wskaźnik wyjazdów zagranicznych ma w tej edycji wagę 0%.</p>
-                </div>
-                <p class="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-600 ring-1 ring-slate-200">Razem 100%</p>
+          <div class="p-5 sm:p-6 md:p-7">
+            <section class="rks-subject-bar" aria-label="Podsumowanie metodyki THE World University Rankings 2026">
+              <div>
+                <span class="rks-control-label">Ranking instytucjonalny</span>
+                <h3 class="text-base font-extrabold text-slate-950">THE World University Rankings 2026</h3>
+                <p class="mt-2 text-xs leading-5 text-slate-600">Ocena całej uczelni badawczej obejmuje kształcenie, środowisko i jakość badań, umiędzynarodowienie oraz transfer wiedzy do gospodarki.</p>
               </div>
-              <div class="flex h-16 overflow-hidden rounded-2xl bg-white shadow-inner ring-1 ring-slate-200">
-                <div class="flex items-center justify-center bg-cyan-700 text-[10px] font-bold text-white" style="width:29.5%" title="Teaching — 29,5%">29,5%</div>
-                <div class="flex items-center justify-center bg-sky-600 text-[10px] font-bold text-white" style="width:29%" title="Research Environment — 29%">29%</div>
-                <div class="flex items-center justify-center bg-indigo-700 text-[10px] font-bold text-white" style="width:30%" title="Research Quality — 30%">30%</div>
-                <div class="flex items-center justify-center bg-emerald-600 text-[10px] font-bold text-white" style="width:7.5%" title="International Outlook — 7,5%">7,5%</div>
-                <div class="bg-amber-500" style="width:4%" title="Industry — 4%"></div>
-              </div>
-              <div class="mt-4 grid gap-2 text-[11px] text-slate-600 sm:grid-cols-2 lg:grid-cols-5">
-                <span><b class="text-cyan-700">■</b> Kształcenie 29,5%</span>
-                <span><b class="text-sky-700">■</b> Środowisko badań 29%</span>
-                <span><b class="text-indigo-700">■</b> Jakość badań 30%</span>
-                <span><b class="text-emerald-700">■</b> Umiędzynarodowienie 7,5%</span>
-                <span><b class="text-amber-600">■</b> Przemysł 4%</span>
+              <div class="rks-profile-facts" aria-label="Najważniejsze fakty o metodologii THE WUR">
+                <div class="rks-profile-fact"><b>THE WUR 2026</b><span>edycja</span></div>
+                <div class="rks-profile-fact"><b id="theWurMethodologyIndicatorCount">17 + 1</b><span>ważone + waga 0%</span></div>
+                <div class="rks-profile-fact"><b id="theWurMethodologyPillarCount">5</b><span>filarów oceny</span></div>
+                <div class="rks-profile-fact"><b id="theWurMethodologyLatestPosition">1201–1500</b><span>pozycja PW 2026</span></div>
               </div>
             </section>
 
-            <section class="grid gap-4 lg:grid-cols-2" aria-label="Wskaźniki THE World University Rankings 2026">
-              <section class="rounded-2xl border border-slate-200 bg-white p-4">
-                <h4 class="text-sm font-extrabold text-cyan-700">Teaching — 29,5%</h4>
-                <ul class="mt-3 space-y-2 text-xs leading-5 text-slate-600">
-                  <li>Reputacja dydaktyczna — 15%</li>
-                  <li>Relacja kadra–studenci — 4,5%</li>
-                  <li>Doktoraty do licencjatów — 2%</li>
-                  <li>Doktoraty do kadry — 5,5%</li>
-                  <li>Dochód instytucjonalny — 2,5%</li>
-                </ul>
-              </section>
-              <section class="rounded-2xl border border-slate-200 bg-white p-4">
-                <h4 class="text-sm font-extrabold text-sky-700">Research Environment — 29%</h4>
-                <ul class="mt-3 space-y-2 text-xs leading-5 text-slate-600">
-                  <li>Reputacja badawcza — 18%</li>
-                  <li>Przychody z badań — 5,5%</li>
-                  <li>Produktywność publikacyjna — 5,5%</li>
-                </ul>
-              </section>
-              <section class="rounded-2xl border border-slate-200 bg-white p-4">
-                <h4 class="text-sm font-extrabold text-indigo-700">Research Quality — 30%</h4>
-                <ul class="mt-3 space-y-2 text-xs leading-5 text-slate-600">
-                  <li>Wpływ cytowań — 15%</li>
-                  <li>Siła badań — 5%</li>
-                  <li>Doskonałość badań — 5%</li>
-                  <li>Wpływ badań — 5%</li>
-                </ul>
-              </section>
-              <section class="rounded-2xl border border-slate-200 bg-white p-4">
-                <h4 class="text-sm font-extrabold text-emerald-700">International Outlook i Industry — 11,5%</h4>
-                <p class="mt-3 text-xs leading-5 text-slate-600">Udział studentów i kadry zagranicznej oraz współautorstwo międzynarodowe mają po 2,5%. Przychody z przemysłu i patenty mają po 2%. Wskaźnik studiowania za granicą pozostaje przygotowany, lecz ma wagę 0%.</p>
-              </section>
+            <section class="rks-variant-band">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="m7 8 5-5 5 5"/><path d="m7 16 5 5 5-5"/></svg>
+              <div><strong>Studying Abroad jest raportowany, ale nie wpływa na wynik</strong><p>Wskaźnik mobilności wyjazdowej należy do filaru International Outlook, jednak w edycji 2026 ma wagę 0%. Pozostałe 17 wskaźników sumuje się do 100%.</p></div>
+              <span class="rks-variant-tag">17 × WSK + 1 × 0%</span>
             </section>
 
-            <section class="rounded-3xl border border-cyan-100 bg-cyan-50/70 p-5">
-              <h3 class="font-extrabold text-slate-950">Warunki wejścia do rankingu ogólnego</h3>
-              <p class="mt-2 text-sm leading-6 text-slate-700">Uczelnia musi osiągnąć minimalny wolumen publikacji w pięcioletnim oknie, publikować w każdym roku analizowanego okresu oraz prowadzić kształcenie na poziomie licencjackim. THE może wykluczyć instytucje o bardzo wąskim profilu lub niespełniające wymogów jakości danych.</p>
+            <section class="rks-weights" aria-labelledby="theWurMethodologyWeightsTitle">
+              <div class="rks-section-head">
+                <div><h3 id="theWurMethodologyWeightsTitle">Wagi filarów oceny</h3><p>Kliknij segment lub pozycję legendy, aby zobaczyć wskaźniki, definicje, okres danych i źródło.</p></div>
+                <span>Suma: 100%</span>
+              </div>
+              <div id="theWurMethodologyPillarChart" class="rks-weight-bar" role="img" aria-label="Rozkład wag pięciu filarów THE World University Rankings 2026"></div>
+              <div id="theWurMethodologyPillarLegend" class="rks-weight-legend"></div>
             </section>
 
-            <p class="rounded-2xl bg-cyan-50 p-4 text-xs leading-5 text-cyan-950">Źródło: <a href="https://www.timeshighereducation.com/world-university-rankings/methodology" target="_blank" rel="noopener noreferrer" class="font-bold text-cyan-700 underline decoration-cyan-300 underline-offset-2">THE World University Rankings 2026 — methodology</a>.</p>
+            <section class="rks-indicator-explorer" aria-label="Definicje filarów i wskaźników THE WUR">
+              <nav class="rks-criteria-nav" aria-label="Filary oceny THE WUR">
+                <h3>Filary oceny</h3>
+                <div id="theWurMethodologyPillarButtons" class="rks-criteria-buttons"></div>
+              </nav>
+              <div>
+                <header class="rks-detail-head">
+                  <div><div class="rks-detail-title"><span id="theWurMethodologyDetailSwatch"></span><h3 id="theWurMethodologyDetailTitle"></h3></div><p id="theWurMethodologyDetailCopy"></p></div>
+                  <div id="theWurMethodologyPillarTotal" class="rks-criterion-total"></div>
+                </header>
+                <div id="theWurMethodologyIndicatorList"></div>
+              </div>
+            </section>
+
+            <nav class="rks-info-tabs" aria-label="Dodatkowe informacje o metodologii THE WUR">
+              <button type="button" class="active" data-the-wur-panel="theWurMethodologyEligibilityPanel">Kwalifikacja</button>
+              <button type="button" data-the-wur-panel="theWurMethodologyDataPanel">Dane i braki</button>
+              <button type="button" data-the-wur-panel="theWurMethodologyNormalizationPanel">Normalizacja</button>
+              <button type="button" data-the-wur-panel="theWurMethodologyPublicationPanel">Publikacja wyników</button>
+              <button type="button" data-the-wur-panel="theWurMethodologySourcesPanel">Źródła</button>
+            </nav>
+            <div>
+              <div id="theWurMethodologyEligibilityPanel" class="rks-info-panel">Uczelnia musi: opublikować ponad 1000 kwalifikowanych prac w latach 2020–2024 i ponad 100 w każdym roku; prowadzić kształcenie licencjackie; nie mieć ponad 80% publikacji w jednej wąskiej dyscyplinie; przekazać dane ogółem; mieć najwyżej dwie brakujące wartości krytyczne; wskazać co najmniej jedną aktywną dyscyplinę; nie znajdować się na liście wyłączeń. Instytucje spełniające tylko część wymagań mogą otrzymać status Reporter bez pozycji i wyników.</div>
+              <div id="theWurMethodologyDataPanel" class="rks-info-panel hidden">Dane instytucjonalne dotyczą roku kończącego się w 2023 r. Bibliometria obejmuje 18,7 mln publikacji ze Scopus z lat 2020–2024 oraz 174,9 mln cytowań z lat 2020–2025. Academic Reputation Survey łączy odpowiedzi z dwóch edycji, w tym badanie prowadzone od listopada 2024 do stycznia 2025. Gdy brakuje metryki, THE może przypisać wyższą z dwóch wartości: średnią dwóch najniższych wyników metryk danej uczelni albo minimalny wynik w całej populacji.</div>
+              <div id="theWurMethodologyNormalizationPanel" class="rks-info-panel hidden">Większość wskaźników jest standaryzowana na podstawie rozkładu danych z użyciem wariantu z-score i funkcji skumulowanego prawdopodobieństwa. Dla reputacji, Research Excellence, Research Influence i patentów THE stosuje komponent wykładniczy. Dane finansowe są przeliczane na dolary według parytetu siły nabywczej, a część wskaźników jest korygowana o profil dyscyplin uczelni i wielkość kraju.</div>
+              <div id="theWurMethodologyPublicationPanel" class="rks-info-panel hidden">Dokładną pozycję i wynik ogólny publikuje się dla uczelni z miejsc 1–200. Kolejne uczelnie otrzymują wspólne pasma: 201–250, 251–300, 301–350, 351–400, 401–500, 501–600, 601–800, 801–1000, 1001–1200, 1201–1500 oraz 1501+. Wewnątrz pasma uczelnie są prezentowane alfabetycznie. THE publikuje również dokładne wyniki pięciu filarów.</div>
+              <div id="theWurMethodologySourcesPanel" class="rks-info-panel hidden">Dane instytucjonalne: uczelnie poprzez THE Data Portal; reputacja: THE Academic Reputation Survey; bibliometria: Elsevier Scopus; parytet siły nabywczej: Bank Światowy. <a href="https://www.timeshighereducation.com/sites/default/files/breaking_news_files/the_world_university_rankings_2026_methodology.pdf" target="_blank" rel="noopener noreferrer">Otwórz pełną metodologię THE WUR 2026</a> oraz <a href="https://www.timeshighereducation.com/world-university-rankings/latest/world-ranking" target="_blank" rel="noopener noreferrer">tabelę wyników 2026</a>.</div>
+            </div>
           </div>
         </section>
       </div>
     </div>
-
     <div id="theSubjectMethodologyModal" data-methodology-modal class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="theSubjectMethodologyTitle" aria-describedby="theSubjectMethodologyDesc">
       <div data-methodology-backdrop class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
       <div class="relative z-10 flex min-h-full items-center justify-center p-4">
