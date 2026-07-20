@@ -1484,6 +1484,24 @@ window.RankingData = (() => {
 
   const arwuUpper = [900, 1000, 1000, 1000, 1000, 1000];
 
+  const arwuDetailsData = {
+    years: arwuYears,
+    worldRankLabels: ['801–900', '901–1000', '901–1000', '901–1000', '901–1000', '901–1000'],
+    worldRankLower: arwuLower,
+    worldRankUpper: arwuUpper,
+    nationalRankLabels: ['4–6', '8–10', '7–11', '5–9', '4–8', '4–7'],
+    nationalRankLower: [4, 8, 7, 5, 4, 4],
+    nationalRankUpper: [6, 10, 11, 9, 8, 7],
+    indicators: {
+      alumni: { label: 'Absolwenci z Noblem lub Medalem Fieldsa', shortLabel: 'Alumni', weight: 10, values: [0, 0, 0, 0, 0, 0] },
+      award: { label: 'Kadra z Noblem lub Medalem Fieldsa', shortLabel: 'Award', weight: 20, values: [0, 0, 0, 0, 0, 0] },
+      hici: { label: 'Najczęściej cytowani badacze', shortLabel: 'HiCi', weight: 20, values: [0, 0, 0, 0, 0, 0] },
+      ns: { label: 'Publikacje w Nature i Science', shortLabel: 'N&S', weight: 20, values: [2.0, 2.5, 2.5, 2.5, 3.2, 3.6] },
+      pub: { label: 'Publikacje w SCI-Expanded i SSCI', shortLabel: 'PUB', weight: 20, values: [27.5, 26.9, 26.7, 24.5, 25.3, 25.3] },
+      pcp: { label: 'Wynik ważony na pracownika', shortLabel: 'PCP', weight: 10, values: [10.9, 11.1, 11.6, 10.9, 11.1, 11.0] }
+    }
+  };
+
   const perspektywyYears = [2020, 2021, 2022, 2023, 2024, 2025, 2026];
 
   const perspektywyPositions = [3, 3, 3, 3, 3, 3, 3];
@@ -1514,6 +1532,7 @@ window.RankingData = (() => {
     arwuYears,
     arwuLower,
     arwuUpper,
+    arwuDetailsData,
     perspektywyYears,
     perspektywyPositions,
     perspektywyScores,

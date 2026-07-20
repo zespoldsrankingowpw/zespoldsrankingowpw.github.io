@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
-    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260720-the-details" />
+    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260720-arwu-details" />
   </head>
   <body id="top" class="bg-gray-50 text-gray-900">
     <a href="#main-content" class="skip-link sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-slate-950 focus:px-4 focus:py-3 focus:text-sm focus:font-bold focus:text-white">Przejdź do głównej treści</a>
@@ -685,6 +685,11 @@
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgb(220,38,38); border-color: rgb(220,38,38); background-color: #fff5f5;">Aktualizacja: 15.08.2025</span>
             <div class="flex items-center justify-between gap-3">
               <h3 class="text-lg font-semibold text-gray-900">ARWU (Lista Szanghajska)</h3>
+              <div class="flex items-center gap-2">
+                <button id="arwuDetailsOpen" type="button" data-methodology-open="arwuDetailsModal" aria-controls="arwuDetailsModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-rose-700 shadow-sm transition hover:border-rose-300 hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2" aria-label="Otwórz szczegółowe wyniki ARWU" title="Otwórz szczegółowe wyniki ARWU">
+                  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0"><path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 4-4 3 2 4-6"/></svg>
+                  <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-52 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Wyniki: pozycja światowa, krajowa i sześć wskaźników ARWU 2020–2025.</span>
+                </button>
               <button id="arwuMethodologyOpen" type="button" data-methodology-open="arwuMethodologyModal" aria-controls="arwuMethodologyModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-rose-700 shadow-sm transition hover:border-rose-300 hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2" aria-label="Otwórz metodykę ARWU" title="Otwórz metodykę ARWU">
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0">
   <path d="M12 8.5a3.5 3.5 0 1 1 0 7a3.5 3.5 0 0 1 0-7Z" />
@@ -692,6 +697,7 @@
 </svg>
       <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-56 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Metodyka: wagi, wskaźniki, źródła danych i zasady kwalifikacji.</span>
     </button>
+              </div>
             </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
             <canvas id="chartARWU" role="img" aria-label="Trend pozycji Politechniki Warszawskiej w Academic Ranking of World Universities." class="mt-4 w-full" style="height: 288px;">Trend pozycji Politechniki Warszawskiej w Academic Ranking of World Universities. Szczegółowy opis znajduje się pod wykresem.</canvas>
@@ -866,6 +872,74 @@
             <footer class="flex flex-col gap-3 border-t border-slate-200 pt-4 text-[11px] leading-5 text-slate-500 sm:flex-row sm:items-center sm:justify-between">
               <p>Źródło: <a href="https://www.timeshighereducation.com/world-university-rankings/warsaw-university-technology" target="_blank" rel="noopener noreferrer" class="font-bold text-cyan-700 underline decoration-cyan-300 underline-offset-2">oficjalny profil Warsaw University of Technology w THE</a>, edycje 2020–2026.</p>
               <button id="theWurDetailsMethodologyOpen" type="button" class="inline-flex min-h-9 items-center justify-center rounded-lg border border-cyan-200 bg-cyan-50 px-3 text-xs font-bold text-cyan-800 transition hover:bg-cyan-100 focus:outline-none focus:ring-2 focus:ring-cyan-500">Wskaźniki i wagi →</button>
+            </footer>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Szczegółowe wyniki ARWU -->
+    <div id="arwuDetailsModal" data-methodology-modal class="fixed inset-0 z-50 hidden" role="dialog" aria-hidden="true" aria-modal="true" aria-labelledby="arwuDetailsTitle" aria-describedby="arwuDetailsDesc">
+      <div data-methodology-backdrop class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
+      <div class="relative z-10 flex min-h-full items-center justify-center p-0 sm:p-4">
+        <section class="max-h-screen w-full max-w-6xl overflow-y-auto bg-white shadow-2xl ring-1 ring-slate-900/10 sm:max-h-[94vh] sm:rounded-2xl">
+          <header class="sticky top-0 z-20 flex items-start justify-between gap-6 border-b border-slate-200 bg-white/95 p-5 backdrop-blur sm:p-6 md:p-7">
+            <div>
+              <p class="text-[11px] font-extrabold uppercase tracking-[0.2em] text-rose-700">Academic Ranking of World Universities | 2020–2025</p>
+              <h2 id="arwuDetailsTitle" class="mt-2 text-xl font-extrabold text-slate-950 sm:text-2xl">Wyniki ARWU Politechniki Warszawskiej</h2>
+              <p id="arwuDetailsDesc" class="mt-2 max-w-3xl text-xs leading-5 text-slate-600 sm:text-sm">Pozycja światowa, pozycja krajowa oraz wyniki sześciu wskaźników ShanghaiRanking.</p>
+            </div>
+            <button data-methodology-close type="button" class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500" aria-label="Zamknij szczegółowe wyniki ARWU">×</button>
+          </header>
+
+          <div class="space-y-5 p-5 sm:p-6 md:p-7">
+            <section class="grid gap-3 rounded-lg border border-rose-200 bg-rose-50 p-4 text-xs leading-5 text-rose-950 sm:grid-cols-[1.35rem_1fr]" aria-label="Zasady publikowania wyników ARWU">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-rose-700"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg>
+              <div><b>Pozycja PW jest publikowana jako pasmo.</b> ShanghaiRanking nie podaje dokładnego miejsca ani wyniku Total Score dla uczelni w tej części tabeli. Instytucje w tym samym paśmie są wymieniane alfabetycznie.</div>
+            </section>
+
+            <section class="rks-details-controls" aria-label="Zakres szczegółowych wyników ARWU">
+              <label for="arwuDetailsMetricSelect" class="block">
+                <span class="rks-control-label">Prezentowana miara</span>
+                <select id="arwuDetailsMetricSelect" class="mt-2 h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 focus:border-rose-500 focus:ring-rose-500">
+                  <option value="worldPosition">Pozycja światowa</option>
+                  <option value="nationalPosition">Pozycja krajowa</option>
+                  <option value="alumni">Alumni — absolwenci z Noblem lub Medalem Fieldsa</option>
+                  <option value="award">Award — kadra z Noblem lub Medalem Fieldsa</option>
+                  <option value="hici">HiCi — najczęściej cytowani badacze</option>
+                  <option value="ns">N&amp;S — publikacje w Nature i Science</option>
+                  <option value="pub">PUB — publikacje w SCI-Expanded i SSCI</option>
+                  <option value="pcp">PCP — wynik ważony na pracownika</option>
+                </select>
+              </label>
+              <div><span class="rks-control-label">Zakres danych</span><div class="flex h-11 items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm font-bold text-slate-700">PW · 6 edycji</div></div>
+            </section>
+
+            <section class="rks-details-stats" aria-label="Podsumowanie wyników ARWU PW">
+              <div><span>Pozycja światowa 2025</span><b id="arwuDetailsLatestWorld">901–1000</b></div>
+              <div><span>Pozycja w Polsce 2025</span><b id="arwuDetailsLatestNational">4–7</b></div>
+              <div><span>Najwyższy wskaźnik 2025</span><b id="arwuDetailsStrongest">PUB 25,3</b></div>
+              <div><span>Dostępność danych</span><b id="arwuDetailsCoverage">6 / 6</b></div>
+            </section>
+
+            <div class="overflow-x-auto"><div id="arwuDetailsYearCards" class="rks-details-years arwu-details-years" role="list"></div></div>
+
+            <section id="arwuDetailsZeroNotice" class="hidden grid gap-3 rounded-lg border border-amber-200 bg-amber-50 p-4 text-xs leading-5 text-amber-950 sm:grid-cols-[1.35rem_1fr]" aria-live="polite">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-amber-700"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.7 2.6 17a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 3.7a2 2 0 0 0-3.4 0Z"/></svg>
+              <div><b>Wartość 0,0 jest opublikowanym wynikiem.</b> Nie oznacza braku danych. PW nie uzyskała punktów w wybranym wskaźniku w żadnej z sześciu analizowanych edycji.</div>
+            </section>
+
+            <section class="border-t border-slate-200 pt-5" aria-labelledby="arwuDetailsChartTitle">
+              <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
+                <div><h3 id="arwuDetailsChartTitle" class="text-base font-extrabold text-slate-950">Pozycja światowa PW — pasma 2020–2025</h3><p id="arwuDetailsChartNote" class="mt-1 text-xs leading-5 text-slate-500"></p></div>
+                <div id="arwuDetailsLegend" class="flex items-center gap-2 text-[11px] font-bold text-slate-600"><span class="h-0.5 w-7 bg-rose-600"></span><span>Opublikowane pasmo</span></div>
+              </div>
+              <div class="chart-frame chart-frame--rks-details mt-3"><canvas id="chartArwuDetails" role="img" aria-label="Wyniki Politechniki Warszawskiej w Academic Ranking of World Universities 2020–2025"></canvas></div>
+            </section>
+
+            <footer class="flex flex-col gap-3 border-t border-slate-200 pt-4 text-[11px] leading-5 text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+              <p>Źródło: <a href="https://www.shanghairanking.com/universities/warsaw-university-of-technology" target="_blank" rel="noopener noreferrer" class="font-bold text-rose-700 underline decoration-rose-300 underline-offset-2">oficjalny profil PW w ShanghaiRanking</a> oraz tabele ARWU 2020–2025.</p>
+              <button id="arwuDetailsMethodologyOpen" type="button" class="inline-flex min-h-9 items-center justify-center rounded-lg border border-rose-200 bg-rose-50 px-3 text-xs font-bold text-rose-800 transition hover:bg-rose-100 focus:outline-none focus:ring-2 focus:ring-rose-500">Wskaźniki i wagi →</button>
             </footer>
           </div>
         </section>
@@ -1615,10 +1689,10 @@
         <a href="#top" class="font-bold text-indigo-700 hover:text-indigo-900">Wróć na początek ↑</a>
       </div>
     </footer>
-    <script src="assets/js/ranking-data.js?v=20260720-the-details"></script>
-    <script src="assets/js/perspektywy-indicators.js?v=20260720-the-details"></script>
-    <script src="assets/js/perspektywy-methodology.js?v=20260720-the-details"></script>
-    <script src="assets/js/dashboard.js?v=20260720-the-details"></script>
+    <script src="assets/js/ranking-data.js?v=20260720-arwu-details"></script>
+    <script src="assets/js/perspektywy-indicators.js?v=20260720-arwu-details"></script>
+    <script src="assets/js/perspektywy-methodology.js?v=20260720-arwu-details"></script>
+    <script src="assets/js/dashboard.js?v=20260720-arwu-details"></script>
   </body>
 </html>
 

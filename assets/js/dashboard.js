@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
     arwuYears,
     arwuLower,
     arwuUpper,
+    arwuDetailsData,
     perspektywyYears,
     perspektywyPositions,
     perspektywyScores,
@@ -138,6 +139,21 @@ document.addEventListener('DOMContentLoaded', function () {
   const theWurDetailsCanvas = document.getElementById('chartTheWurDetails');
   const theWurDetailsMethodologyOpen = document.getElementById('theWurDetailsMethodologyOpen');
   let renderTheWurDetails = () => {};
+
+  const arwuDetailsModal = document.getElementById('arwuDetailsModal');
+  const arwuDetailsMetricSelect = document.getElementById('arwuDetailsMetricSelect');
+  const arwuDetailsLatestWorld = document.getElementById('arwuDetailsLatestWorld');
+  const arwuDetailsLatestNational = document.getElementById('arwuDetailsLatestNational');
+  const arwuDetailsStrongest = document.getElementById('arwuDetailsStrongest');
+  const arwuDetailsCoverage = document.getElementById('arwuDetailsCoverage');
+  const arwuDetailsYearCards = document.getElementById('arwuDetailsYearCards');
+  const arwuDetailsZeroNotice = document.getElementById('arwuDetailsZeroNotice');
+  const arwuDetailsChartTitle = document.getElementById('arwuDetailsChartTitle');
+  const arwuDetailsChartNote = document.getElementById('arwuDetailsChartNote');
+  const arwuDetailsLegend = document.getElementById('arwuDetailsLegend');
+  const arwuDetailsCanvas = document.getElementById('chartArwuDetails');
+  const arwuDetailsMethodologyOpen = document.getElementById('arwuDetailsMethodologyOpen');
+  let renderArwuDetails = () => {};
 
   const internationalMethodologyModals = [...document.querySelectorAll('[data-methodology-modal]')];
   let activeInternationalMethodologyTrigger = null;
@@ -920,6 +936,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (scrollPanel) scrollPanel.scrollTop = 0;
       modal.querySelector('[data-methodology-close]')?.focus();
       if (modal.id === 'theWurDetailsModal') requestAnimationFrame(renderTheWurDetails);
+      if (modal.id === 'arwuDetailsModal') requestAnimationFrame(renderArwuDetails);
       if (modal.id === 'qsWurDetailsModal') requestAnimationFrame(renderQsWurDetails);
       if (modal.id === 'qsSubjectDetailsModal') requestAnimationFrame(renderQSSubjectDetails);
       if (modal.id === 'perspektywyDetailsModal') requestAnimationFrame(renderPerspektywyDetails);
@@ -3292,6 +3309,202 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       }
     }
+  });
+
+  let arwuDetailsChart = null;
+
+  const formatArwuScore = (value) => typeof value === 'number'
+    ? value.toLocaleString('pl-PL', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+    : '—';
+
+  const createArwuYearCard = (year, index, metricKey) => {
+    const isWorld = metricKey === 'worldPosition';
+    const isNational = metricKey === 'nationalPosition';
+    const indicator = isWorld || isNational ? null : arwuDetailsData.indicators[metricKey];
+    const card = document.createElement('article');
+    card.className = 'rks-details-year';
+    card.setAttribute('role', 'listitem');
+
+    const yearLabel = document.createElement('div');
+    yearLabel.className = 'year';
+    yearLabel.textContent = year;
+
+    const primary = document.createElement('div');
+    primary.className = 'position';
+    primary.textContent = isWorld
+      ? arwuDetailsData.worldRankLabels[index]
+      : isNational
+        ? arwuDetailsData.nationalRankLabels[index]
+        : formatArwuScore(indicator?.values[index]);
+
+    const primaryLabel = document.createElement('span');
+    primaryLabel.className = 'position-label';
+    primaryLabel.textContent = isWorld
+      ? 'pasmo światowe'
+      : isNational
+        ? 'pasmo w Polsce'
+        : 'wynik wskaźnika 0–100';
+
+    const secondary = document.createElement('span');
+    secondary.className = 'score';
+    secondary.textContent = isWorld
+      ? 'Polska ' + arwuDetailsData.nationalRankLabels[index]
+      : isNational
+        ? 'świat ' + arwuDetailsData.worldRankLabels[index]
+        : 'waga ' + indicator.weight + '% · świat ' + arwuDetailsData.worldRankLabels[index];
+
+    card.append(yearLabel, primary, primaryLabel, secondary);
+    return card;
+  };
+
+  renderArwuDetails = () => {
+    if (!arwuDetailsCanvas || !arwuDetailsData?.years?.length) return;
+    const metricKey = arwuDetailsMetricSelect?.value || 'worldPosition';
+    const isWorld = metricKey === 'worldPosition';
+    const isNational = metricKey === 'nationalPosition';
+    const isPosition = isWorld || isNational;
+    const indicator = isPosition ? null : arwuDetailsData.indicators[metricKey];
+    const years = arwuDetailsData.years;
+    const latestIndex = years.length - 1;
+    const strongest = Object.values(arwuDetailsData.indicators)
+      .map((item) => ({ label: item.shortLabel, value: item.values[latestIndex] }))
+      .sort((a, b) => b.value - a.value)[0];
+
+    if (arwuDetailsLatestWorld) arwuDetailsLatestWorld.textContent = arwuDetailsData.worldRankLabels[latestIndex];
+    if (arwuDetailsLatestNational) arwuDetailsLatestNational.textContent = arwuDetailsData.nationalRankLabels[latestIndex];
+    if (arwuDetailsStrongest) arwuDetailsStrongest.textContent = strongest ? strongest.label + ' ' + formatArwuScore(strongest.value) : '—';
+    if (arwuDetailsCoverage) arwuDetailsCoverage.textContent = years.length + ' / ' + years.length;
+    arwuDetailsYearCards?.replaceChildren(...years.map((year, index) => createArwuYearCard(year, index, metricKey)));
+
+    const allZero = Boolean(indicator) && indicator.values.every((value) => value === 0);
+    arwuDetailsZeroNotice?.classList.toggle('hidden', !allZero);
+
+    const legendLine = arwuDetailsLegend?.querySelector('span:first-child');
+    const legendText = arwuDetailsLegend?.querySelector('span:last-child');
+    if (legendLine) legendLine.style.backgroundColor = isPosition ? '#e11d48' : '#4f46e5';
+    if (legendText) {
+      legendText.textContent = isWorld
+        ? 'Pasmo światowe'
+        : isNational
+          ? 'Pasmo krajowe'
+          : indicator.shortLabel + ' · wynik 0–100';
+    }
+
+    if (isWorld) {
+      if (arwuDetailsChartTitle) arwuDetailsChartTitle.textContent = 'Pozycja światowa PW — pasma 2020–2025';
+      if (arwuDetailsChartNote) arwuDetailsChartNote.textContent = 'W 2020 PW zajmowała pasmo 801–900; od edycji 2021 pozostaje w paśmie 901–1000. Dokładne miejsce wewnątrz pasma nie jest publikowane.';
+      arwuDetailsCanvas.setAttribute('aria-label', 'Pasma światowej pozycji Politechniki Warszawskiej w ARWU 2020–2025');
+    } else if (isNational) {
+      if (arwuDetailsChartTitle) arwuDetailsChartTitle.textContent = 'Pozycja PW w Polsce — pasma 2020–2025';
+      if (arwuDetailsChartNote) arwuDetailsChartNote.textContent = 'Pozycja krajowa jest również publikowana jako przedział. W 2025 PW znalazła się na miejscach 4–7 w Polsce.';
+      arwuDetailsCanvas.setAttribute('aria-label', 'Pasma krajowej pozycji Politechniki Warszawskiej w ARWU 2020–2025');
+    } else {
+      const first = indicator.values[0];
+      const latest = indicator.values[latestIndex];
+      const change = latest - first;
+      if (arwuDetailsChartTitle) arwuDetailsChartTitle.textContent = indicator.shortLabel + ' — ' + indicator.label + ', 2020–2025';
+      if (arwuDetailsChartNote) {
+        arwuDetailsChartNote.textContent = allZero
+          ? 'Opublikowany wynik wynosi 0,0 we wszystkich sześciu edycjach. Waga wskaźnika w ARWU: ' + indicator.weight + '%.'
+          : 'Zmiana względem 2020: ' + (change >= 0 ? '+' : '−') + formatArwuScore(Math.abs(change)) + ' pkt. Waga wskaźnika: ' + indicator.weight + '%. Wyniki są normalizowane względem lidera każdej edycji.';
+      }
+      arwuDetailsCanvas.setAttribute('aria-label', indicator.shortLabel + ': wynik Politechniki Warszawskiej w ARWU 2020–2025');
+    }
+
+    if (!arwuDetailsChart) {
+      arwuDetailsChart = new Chart(arwuDetailsCanvas, {
+        type: 'line',
+        data: { labels: years, datasets: [] },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  if (arwuDetailsChart.$isPosition) {
+                    return context.datasetIndex === 0
+                      ? 'Pozycja: ' + arwuDetailsChart.$bandLabels[context.dataIndex]
+                      : null;
+                  }
+                  return typeof context.parsed.y === 'number'
+                    ? 'Wynik: ' + formatArwuScore(context.parsed.y)
+                    : 'Brak danych';
+                }
+              }
+            }
+          },
+          scales: {
+            x: { grid: { display: false }, ticks: { color: '#475569', font: { weight: '600' } } },
+            y: {
+              grid: { color: 'rgba(148,163,184,0.2)' },
+              ticks: { color: '#475569' },
+              title: { display: true, text: '' }
+            }
+          }
+        }
+      });
+    }
+
+    arwuDetailsChart.$isPosition = isPosition;
+    arwuDetailsChart.data.labels = years;
+    const yAxis = arwuDetailsChart.options.scales.y;
+
+    if (isPosition) {
+      const lower = isWorld ? arwuDetailsData.worldRankLower : arwuDetailsData.nationalRankLower;
+      const upper = isWorld ? arwuDetailsData.worldRankUpper : arwuDetailsData.nationalRankUpper;
+      arwuDetailsChart.$bandLabels = isWorld ? arwuDetailsData.worldRankLabels : arwuDetailsData.nationalRankLabels;
+      arwuDetailsChart.data.datasets = [
+        {
+          label: 'Początek pasma', data: lower, borderColor: '#e11d48',
+          backgroundColor: 'rgba(225,29,72,0.13)', fill: '+1', pointBackgroundColor: '#e11d48',
+          pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4, pointHoverRadius: 6,
+          borderWidth: 2.5, tension: 0.2, spanGaps: false
+        },
+        {
+          label: 'Koniec pasma', data: upper, borderColor: 'rgba(225,29,72,0.5)',
+          backgroundColor: 'transparent', fill: false, pointBackgroundColor: '#fda4af',
+          pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4, pointHoverRadius: 6,
+          borderWidth: 2, borderDash: [6, 4], tension: 0.2, spanGaps: false
+        }
+      ];
+      yAxis.reverse = true;
+      yAxis.min = isWorld ? 750 : 1;
+      yAxis.max = isWorld ? 1050 : 12;
+      yAxis.ticks.stepSize = isWorld ? 50 : 1;
+      yAxis.ticks.callback = (value) => Math.round(value);
+      yAxis.title.text = isWorld ? 'Pozycja światowa (niżej = lepiej)' : 'Pozycja w Polsce (niżej = lepiej)';
+    } else {
+      const values = indicator.values;
+      const minValue = Math.min(...values);
+      const maxValue = Math.max(...values);
+      const spread = maxValue - minValue;
+      const padding = spread === 0 ? (maxValue === 0 ? 5 : 1) : Math.max(spread * 0.3, 0.5);
+      arwuDetailsChart.data.datasets = [{
+        label: indicator.shortLabel, data: values, borderColor: '#4f46e5',
+        backgroundColor: 'rgba(79,70,229,0.1)', fill: false, pointBackgroundColor: '#4f46e5',
+        pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4, pointHoverRadius: 6,
+        borderWidth: 2.5, tension: 0.22, spanGaps: false
+      }];
+      yAxis.reverse = false;
+      yAxis.min = Math.max(0, minValue - padding);
+      yAxis.max = Math.min(100, maxValue + padding);
+      if (yAxis.max <= yAxis.min) yAxis.max = yAxis.min + 10;
+      yAxis.ticks.stepSize = undefined;
+      yAxis.ticks.callback = (value) => Number(value).toLocaleString('pl-PL');
+      yAxis.title.text = 'Wynik wskaźnika (0–100)';
+    }
+
+    arwuDetailsChart.update();
+    arwuDetailsChart.resize();
+  };
+
+  arwuDetailsMetricSelect?.addEventListener('change', renderArwuDetails);
+  arwuDetailsMethodologyOpen?.addEventListener('click', () => {
+    closeInternationalMethodology(arwuDetailsModal, false);
+    requestAnimationFrame(() => document.getElementById('arwuMethodologyOpen')?.click());
   });
 
   new Chart(document.getElementById('chartARWU'), {
