@@ -168,6 +168,22 @@ document.addEventListener('DOMContentLoaded', function () {
   const theWurDetailsCanvas = document.getElementById('chartTheWurDetails');
   const theWurDetailsMethodologyOpen = document.getElementById('theWurDetailsMethodologyOpen');
   let renderTheWurDetails = () => {};
+  const theSubjectDetailsModal = document.getElementById('theSubjectDetailsModal');
+  const theSubjectDetailsSelect = document.getElementById('theSubjectDetailsSelect');
+  const theSubjectDetailsMetricSelect = document.getElementById('theSubjectDetailsMetricSelect');
+  const theSubjectDetailsStatLabels = [1, 2, 3, 4].map((index) => document.getElementById(`theSubjectDetailsStat${index}Label`));
+  const theSubjectDetailsStatValues = [1, 2, 3, 4].map((index) => document.getElementById(`theSubjectDetailsStat${index}`));
+  const theSubjectDetailsMetricContext = document.getElementById('theSubjectDetailsMetricContext');
+  const theSubjectDetailsYearCards = document.getElementById('theSubjectDetailsYearCards');
+  const theSubjectDetailsChangeNotice = document.getElementById('theSubjectDetailsChangeNotice');
+  const theSubjectDetailsChartTitle = document.getElementById('theSubjectDetailsChartTitle');
+  const theSubjectDetailsChartNote = document.getElementById('theSubjectDetailsChartNote');
+  const theSubjectDetailsLegend = document.getElementById('theSubjectDetailsLegend');
+  const theSubjectDetailsCanvas = document.getElementById('chartTheSubjectDetails');
+  const theSubjectDetailsMethodologyOpen = document.getElementById('theSubjectDetailsMethodologyOpen');
+  const theSubjectMethodologyOpenButton = document.getElementById('theSubjectMethodologyOpen');
+  const theSubjectIndicatorData = window.THESubjectIndicatorData || { years: [], metricOrder: [], metrics: {}, subjects: {} };
+  let renderTheSubjectDetails = () => {};
 
   const arwuDetailsModal = document.getElementById('arwuDetailsModal');
   const arwuDetailsMetricSelect = document.getElementById('arwuDetailsMetricSelect');
@@ -199,6 +215,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const syncMethodologySelect = (modalId) => {
     const pairs = {
       qsSubjectMethodologyModal: ['qsSubjectSelect', 'qsMethodologySubjectSelect'],
+      theSubjectDetailsModal: ['theSubjectSelect', 'theSubjectDetailsSelect'],
       theSubjectMethodologyModal: ['theSubjectSelect', 'theMethodologySubjectSelect'],
       grasMethodologyModal: ['grasSubjectSelect', 'grasMethodologySubjectSelect'],
       engiSubjectMethodologyModal: ['engiSubjectSelect', 'engiMethodologySubjectSelect']
@@ -965,6 +982,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (scrollPanel) scrollPanel.scrollTop = 0;
       modal.querySelector('[data-methodology-close]')?.focus();
       if (modal.id === 'theWurDetailsModal') requestAnimationFrame(renderTheWurDetails);
+      if (modal.id === 'theSubjectDetailsModal') requestAnimationFrame(renderTheSubjectDetails);
       if (modal.id === 'arwuDetailsModal') requestAnimationFrame(renderArwuDetails);
       if (modal.id === 'qsWurDetailsModal') requestAnimationFrame(renderQsWurDetails);
       if (modal.id === 'qsSubjectDetailsModal') requestAnimationFrame(renderQSSubjectDetails);
@@ -1917,6 +1935,7 @@ document.addEventListener('DOMContentLoaded', function () {
     theSubjectSelect.innerHTML = subjectNames
       .map((subject) => `<option value="${subject}">${subject}</option>`)
       .join('');
+    if (theSubjectDetailsSelect) theSubjectDetailsSelect.innerHTML = theSubjectSelect.innerHTML;
 
     let currentSubject = theSubjectSelect.value || subjectNames[0] || null;
     if (!theSubjectSelect.value && currentSubject) {
@@ -2080,8 +2099,387 @@ document.addEventListener('DOMContentLoaded', function () {
 
          theSubjectNote.textContent = noteText;
       }
+      if (theSubjectDetailsSelect && theSubjectDetailsSelect.value !== subjectName) {
+        theSubjectDetailsSelect.value = subjectName;
+      }
+      if (theSubjectDetailsModal && !theSubjectDetailsModal.classList.contains('hidden')) {
+        renderTheSubjectDetails();
+      }
+
     };
 
+    let theSubjectDetailsChart = null;
+
+    const formatTheSubjectValue = (value) => typeof value === 'number'
+      ? value.toLocaleString('pl-PL', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+      : '—';
+
+    const parseTheSubjectRank = (label) => {
+      if (!label) return { raw: null, lower: null, upper: null, open: false };
+      const normalized = String(label).trim().replace(/-/g, '–');
+      const range = normalized.match(/^(\d+)–(\d+)$/);
+      if (range) {
+        return { raw: normalized, lower: Number(range[1]), upper: Number(range[2]), open: false };
+      }
+      const value = Number.parseInt(normalized, 10);
+      if (!Number.isFinite(value)) return { raw: null, lower: null, upper: null, open: false };
+      return { raw: normalized, lower: value, upper: value, open: normalized.endsWith('+') };
+    };
+
+    const getTheSubjectPositionSnapshots = (subjectName) => {
+      const labels = theSubjectIndicatorData.subjects?.[subjectName]?.rankLabels || [];
+      return theSubjectIndicatorData.years.map((year, index) => ({
+        year,
+        ...parseTheSubjectRank(labels[index])
+      }));
+    };
+
+    const getTheSubjectMetricSnapshots = (subjectName, metricKey) => {
+      const editions = theSubjectIndicatorData.subjects?.[subjectName]?.editions || {};
+      return theSubjectIndicatorData.years.map((year) => {
+        const edition = editions[String(year)];
+        if (metricKey === 'overall') {
+          const range = edition?.overall;
+          const lower = Array.isArray(range) && typeof range[0] === 'number' ? range[0] : null;
+          const upper = Array.isArray(range) && typeof range[1] === 'number' ? range[1] : lower;
+          return {
+            year,
+            lower,
+            upper,
+            raw: typeof lower === 'number'
+              ? (upper !== lower ? formatTheSubjectValue(lower) + '–' + formatTheSubjectValue(upper) : formatTheSubjectValue(lower))
+              : null
+          };
+        }
+        const value = edition?.[metricKey];
+        return { year, value: typeof value === 'number' ? value : null };
+      });
+    };
+
+    const updateTheSubjectMetricOptions = (subjectName) => {
+      if (!theSubjectDetailsMetricSelect) return 'position';
+      if (theSubjectDetailsMetricSelect.dataset.subject === subjectName && theSubjectDetailsMetricSelect.options.length) {
+        return theSubjectDetailsMetricSelect.value;
+      }
+      const previous = theSubjectDetailsMetricSelect.value;
+      const positionOption = document.createElement('option');
+      positionOption.value = 'position';
+      positionOption.textContent = 'Pozycja / pasmo pozycji';
+      const resultGroup = document.createElement('optgroup');
+      resultGroup.label = 'Opublikowane wyniki 0–100';
+      theSubjectIndicatorData.metricOrder.forEach((key) => {
+        const meta = theSubjectIndicatorData.metrics[key];
+        if (!meta) return;
+        const option = document.createElement('option');
+        option.value = key;
+        option.textContent = meta.label + ' (' + meta.sourceLabel + ')';
+        resultGroup.append(option);
+      });
+      theSubjectDetailsMetricSelect.replaceChildren(positionOption, resultGroup);
+      const available = new Set(['position', ...theSubjectIndicatorData.metricOrder]);
+      theSubjectDetailsMetricSelect.value = available.has(previous) ? previous : 'position';
+      theSubjectDetailsMetricSelect.dataset.subject = subjectName;
+      return theSubjectDetailsMetricSelect.value;
+    };
+
+    const setTheSubjectDetailsStat = (index, label, value) => {
+      if (theSubjectDetailsStatLabels[index]) theSubjectDetailsStatLabels[index].textContent = label;
+      if (theSubjectDetailsStatValues[index]) theSubjectDetailsStatValues[index].textContent = value;
+    };
+
+    const createTheSubjectLegendItem = (label, color, dashed = false) => {
+      const item = document.createElement('span');
+      item.className = 'inline-flex items-center gap-2';
+      const line = document.createElement('i');
+      line.className = 'h-0.5 w-7';
+      if (dashed) line.style.borderTop = '2px dashed ' + color;
+      else line.style.backgroundColor = color;
+      item.append(line, document.createTextNode(label));
+      return item;
+    };
+
+    const createTheSubjectYearCard = (year, snapshot, mode) => {
+      const isPosition = mode === 'position';
+      const isOverall = mode === 'overall';
+      const hasValue = isPosition || isOverall
+        ? typeof snapshot.lower === 'number'
+        : typeof snapshot.value === 'number';
+      const card = document.createElement('article');
+      card.className = 'rks-details-year' + (hasValue ? '' : ' missing');
+      card.setAttribute('role', 'listitem');
+      const yearLabel = document.createElement('div');
+      yearLabel.className = 'year';
+      yearLabel.textContent = year;
+      const value = document.createElement('div');
+      value.className = 'position';
+      value.textContent = hasValue
+        ? (isPosition || isOverall ? snapshot.raw : formatTheSubjectValue(snapshot.value))
+        : '—';
+      const valueLabel = document.createElement('span');
+      valueLabel.className = 'position-label';
+      const detail = document.createElement('span');
+      detail.className = 'score';
+      if (!hasValue) {
+        valueLabel.textContent = 'brak wartości';
+        detail.textContent = 'nie interpolujemy';
+      } else if (isPosition) {
+        valueLabel.textContent = snapshot.open ? 'otwarte pasmo' : (snapshot.upper !== snapshot.lower ? 'pasmo pozycji' : 'pozycja');
+        detail.textContent = snapshot.open
+          ? 'od pozycji ' + snapshot.lower
+          : (snapshot.upper !== snapshot.lower ? (snapshot.upper - snapshot.lower + 1) + ' miejsc w paśmie' : 'wartość opublikowana');
+      } else if (isOverall) {
+        valueLabel.textContent = snapshot.upper !== snapshot.lower ? 'zakres Overall pasma' : 'wartość Overall pasma';
+        detail.textContent = 'nie jest dokładnym wynikiem PW';
+      } else {
+        valueLabel.textContent = 'wynik filaru 0–100';
+        detail.textContent = 'wartość opublikowana';
+      }
+      card.append(yearLabel, value, valueLabel, detail);
+      return card;
+    };
+
+    const classifyTheSubjectPositionChange = (first, latest) => {
+      if (!first || !latest) return 'brak porównania';
+      if (latest.lower < first.lower) return 'awans';
+      if (latest.lower > first.lower) return 'spadek';
+      if (latest.raw === first.raw) return 'bez zmian';
+      return 'zmienione pasmo';
+    };
+
+    renderTheSubjectDetails = () => {
+      if (!theSubjectDetailsCanvas || !theSubjectDetailsSelect) return;
+      const subjectName = theSubjectDetailsSelect.value || currentSubject || subjectNames[0];
+      const subject = theSubjectIndicatorData.subjects?.[subjectName];
+      if (!subject) return;
+      const metricKey = updateTheSubjectMetricOptions(subjectName);
+      const isPosition = metricKey === 'position';
+      const isOverall = metricKey === 'overall';
+      const metricMeta = theSubjectIndicatorData.metrics[metricKey];
+      const metricLabel = isPosition ? 'Pozycja / pasmo pozycji' : metricMeta?.label || metricKey;
+      const positionSnapshots = getTheSubjectPositionSnapshots(subjectName);
+      const metricSnapshots = isPosition ? [] : getTheSubjectMetricSnapshots(subjectName, metricKey);
+
+      if (isPosition) {
+        const valid = positionSnapshots.filter(({ lower }) => typeof lower === 'number');
+        const latest = valid.at(-1);
+        const first = valid[0];
+        const best = valid.reduce((current, entry) => {
+          if (!current || entry.lower < current.lower) return entry;
+          if (entry.lower === current.lower && !entry.open && (current.open || entry.upper < current.upper)) return entry;
+          return current;
+        }, null);
+        setTheSubjectDetailsStat(0, 'Pozycja 2026', positionSnapshots.at(-1)?.raw || '—');
+        setTheSubjectDetailsStat(1, 'Najlepsze pasmo', best?.raw || '—');
+        setTheSubjectDetailsStat(2, first ? 'Zmiana od ' + first.year : 'Zmiana', classifyTheSubjectPositionChange(first, latest));
+        setTheSubjectDetailsStat(3, 'Edycje z pozycją', valid.length + ' / ' + theSubjectIndicatorData.years.length);
+        theSubjectDetailsYearCards?.replaceChildren(...positionSnapshots.map((snapshot) =>
+          createTheSubjectYearCard(snapshot.year, snapshot, 'position')
+        ));
+        const missing = positionSnapshots.filter(({ lower }) => typeof lower !== 'number').map(({ year }) => year);
+        if (theSubjectDetailsMetricContext) {
+          theSubjectDetailsMetricContext.textContent = 'THE publikuje pozycje PW w pasmach, a znak „+” oznacza otwarty przedział od wskazanego miejsca.'
+            + (missing.length ? ' Brak klasyfikacji: ' + missing.join(', ') + '.' : ' Pozycja jest dostępna we wszystkich siedmiu edycjach.');
+        }
+      } else if (isOverall) {
+        const valid = metricSnapshots.filter(({ lower }) => typeof lower === 'number');
+        const latest = valid.at(-1);
+        const highestUpper = valid.length ? Math.max(...valid.map(({ upper }) => upper)) : null;
+        const firstYear = valid[0]?.year;
+        const lastYear = valid.at(-1)?.year;
+        setTheSubjectDetailsStat(0, latest ? 'Overall ' + latest.year : 'Najnowsza wartość', latest?.raw || '—');
+        setTheSubjectDetailsStat(1, 'Najwyższa granica pasma', formatTheSubjectValue(highestUpper));
+        setTheSubjectDetailsStat(2, 'Zakres publikacji', firstYear ? (firstYear === lastYear ? String(firstYear) : firstYear + '–' + lastYear) : 'brak danych');
+        setTheSubjectDetailsStat(3, 'Edycje z wartością', valid.length + ' / ' + theSubjectIndicatorData.years.length);
+        theSubjectDetailsYearCards?.replaceChildren(...metricSnapshots.map((snapshot) =>
+          createTheSubjectYearCard(snapshot.year, snapshot, 'overall')
+        ));
+        const available = valid.map(({ year }) => year);
+        const missing = metricSnapshots.filter(({ lower }) => typeof lower !== 'number').map(({ year }) => year);
+        if (theSubjectDetailsMetricContext) {
+          theSubjectDetailsMetricContext.textContent = 'Overall jest wartością lub zakresem przypisanym przez THE do całego pasma pozycji, a nie dokładną punktacją PW. Dostępne edycje: '
+            + (available.length ? available.join(', ') : 'brak') + '.'
+            + (missing.length ? ' Brak wartości: ' + missing.join(', ') + '.' : '');
+        }
+      } else {
+        const valid = metricSnapshots.filter(({ value }) => typeof value === 'number');
+        const latest = valid.at(-1);
+        const first = valid[0];
+        const best = valid.length ? Math.max(...valid.map(({ value }) => value)) : null;
+        const delta = first && latest && first !== latest ? latest.value - first.value : null;
+        const deltaText = delta === null
+          ? 'brak porównania'
+          : Math.abs(delta) < 0.05
+            ? 'bez zmian'
+            : (delta > 0 ? '+' : '−') + formatTheSubjectValue(Math.abs(delta)) + ' pkt';
+        setTheSubjectDetailsStat(0, latest ? 'Wynik ' + latest.year : 'Najnowszy wynik', formatTheSubjectValue(latest?.value));
+        setTheSubjectDetailsStat(1, 'Najlepszy wynik', formatTheSubjectValue(best));
+        setTheSubjectDetailsStat(2, valid.length > 1 && first ? 'Zmiana od ' + first.year : 'Zmiana w czasie', deltaText);
+        setTheSubjectDetailsStat(3, 'Edycje z wynikiem', valid.length + ' / ' + theSubjectIndicatorData.years.length);
+        theSubjectDetailsYearCards?.replaceChildren(...metricSnapshots.map((snapshot) =>
+          createTheSubjectYearCard(snapshot.year, snapshot, 'metric')
+        ));
+        const available = valid.map(({ year }) => year);
+        const missing = metricSnapshots.filter(({ value }) => typeof value !== 'number').map(({ year }) => year);
+        if (theSubjectDetailsMetricContext) {
+          theSubjectDetailsMetricContext.textContent = metricLabel + ' (' + metricMeta.sourceLabel + '). Opublikowane wartości PW: '
+            + (available.length ? available.join(', ') : 'brak') + '.'
+            + (missing.length ? ' Brak wartości: ' + missing.join(', ') + '.' : '')
+            + ' Braków nie interpolujemy.';
+        }
+      }
+
+      const hasHistoricalScores = Object.keys(subject.editions || {}).some((year) => Number(year) < 2024);
+      theSubjectDetailsChangeNotice?.classList.toggle('hidden', isPosition || !hasHistoricalScores);
+      const metricColor = isOverall ? '#059669' : '#0891b2';
+      if (theSubjectDetailsChartTitle) {
+        theSubjectDetailsChartTitle.textContent = subjectName + ' — ' + (isPosition ? 'pozycja' : metricLabel) + ' 2020–2026';
+      }
+      if (theSubjectDetailsChartNote) {
+        theSubjectDetailsChartNote.textContent = isPosition
+          ? 'Niższa wartość oznacza lepszą pozycję; wypełnienie pokazuje opublikowane pasmo.'
+          : isOverall
+            ? 'Wartości Overall dotyczą pasma pozycji. Przerwa na wykresie oznacza brak opublikowanej wartości.'
+            : 'Wynik filaru 0–100; wyższa wartość oznacza lepszy rezultat. Przerw nie interpolujemy.';
+      }
+      if (theSubjectDetailsLegend) {
+        theSubjectDetailsLegend.replaceChildren(...(isPosition
+          ? [
+            createTheSubjectLegendItem('Początek pasma', '#0e7490'),
+            createTheSubjectLegendItem('Koniec pasma', '#67e8f9', true)
+          ]
+          : isOverall
+            ? [
+              createTheSubjectLegendItem('Dolna granica Overall', '#059669'),
+              createTheSubjectLegendItem('Górna granica Overall', '#6ee7b7', true)
+            ]
+            : [createTheSubjectLegendItem(metricLabel + ' 0–100', metricColor)]));
+      }
+      theSubjectDetailsCanvas.setAttribute('aria-label', subjectName + ': ' + metricLabel + ' w THE World University Rankings by Subject 2020–2026');
+
+      if (!theSubjectDetailsChart) {
+        theSubjectDetailsChart = new Chart(theSubjectDetailsCanvas, {
+          type: 'line',
+          data: { labels: theSubjectIndicatorData.years, datasets: [] },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: (context) => {
+                    const mode = theSubjectDetailsChart.$mode;
+                    if (mode === 'position' || mode === 'overall') {
+                      if (context.datasetIndex !== 0) return null;
+                      const snapshot = theSubjectDetailsChart.$snapshots?.[context.dataIndex];
+                      if (mode === 'position') return snapshot?.raw ? 'Pozycja: ' + snapshot.raw : 'Brak danych';
+                      return snapshot?.raw ? 'Overall pasma: ' + snapshot.raw : 'Brak wartości';
+                    }
+                    return typeof context.parsed.y === 'number'
+                      ? theSubjectDetailsChart.$metricLabel + ': ' + formatTheSubjectValue(context.parsed.y)
+                      : 'Brak wartości';
+                  }
+                }
+              }
+            },
+            scales: {
+              x: { grid: { display: false }, ticks: { color: '#475569', font: { weight: '600' } } },
+              y: {
+                grid: { color: 'rgba(148,163,184,0.2)' },
+                ticks: { color: '#475569' },
+                title: { display: true, text: '' }
+              }
+            }
+          }
+        });
+      }
+
+      const yAxis = theSubjectDetailsChart.options.scales.y;
+      delete yAxis.min;
+      delete yAxis.max;
+      delete yAxis.suggestedMin;
+      delete yAxis.suggestedMax;
+      theSubjectDetailsChart.data.labels = theSubjectIndicatorData.years;
+      theSubjectDetailsChart.$mode = isPosition ? 'position' : (isOverall ? 'overall' : 'metric');
+      theSubjectDetailsChart.$metricLabel = metricLabel;
+
+      if (isPosition) {
+        const lower = positionSnapshots.map(({ lower: value }) => value);
+        const upper = positionSnapshots.map(({ upper: value }) => value);
+        theSubjectDetailsChart.$snapshots = positionSnapshots;
+        theSubjectDetailsChart.data.datasets = [
+          {
+            label: 'Początek pasma', data: lower, borderColor: '#0e7490', backgroundColor: 'rgba(14,116,144,0.14)',
+            fill: '+1', pointBackgroundColor: '#0e7490', pointBorderColor: '#fff', pointBorderWidth: 2,
+            pointRadius: 4, pointHoverRadius: 6, borderWidth: 2.5, tension: 0.2, spanGaps: false
+          },
+          {
+            label: 'Koniec pasma', data: upper, borderColor: 'rgba(14,116,144,0.5)', backgroundColor: 'transparent',
+            fill: false, pointBackgroundColor: '#67e8f9', pointBorderColor: '#fff', pointBorderWidth: 2,
+            pointRadius: 4, pointHoverRadius: 6, borderWidth: 2, borderDash: [6, 4], tension: 0.2, spanGaps: false
+          }
+        ];
+        const values = lower.concat(upper).filter((value) => typeof value === 'number');
+        const min = values.length ? Math.min(...values) : 1;
+        const max = values.length ? Math.max(...values) : 1250;
+        const padding = Math.max(Math.ceil((max - min) * 0.1), 25);
+        yAxis.reverse = true;
+        yAxis.suggestedMin = Math.max(1, min - padding);
+        yAxis.suggestedMax = max + padding;
+        yAxis.ticks.stepSize = undefined;
+        yAxis.ticks.callback = (value) => Math.round(value);
+        yAxis.title.text = 'Pozycja (niższa wartość = lepiej)';
+      } else if (isOverall) {
+        const lower = metricSnapshots.map(({ lower: value }) => value);
+        const upper = metricSnapshots.map(({ upper: value }) => value);
+        theSubjectDetailsChart.$snapshots = metricSnapshots;
+        theSubjectDetailsChart.data.datasets = [
+          {
+            label: 'Dolna granica Overall', data: lower, borderColor: '#059669', backgroundColor: 'rgba(5,150,105,0.14)',
+            fill: '+1', pointBackgroundColor: '#059669', pointBorderColor: '#fff', pointBorderWidth: 2,
+            pointRadius: 4, pointHoverRadius: 6, borderWidth: 2.5, tension: 0.2, spanGaps: false, clip: 8
+          },
+          {
+            label: 'Górna granica Overall', data: upper, borderColor: 'rgba(5,150,105,0.55)', backgroundColor: 'transparent',
+            fill: false, pointBackgroundColor: '#6ee7b7', pointBorderColor: '#fff', pointBorderWidth: 2,
+            pointRadius: 4, pointHoverRadius: 6, borderWidth: 2, borderDash: [6, 4], tension: 0.2, spanGaps: false, clip: 8
+          }
+        ];
+        yAxis.reverse = false;
+        yAxis.min = 0;
+        yAxis.max = 105;
+        yAxis.ticks.stepSize = 10;
+        yAxis.ticks.callback = (value) => value > 100 ? '' : Number(value).toLocaleString('pl-PL');
+        yAxis.title.text = 'Overall pasma (0–100)';
+      } else {
+        theSubjectDetailsChart.$snapshots = metricSnapshots;
+        theSubjectDetailsChart.data.datasets = [{
+          label: metricLabel,
+          data: metricSnapshots.map(({ value }) => value),
+          borderColor: metricColor,
+          backgroundColor: 'rgba(8,145,178,0.12)',
+          pointBackgroundColor: metricColor,
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          borderWidth: 2.5,
+          tension: 0.2,
+          spanGaps: false,
+          clip: 8,
+          fill: false
+        }];
+        yAxis.reverse = false;
+        yAxis.min = 0;
+        yAxis.max = 105;
+        yAxis.ticks.stepSize = 10;
+        yAxis.ticks.callback = (value) => value > 100 ? '' : Number(value).toLocaleString('pl-PL');
+        yAxis.title.text = 'Wynik filaru (0–100)';
+      }
+      theSubjectDetailsChart.update();
+      theSubjectDetailsChart.resize();
+    };
     if (currentSubject) {
       updateTHESubjectChart(currentSubject);
     }
@@ -2089,6 +2487,16 @@ document.addEventListener('DOMContentLoaded', function () {
     theSubjectSelect.addEventListener('change', (event) => {
       currentSubject = event.target.value;
       updateTHESubjectChart(currentSubject);
+    });
+    theSubjectDetailsSelect?.addEventListener('change', (event) => {
+      currentSubject = event.target.value;
+      theSubjectSelect.value = currentSubject;
+      updateTHESubjectChart(currentSubject);
+    });
+    theSubjectDetailsMetricSelect?.addEventListener('change', renderTheSubjectDetails);
+    theSubjectDetailsMethodologyOpen?.addEventListener('click', () => {
+      closeInternationalMethodology(theSubjectDetailsModal, false);
+      requestAnimationFrame(() => theSubjectMethodologyOpenButton?.click());
     });
   }
 

@@ -308,3 +308,9 @@ body { background: radial-gradient(circle at 50% -10%, #eef2ff 0, #f8fafc 34rem)
 @media (max-width: 640px) {
   .ranking-details-modal--compact .chart-frame--rks-details { height: 11rem; }
 }
+#theSubjectDetailsChangeNotice {
+  align-items: center;
+  margin-top: .5rem !important;
+  padding: .5rem .75rem;
+  line-height: 1rem;
+}
