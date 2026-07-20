@@ -125,17 +125,22 @@ document.addEventListener('DOMContentLoaded', function () {
   let renderGrasDetails = () => {};
   const rksDetailsModal = document.getElementById('rksDetailsModal');
   const rksDetailsSubjectSelect = document.getElementById('rksDetailsSubjectSelect');
+  const rksDetailsMetricSelect = document.getElementById('rksDetailsMetricSelect');
+  const rksDetailsViewControl = document.getElementById('rksDetailsViewControl');
   const rksDetailsModeControl = document.getElementById('rksDetailsModeControl');
   const rksDetailsModeButtons = [...document.querySelectorAll('[data-rks-details-mode]')];
+  const rksDetailsStatLabels = [1, 2, 3, 4].map((index) => document.getElementById(`rksDetailsStat${index}Label`));
   const rksDetailsLatestPosition = document.getElementById('rksDetailsLatestPosition');
   const rksDetailsLatestScore = document.getElementById('rksDetailsLatestScore');
   const rksDetailsBestPosition = document.getElementById('rksDetailsBestPosition');
   const rksDetailsPodiums = document.getElementById('rksDetailsPodiums');
+  const rksDetailsMetricContext = document.getElementById('rksDetailsMetricContext');
   const rksDetailsYearCards = document.getElementById('rksDetailsYearCards');
   const rksDetailsChartTitle = document.getElementById('rksDetailsChartTitle');
   const rksDetailsChartNote = document.getElementById('rksDetailsChartNote');
   const rksDetailsLegend = document.getElementById('rksDetailsLegend');
   const rksDetailsCanvas = document.getElementById('chartRKSDetails');
+  const rksDetailsSourceLink = document.getElementById('rksDetailsSourceLink');
   const rksDetailsMethodologyOpen = document.getElementById('rksDetailsMethodologyOpen');
   let renderRKSDetails = () => {};
 
@@ -2459,6 +2464,9 @@ document.addEventListener('DOMContentLoaded', function () {
   const rksNote = document.getElementById('rksSubjectNote');
   const rksYears = Array.isArray(rksSubjectData && rksSubjectData.years) ? rksSubjectData.years.slice() : [];
   const rksSubjects = rksSubjectData && typeof rksSubjectData.subjects === 'object' ? rksSubjectData.subjects : {};
+  const rksIndicatorSubjects = window.RKSIndicatorData && typeof window.RKSIndicatorData.subjects === 'object'
+    ? window.RKSIndicatorData.subjects
+    : {};
   let rksChart;
 
   if (rksCanvas && rksSelect && rksYears.length && Object.keys(rksSubjects).length) {
@@ -3001,16 +3009,123 @@ document.addEventListener('DOMContentLoaded', function () {
     let rksDetailsMode = 'position';
     let rksDetailsChart = null;
 
+    const rksMetricAliases = {
+      sz: 'foreignStudents',
+      sc: 'foreignStudents',
+      engirank: 'engirank',
+      er: 'engirank',
+      er_ci: 'engirank',
+      er_el: 'engirank',
+      er_med: 'engirank',
+      er_ch: 'engirank',
+      er_mat: 'engirank',
+      er_env: 'engirank',
+      er_mec: 'engirank'
+    };
+    const rksEngiRankMetricLabels = {
+      er_ci: 'EngiRank – Civil Engineering',
+      er_el: 'EngiRank – Electrical, Electronic and Information Engineering',
+      er_med: 'EngiRank – Medical Engineering',
+      er_ch: 'EngiRank – Chemical Engineering',
+      er_mat: 'EngiRank – Materials Engineering',
+      er_env: 'EngiRank – Environmental Engineering',
+      er_mec: 'EngiRank – Mechanical Engineering'
+    };
+    const rksMetricLabels = {
+      opka: 'Ocena przez kadrę akademicką',
+      ela: 'Ekonomiczne losy absolwentów',
+      wa: 'Wynagrodzenia absolwentów',
+      za: 'Zatrudnienie absolwentów',
+      wkn: 'Ewaluacja działalności naukowej',
+      akr: 'Akredytacje',
+      jpns: 'Jakość przyjętych na studia',
+      pub: 'Publikacje',
+      cyt: 'Cytowania',
+      fwci: 'FWCI',
+      fwvi: 'FWVI',
+      top: 'Top 10',
+      pubz: 'Publikacje we współpracy zagranicznej',
+      foreignStudents: 'Studenci cudzoziemcy',
+      engirank: 'EngiRank',
+      egzaminy: 'Egzaminy zawodowe'
+    };
+    const canonicalRKSMetric = (key) => rksMetricAliases[key] || key;
     const formatRKSScore = (value) => typeof value === 'number'
       ? value.toLocaleString('pl-PL', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
       : '—';
+    const formatRKSIndicatorValue = (value) => typeof value === 'number'
+      ? value.toLocaleString('pl-PL', { minimumFractionDigits: 1, maximumFractionDigits: 2 })
+      : '—';
+    const formatRKSMetricWeight = (value) => typeof value === 'number'
+      ? value.toLocaleString('pl-PL', { maximumFractionDigits: 1 })
+      : '—';
+
+    const getRKSMetricCatalog = (subjectName) => {
+      const editions = rksIndicatorSubjects[subjectName]?.editions || {};
+      const catalog = new Map();
+      [...rksYears].reverse().forEach((year) => {
+        const edition = editions[String(year)];
+        if (!edition) return;
+        const keys = Array.isArray(edition.order) ? edition.order : Object.keys(edition.metrics || {});
+        keys.forEach((sourceKey) => {
+          const metric = edition.metrics?.[sourceKey];
+          const key = canonicalRKSMetric(sourceKey);
+          if (!metric || catalog.has(key)) return;
+          let label = rksMetricLabels[key] || metric.label || key;
+          if (key === 'engirank') label = rksEngiRankMetricLabels[sourceKey] || rksMetricLabels.engirank;
+          catalog.set(key, { key, label });
+        });
+      });
+      return [...catalog.values()];
+    };
+
+    const updateRKSMetricOptions = (subjectName) => {
+      if (!rksDetailsMetricSelect) return 'overall';
+      if (rksDetailsMetricSelect.dataset.subject === subjectName && rksDetailsMetricSelect.options.length) {
+        return rksDetailsMetricSelect.value;
+      }
+      const previous = rksDetailsMetricSelect.value;
+      const catalog = getRKSMetricCatalog(subjectName);
+      const overallOption = document.createElement('option');
+      overallOption.value = 'overall';
+      overallOption.textContent = 'Wynik ogólny (pozycja / punktacja)';
+      const indicatorGroup = document.createElement('optgroup');
+      indicatorGroup.label = 'Wskaźniki kierunku (0–100)';
+      catalog.forEach(({ key, label }) => {
+        const option = document.createElement('option');
+        option.value = key;
+        option.textContent = label;
+        indicatorGroup.append(option);
+      });
+      rksDetailsMetricSelect.replaceChildren(overallOption, indicatorGroup);
+      const available = new Set(['overall', ...catalog.map(({ key }) => key)]);
+      rksDetailsMetricSelect.value = previous && available.has(previous)
+        ? previous
+        : (catalog[0]?.key || 'overall');
+      rksDetailsMetricSelect.dataset.subject = subjectName;
+      return rksDetailsMetricSelect.value;
+    };
+
+    const getRKSMetricSnapshot = (subjectName, year, metricKey) => {
+      const edition = rksIndicatorSubjects[subjectName]?.editions?.[String(year)];
+      if (!edition) return { exists: false, value: null, weight: null, sourceKeys: [] };
+      const matches = Object.entries(edition.metrics || {})
+        .filter(([sourceKey]) => canonicalRKSMetric(sourceKey) === metricKey);
+      const selected = matches.find(([, metric]) => typeof metric.value === 'number') || matches[0];
+      if (!selected) return { exists: false, value: null, weight: null, sourceKeys: [] };
+      return {
+        exists: true,
+        value: typeof selected[1].value === 'number' ? selected[1].value : null,
+        weight: typeof selected[1].weight === 'number' ? selected[1].weight : null,
+        sourceKeys: matches.map(([sourceKey]) => sourceKey)
+      };
+    };
 
     const createRKSDetailsYearCard = (year, rawPosition, score) => {
       const hasPosition = typeof rawPosition === 'string' || typeof rawPosition === 'number';
       const card = document.createElement('article');
       card.className = 'rks-details-year' + (hasPosition ? '' : ' missing');
       card.setAttribute('role', 'listitem');
-
       const yearLabel = document.createElement('div');
       yearLabel.className = 'year';
       yearLabel.textContent = year;
@@ -3023,9 +3138,36 @@ document.addEventListener('DOMContentLoaded', function () {
       const scoreLabel = document.createElement('span');
       scoreLabel.className = 'score';
       scoreLabel.textContent = typeof score === 'number' ? `${formatRKSScore(score)} pkt` : 'brak punktacji';
-
       card.append(yearLabel, position, positionLabel, scoreLabel);
       return card;
+    };
+
+    const createRKSIndicatorYearCard = (year, snapshot) => {
+      const hasValue = typeof snapshot.value === 'number';
+      const card = document.createElement('article');
+      card.className = 'rks-details-year' + (hasValue ? '' : ' missing');
+      card.setAttribute('role', 'listitem');
+      const yearLabel = document.createElement('div');
+      yearLabel.className = 'year';
+      yearLabel.textContent = year;
+      const value = document.createElement('div');
+      value.className = 'position';
+      value.textContent = formatRKSIndicatorValue(snapshot.value);
+      const valueLabel = document.createElement('span');
+      valueLabel.className = 'position-label';
+      valueLabel.textContent = hasValue ? 'wynik 0–100' : (snapshot.exists ? 'brak wartości' : 'wskaźnik nie występował');
+      const weight = document.createElement('span');
+      weight.className = 'score';
+      weight.textContent = typeof snapshot.weight === 'number'
+        ? `waga ${formatRKSMetricWeight(snapshot.weight)}%`
+        : (snapshot.exists ? 'waga niepublikowana' : '—');
+      card.append(yearLabel, value, valueLabel, weight);
+      return card;
+    };
+
+    const setRKSDetailsStat = (index, label, value) => {
+      if (rksDetailsStatLabels[index]) rksDetailsStatLabels[index].textContent = label;
+      [rksDetailsLatestPosition, rksDetailsLatestScore, rksDetailsBestPosition, rksDetailsPodiums][index].textContent = value;
     };
 
     renderRKSDetails = () => {
@@ -3033,48 +3175,101 @@ document.addEventListener('DOMContentLoaded', function () {
       const subjectName = rksDetailsSubjectSelect.value || currentRKSSubject || defaultSubject;
       const subjectData = rksSubjects[subjectName];
       if (!subjectData) return;
-
+      const metricKey = updateRKSMetricOptions(subjectName);
+      const isIndicator = metricKey !== 'overall';
+      const metricCatalog = getRKSMetricCatalog(subjectName);
+      const metricLabel = metricCatalog.find((metric) => metric.key === metricKey)?.label || rksMetricLabels[metricKey] || metricKey;
       const lowerSeries = Array.isArray(subjectData.lower) ? subjectData.lower.slice() : [];
       const upperSeries = Array.isArray(subjectData.upper) ? subjectData.upper.slice() : [];
       const rawSeries = Array.isArray(subjectData.raw) ? subjectData.raw.slice() : [];
       const scoreSeries = Array.isArray(subjectData.score) ? subjectData.score.slice() : [];
       const latestIndex = rksYears.length - 1;
-      const numericPositions = lowerSeries.filter((value) => typeof value === 'number');
-      const bestPosition = numericPositions.length ? Math.min(...numericPositions) : null;
-      const podiumCount = upperSeries.filter((value) => typeof value === 'number' && value <= 3).length;
-      const bestYears = bestPosition === null
-        ? []
-        : rksYears.filter((year, index) => lowerSeries[index] === bestPosition);
+      const snapshots = isIndicator
+        ? rksYears.map((year) => getRKSMetricSnapshot(subjectName, year, metricKey))
+        : [];
 
-      if (rksDetailsLatestPosition) rksDetailsLatestPosition.textContent = rawSeries[latestIndex] ?? '—';
-      if (rksDetailsLatestScore) rksDetailsLatestScore.textContent = formatRKSScore(scoreSeries[latestIndex]);
-      if (rksDetailsBestPosition) rksDetailsBestPosition.textContent = bestPosition === null ? '—' : `${bestPosition}.`;
-      if (rksDetailsPodiums) rksDetailsPodiums.textContent = `${podiumCount} / ${rksYears.length}`;
-      if (rksDetailsYearCards) {
-        rksDetailsYearCards.replaceChildren(...rksYears.map((year, index) =>
-          createRKSDetailsYearCard(year, rawSeries[index], scoreSeries[index])));
-      }
-
+      rksDetailsViewControl?.classList.toggle('hidden', isIndicator);
       rksDetailsModeButtons.forEach((button) => {
         button.setAttribute('aria-pressed', (button.dataset.rksDetailsMode === rksDetailsMode).toString());
       });
 
-      const isScore = rksDetailsMode === 'score';
-      const chartColor = isScore ? '#059669' : '#4f46e5';
-      if (rksDetailsChartTitle) rksDetailsChartTitle.textContent = `${subjectName} — ${isScore ? 'punktacja' : 'pozycja'} 2020–2026`;
+      if (isIndicator) {
+        const numericEntries = snapshots
+          .map((snapshot, index) => ({ ...snapshot, index }))
+          .filter((snapshot) => typeof snapshot.value === 'number');
+        const latest = numericEntries.at(-1);
+        const best = numericEntries.length ? Math.max(...numericEntries.map(({ value }) => value)) : null;
+        const latestWeightEntry = [...snapshots.map((snapshot, index) => ({ ...snapshot, index }))]
+          .reverse()
+          .find(({ exists }) => exists);
+        setRKSDetailsStat(0, latest ? `Wynik ${rksYears[latest.index]}` : 'Najnowszy wynik', formatRKSIndicatorValue(latest?.value));
+        setRKSDetailsStat(1, latestWeightEntry ? `Waga ${rksYears[latestWeightEntry.index]}` : 'Najnowsza waga', typeof latestWeightEntry?.weight === 'number' ? `${formatRKSMetricWeight(latestWeightEntry.weight)}%` : '—');
+        setRKSDetailsStat(2, 'Najlepszy wynik', formatRKSIndicatorValue(best));
+        setRKSDetailsStat(3, 'Edycje z wynikiem', `${numericEntries.length} / ${rksYears.length}`);
+        rksDetailsYearCards?.replaceChildren(...rksYears.map((year, index) => createRKSIndicatorYearCard(year, snapshots[index])));
+
+        const availableYears = numericEntries.map(({ index }) => rksYears[index]);
+        const weightPairs = snapshots
+          .map((snapshot, index) => typeof snapshot.weight === 'number' ? `${rksYears[index]}: ${formatRKSMetricWeight(snapshot.weight)}%` : null)
+          .filter(Boolean);
+        const sourceKeys = new Set(snapshots.flatMap(({ sourceKeys: keys }) => keys));
+        const aliasNote = sourceKeys.size > 1
+          ? ' Oznaczenie wskaźnika w tabelach źródłowych zmieniało się między edycjami; seria łączy ten sam zakres merytoryczny.'
+          : '';
+        if (rksDetailsMetricContext) {
+          rksDetailsMetricContext.textContent = availableYears.length
+            ? `Dostępne wyniki: ${availableYears.join(', ')}. ${weightPairs.length ? `Wagi według edycji: ${weightPairs.join('; ')}.` : 'Wagi nie były publikowane w odczytanych tabelach.'}${aliasNote}`
+            : 'Brak opublikowanych wartości tego wskaźnika dla PW w analizowanych edycjach.';
+        }
+      } else {
+        const numericPositions = lowerSeries.filter((value) => typeof value === 'number');
+        const bestPosition = numericPositions.length ? Math.min(...numericPositions) : null;
+        const podiumCount = upperSeries.filter((value) => typeof value === 'number' && value <= 3).length;
+        setRKSDetailsStat(0, 'Najnowsza pozycja', rawSeries[latestIndex] ?? '—');
+        setRKSDetailsStat(1, 'Punktacja 2026', formatRKSScore(scoreSeries[latestIndex]));
+        setRKSDetailsStat(2, 'Najlepsza pozycja', bestPosition === null ? '—' : `${bestPosition}.`);
+        setRKSDetailsStat(3, 'Edycje na podium', `${podiumCount} / ${rksYears.length}`);
+        rksDetailsYearCards?.replaceChildren(...rksYears.map((year, index) =>
+          createRKSDetailsYearCard(year, rawSeries[index], scoreSeries[index])));
+        if (rksDetailsMetricContext) {
+          rksDetailsMetricContext.textContent = 'Wynik ogólny łączy wskaźniki z wagami właściwymi dla kierunku i edycji. Punktacja jest normalizowana osobno w każdej tabeli, dlatego nie należy porównywać jej bezpośrednio między różnymi kierunkami.';
+        }
+      }
+
+      const indicatorColor = '#0891b2';
+      const isScore = !isIndicator && rksDetailsMode === 'score';
+      const chartColor = isIndicator ? indicatorColor : (isScore ? '#059669' : '#4f46e5');
+      if (rksDetailsChartTitle) {
+        rksDetailsChartTitle.textContent = isIndicator
+          ? `${subjectName} — ${metricLabel} 2020–2026`
+          : `${subjectName} — ${isScore ? 'punktacja' : 'pozycja'} 2020–2026`;
+      }
       if (rksDetailsChartNote) {
-        const bestText = bestYears.length
-          ? `Najlepsza pozycja: ${bestPosition}. (${bestYears.join(', ')}).`
-          : 'Brak danych o pozycji.';
-        rksDetailsChartNote.textContent = isScore
-          ? 'Wynik jest normalizowany w skali 0–100 osobno dla kierunku i edycji rankingu.'
-          : `${bestText} Niższa wartość oznacza lepsze miejsce; pasmo pokazuje przedział ex aequo.`;
+        if (isIndicator) {
+          rksDetailsChartNote.textContent = 'Wynik 0–100 jest normalizowany w obrębie kierunku i edycji. Przerwa na wykresie oznacza brak wartości albo niewystępowanie wskaźnika; braków nie interpolujemy.';
+        } else {
+          const numericPositions = lowerSeries.filter((value) => typeof value === 'number');
+          const bestPosition = numericPositions.length ? Math.min(...numericPositions) : null;
+          const bestYears = bestPosition === null ? [] : rksYears.filter((year, index) => lowerSeries[index] === bestPosition);
+          const bestText = bestYears.length ? `Najlepsza pozycja: ${bestPosition}. (${bestYears.join(', ')}).` : 'Brak danych o pozycji.';
+          rksDetailsChartNote.textContent = isScore
+            ? 'Wynik jest normalizowany w skali 0–100 osobno dla kierunku i edycji rankingu.'
+            : `${bestText} Niższa wartość oznacza lepsze miejsce; pasmo pokazuje przedział ex aequo.`;
+        }
       }
       const legendLine = rksDetailsLegend?.querySelector('span:first-child');
       const legendText = rksDetailsLegend?.querySelector('span:last-child');
       if (legendLine) legendLine.style.backgroundColor = chartColor;
-      if (legendText) legendText.textContent = isScore ? 'Punktacja 0–100' : 'Pozycja / przedział';
-      rksDetailsCanvas.setAttribute('aria-label', `${subjectName}: ${isScore ? 'punktacja' : 'pozycja'} w Rankingu Kierunków Studiów 2020–2026`);
+      if (legendText) legendText.textContent = isIndicator ? `${metricLabel} 0–100` : (isScore ? 'Punktacja 0–100' : 'Pozycja / przedział');
+      rksDetailsCanvas.setAttribute('aria-label', isIndicator
+        ? `${subjectName}: ${metricLabel} w Rankingu Kierunków Studiów 2020–2026`
+        : `${subjectName}: ${isScore ? 'punktacja' : 'pozycja'} w Rankingu Kierunków Studiów 2020–2026`);
+
+      const sourceSlug = rksIndicatorSubjects[subjectName]?.slug;
+      if (rksDetailsSourceLink && sourceSlug) {
+        rksDetailsSourceLink.href = `https://ranking.perspektywy.pl/ranking-kierunkow-studiow/${sourceSlug}/`;
+        rksDetailsSourceLink.textContent = `oficjalne tabele Perspektywy: ${subjectName}, edycje 2020–2026`;
+      }
 
       if (!rksDetailsChart) {
         rksDetailsChart = new Chart(rksDetailsCanvas, {
@@ -3090,6 +3285,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 callbacks: {
                   label: (context) => {
                     if (context.datasetIndex !== 0) return null;
+                    if (rksDetailsChart.$mode === 'indicator') {
+                      if (typeof context.parsed.y !== 'number') return 'Brak danych';
+                      const weight = rksDetailsChart.$weightSeries?.[context.dataIndex];
+                      return typeof weight === 'number'
+                        ? [`Wynik: ${formatRKSIndicatorValue(context.parsed.y)}`, `Waga: ${formatRKSMetricWeight(weight)}%`]
+                        : `Wynik: ${formatRKSIndicatorValue(context.parsed.y)}`;
+                    }
                     if (rksDetailsChart.$mode === 'score') {
                       return typeof context.parsed.y === 'number'
                         ? `Punktacja: ${formatRKSScore(context.parsed.y)}`
@@ -3114,11 +3316,38 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       rksDetailsChart.data.labels = rksYears;
-      rksDetailsChart.$mode = rksDetailsMode;
+      rksDetailsChart.$mode = isIndicator ? 'indicator' : rksDetailsMode;
       rksDetailsChart.$rawSeries = rawSeries;
+      rksDetailsChart.$weightSeries = isIndicator ? snapshots.map(({ weight }) => weight) : [];
       const yAxis = rksDetailsChart.options.scales.y;
+      delete yAxis.min;
+      delete yAxis.max;
+      delete yAxis.suggestedMin;
+      delete yAxis.suggestedMax;
 
-      if (isScore) {
+      if (isIndicator) {
+        rksDetailsChart.data.datasets = [{
+          label: metricLabel,
+          data: snapshots.map(({ value }) => value),
+          borderColor: indicatorColor,
+          backgroundColor: 'rgba(8, 145, 178, 0.12)',
+          pointBackgroundColor: indicatorColor,
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          borderWidth: 2.5,
+          tension: 0.25,
+          spanGaps: false,
+          fill: false
+        }];
+        yAxis.reverse = false;
+        yAxis.min = 0;
+        yAxis.max = 100;
+        yAxis.ticks.stepSize = 10;
+        yAxis.ticks.callback = (value) => Number(value).toLocaleString('pl-PL');
+        yAxis.title.text = 'Wynik wskaźnika (0–100)';
+      } else if (isScore) {
         rksDetailsChart.data.datasets = [{
           label: 'Punktacja 0–100',
           data: scoreSeries,
@@ -3131,7 +3360,7 @@ document.addEventListener('DOMContentLoaded', function () {
           pointHoverRadius: 6,
           borderWidth: 2.5,
           tension: 0.25,
-          spanGaps: true,
+          spanGaps: false,
           fill: false
         }];
         const numericScores = scoreSeries.filter((value) => typeof value === 'number');
@@ -3158,7 +3387,7 @@ document.addEventListener('DOMContentLoaded', function () {
             pointHoverRadius: 6,
             borderWidth: 2.5,
             tension: 0.25,
-            spanGaps: true,
+            spanGaps: false,
             fill: '+1'
           },
           {
@@ -3170,7 +3399,7 @@ document.addEventListener('DOMContentLoaded', function () {
             borderWidth: 1.5,
             borderDash: [5, 4],
             tension: 0.25,
-            spanGaps: true,
+            spanGaps: false,
             fill: false
           }
         ];
@@ -3219,6 +3448,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     rksDetailsSubjectSelect?.addEventListener('change', (event) => {
       updateRKSChart(event.target.value);
+    });
+
+    rksDetailsMetricSelect?.addEventListener('change', () => {
+      renderRKSDetails();
     });
 
     rksDetailsModeButtons.forEach((button) => {

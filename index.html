@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
-    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260720-gras-details" />
+    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260720-rks-indicators" />
   </head>
   <body id="top" class="bg-gray-50 text-gray-900">
     <a href="#main-content" class="skip-link sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-slate-950 focus:px-4 focus:py-3 focus:text-sm focus:font-bold focus:text-white">Przejdź do głównej treści</a>
@@ -240,7 +240,7 @@
           <div class="relative z-10 flex min-h-full items-center justify-center p-0 sm:p-4">
             <section class="max-h-screen w-full max-w-6xl overflow-y-auto bg-white shadow-2xl ring-1 ring-slate-900/10 sm:max-h-[94vh] sm:rounded-2xl">
               <header class="sticky top-0 z-10 flex items-start justify-between gap-6 border-b border-slate-200 bg-white/95 p-5 backdrop-blur sm:p-6 md:p-7">
-                <div><p class="text-[11px] font-extrabold uppercase tracking-[0.2em] text-indigo-700">Perspektywy RKS | 2020–2026</p><h2 id="rksDetailsTitle" class="mt-2 text-xl font-extrabold text-slate-950 sm:text-2xl">Wyniki kierunków Politechniki Warszawskiej</h2><p id="rksDetailsDesc" class="mt-2 max-w-3xl text-xs leading-5 text-slate-600 sm:text-sm">Porównaj pozycję i punktację wybranego kierunku PW w siedmiu kolejnych edycjach Rankingu Kierunków Studiów.</p></div>
+                <div><p class="text-[11px] font-extrabold uppercase tracking-[0.2em] text-indigo-700">Perspektywy RKS | 2020–2026</p><h2 id="rksDetailsTitle" class="mt-2 text-xl font-extrabold text-slate-950 sm:text-2xl">Wyniki kierunków Politechniki Warszawskiej</h2><p id="rksDetailsDesc" class="mt-2 max-w-3xl text-xs leading-5 text-slate-600 sm:text-sm">Porównaj pozycję, punktację ogólną oraz wyniki wszystkich wskaźników wybranego kierunku PW w siedmiu kolejnych edycjach Rankingu Kierunków Studiów.</p></div>
                 <button type="button" data-methodology-close class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-label="Zamknij szczegółowe wyniki RKS">×</button>
               </header>
 
@@ -250,15 +250,17 @@
                   <div><b>Wyniki są porównywalne przede wszystkim w obrębie tego samego kierunku.</b> Punktacja 0–100 jest normalizowana w każdej edycji względem najlepszej uczelni w danym zestawieniu. Zmieniają się także okna danych i liczba porównywanych uczelni.</div>
                 </section>
 
-                <section class="rks-details-controls" aria-label="Wybór kierunku i rodzaju wyniku">
+                <section class="rks-details-controls rks-details-controls--indicators" aria-label="Wybór kierunku, wskaźnika i rodzaju wyniku">
                   <label for="rksDetailsSubjectSelect"><span class="rks-control-label">Kierunek PW</span><select id="rksDetailsSubjectSelect" class="h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"></select></label>
-                  <div><span class="rks-control-label">Widok wykresu</span><div id="rksDetailsModeControl" class="inline-flex h-11 items-center rounded-lg border border-slate-200 bg-slate-100 p-1" role="group" aria-label="Wybierz rodzaj wyniku"><button type="button" data-rks-details-mode="position" aria-pressed="true">POZ</button><button type="button" data-rks-details-mode="score" aria-pressed="false">PKT</button></div></div>
+                  <label for="rksDetailsMetricSelect"><span class="rks-control-label">Zakres danych</span><select id="rksDetailsMetricSelect" class="h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"></select></label>
+                  <div id="rksDetailsViewControl"><span class="rks-control-label">Widok wykresu</span><div id="rksDetailsModeControl" class="inline-flex h-11 items-center rounded-lg border border-slate-200 bg-slate-100 p-1" role="group" aria-label="Wybierz rodzaj wyniku"><button type="button" data-rks-details-mode="position" aria-pressed="true">POZ</button><button type="button" data-rks-details-mode="score" aria-pressed="false">PKT</button></div></div>
                 </section>
 
                 <section class="rks-details-stats" aria-label="Podsumowanie wyników wybranego kierunku">
-                  <div><span>Najnowsza pozycja</span><b id="rksDetailsLatestPosition">—</b></div><div><span>Punktacja 2026</span><b id="rksDetailsLatestScore">—</b></div><div><span>Najlepsza pozycja</span><b id="rksDetailsBestPosition">—</b></div><div><span>Edycje na podium</span><b id="rksDetailsPodiums">—</b></div>
+                  <div><span id="rksDetailsStat1Label">Najnowsza pozycja</span><b id="rksDetailsLatestPosition">—</b></div><div><span id="rksDetailsStat2Label">Punktacja 2026</span><b id="rksDetailsLatestScore">—</b></div><div><span id="rksDetailsStat3Label">Najlepsza pozycja</span><b id="rksDetailsBestPosition">—</b></div><div><span id="rksDetailsStat4Label">Edycje na podium</span><b id="rksDetailsPodiums">—</b></div>
                 </section>
 
+                <p id="rksDetailsMetricContext" class="rounded-lg border border-indigo-100 bg-indigo-50 px-4 py-3 text-xs leading-5 text-slate-700"></p>
                 <div class="overflow-x-auto"><div id="rksDetailsYearCards" class="rks-details-years" role="list"></div></div>
 
                 <section class="border-t border-slate-200 pt-5" aria-labelledby="rksDetailsChartTitle">
@@ -266,7 +268,7 @@
                   <div class="chart-frame chart-frame--rks-details mt-3"><canvas id="chartRKSDetails" role="img" aria-label="Trend wyniku wybranego kierunku PW w Rankingu Kierunków Studiów Perspektywy"></canvas></div>
                 </section>
 
-                <footer class="flex flex-col gap-3 border-t border-slate-200 pt-4 text-[11px] leading-5 text-slate-500 sm:flex-row sm:items-center sm:justify-between"><p>Źródło: <a href="https://ranking.perspektywy.pl/ranking-kierunkow-studiow/" target="_blank" rel="noopener noreferrer" class="font-bold text-indigo-700 underline decoration-indigo-300 underline-offset-2">Ranking Kierunków Studiów Perspektywy 2020–2026</a>.</p><button id="rksDetailsMethodologyOpen" type="button" class="inline-flex min-h-9 items-center justify-center rounded-lg border border-indigo-200 bg-indigo-50 px-3 text-xs font-bold text-indigo-800 transition hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">Wskaźniki i wagi →</button></footer>
+                <footer class="flex flex-col gap-3 border-t border-slate-200 pt-4 text-[11px] leading-5 text-slate-500 sm:flex-row sm:items-center sm:justify-between"><p>Źródło: <a id="rksDetailsSourceLink" href="https://ranking.perspektywy.pl/ranking-kierunkow-studiow/" target="_blank" rel="noopener noreferrer" class="font-bold text-indigo-700 underline decoration-indigo-300 underline-offset-2">oficjalne tabele Rankingu Kierunków Studiów Perspektywy 2020–2026</a>.</p><button id="rksDetailsMethodologyOpen" type="button" class="inline-flex min-h-9 items-center justify-center rounded-lg border border-indigo-200 bg-indigo-50 px-3 text-xs font-bold text-indigo-800 transition hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">Wskaźniki i wagi →</button></footer>
               </div>
             </section>
           </div>
@@ -1841,10 +1843,11 @@
         <a href="#top" class="font-bold text-indigo-700 hover:text-indigo-900">Wróć na początek ↑</a>
       </div>
     </footer>
-    <script src="assets/js/ranking-data.js?v=20260720-gras-details"></script>
-    <script src="assets/js/perspektywy-indicators.js?v=20260720-gras-details"></script>
-    <script src="assets/js/perspektywy-methodology.js?v=20260720-gras-details"></script>
-    <script src="assets/js/dashboard.js?v=20260720-gras-details"></script>
+    <script src="assets/js/ranking-data.js?v=20260720-rks-indicators"></script>
+    <script src="assets/js/perspektywy-indicators.js?v=20260720-rks-indicators"></script>
+    <script src="assets/js/rks-indicators.js?v=20260720-rks-indicators"></script>
+    <script src="assets/js/perspektywy-methodology.js?v=20260720-rks-indicators"></script>
+    <script src="assets/js/dashboard.js?v=20260720-rks-indicators"></script>
   </body>
 </html>
 
