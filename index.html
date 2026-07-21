@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
-    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260720-the-subject-results" />
+    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260721-responsive-charts" />
   </head>
   <body id="top" class="bg-gray-50 text-gray-900">
     <a href="#main-content" class="skip-link sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-slate-950 focus:px-4 focus:py-3 focus:text-sm focus:font-bold focus:text-white">Przejdź do głównej treści</a>
@@ -297,7 +297,7 @@
                 <div>
                   <p class="text-xs uppercase tracking-[0.24em] text-indigo-700 font-bold">EngiRank by Subject 2025</p>
                   <h4 class="mt-2 text-2xl font-extrabold text-slate-950">Najmocniejsze dyscypliny PW</h4>
-                  <p class="mt-3 text-sm text-slate-500">Pozycje Politechniki Warszawskiej we wszystkich siedmiu dyscyplinach EngiRank 2025.</p>
+                  <p class="mt-3 text-sm text-slate-500">Pozycje Politechniki Warszawskiej we wszystkich siedmiu dyscyplinach EngiRank 2025. Znak = oznacza pozycję ex aequo.</p>
                 </div>
                 <div class="hidden sm:block text-right">
                   <p class="text-4xl font-extrabold text-indigo-700">7</p>
@@ -307,31 +307,31 @@
               <div class="mt-6 grid gap-x-7 gap-y-5 lg:grid-cols-2">
                 <div class="border-b border-slate-100 pb-4">
                   <h5 class="text-sm font-bold text-slate-900">Inżynieria materiałowa (Materials Engineering)</h5>
-                  <p class="mt-2 text-sm text-slate-600"><span class="font-extrabold text-indigo-700">50.</span> miejsce w Europie</p>
+                  <p class="mt-2 text-sm text-slate-600"><span class="font-extrabold text-indigo-700">50=</span> miejsce w Europie</p>
                 </div>
                 <div class="border-b border-slate-100 pb-4">
                   <h5 class="text-sm font-bold text-slate-900">Inżynieria chemiczna (Chemical Engineering)</h5>
-                  <p class="mt-2 text-sm text-slate-600"><span class="font-extrabold text-indigo-700">56.</span> miejsce w Europie</p>
+                  <p class="mt-2 text-sm text-slate-600"><span class="font-extrabold text-indigo-700">56=</span> miejsce w Europie</p>
                 </div>
                 <div class="border-b border-slate-100 pb-4">
                   <h5 class="text-sm font-bold text-slate-900">Elektronika, elektrotechnika i inżynieria informacyjna</h5>
-                  <p class="mt-2 text-sm text-slate-600"><span class="font-extrabold text-indigo-700">62.</span> miejsce w Europie</p>
+                  <p class="mt-2 text-sm text-slate-600"><span class="font-extrabold text-indigo-700">62=</span> miejsce w Europie</p>
                 </div>
                 <div class="border-b border-slate-100 pb-4">
                   <h5 class="text-sm font-bold text-slate-900">Inżynieria medyczna (Medical Engineering)</h5>
-                  <p class="mt-2 text-sm text-slate-600"><span class="font-extrabold text-indigo-700">73.</span> miejsce w Europie</p>
+                  <p class="mt-2 text-sm text-slate-600"><span class="font-extrabold text-indigo-700">73=</span> miejsce w Europie</p>
                 </div>
                 <div class="border-b border-slate-100 pb-4">
                   <h5 class="text-sm font-bold text-slate-900">Inżynieria mechaniczna (Mechanical Engineering)</h5>
-                  <p class="mt-2 text-sm text-slate-600"><span class="font-extrabold text-indigo-700">80.</span> miejsce w Europie</p>
+                  <p class="mt-2 text-sm text-slate-600"><span class="font-extrabold text-indigo-700">80=</span> miejsce w Europie</p>
                 </div>
                 <div class="border-b border-slate-100 pb-4">
                   <h5 class="text-sm font-bold text-slate-900">Inżynieria lądowa (Civil Engineering)</h5>
-                  <p class="mt-2 text-sm text-slate-600"><span class="font-extrabold text-indigo-700">84.</span> miejsce w Europie</p>
+                  <p class="mt-2 text-sm text-slate-600"><span class="font-extrabold text-indigo-700">84=</span> miejsce w Europie</p>
                 </div>
                 <div class="border-b border-slate-100 pb-4 lg:col-span-2">
                   <h5 class="text-sm font-bold text-slate-900">Inżynieria środowiska (Environmental Engineering)</h5>
-                  <p class="mt-2 text-sm text-slate-600"><span class="font-extrabold text-indigo-700">130.</span> miejsce w Europie</p>
+                  <p class="mt-2 text-sm text-slate-600"><span class="font-extrabold text-indigo-700">130=</span> miejsce w Europie</p>
                 </div>
               </div>
               <p class="mt-6 rounded-2xl bg-slate-50 p-4 text-xs leading-5 text-slate-500">Źródło: <a href="https://engirank.eu/ranking/2025/all/" class="font-bold text-indigo-700 underline decoration-indigo-300 underline-offset-2 hover:text-indigo-900" target="_blank" rel="noopener noreferrer">oficjalne wyniki EngiRank 2025</a>; panel obejmuje ranking instytucjonalny i EngiRank by Subject 2025.</p>
@@ -344,9 +344,9 @@
             <div class="flex items-center justify-between gap-3">
               <h3 class="text-lg font-semibold text-gray-900">EngiRank</h3>
               <div class="flex items-center gap-2">
-                <button id="engiDetailsOpen" type="button" data-methodology-open="engiDetailsModal" aria-controls="engiDetailsModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Otwórz szczegółowe wyniki głównego EngiRank" title="Pozycja, WSK i trend PW w EngiRank 2023–2025">
+                <button id="engiDetailsOpen" type="button" data-methodology-open="engiDetailsModal" aria-controls="engiDetailsModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Otwórz szczegółowe wyniki głównego EngiRank" title="Pozycja, wynik i trend PW w EngiRank 2023–2025">
                   <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 4-4 3 2 4-6"/></svg>
-                  <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-60 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Pozycja, WSK i trend Politechniki Warszawskiej w edycjach 2023–2025.</span>
+                  <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-60 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Pozycja, wynik i trend Politechniki Warszawskiej w edycjach 2023–2025.</span>
                 </button>                <button id="engiMethodologyOpen" type="button" data-methodology-open="engiMethodologyModal" aria-controls="engiMethodologyModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Otwórz metodykę EngiRank" title="Otwórz metodykę EngiRank">
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0">
   <path d="M12 8.5a3.5 3.5 0 1 1 0 7a3.5 3.5 0 0 1 0-7Z" />
@@ -354,10 +354,10 @@
 </svg>
       <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-56 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Metodyka: wagi, wskaźniki, źródła danych i zasady kwalifikacji.</span>
     </button>
-                <button id="engiToggle" type="button" aria-controls="chartEngi" class="group relative inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50/70 p-0.5 text-[11px] font-bold uppercase tracking-wide text-slate-500 transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-pressed="false" aria-label="Przełącz wykres EngiRank między pozycją i WSK">
+                <button id="engiToggle" type="button" aria-controls="chartEngi" class="group relative inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50/70 p-0.5 text-[11px] font-bold uppercase tracking-wide text-slate-500 transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-pressed="false" aria-label="Przełącz wykres EngiRank między pozycją i wynikiem">
                 <span data-toggle-option="position" class="rounded-full bg-white px-2.5 py-1 text-indigo-700 shadow-sm transition">poz</span>
-                <span data-toggle-option="score" class="rounded-full px-2.5 py-1 transition hover:text-indigo-700">WSK</span>
-                <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-64 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium normal-case leading-4 tracking-normal text-white shadow-xl group-hover:block group-focus:block">Przełącz widok wykresu EngiRank: pozycja albo WSK — wskaźnik punktowy 0–100.</span>
+                <span data-toggle-option="score" class="rounded-full px-2.5 py-1 transition hover:text-indigo-700">PKT</span>
+                <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-64 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium normal-case leading-4 tracking-normal text-white shadow-xl group-hover:block group-focus:block">Przełącz widok wykresu EngiRank: pozycja albo wynik punktowy 0–100.</span>
               </button>
             </div>
             </div>
@@ -365,8 +365,8 @@
             <div class="chart-frame chart-frame--engirank mt-4">
               <canvas id="chartEngi" role="img" aria-label="Trend pozycji i wskaźnika punktowego Politechniki Warszawskiej w EngiRank.">Trend pozycji i wskaźnika punktowego Politechniki Warszawskiej w EngiRank. Szczegółowy opis znajduje się pod wykresem.</canvas>
             </div>
-            <p id="engiNote" aria-live="polite" class="text-xs text-gray-500 mt-4">PW zajęła 72. miejsce w EngiRank 2025 z wynikiem 63,82.</p>
-            <p class="text-[11px] text-slate-500 mt-2">Źródło: EngiRank 2023–2025. Przełącznik: pozycja ↔ WSK (0-100).</p>
+            <p id="engiNote" aria-live="polite" class="text-xs text-gray-500 mt-4">PW zajęła pozycję 72= (ex aequo) w EngiRank 2025 z wynikiem 63,82.</p>
+            <p class="text-[11px] text-slate-500 mt-2">Źródło: oficjalny profil PW w EngiRank 2023–2025. Przełącznik: pozycja ↔ wynik (0–100).</p>
           </div>
           <div class="ranking-card bg-white rounded-2xl shadow-sm p-6">
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgba(79,70,229,0.75); border-color: rgba(79,70,229,0.75); background-color: #f8f9ff;">Aktualizacja: 22.12.2025</span>
@@ -1616,30 +1616,30 @@
       <div class="relative z-10 flex min-h-full items-center justify-center p-0 sm:p-4">
         <section class="max-h-screen w-full max-w-6xl overflow-y-auto bg-white shadow-2xl ring-1 ring-slate-900/10 sm:max-h-[94vh] sm:rounded-2xl">
           <header class="sticky top-0 z-10 flex items-start justify-between gap-6 border-b border-slate-200 bg-white/95 p-5 backdrop-blur sm:p-6 md:p-7">
-            <div><p class="text-[11px] font-extrabold uppercase tracking-[0.2em] text-indigo-700">EngiRank | ranking instytucjonalny 2023–2025</p><h2 id="engiDetailsTitle" class="mt-2 text-xl font-extrabold text-slate-950 sm:text-2xl">Wyniki Politechniki Warszawskiej</h2><p id="engiDetailsDesc" class="mt-2 max-w-3xl text-xs leading-5 text-slate-600 sm:text-sm">Porównaj pozycję i wskaźnik rankingowy PW w trzech edycjach europejskiego rankingu uczelni technicznych.</p></div>
+            <div><p class="text-[11px] font-extrabold uppercase tracking-[0.2em] text-indigo-700">EngiRank | ranking instytucjonalny 2023–2025</p><h2 id="engiDetailsTitle" class="mt-2 text-xl font-extrabold text-slate-950 sm:text-2xl">Wyniki Politechniki Warszawskiej</h2><p id="engiDetailsDesc" class="mt-2 max-w-3xl text-xs leading-5 text-slate-600 sm:text-sm">Porównaj pozycję i oficjalny wynik końcowy PW w trzech edycjach europejskiego rankingu uczelni technicznych.</p></div>
             <button type="button" data-methodology-close class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-label="Zamknij szczegółowe wyniki głównego EngiRank">×</button>
           </header>
 
           <div class="space-y-5 p-5 sm:p-6 md:p-7">
             <section class="grid gap-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-xs leading-5 text-amber-950 sm:grid-cols-[1.35rem_1fr]" aria-label="Informacja o interpretacji wyników EngiRank">
               <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-amber-700"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.7 2.6 17a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 3.7a2 2 0 0 0-3.4 0Z"/></svg>
-              <div><b>Pozycja i WSK nie są tym samym.</b> Pozycja zależy od wyników wszystkich sklasyfikowanych uczelni. WSK jest końcowym wynikiem 0–100 odniesionym do lidera danej edycji, dlatego zmianę miejsca należy analizować razem ze zmianą punktacji.</div>
+              <div><b>Pozycja i wynik nie są tym samym.</b> Pozycja zależy od wyników wszystkich sklasyfikowanych uczelni. Wynik końcowy jest podawany w skali 0–100, dlatego zmianę miejsca należy analizować razem ze zmianą punktacji. Znak = oznacza pozycję ex aequo.</div>
             </section>
 
             <section class="rks-details-controls" aria-label="Wybór rodzaju wyniku głównego EngiRank">
               <div><span class="rks-control-label">Zakres danych</span><div class="flex h-11 items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm font-bold text-slate-700">Politechnika Warszawska · 2023–2025</div></div>
-              <div><span class="rks-control-label">Widok wykresu</span><div id="engiDetailsModeControl" class="inline-flex h-11 items-center rounded-lg border border-slate-200 bg-slate-100 p-1" role="group" aria-label="Wybierz rodzaj wyniku"><button type="button" data-engi-main-details-mode="position" aria-pressed="true">POZ</button><button type="button" data-engi-main-details-mode="score" aria-pressed="false">WSK</button></div></div>
+              <div><span class="rks-control-label">Widok wykresu</span><div id="engiDetailsModeControl" class="inline-flex h-11 items-center rounded-lg border border-slate-200 bg-slate-100 p-1" role="group" aria-label="Wybierz rodzaj wyniku"><button type="button" data-engi-main-details-mode="position" aria-pressed="true">POZ</button><button type="button" data-engi-main-details-mode="score" aria-pressed="false">PKT</button></div></div>
             </section>
 
             <section class="rks-details-stats" aria-label="Podsumowanie głównego wyniku EngiRank PW">
-              <div><span>Pozycja 2025</span><b id="engiDetailsLatestPosition">—</b></div><div><span>WSK 2025</span><b id="engiDetailsLatestScore">—</b></div><div><span>Najlepsza pozycja</span><b id="engiDetailsBestPosition">—</b></div><div><span>Zmiana od 2023</span><b id="engiDetailsPositionChange">—</b></div>
+              <div><span>Pozycja 2025</span><b id="engiDetailsLatestPosition">—</b></div><div><span>Wynik 2025</span><b id="engiDetailsLatestScore">—</b></div><div><span>Najlepsza pozycja</span><b id="engiDetailsBestPosition">—</b></div><div><span>Zmiana od 2023</span><b id="engiDetailsPositionChange">—</b></div>
             </section>
 
             <div class="overflow-x-auto"><div id="engiDetailsYearCards" class="rks-details-years engi-details-years" role="list"></div></div>
 
             <section class="border-t border-slate-200 pt-5" aria-labelledby="engiDetailsChartTitle">
               <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-start"><div><h3 id="engiDetailsChartTitle" class="text-base font-extrabold text-slate-950"></h3><p id="engiDetailsChartNote" class="mt-1 text-xs leading-5 text-slate-500"></p></div><div id="engiDetailsLegend" class="flex items-center gap-2 text-[11px] font-bold text-slate-600"><span class="h-0.5 w-7 bg-indigo-600"></span><span></span></div></div>
-              <div class="chart-frame chart-frame--rks-details mt-3"><canvas id="chartEngiDetails" role="img" aria-label="Trend pozycji i WSK Politechniki Warszawskiej w głównym EngiRank"></canvas></div>
+              <div class="chart-frame chart-frame--rks-details mt-3"><canvas id="chartEngiDetails" role="img" aria-label="Trend pozycji i wyniku Politechniki Warszawskiej w głównym EngiRank"></canvas></div>
             </section>
 
             <footer class="flex flex-col gap-3 border-t border-slate-200 pt-4 text-[11px] leading-5 text-slate-500 sm:flex-row sm:items-center sm:justify-between"><p>Źródło: <a href="https://engirank.eu/ranking/2025/all/" target="_blank" rel="noopener noreferrer" class="font-bold text-indigo-700 underline decoration-indigo-300 underline-offset-2">oficjalne wyniki EngiRank 2023–2025</a>.</p><button id="engiDetailsMethodologyOpen" type="button" class="inline-flex min-h-9 items-center justify-center rounded-lg border border-indigo-200 bg-indigo-50 px-3 text-xs font-bold text-indigo-800 transition hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">Wskaźniki i wagi →</button></footer>
@@ -1667,7 +1667,7 @@
                 <div class="rks-profile-fact"><b>Instytucjonalny</b><span>profil</span></div>
                 <div class="rks-profile-fact"><b id="engiInstitutionIndicatorCount">19</b><span>składników wyniku</span></div>
                 <div class="rks-profile-fact"><b id="engiInstitutionCriterionCount">5</b><span>kryteriów</span></div>
-                <div class="rks-profile-fact"><b id="engiInstitutionLatestPosition">72.</b><span>pozycja PW 2025</span></div>
+                <div class="rks-profile-fact"><b id="engiInstitutionLatestPosition">72=</b><span>pozycja PW 2025</span></div>
               </div>
             </section>
 
@@ -1857,14 +1857,14 @@
         <a href="#top" class="font-bold text-indigo-700 hover:text-indigo-900">Wróć na początek ↑</a>
       </div>
     </footer>
-    <script src="assets/js/ranking-data.js?v=20260720-the-subject-results"></script>
+    <script src="assets/js/ranking-data.js?v=20260721-engirank-data-audit"></script>
     <script src="assets/js/perspektywy-indicators.js?v=20260720-engi-subject-indicators"></script>
     <script src="assets/js/rks-indicators.js?v=20260720-engi-subject-indicators"></script>
     <script src="assets/js/engirank-subject-indicators.js?v=20260720-qs-subject-results"></script>
     <script src="assets/js/qs-subject-indicators.js?v=20260720-the-subject-results"></script>
     <script src="assets/js/the-subject-indicators.js?v=20260720-the-subject-results"></script>
     <script src="assets/js/perspektywy-methodology.js?v=20260720-engi-subject-indicators"></script>
-    <script src="assets/js/dashboard.js?v=20260720-the-subject-methodology"></script>
+    <script src="assets/js/dashboard.js?v=20260721-engirank-data-audit"></script>
   </body>
 </html>
 

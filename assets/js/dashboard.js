@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
     perspektywyScores,
     engiYears,
     engiPositions,
+    engiRankLabels,
     engiScores
   } = window.RankingData;
 
@@ -696,25 +697,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     if (!perspektywyDetailsCanvas || typeof Chart === 'undefined') return;
 
-    const directValueLabels = {
-      id: 'perspektywyDetailsDirectValueLabels',
-      afterDatasetsDraw(chart) {
-        const meta = chart.getDatasetMeta(0);
-        const context = chart.ctx;
-        context.save();
-        context.fillStyle = color;
-        context.font = '600 11px Inter, sans-serif';
-        context.textAlign = 'center';
-        context.textBaseline = 'bottom';
-        meta.data.forEach((point, index) => {
-          if (data[index] == null) return;
-          const label = isPosition ? String(data[index]) : formatPerspektywyValue(data[index]);
-          context.fillText(label, point.x, point.y - 10);
-        });
-        context.restore();
-      }
-    };
-
     perspektywyDetailsChart?.destroy();
     perspektywyDetailsChart = new Chart(perspektywyDetailsCanvas, {
       type: 'line',
@@ -772,8 +754,7 @@ document.addEventListener('DOMContentLoaded', function () {
             grid: { color: 'rgba(148, 163, 184, 0.18)' }
           }
         }
-      },
-      plugins: [directValueLabels]
+      }
     });
   };
 
@@ -886,25 +867,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const rankMin = Math.max(1, Math.floor((valueMin - valuePadding) / 10) * 10);
     const rankMax = Math.max(rankMin + 10, Math.ceil((valueMax + valuePadding) / 10) * 10);
 
-    const directValueLabels = {
-      id: 'qsWurDirectValueLabels',
-      afterDatasetsDraw(chart) {
-        const meta = chart.getDatasetMeta(0);
-        const context = chart.ctx;
-        context.save();
-        context.fillStyle = color;
-        context.font = '600 12px Inter, sans-serif';
-        context.textAlign = 'center';
-        context.textBaseline = 'bottom';
-        meta.data.forEach((point, index) => {
-          if (data[index] == null) return;
-          const label = isScore ? formatQsWurScore(data[index]) : (series.rankLabels[index] || String(data[index]));
-          context.fillText(label, point.x, point.y - 10);
-        });
-        context.restore();
-      }
-    };
-
     qsWurDetailsChart?.destroy();
     qsWurDetailsChart = new Chart(qsWurDetailsCanvas, {
       type: 'line',
@@ -957,8 +919,7 @@ document.addEventListener('DOMContentLoaded', function () {
             grid: { color: 'rgba(148, 163, 184, 0.18)' }
           }
         }
-      },
-      plugins: [directValueLabels]
+      }
     });
   };
 
@@ -1134,6 +1095,188 @@ document.addEventListener('DOMContentLoaded', function () {
   Chart.defaults.font.family = 'Inter, system-ui, sans-serif';
   Chart.defaults.color = '#4B5563';
   Chart.defaults.maintainAspectRatio = false;
+  Chart.defaults.interaction.mode = 'index';
+  Chart.defaults.interaction.intersect = false;
+  Chart.defaults.plugins.tooltip.enabled = false;
+  Chart.defaults.plugins.legend.labels.boxWidth = 36;
+  Chart.defaults.plugins.legend.labels.pointStyleWidth = 32;
+
+  const defaultLegendLabelGenerator = Chart.defaults.plugins.legend.labels.generateLabels;
+  const createLegendLineSwatch = (dataset, fallbackColor) => {
+    const swatch = document.createElement('canvas');
+    swatch.width = 32;
+    swatch.height = 8;
+    const context = swatch.getContext('2d');
+    const borderColor = typeof dataset?.borderColor === 'string' ? dataset.borderColor : fallbackColor;
+    context.strokeStyle = borderColor || '#64748b';
+    context.lineWidth = typeof dataset?.borderWidth === 'number' ? Math.max(2, dataset.borderWidth) : 2;
+    context.lineCap = 'round';
+    context.setLineDash(Array.isArray(dataset?.borderDash) ? dataset.borderDash : []);
+    context.lineDashOffset = Number(dataset?.borderDashOffset) || 0;
+    context.beginPath();
+    context.moveTo(1, 4);
+    context.lineTo(31, 4);
+    context.stroke();
+    return swatch;
+  };
+
+  Chart.defaults.plugins.legend.labels.generateLabels = (chart) => {
+    return defaultLegendLabelGenerator(chart).map((item) => ({
+      ...item,
+      pointStyle: createLegendLineSwatch(chart.data.datasets[item.datasetIndex], item.strokeStyle)
+    }));
+  };
+
+  const formatHoverValue = (value) => {
+    if (typeof value === 'number' && Number.isFinite(value)) {
+      return value.toLocaleString('pl-PL', { maximumFractionDigits: 2 });
+    }
+    return value == null ? '—' : String(value);
+  };
+
+  const resolveHoverLabel = (chart, activeElement) => {
+    const { datasetIndex, index: dataIndex, element } = activeElement;
+    const dataset = chart.data.datasets[datasetIndex];
+    const raw = dataset?.data?.[dataIndex];
+    const parsed = chart.getDatasetMeta(datasetIndex)?.controller?.getParsed(dataIndex);
+    const value = parsed && typeof parsed === 'object' && 'y' in parsed ? parsed.y : raw;
+    const callback = chart.options?.plugins?.tooltip?.callbacks?.label;
+    let resolved;
+
+    if (typeof callback === 'function') {
+      try {
+        resolved = callback({
+          chart,
+          dataset,
+          datasetIndex,
+          dataIndex,
+          element,
+          label: chart.data.labels?.[dataIndex],
+          parsed,
+          raw,
+          formattedValue: formatHoverValue(value)
+        });
+      } catch (error) {
+        resolved = undefined;
+      }
+    }
+
+    if (resolved === null) return null;
+    if (Array.isArray(resolved)) resolved = resolved.filter(Boolean).join(' · ');
+    if (typeof resolved === 'string' && resolved.trim()) return resolved.trim();
+    const prefix = dataset?.label ? dataset.label + ': ' : '';
+    return prefix + formatHoverValue(value);
+  };
+
+  const fitHoverLabel = (context, label, maxWidth) => {
+    if (context.measureText(label).width <= maxWidth) return label;
+    let shortened = label;
+    while (shortened.length > 8 && context.measureText(shortened + '…').width > maxWidth) {
+      shortened = shortened.slice(0, -1);
+    }
+    return shortened + '…';
+  };
+
+  const hoverValueLabelsPlugin = {
+    id: 'hoverValueLabels',
+    afterDatasetsDraw(chart) {
+      const activeElements = chart.getActiveElements();
+      if (!activeElements.length) return;
+      const { ctx, chartArea } = chart;
+      const maxTextWidth = Math.max(72, chartArea.right - chartArea.left - 28);
+
+      ctx.save();
+      ctx.font = '700 11px Inter, system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      activeElements.forEach((activeElement, activeIndex) => {
+        const label = resolveHoverLabel(chart, activeElement);
+        if (!label) return;
+        const visibleLabel = fitHoverLabel(ctx, label, maxTextWidth);
+        const point = activeElement.element.tooltipPosition();
+        const boxWidth = Math.min(maxTextWidth + 16, ctx.measureText(visibleLabel).width + 16);
+        const boxHeight = 24;
+        const preferBelow = activeElements.length > 1 && activeIndex % 2 === 1;
+        let boxX = point.x - boxWidth / 2;
+        let boxY = preferBelow ? point.y + 10 : point.y - boxHeight - 10;
+        boxX = Math.max(chartArea.left + 2, Math.min(boxX, chartArea.right - boxWidth - 2));
+        if (boxY < chartArea.top + 2) boxY = point.y + 10;
+        if (boxY + boxHeight > chartArea.bottom - 2) boxY = point.y - boxHeight - 10;
+
+        const dataset = chart.data.datasets[activeElement.datasetIndex];
+        const borderColor = typeof dataset?.borderColor === 'string' ? dataset.borderColor : '#4f46e5';
+        const radius = 6;
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.96)';
+        ctx.strokeStyle = borderColor;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(boxX + radius, boxY);
+        ctx.lineTo(boxX + boxWidth - radius, boxY);
+        ctx.quadraticCurveTo(boxX + boxWidth, boxY, boxX + boxWidth, boxY + radius);
+        ctx.lineTo(boxX + boxWidth, boxY + boxHeight - radius);
+        ctx.quadraticCurveTo(boxX + boxWidth, boxY + boxHeight, boxX + boxWidth - radius, boxY + boxHeight);
+        ctx.lineTo(boxX + radius, boxY + boxHeight);
+        ctx.quadraticCurveTo(boxX, boxY + boxHeight, boxX, boxY + boxHeight - radius);
+        ctx.lineTo(boxX, boxY + radius);
+        ctx.quadraticCurveTo(boxX, boxY, boxX + radius, boxY);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = borderColor;
+        ctx.fillText(visibleLabel, boxX + boxWidth / 2, boxY + boxHeight / 2 + 0.5);
+      });
+
+      ctx.restore();
+    }
+  };
+
+  Chart.register(hoverValueLabelsPlugin);
+
+  const fixedHeightChartObservers = new WeakMap();
+  const fixedHeightChartSizePlugin = {
+    id: 'fixedHeightChartSize',
+    afterInit(chart) {
+      if (chart.options.responsive !== false) return;
+      const canvas = chart.canvas;
+      const fixedHeight = Number.parseFloat(canvas.style.height) || canvas.height;
+      const observedElement = canvas.parentElement || canvas;
+      const state = { observer: null, resizeFrame: 0, onWindowResize: null };
+
+      const syncSize = () => {
+        state.resizeFrame = 0;
+        const displayWidth = Math.round(canvas.getBoundingClientRect().width);
+        if (displayWidth <= 0) return;
+        const styles = getComputedStyle(canvas);
+        const verticalMargins = (Number.parseFloat(styles.marginTop) || 0) + (Number.parseFloat(styles.marginBottom) || 0);
+        if (chart.width !== displayWidth || chart.height !== fixedHeight) {
+          chart.resize(displayWidth, fixedHeight + verticalMargins);
+          canvas.style.width = '100%';
+          canvas.style.height = fixedHeight + 'px';
+        }
+      };
+      const queueSync = () => {
+        if (state.resizeFrame) cancelAnimationFrame(state.resizeFrame);
+        state.resizeFrame = requestAnimationFrame(syncSize);
+      };
+
+      requestAnimationFrame(() => requestAnimationFrame(syncSize));
+      state.observer = typeof ResizeObserver === 'function' ? new ResizeObserver(queueSync) : null;
+      state.observer?.observe(observedElement);
+      state.onWindowResize = queueSync;
+      window.addEventListener('resize', state.onWindowResize, { passive: true });
+      fixedHeightChartObservers.set(chart, state);
+    },
+    afterDestroy(chart) {
+      const state = fixedHeightChartObservers.get(chart);
+      state?.observer?.disconnect();
+      if (state?.onWindowResize) window.removeEventListener('resize', state.onWindowResize);
+      if (state?.resizeFrame) cancelAnimationFrame(state.resizeFrame);
+      fixedHeightChartObservers.delete(chart);
+    }
+  };
+
+  Chart.register(fixedHeightChartSizePlugin);
 
   new Chart(document.getElementById('chartQS'), {
     type: 'line',
@@ -1141,7 +1284,7 @@ document.addEventListener('DOMContentLoaded', function () {
       labels: qsYears,
       datasets: [
         {
-          label: 'Granica dolna',
+          label: 'Najlepsza pozycja w przedziale',
           data: qsMin,
           borderColor: 'rgb(79,70,229)',
           fill: '+1',
@@ -1152,7 +1295,7 @@ document.addEventListener('DOMContentLoaded', function () {
           borderWidth: 2
         },
         {
-          label: 'Granica g\u00F3rna',
+          label: 'Najsłabsza pozycja w przedziale',
           data: qsMax,
           borderColor: 'rgba(79,70,229,0.5)',
           fill: false,
@@ -1183,7 +1326,7 @@ document.addEventListener('DOMContentLoaded', function () {
               const index = context.dataIndex;
               const lower = qsMin[index];
               const upper = qsMax[index];
-              if (context.dataset.label !== 'Granica dolna') {
+              if (context.datasetIndex !== 0) {
                 return null;
               }
               if (lower === upper) {
@@ -1255,7 +1398,7 @@ document.addEventListener('DOMContentLoaded', function () {
         labels: qsSubjectData.years,
         datasets: [
           {
-            label: 'Granica dolna',
+            label: 'Najlepsza pozycja w przedziale',
             data: [],
             borderColor: 'rgb(79,70,229)',
             backgroundColor: 'rgba(79,70,229,0.12)',
@@ -1266,7 +1409,7 @@ document.addEventListener('DOMContentLoaded', function () {
             borderWidth: 2
           },
           {
-            label: 'Granica górna',
+            label: 'Najsłabsza pozycja w przedziale',
             data: [],
             borderColor: 'rgba(79,70,229,0.45)',
             backgroundColor: 'rgba(79,70,229,0.05)',
@@ -1802,7 +1945,7 @@ document.addEventListener('DOMContentLoaded', function () {
         labels: qsSubjectData.years,
         datasets: [
           {
-            label: 'Granica dolna',
+            label: 'Najlepsza pozycja w przedziale',
             data: [],
             borderColor: 'rgb(79,70,229)',
             backgroundColor: 'rgba(79,70,229,0.12)',
@@ -1813,7 +1956,7 @@ document.addEventListener('DOMContentLoaded', function () {
             borderWidth: 2
           },
           {
-            label: 'Granica górna',
+            label: 'Najsłabsza pozycja w przedziale',
             data: [],
             borderColor: 'rgba(79,70,229,0.45)',
             backgroundColor: 'rgba(79,70,229,0.05)',
@@ -1950,7 +2093,7 @@ document.addEventListener('DOMContentLoaded', function () {
         labels: theSubjectData.years,
         datasets: [
           {
-            label: 'Granica dolna',
+            label: 'Najlepsza pozycja w przedziale',
             data: [],
             borderColor: 'rgb(14,116,144)',
             backgroundColor: 'rgba(14,116,144,0.12)',
@@ -1961,7 +2104,7 @@ document.addEventListener('DOMContentLoaded', function () {
             borderWidth: 2
           },
           {
-            label: 'Granica górna',
+            label: 'Najsłabsza pozycja w przedziale',
             data: [],
             borderColor: 'rgba(14,116,144,0.45)',
             backgroundColor: 'rgba(14,116,144,0.05)',
@@ -2526,7 +2669,7 @@ document.addEventListener('DOMContentLoaded', function () {
         labels: grasSubjectData.years,
         datasets: [
           {
-            label: 'Granica dolna',
+            label: 'Najlepsza pozycja w przedziale',
             data: [],
             borderColor: 'rgb(220,38,38)',
             backgroundColor: 'rgba(220,38,38,0.12)',
@@ -2537,7 +2680,7 @@ document.addEventListener('DOMContentLoaded', function () {
             borderWidth: 2
           },
           {
-            label: 'Granica górna',
+            label: 'Najsłabsza pozycja w przedziale',
             data: [],
             borderColor: 'rgba(220,38,38,0.45)',
             backgroundColor: 'rgba(220,38,38,0.05)',
@@ -2972,7 +3115,9 @@ document.addEventListener('DOMContentLoaded', function () {
         return engiSubjectDetailsMetricSelect.value;
       }
       const subject = engiSubjectIndicatorData.subjects?.[subjectName];
-      const previous = engiSubjectDetailsMetricSelect.value;
+      const previous = engiSubjectDetailsMetricSelect.dataset.subject
+        ? engiSubjectDetailsMetricSelect.value
+        : 'overall';
       const metricKeys = (engiSubjectIndicatorData.metricOrder || []).filter((key) =>
         Object.values(subject?.editions || {}).some((edition) => edition.metrics?.[key])
       );
@@ -3106,7 +3251,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const top100Count = numericPositions.filter((value) => value <= 100).length;
         setEngiSubjectDetailsStat(0, 'Pozycja 2025', rawSeries[latestIndex] ?? '—');
         setEngiSubjectDetailsStat(1, 'Wynik ogólny 2025', formatEngiScore(scoreSeries[latestIndex]));
-        setEngiSubjectDetailsStat(2, 'Najlepsza pozycja', bestPosition === null ? '—' : bestPosition + '.');
+        setEngiSubjectDetailsStat(2, 'Najlepsza pozycja', bestPosition === null ? '—' : (rawSeries[positionSeries.indexOf(bestPosition)] || bestPosition + '.'));
         setEngiSubjectDetailsStat(3, 'Edycje w TOP 100', top100Count + ' / ' + engiSubjectYears.length);
         engiSubjectDetailsYearCards?.replaceChildren(...engiSubjectYears.map((year, index) =>
           createEngiSubjectYearCard(year, rawSeries[index], scoreSeries[index])
@@ -3132,7 +3277,7 @@ document.addEventListener('DOMContentLoaded', function () {
           ? 'Wynik wskaźnika w skali 0–100. Brak punktu oznacza, że wskaźnik nie występował w modelu danej dyscypliny.'
           : (isScore
             ? 'Oficjalny Overall score EngiRank w skali 0–100; wyższa wartość oznacza lepszy wynik.'
-            : 'Najlepsza pozycja: ' + (bestPosition ?? '—') + '.'
+            : 'Najlepsza pozycja: ' + (bestPosition === null ? '—' : (rawSeries[positionSeries.indexOf(bestPosition)] || bestPosition + '.'))
               + (bestYears.length ? ' (' + bestYears.join(', ') + ').' : '')
               + ' Niższa wartość oznacza lepsze miejsce.');
       }
@@ -4447,7 +4592,7 @@ document.addEventListener('DOMContentLoaded', function () {
       labels: theYears,
       datasets: [
         {
-          label: 'Granica dolna',
+          label: 'Najlepsza pozycja w przedziale',
           data: theLower,
           borderColor: 'rgb(14,116,144)',
           fill: '+1',
@@ -4458,7 +4603,7 @@ document.addEventListener('DOMContentLoaded', function () {
           borderWidth: 2
         },
         {
-          label: 'Granica górna',
+          label: 'Najsłabsza pozycja w przedziale',
           data: theUpper,
           borderColor: 'rgba(14,116,144,0.5)',
           fill: false,
@@ -4489,7 +4634,7 @@ document.addEventListener('DOMContentLoaded', function () {
               const index = context.dataIndex;
               const lower = theLower[index];
               const upper = theUpper[index];
-              if (context.dataset.label !== 'Granica dolna') {
+              if (context.datasetIndex !== 0) {
                 return null;
               }
               const publishedLabel = theWurDetailsData?.rankLabels?.[index];
@@ -4721,7 +4866,7 @@ document.addEventListener('DOMContentLoaded', function () {
       labels: arwuYears,
       datasets: [
         {
-          label: 'Granica dolna',
+          label: 'Najlepsza pozycja w przedziale',
           data: arwuLower,
           borderColor: 'rgb(220,38,38)',
           backgroundColor: 'rgba(220,38,38,0.18)',
@@ -4731,7 +4876,7 @@ document.addEventListener('DOMContentLoaded', function () {
           spanGaps: true
         },
         {
-          label: 'Granica górna',
+          label: 'Najsłabsza pozycja w przedziale',
           data: arwuUpper,
           borderColor: 'rgb(248,113,113)',
           backgroundColor: 'rgba(248,113,113,0.12)',
@@ -4758,7 +4903,7 @@ document.addEventListener('DOMContentLoaded', function () {
               const index = context.dataIndex;
               const lower = arwuLower[index];
               const upper = arwuUpper[index];
-              if (context.dataset.label !== 'Granica dolna') {
+              if (context.datasetIndex !== 0) {
                 return null;
               }
               if (lower === upper) {
@@ -4795,63 +4940,6 @@ document.addEventListener('DOMContentLoaded', function () {
   let perspektywyChart;
 
   if (perspektywyCanvas) {
-    const perspektywyValueLabelsPlugin = {
-      id: 'perspektywyValueLabels',
-      afterDatasetsDraw(chart) {
-        const { ctx } = chart;
-        const meta = chart.getDatasetMeta(0);
-        const dataset = chart.data.datasets[0];
-
-        if (!meta || !dataset || !meta.data) {
-          return;
-        }
-
-        ctx.save();
-        ctx.font = '600 11px Inter, system-ui, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'bottom';
-
-        meta.data.forEach((point, index) => {
-          const rawValue = dataset.data[index];
-          if (rawValue === null || rawValue === undefined) {
-            return;
-          }
-
-          const label = perspektywyMode === 'score'
-            ? Number(rawValue).toFixed(1)
-            : String(rawValue);
-          const textWidth = ctx.measureText(label).width;
-          const boxWidth = textWidth + 10;
-          const boxHeight = 18;
-          const boxX = point.x - boxWidth / 2;
-          const boxY = point.y - 30;
-          const radius = 6;
-
-          ctx.fillStyle = 'rgba(255,255,255,0.92)';
-          ctx.strokeStyle = perspektywyMode === 'score' ? 'rgba(16,185,129,0.35)' : 'rgba(79,70,229,0.35)';
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(boxX + radius, boxY);
-          ctx.lineTo(boxX + boxWidth - radius, boxY);
-          ctx.quadraticCurveTo(boxX + boxWidth, boxY, boxX + boxWidth, boxY + radius);
-          ctx.lineTo(boxX + boxWidth, boxY + boxHeight - radius);
-          ctx.quadraticCurveTo(boxX + boxWidth, boxY + boxHeight, boxX + boxWidth - radius, boxY + boxHeight);
-          ctx.lineTo(boxX + radius, boxY + boxHeight);
-          ctx.quadraticCurveTo(boxX, boxY + boxHeight, boxX, boxY + boxHeight - radius);
-          ctx.lineTo(boxX, boxY + radius);
-          ctx.quadraticCurveTo(boxX, boxY, boxX + radius, boxY);
-          ctx.closePath();
-          ctx.fill();
-          ctx.stroke();
-
-          ctx.fillStyle = perspektywyMode === 'score' ? 'rgb(5,150,105)' : 'rgb(79,70,229)';
-          ctx.fillText(label, point.x, boxY + boxHeight - 4);
-        });
-
-        ctx.restore();
-      }
-    };
-
     perspektywyChart = new Chart(perspektywyCanvas, {
       type: 'line',
       data: {
@@ -4896,8 +4984,7 @@ document.addEventListener('DOMContentLoaded', function () {
             grid: { display: false }
           }
         }
-      },
-      plugins: [perspektywyValueLabelsPlugin]
+      }
     });
 
     const setPerspektywyMode = (mode) => {
@@ -5025,7 +5112,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const yAxis = engiChart.options.scales.y;
 
       if (mode === 'score') {
-        dataset.label = 'WSK (0-100)';
+        dataset.label = 'Wynik 0–100';
         dataset.data = engiScores;
         dataset.borderColor = 'rgba(16,185,129,0.85)';
         dataset.backgroundColor = 'rgba(16,185,129,0.15)';
@@ -5035,14 +5122,14 @@ document.addEventListener('DOMContentLoaded', function () {
         yAxis.max = 65;
         yAxis.ticks.stepSize = 1;
         yAxis.ticks.callback = (value) => (typeof value === 'number' ? value.toFixed(1) : value);
-        yAxis.title.text = 'WSK (im wyższy, tym lepiej)';
+        yAxis.title.text = 'Wynik (im wyższy, tym lepiej)';
 
         engiChart.options.plugins.tooltip.callbacks.label = (context) => {
           const value = context.parsed.y;
-          return value !== null && value !== undefined ? `WSK: ${value.toFixed(2)}` : 'Brak danych';
+          return value !== null && value !== undefined ? `Wynik: ${value.toFixed(2)}` : 'Brak danych';
         };
         if (engiNote) {
-          engiNote.textContent = 'PW w EngiRank 2025 zajęła 72 miejsce (WSK 63,82).';
+          engiNote.textContent = 'PW w EngiRank 2025 zajęła pozycję 72= (ex aequo) z wynikiem 63,82.';
         }
       } else {
         dataset.label = 'Pozycja (im wyżej, tym lepiej)';
@@ -5059,10 +5146,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         engiChart.options.plugins.tooltip.callbacks.label = (context) => {
           const value = context.parsed.y;
-          return value !== null && value !== undefined ? `Pozycja: ${value}` : 'Brak danych';
+          return value !== null && value !== undefined ? `Pozycja: ${engiRankLabels?.[context.dataIndex] || value}` : 'Brak danych';
         };
         if (engiNote) {
-          engiNote.textContent = 'PW w EngiRank 2025 zajęła 72 miejsce (WSK 63,82).';
+          engiNote.textContent = 'PW w EngiRank 2025 zajęła pozycję 72= (ex aequo) z wynikiem 63,82.';
         }
       }
 
@@ -5076,7 +5163,7 @@ document.addEventListener('DOMContentLoaded', function () {
       ? value.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       : '—';
 
-    const createEngiMainYearCard = (year, positionValue, scoreValue) => {
+    const createEngiMainYearCard = (year, positionValue, rankLabel, scoreValue) => {
       const hasPosition = typeof positionValue === 'number';
       const card = document.createElement('article');
       card.className = 'rks-details-year' + (hasPosition ? '' : ' missing');
@@ -5086,13 +5173,13 @@ document.addEventListener('DOMContentLoaded', function () {
       yearLabel.textContent = year;
       const position = document.createElement('div');
       position.className = 'position';
-      position.textContent = hasPosition ? positionValue : '—';
+      position.textContent = hasPosition ? (rankLabel || positionValue) : '—';
       const positionLabel = document.createElement('span');
       positionLabel.className = 'position-label';
       positionLabel.textContent = hasPosition ? 'pozycja' : 'brak danych';
       const score = document.createElement('span');
       score.className = 'score';
-      score.textContent = typeof scoreValue === 'number' ? `WSK ${formatEngiMainScore(scoreValue)}` : 'brak WSK';
+      score.textContent = typeof scoreValue === 'number' ? `wynik ${formatEngiMainScore(scoreValue)}` : 'brak wyniku';
       card.append(yearLabel, position, positionLabel, score);
       return card;
     };
@@ -5110,15 +5197,18 @@ document.addEventListener('DOMContentLoaded', function () {
         ? engiScores[latestIndex] - engiScores[0]
         : null;
 
-      if (engiDetailsLatestPosition) engiDetailsLatestPosition.textContent = typeof engiPositions[latestIndex] === 'number' ? `${engiPositions[latestIndex]}.` : '—';
+      if (engiDetailsLatestPosition) engiDetailsLatestPosition.textContent = typeof engiPositions[latestIndex] === 'number' ? (engiRankLabels?.[latestIndex] || `${engiPositions[latestIndex]}.`) : '—';
       if (engiDetailsLatestScore) engiDetailsLatestScore.textContent = formatEngiMainScore(engiScores[latestIndex]);
-      if (engiDetailsBestPosition) engiDetailsBestPosition.textContent = bestPosition === null ? '—' : `${bestPosition}.`;
+      if (engiDetailsBestPosition) {
+        const bestIndex = engiPositions.indexOf(bestPosition);
+        engiDetailsBestPosition.textContent = bestPosition === null ? '—' : (engiRankLabels?.[bestIndex] || `${bestPosition}.`);
+      }
       if (engiDetailsPositionChange) {
         engiDetailsPositionChange.textContent = positionChange === null ? '—' : positionChange > 0 ? `${positionChange} ↑` : positionChange < 0 ? `${Math.abs(positionChange)} ↓` : '0';
         engiDetailsPositionChange.title = positionChange > 0 ? 'Poprawa pozycji od 2023' : positionChange < 0 ? 'Spadek pozycji od 2023' : 'Pozycja bez zmiany';
       }
       engiDetailsYearCards?.replaceChildren(...engiYears.map((year, index) =>
-        createEngiMainYearCard(year, engiPositions[index], engiScores[index])));
+        createEngiMainYearCard(year, engiPositions[index], engiRankLabels?.[index], engiScores[index])));
       engiDetailsModeButtons.forEach((button) => {
         button.setAttribute('aria-pressed', (button.dataset.engiMainDetailsMode === engiDetailsMode).toString());
       });
@@ -5133,18 +5223,18 @@ document.addEventListener('DOMContentLoaded', function () {
             ? `Spadek o ${Math.abs(positionChange)} ${Math.abs(positionChange) === 1 ? 'miejsce' : 'miejsca'} względem 2023.`
             : 'Pozycja bez zmiany względem 2023.';
       const scoreTrend = scoreChange === null
-        ? 'Brak pełnych danych do oceny zmiany WSK.'
+        ? 'Brak pełnych danych do oceny zmiany wyniku.'
         : `Zmiana od 2023: ${scoreChange >= 0 ? '+' : '−'}${formatEngiMainScore(Math.abs(scoreChange))} pkt.`;
 
-      if (engiDetailsChartTitle) engiDetailsChartTitle.textContent = `Politechnika Warszawska — ${isScore ? 'WSK' : 'pozycja'} 2023–2025`;
+      if (engiDetailsChartTitle) engiDetailsChartTitle.textContent = `Politechnika Warszawska — ${isScore ? 'wynik' : 'pozycja'} 2023–2025`;
       if (engiDetailsChartNote) engiDetailsChartNote.textContent = isScore
         ? `${scoreTrend} Wynik 100 otrzymuje lider edycji.`
         : `${positionTrend} Najlepszy wynik: ${bestPosition ?? '—'}. miejsce${bestYears.length ? ` (${bestYears.join(', ')})` : ''}.`;
       const legendLine = engiDetailsLegend?.querySelector('span:first-child');
       const legendText = engiDetailsLegend?.querySelector('span:last-child');
       if (legendLine) legendLine.style.backgroundColor = chartColor;
-      if (legendText) legendText.textContent = isScore ? 'WSK 0–100' : 'Pozycja';
-      engiDetailsCanvas.setAttribute('aria-label', `Politechnika Warszawska: ${isScore ? 'WSK' : 'pozycja'} w głównym EngiRank 2023–2025`);
+      if (legendText) legendText.textContent = isScore ? 'Wynik 0–100' : 'Pozycja';
+      engiDetailsCanvas.setAttribute('aria-label', `Politechnika Warszawska: ${isScore ? 'wynik' : 'pozycja'} w głównym EngiRank 2023–2025`);
 
       if (!engiDetailsChart) {
         engiDetailsChart = new Chart(engiDetailsCanvas, {
@@ -5159,7 +5249,7 @@ document.addEventListener('DOMContentLoaded', function () {
               tooltip: {
                 callbacks: {
                   label: (context) => {
-                    if (engiDetailsChart.$mode === 'score') return typeof context.parsed.y === 'number' ? `WSK: ${formatEngiMainScore(context.parsed.y)}` : 'Brak danych';
+                    if (engiDetailsChart.$mode === 'score') return typeof context.parsed.y === 'number' ? `Wynik: ${formatEngiMainScore(context.parsed.y)}` : 'Brak danych';
                     return typeof context.parsed.y === 'number' ? `Pozycja: ${context.parsed.y}` : 'Brak danych';
                   }
                 }
@@ -5177,7 +5267,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const yAxis = engiDetailsChart.options.scales.y;
       if (isScore) {
         engiDetailsChart.data.datasets = [{
-          label: 'WSK 0–100', data: engiScores, borderColor: '#059669', backgroundColor: 'rgba(5,150,105,0.12)',
+          label: 'Wynik 0–100', data: engiScores, borderColor: '#059669', backgroundColor: 'rgba(5,150,105,0.12)',
           pointBackgroundColor: '#059669', pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 4,
           pointHoverRadius: 6, borderWidth: 2.5, tension: 0.25, fill: false
         }];
@@ -5189,7 +5279,7 @@ document.addEventListener('DOMContentLoaded', function () {
         yAxis.suggestedMax = Math.min(100, maxScore + padding);
         yAxis.ticks.stepSize = undefined;
         yAxis.ticks.callback = (value) => Number(value).toLocaleString('pl-PL');
-        yAxis.title.text = 'WSK (0–100)';
+        yAxis.title.text = 'Wynik (0–100)';
       } else {
         engiDetailsChart.data.datasets = [{
           label: 'Pozycja', data: engiPositions, borderColor: '#4f46e5', backgroundColor: 'rgba(79,70,229,0.12)',
@@ -6505,7 +6595,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (engiInstitutionIndicatorCount) engiInstitutionIndicatorCount.textContent = engiInstitutionIndicators.length;
     if (engiInstitutionCriterionCount) engiInstitutionCriterionCount.textContent = engiInstitutionCriteria.length;
-    if (engiInstitutionLatestPosition) engiInstitutionLatestPosition.textContent = engiPositions?.length ? `${engiPositions[engiPositions.length - 1]}.` : '—';
+    if (engiInstitutionLatestPosition) engiInstitutionLatestPosition.textContent = engiPositions?.length ? (engiRankLabels?.[engiPositions.length - 1] || `${engiPositions[engiPositions.length - 1]}.`) : '—';
   };
 
   engiInstitutionInfoTabs.forEach((button) => {

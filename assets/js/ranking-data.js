@@ -1430,44 +1430,44 @@ window.RankingData = (() => {
       "Inżynieria chemiczna (Chemical Engineering)": {
         lower: [77, 49, 56],
         upper: [77, 49, 56],
-        raw: ["77", "49", "56"],
-        score: [63.13, 100.0, 100.0]
+        raw: ["77=", "49=", "56="],
+        score: [63.13, 72.13, 71.76]
       },
       "Inżynieria lądowa (Civil Engineering)": {
         lower: [77, 70, 84],
         upper: [77, 70, 84],
-        raw: ["77", "70", "84"],
-        score: [58.87, 85.71, 100.0]
+        raw: ["77=", "70=", "84="],
+        score: [58.87, 64.52, 63.59]
       },
       "Elektronika, elektrotechnika i inżynieria informacyjna": {
         lower: [95, 71, 62],
         upper: [95, 71, 62],
-        raw: ["95", "71", "62"],
-        score: [64.72, 25.0, 62.5]
+        raw: ["95=", "71=", "62="],
+        score: [64.72, 61.22, 67.75]
       },
       "Inżynieria środowiska (Environmental engineering)": {
         lower: [74, 86, 130],
         upper: [74, 86, 130],
-        raw: ["74", "86", "130"],
-        score: [60.85, 26.67, 0.0]
+        raw: ["74=", "86=", "130="],
+        score: [60.85, 60.81, 56.80]
       },
       "Inżynieria materiałowa (Materials Engineering)": {
-        lower: [95, 47, 50],
-        upper: [95, 47, 50],
-        raw: ["95", "47", "50"],
-        score: [65.95, 50.0, 50.0]
+        lower: [71, 47, 50],
+        upper: [71, 47, 50],
+        raw: ["71=", "47=", "50="],
+        score: [69.72, 71.53, 71.31]
       },
       "Inżynieria mechaniczna (Mechanical engineering)": {
         lower: [63, 76, 80],
         upper: [63, 76, 80],
-        raw: ["63", "76", "80"],
-        score: [72.77, 50.0, 62.5]
+        raw: ["63=", "76=", "80="],
+        score: [72.77, 69.37, 70.86]
       },
       "Inżynieria medyczna": {
         lower: [63, 59, 73],
         upper: [63, 59, 73],
-        raw: ["63", "59", "73"],
-        score: [71.63, 0.0, 0.0]
+        raw: ["63", "59=", "73="],
+        score: [54.77, 57.27, 57.14]
       }
     }
   };
@@ -1512,6 +1512,8 @@ window.RankingData = (() => {
 
   const engiPositions = [69, 64, 72];
 
+  const engiRankLabels = ['69=', '64=', '72='];
+
   const engiScores = [60.17, 62.2, 63.82];
 
   return Object.freeze({
@@ -1538,6 +1540,7 @@ window.RankingData = (() => {
     perspektywyScores,
     engiYears,
     engiPositions,
+    engiRankLabels,
     engiScores
   });
 })();
