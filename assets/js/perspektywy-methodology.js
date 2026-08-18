@@ -9,7 +9,7 @@ window.PerspektywyMethodology = Object.freeze({
     status: 'Seria względna',
     short: 'Coroczna normalizacja',
     tone: 'info',
-    description: 'Wartość jest co roku normalizowana względem innych uczelni, a okres danych źródłowych jest aktualizowany. Trend należy interpretować jako zmianę względnej pozycji PW, nie surowej wartości miernika.'
+    description: 'Wykres przedstawia opublikowane wartości wskaźnika w kolejnych edycjach. Danych nie przeliczamy ani nie interpolujemy.'
   },
   indicators: {
     'Ekonomiczne losy absolwentów': {

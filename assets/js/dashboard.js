@@ -319,10 +319,10 @@ document.addEventListener('DOMContentLoaded', function () {
     2020: 'https://www.ranking.perspektywy.pl/metodologia-rankingu-uczelni-akademickich/2020/',
     2021: 'https://ranking.perspektywy.pl/metodologia-rankingu-uczelni-akademickich/2021/',
     2022: 'https://www.ranking.perspektywy.pl/metodologia-rankingu-uczelni-akademickich-2022r/',
-    2023: 'https://ranking.perspektywy.pl/metodologia-rankingu-uczelni-akademickich/2023/',
-    2024: 'https://www.ranking.perspektywy.pl/metodologia/2024/',
-    2025: 'https://www.ranking.perspektywy.pl/metodologia/2025/',
-    2026: 'https://www.ranking.perspektywy.pl/metodologia/2026/'
+    2023: 'https://www.ranking.perspektywy.pl/metodologia-rankingu-uczelni-akademickich/2023/',
+    2024: 'https://www.ranking.perspektywy.pl/metodologia-rankingu-uczelni-akademickich/2024/',
+    2025: 'https://www.ranking.perspektywy.pl/metodologia-rankingu-uczelni-akademickich/2025/',
+    2026: 'https://www.ranking.perspektywy.pl/metodologia-rankingu-uczelni-akademickich/'
   };
 
   const ruaCriteriaPresentation = [
@@ -614,7 +614,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (perspektywyDetailsMetricHelp) {
       perspektywyDetailsMetricHelp.textContent = isOverall
-        ? 'WSK jest wynikiem końcowym w skali 0–100. W widoku pozycji mniejszy numer oznacza lepsze miejsce. ' + (seriesMeta.description || '')
+        ? 'WSK jest wynikiem końcowym w skali 0–100. W widoku pozycji wyższe położenie na osi oznacza lepsze miejsce. ' + (seriesMeta.description || '')
         : selectedIndicator.criterion + '. ' + (seriesMeta.description || 'Wartości są corocznie normalizowane w skali 0–100 względem innych uczelni.');
     }
 
@@ -657,12 +657,12 @@ document.addEventListener('DOMContentLoaded', function () {
       : [];
 
     if (perspektywyDetailsChartTitle) {
-      perspektywyDetailsChartTitle.textContent = seriesLabel + ' — trend 2020–2026';
+      perspektywyDetailsChartTitle.textContent = seriesLabel + ' — wyniki 2020–2026';
     }
     if (perspektywyDetailsChartNote) {
       if (isOverall) {
         perspektywyDetailsChartNote.textContent = isPosition
-          ? 'Mniejszy numer oznacza lepszą pozycję w rankingu.'
+          ? 'Wyższe położenie na osi oznacza lepsze miejsce w rankingu.'
           : 'Skala 0–100; wyższy WSK oznacza lepszy wynik.';
       } else {
         const coverage = availableYears.length
@@ -684,7 +684,7 @@ document.addEventListener('DOMContentLoaded', function () {
       perspektywyDetailsStatus.textContent = 'Widok szczegółów Perspektyw: ' + seriesLabel + (isOverall ? '.' : '. Porównywalność: ' + (seriesMeta.status || 'seria względna') + '.');
     }
     if (perspektywyDetailsLegendLabel) {
-      perspektywyDetailsLegendLabel.textContent = isPosition ? 'Pozycja — mniejszy numer = lepiej' : seriesLabel + ' 0–100';
+      perspektywyDetailsLegendLabel.textContent = isPosition ? 'Pozycja (im wyżej, tym lepiej)' : seriesLabel + ' 0–100';
     }
     if (perspektywyDetailsLegendLine) {
       perspektywyDetailsLegendLine.className = 'h-0.5 w-8 ' + (isPosition ? 'bg-cyan-600' : 'bg-indigo-600');
@@ -692,7 +692,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (perspektywyDetailsCanvas) {
       perspektywyDetailsCanvas.setAttribute(
         'aria-label',
-        'Trend: ' + seriesLabel + ', Politechnika Warszawska, Ranking Uczelni Akademickich Perspektywy, lata 2020–2026.'
+        'Zestawienie: ' + seriesLabel + ', Politechnika Warszawska, Ranking Uczelni Akademickich Perspektywy, lata 2020–2026.'
       );
     }
     if (!perspektywyDetailsCanvas || typeof Chart === 'undefined') return;
@@ -742,7 +742,7 @@ document.addEventListener('DOMContentLoaded', function () {
             max: isPosition ? 4 : 100,
             title: {
               display: true,
-              text: isPosition ? 'Pozycja (mniejszy numer = lepiej)' : seriesLabel + ' (0–100)',
+              text: isPosition ? 'Pozycja (im wyżej, tym lepiej)' : seriesLabel + ' (0–100)',
               color: isPosition ? '#0e7490' : '#4338ca',
               font: { weight: '700' }
             },
@@ -837,7 +837,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const modeLabel = isScore ? 'wynik' : 'pozycja';
     const modeDescription = isScore
       ? 'Skala 0–100; wyższy wynik jest lepszy.'
-      : 'Mniejszy numer oznacza lepszą pozycję.';
+      : 'Wyższe położenie na osi oznacza lepsze miejsce.';
     const availabilityNote = indicator === 'International Students Diversity'
       ? ' Dane są dostępne od edycji 2026.'
       : '';
@@ -846,13 +846,13 @@ document.addEventListener('DOMContentLoaded', function () {
     if (qsWurDetailsChartNote) qsWurDetailsChartNote.textContent = modeDescription + availabilityNote;
     if (qsWurDetailsStatus) qsWurDetailsStatus.textContent = 'Wybrano: ' + displayLabel + ', widok: ' + modeLabel + '.';
     if (qsWurDetailsLegendLabel) {
-      qsWurDetailsLegendLabel.textContent = isScore ? 'Wynik 0–100' : 'Pozycja — mniejszy numer = lepiej';
+      qsWurDetailsLegendLabel.textContent = isScore ? 'Wynik 0–100' : 'Pozycja (im wyżej, tym lepiej)';
     }
     if (qsWurDetailsLegendLine) {
       qsWurDetailsLegendLine.className = 'h-0.5 w-8 ' + (isScore ? 'bg-indigo-600' : 'bg-cyan-600');
     }
     if (qsWurDetailsCanvas) {
-      qsWurDetailsCanvas.setAttribute('aria-label', displayLabel + ': trend ' + modeLabel + ' Politechniki Warszawskiej w QS World University Rankings w latach 2024–2026.');
+      qsWurDetailsCanvas.setAttribute('aria-label', displayLabel + ': ' + modeLabel + ' Politechniki Warszawskiej w QS World University Rankings w latach 2024–2026.');
     }
     if (!qsWurDetailsCanvas || typeof Chart === 'undefined') return;
 
@@ -911,7 +911,7 @@ document.addEventListener('DOMContentLoaded', function () {
             max: isScore ? 100 : rankMax,
             title: {
               display: true,
-              text: isScore ? 'Wynik (0–100)' : 'Pozycja (mniejszy numer = lepiej)',
+              text: isScore ? 'Wynik (0–100)' : 'Pozycja (im wyżej, tym lepiej)',
               color: isScore ? '#4338ca' : '#0e7490',
               font: { weight: '700' }
             },
@@ -1233,6 +1233,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
   Chart.register(hoverValueLabelsPlugin);
 
+  const legendChartSpacingPlugin = {
+    id: 'legendChartSpacing',
+    afterInit(chart) {
+      if (!chart.legend) return;
+      const originalFit = chart.legend.fit;
+      chart.legend.fit = function () {
+        originalFit.call(this);
+        if (this.options.display) this.height += 14;
+      };
+    }
+  };
+
+  Chart.register(legendChartSpacingPlugin);
+
   const fixedHeightChartObservers = new WeakMap();
   const fixedHeightChartSizePlugin = {
     id: 'fixedHeightChartSize',
@@ -1346,7 +1360,7 @@ document.addEventListener('DOMContentLoaded', function () {
             callback: (value) => Math.round(value)
           },
           grid: { color: 'rgba(17,24,39,0.08)' },
-          title: { display: true, text: 'Pozycja (wy\u017Cej = lepiej)' }
+          title: { display: true, text: 'Pozycja (im wyżej, tym lepiej)' }
         },
         x: {
           grid: { display: false }
@@ -1464,7 +1478,7 @@ document.addEventListener('DOMContentLoaded', function () {
               callback: (value) => (typeof value === 'number' ? Math.round(value) : value)
             },
             grid: { color: 'rgba(17,24,39,0.08)' },
-            title: { display: true, text: 'Pozycja (wyżej = lepiej)' }
+            title: { display: true, text: 'Pozycja (im wyżej, tym lepiej)' }
           },
           x: {
             grid: { display: false }
@@ -1777,7 +1791,7 @@ document.addEventListener('DOMContentLoaded', function () {
           const bestLower = numericPositions.length ? Math.min(...numericPositions.map(({ lower }) => lower)) : null;
           qsSubjectDetailsChartNote.textContent = bestLower === null
             ? 'Brak opublikowanych pozycji PW.'
-            : 'Niższa wartość oznacza lepszą pozycję; wypełnione pasmo pokazuje zakres miejsca ex aequo.';
+            : 'Wyższe położenie na osi oznacza lepsze miejsce; wypełnione pasmo pokazuje zakres miejsca ex aequo.';
         } else {
           qsSubjectDetailsChartNote.textContent = 'Wynik 0–100; wyższa wartość oznacza lepszy rezultat. Przerwy oznaczają brak opublikowanej wartości.';
         }
@@ -1867,7 +1881,7 @@ document.addEventListener('DOMContentLoaded', function () {
         yAxis.suggestedMax = maxValue + padding;
         yAxis.ticks.stepSize = undefined;
         yAxis.ticks.callback = (value) => Math.round(value);
-        yAxis.title.text = 'Pozycja (niższa wartość = lepiej)';
+        yAxis.title.text = 'Pozycja (im wyżej, tym lepiej)';
       } else {
         qsSubjectDetailsChart.data.datasets = [{
           label: metricLabel,
@@ -2011,7 +2025,7 @@ document.addEventListener('DOMContentLoaded', function () {
               callback: (value) => (typeof value === 'number' ? Math.round(value) : value)
             },
             grid: { color: 'rgba(17,24,39,0.08)' },
-            title: { display: true, text: 'Pozycja (wyżej = lepiej)' }
+            title: { display: true, text: 'Pozycja (im wyżej, tym lepiej)' }
           },
           x: {
             grid: { display: false }
@@ -2162,7 +2176,7 @@ document.addEventListener('DOMContentLoaded', function () {
               callback: (value) => (typeof value === 'number' ? Math.round(value) : value)
             },
             grid: { color: 'rgba(17,24,39,0.08)' },
-            title: { display: true, text: 'Pozycja (wyżej = lepiej)' }
+            title: { display: true, text: 'Pozycja (im wyżej, tym lepiej)' }
           },
           x: {
             grid: { display: false }
@@ -2481,7 +2495,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       if (theSubjectDetailsChartNote) {
         theSubjectDetailsChartNote.textContent = isPosition
-          ? 'Niższa wartość oznacza lepszą pozycję; wypełnienie pokazuje opublikowane pasmo.'
+          ? 'Wyższe położenie na osi oznacza lepsze miejsce; wypełnienie pokazuje opublikowane pasmo.'
           : isOverall
             ? 'Wartości Overall dotyczą pasma pozycji. Przerwa na wykresie oznacza brak opublikowanej wartości.'
             : 'Wynik filaru 0–100; wyższa wartość oznacza lepszy rezultat. Przerw nie interpolujemy.';
@@ -2574,7 +2588,7 @@ document.addEventListener('DOMContentLoaded', function () {
         yAxis.suggestedMax = max + padding;
         yAxis.ticks.stepSize = undefined;
         yAxis.ticks.callback = (value) => Math.round(value);
-        yAxis.title.text = 'Pozycja (niższa wartość = lepiej)';
+        yAxis.title.text = 'Pozycja (im wyżej, tym lepiej)';
       } else if (isOverall) {
         const lower = metricSnapshots.map(({ lower: value }) => value);
         const upper = metricSnapshots.map(({ upper: value }) => value);
@@ -2735,7 +2749,7 @@ document.addEventListener('DOMContentLoaded', function () {
               callback: (value) => (typeof value === 'number' ? Math.round(value) : value)
             },
             grid: { color: 'rgba(17,24,39,0.08)' },
-            title: { display: true, text: 'Pozycja (wyżej = lepiej)' }
+            title: { display: true, text: 'Pozycja (im wyżej, tym lepiej)' }
           },
           x: {
             grid: { display: false }
@@ -2923,7 +2937,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 reverse: true,
                 grid: { color: 'rgba(148,163,184,0.2)' },
                 ticks: { color: '#475569', callback: (value) => Math.round(value) },
-                title: { display: true, text: 'Pozycja (niższa wartość = lepiej)' }
+                title: { display: true, text: 'Pozycja (im wyżej, tym lepiej)' }
               }
             }
           }
@@ -3279,7 +3293,7 @@ document.addEventListener('DOMContentLoaded', function () {
             ? 'Oficjalny Overall score EngiRank w skali 0–100; wyższa wartość oznacza lepszy wynik.'
             : 'Najlepsza pozycja: ' + (bestPosition === null ? '—' : (rawSeries[positionSeries.indexOf(bestPosition)] || bestPosition + '.'))
               + (bestYears.length ? ' (' + bestYears.join(', ') + ').' : '')
-              + ' Niższa wartość oznacza lepsze miejsce.');
+              + ' Wyższe położenie na osi oznacza lepsze miejsce.');
       }
       const legendLine = engiSubjectDetailsLegend?.querySelector('span:first-child');
       const legendText = engiSubjectDetailsLegend?.querySelector('span:last-child');
@@ -3383,7 +3397,7 @@ document.addEventListener('DOMContentLoaded', function () {
         yAxis.suggestedMax = maxValue + padding;
         yAxis.ticks.stepSize = undefined;
         yAxis.ticks.callback = (value) => Math.round(value);
-        yAxis.title.text = 'Pozycja (niżej = lepiej)';
+        yAxis.title.text = 'Pozycja (im wyżej, tym lepiej)';
       }
       engiSubjectDetailsChart.update();
       engiSubjectDetailsChart.resize();
@@ -4207,7 +4221,7 @@ document.addEventListener('DOMContentLoaded', function () {
           const bestText = bestYears.length ? `Najlepsza pozycja: ${bestPosition}. (${bestYears.join(', ')}).` : 'Brak danych o pozycji.';
           rksDetailsChartNote.textContent = isScore
             ? 'Wynik jest normalizowany w skali 0–100 osobno dla kierunku i edycji rankingu.'
-            : `${bestText} Niższa wartość oznacza lepsze miejsce; pasmo pokazuje przedział ex aequo.`;
+            : `${bestText} Wyższe położenie na osi oznacza lepsze miejsce; pasmo pokazuje przedział ex aequo.`;
         }
       }
       const legendLine = rksDetailsLegend?.querySelector('span:first-child');
@@ -4365,7 +4379,7 @@ document.addEventListener('DOMContentLoaded', function () {
         yAxis.suggestedMax = maxPosition + positionPadding;
         yAxis.ticks.stepSize = 1;
         yAxis.ticks.callback = (value) => Math.round(value);
-        yAxis.title.text = 'Pozycja (niżej = lepiej)';
+        yAxis.title.text = 'Pozycja (im wyżej, tym lepiej)';
       }
 
       rksDetailsChart.update();
@@ -4560,7 +4574,7 @@ document.addEventListener('DOMContentLoaded', function () {
       yAxis.max = 1550;
       yAxis.ticks.stepSize = 100;
       yAxis.ticks.callback = (value) => Math.round(value);
-      yAxis.title.text = 'Pozycja (niższa wartość = lepiej)';
+      yAxis.title.text = 'Pozycja (im wyżej, tym lepiej)';
     } else {
       theWurDetailsChart.data.datasets = [{
         label: pillar.sourceLabel, data: pillar.values, borderColor: '#4f46e5',
@@ -4655,7 +4669,7 @@ document.addEventListener('DOMContentLoaded', function () {
             stepSize: 50
           },
           grid: { color: 'rgba(17,24,39,0.08)' },
-          title: { display: true, text: 'Pozycja (wyżej = lepiej)' }
+          title: { display: true, text: 'Pozycja (im wyżej, tym lepiej)' }
         },
         x: {
           grid: { display: false }
@@ -4830,7 +4844,7 @@ document.addEventListener('DOMContentLoaded', function () {
       yAxis.max = isWorld ? 1050 : 12;
       yAxis.ticks.stepSize = isWorld ? 50 : 1;
       yAxis.ticks.callback = (value) => Math.round(value);
-      yAxis.title.text = isWorld ? 'Pozycja światowa (niżej = lepiej)' : 'Pozycja w Polsce (niżej = lepiej)';
+      yAxis.title.text = isWorld ? 'Pozycja światowa (im wyżej, tym lepiej)' : 'Pozycja w Polsce (im wyżej, tym lepiej)';
     } else {
       const values = indicator.values;
       const minValue = Math.min(...values);
@@ -4926,7 +4940,7 @@ document.addEventListener('DOMContentLoaded', function () {
             stepSize: 50
           },
           grid: { color: 'rgba(17,24,39,0.08)' },
-          title: { display: true, text: 'Pozycja (wyżej = lepiej)' }
+          title: { display: true, text: 'Pozycja (im wyżej, tym lepiej)' }
         },
         x: {
           grid: { display: false }
@@ -4980,7 +4994,7 @@ document.addEventListener('DOMContentLoaded', function () {
               callback: (value) => (value >= 1 && value <= 4 ? value : null)
             },
             grid: { color: 'rgba(17,24,39,0.08)' },
-            title: { display: true, text: 'Pozycja (im mniejsza, tym lepiej)' }
+            title: { display: true, text: 'Pozycja (im wyżej, tym lepiej)' }
           },
           x: {
             grid: { display: false }
@@ -5027,7 +5041,7 @@ document.addEventListener('DOMContentLoaded', function () {
         yAxis.max = 4;
         yAxis.ticks.stepSize = 1;
         yAxis.ticks.callback = (value) => (value >= 1 && value <= 4 ? value : null);
-        yAxis.title.text = 'Pozycja (im mniejsza, tym lepiej)';
+        yAxis.title.text = 'Pozycja (im wyżej, tym lepiej)';
 
         perspektywyChart.options.plugins.tooltip.callbacks.label = (context) => {
           const value = context.parsed.y;
@@ -5099,7 +5113,7 @@ document.addEventListener('DOMContentLoaded', function () {
               callback: (value) => (typeof value === 'number' ? value.toFixed(0) : value)
             },
             grid: { color: 'rgba(17,24,39,0.08)' },
-            title: { display: true, text: 'Pozycja (im mniejsza, tym lepiej)' }
+            title: { display: true, text: 'Pozycja (im wyżej, tym lepiej)' }
           },
           x: {
             grid: { display: false }
@@ -5144,7 +5158,7 @@ document.addEventListener('DOMContentLoaded', function () {
         yAxis.max = 80;
         yAxis.ticks.stepSize = 2;
         yAxis.ticks.callback = (value) => (typeof value === 'number' ? value.toFixed(0) : value);
-        yAxis.title.text = 'Pozycja (im mniejsza, tym lepiej)';
+        yAxis.title.text = 'Pozycja (im wyżej, tym lepiej)';
 
         engiChart.options.plugins.tooltip.callbacks.label = (context) => {
           const value = context.parsed.y;
@@ -5217,21 +5231,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const isScore = engiDetailsMode === 'score';
       const chartColor = isScore ? '#059669' : '#4f46e5';
-      const positionTrend = positionChange === null
+      const positionSummary = positionChange === null
         ? 'Brak pełnych danych do oceny zmiany pozycji.'
         : positionChange > 0
           ? `Poprawa o ${positionChange} ${positionChange === 1 ? 'miejsce' : 'miejsc'} względem 2023.`
           : positionChange < 0
             ? `Spadek o ${Math.abs(positionChange)} ${Math.abs(positionChange) === 1 ? 'miejsce' : 'miejsca'} względem 2023.`
             : 'Pozycja bez zmiany względem 2023.';
-      const scoreTrend = scoreChange === null
+      const scoreSummary = scoreChange === null
         ? 'Brak pełnych danych do oceny zmiany wyniku.'
         : `Zmiana od 2023: ${scoreChange >= 0 ? '+' : '−'}${formatEngiMainScore(Math.abs(scoreChange))} pkt.`;
 
       if (engiDetailsChartTitle) engiDetailsChartTitle.textContent = `Politechnika Warszawska — ${isScore ? 'wynik' : 'pozycja'} 2023–2025`;
       if (engiDetailsChartNote) engiDetailsChartNote.textContent = isScore
-        ? `${scoreTrend} Wynik 100 otrzymuje lider edycji.`
-        : `${positionTrend} Najlepszy wynik: ${bestPosition ?? '—'}. miejsce${bestYears.length ? ` (${bestYears.join(', ')})` : ''}.`;
+        ? `${scoreSummary} Wynik 100 otrzymuje lider edycji.`
+        : `${positionSummary} Najlepszy wynik: ${bestPosition ?? '—'}. miejsce${bestYears.length ? ` (${bestYears.join(', ')})` : ''}.`;
       const legendLine = engiDetailsLegend?.querySelector('span:first-child');
       const legendText = engiDetailsLegend?.querySelector('span:last-child');
       if (legendLine) legendLine.style.backgroundColor = chartColor;
@@ -5296,7 +5310,7 @@ document.addEventListener('DOMContentLoaded', function () {
         yAxis.suggestedMax = maxPosition + padding;
         yAxis.ticks.stepSize = 1;
         yAxis.ticks.callback = (value) => Math.round(value);
-        yAxis.title.text = 'Pozycja (niżej = lepiej)';
+        yAxis.title.text = 'Pozycja (im wyżej, tym lepiej)';
       }
       engiDetailsChart.update();
       engiDetailsChart.resize();

@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Politechnika Warszawska — wyniki i trendy rankingowe</title>
-    <meta name="description" content="Interaktywny dashboard wyników Politechniki Warszawskiej w rankingach krajowych i międzynarodowych — trendy, kierunki, wskaźniki i metodyki." />
+    <title>Politechnika Warszawska — wyniki rankingowe</title>
+    <meta name="description" content="Interaktywny dashboard wyników Politechniki Warszawskiej w rankingach krajowych i międzynarodowych — pozycje, kierunki, wskaźniki i metodyki." />
     <meta name="theme-color" content="#0f172a" />
     <meta name="color-scheme" content="light" />
     <script src="https://cdn.tailwindcss.com" defer></script>
@@ -33,12 +33,10 @@
     </nav>
 
     <main id="main-content" class="max-w-7xl mx-auto px-4 md:px-6">
-      <section id="trendy" class="py-12 md:py-16">
+      <section id="wyniki" class="py-12 md:py-16">
         <header class="mb-8">
-          <span class="text-xs uppercase tracking-widest text-indigo-600 font-semibold">Trendy</span>
-          <h2 class="text-3xl md:text-[34px] font-extrabold leading-tight mt-2">Jak zmieniały się wyniki PW?</h2>
-          <p class="text-gray-600 mt-3 max-w-3xl">Poniższe wykresy pokazują zmiany pozycji PW w&nbsp;rankingach QS, THE i&nbsp;ARWU w&nbsp;latach 2020-2027, a&nbsp;także kluczowe wskaźniki Perspektyw i&nbsp;EngiRank.
-          </p>
+          <h2 class="text-3xl md:text-[34px] font-extrabold leading-tight">Jak zmieniały się wyniki PW?</h2>
+          <p class="text-gray-600 mt-3 max-w-3xl">Poniższe wykresy prezentują wyniki Politechniki Warszawskiej w kolejnych edycjach rankingów Perspektywy, EngiRank, QS, THE, ARWU i GRAS.</p>
         </header>
         <section id="perspektywy" aria-label="Podsumowanie Perspektywy 2026" class="mb-10 overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm">
           <div class="grid lg:grid-cols-[0.95fr_1.35fr]">
@@ -46,7 +44,7 @@
               <div>
                 <p class="text-xs uppercase tracking-[0.28em] text-cyan-200 font-semibold">Perspektywy 2026</p>
                 <h3 class="mt-4 text-3xl md:text-4xl font-extrabold leading-tight">Politechnika Warszawska w ścisłej czołówce</h3>
-                <p class="mt-4 text-sm leading-6 text-slate-300">Ranking Perspektywy łączy siedem obszarów oceny: prestiż, pozycję absolwentów na rynku pracy, potencjał i efektywność naukową, innowacyjność, warunki kształcenia oraz umiędzynarodowienie. Wykorzystuje dane publiczne i bibliometryczne, badania opinii oraz system ELA.</p>
+                <p class="mt-4 text-sm leading-6 text-slate-300">Ranking Perspektywy łączy siedem obszarów oceny: prestiż, pozycję absolwentów na rynku pracy, potencjał i efektywność naukową, innowacyjność, warunki kształcenia oraz umiędzynarodowienie. Wykorzystuje dane z ogólnopolskich systemów POL-on i ELA, baz polskich i zagranicznych agencji akredytacyjnych, narzędzia bibliometrycznego SciVal firmy Elsevier, badania opinii przeprowadzanego przez Perspektywy oraz formularzy wypełnianych przez przedstawicieli uczelni.</p>
               </div>
               <div class="grid grid-cols-2 gap-4">
                 <div class="rounded-2xl border border-white/15 bg-white/[0.08] p-5">
@@ -150,10 +148,10 @@
             </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
             <div class="chart-frame chart-frame--perspektywy mt-4">
-              <canvas id="chartPerspektywy" role="img" aria-label="Trend pozycji oraz wskaźnika WSK Politechniki Warszawskiej w rankingu Perspektywy w latach 2020–2026.">Trend pozycji oraz wskaźnika WSK Politechniki Warszawskiej w rankingu Perspektywy w latach 2020–2026. Szczegółowy opis znajduje się pod wykresem.</canvas>
+              <canvas id="chartPerspektywy" role="img" aria-label="Zestawienie pozycji oraz wskaźnika WSK Politechniki Warszawskiej w rankingu Perspektywy w latach 2020–2026.">Zestawienie pozycji oraz wskaźnika WSK Politechniki Warszawskiej w rankingu Perspektywy w latach 2020–2026. Szczegółowy opis znajduje się pod wykresem.</canvas>
             </div>
             <p id="perspektywyNote" aria-live="polite" class="text-xs text-gray-500 mt-4">Politechnika Warszawska utrzymuje 3 miejsce w latach 2020–2026; WSK wzrósł z 78,9 do 92,3 pkt.</p>
-            <p class="text-[11px] text-slate-500 mt-2">Źródło: Perspektywy RUA 2020–2026 z pliku rankingi(19).xlsx. Przełącznik: pozycja ↔ WSK (0-100).</p>
+            <p class="text-[11px] text-slate-500 mt-2">Źródło: <a href="https://ranking.perspektywy.pl/ranking-uczelni-akademickich/" target="_blank" rel="noopener noreferrer" class="font-semibold text-indigo-700 underline decoration-indigo-300 underline-offset-2">Ranking Uczelni Akademickich Perspektywy 2020–2026</a>. Przełącznik: pozycja ↔ WSK (0–100).</p>
           </div>
           <div class="ranking-card bg-white rounded-2xl shadow-sm p-6">
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border inline-block mb-2" style="color: rgba(79,70,229,0.85); border-color: rgba(79,70,229,0.85); background-color: #f8f9ff;">Aktualizacja: 26.06.2026</span>
@@ -162,7 +160,7 @@
               <div class="flex shrink-0 items-center gap-1.5">
                 <button id="rksDetailsOpen" type="button" data-methodology-open="rksDetailsModal" aria-controls="rksDetailsModal" aria-haspopup="dialog" class="group relative inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-700 transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Otwórz szczegółowe wyniki kierunków Perspektywy" title="Szczegółowe wyniki RKS 2020–2026">
                   <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5"><path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 4-4 3 2 4-6"/></svg>
-                  <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-64 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Pozycje, punktacja i trend wybranego kierunku PW w latach 2020–2026.</span>
+                  <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-64 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Pozycje i punktacja wybranego kierunku PW w latach 2020–2026.</span>
                 </button>
                 <button id="rksMethodologyOpen" type="button" aria-controls="rksMethodologyModal" class="group relative inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-700 transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2" aria-label="Otwórz wskaźniki i metodykę Rankingu Kierunków Perspektywy" aria-haspopup="dialog" title="Wskaźniki RKS: profil kierunku, wagi, definicje i źródła danych">
                   <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5"><path d="M12 8.5a3.5 3.5 0 1 1 0 7a3.5 3.5 0 0 1 0-7Z"/><path d="M19.4 13.5a7.9 7.9 0 0 0 .1-1.5 7.9 7.9 0 0 0-.1-1.5l1.6-1.2a.6.6 0 0 0 .1-.8l-1.5-2.6a.6.6 0 0 0-.8-.3l-1.9.8a8.6 8.6 0 0 0-2.6-1.5l-.3-2a.6.6 0 0 0-.6-.5h-3a.6.6 0 0 0-.6.5l-.3 2a8.6 8.6 0 0 0-2.6 1.5l-1.9-.8a.6.6 0 0 0-.8.3L2.8 8.5a.6.6 0 0 0 .1.8l1.6 1.2a7.9 7.9 0 0 0-.1 1.5 7.9 7.9 0 0 0 .1 1.5l-1.6 1.2a.6.6 0 0 0-.1.8l1.5 2.6a.6.6 0 0 0 .8.3l1.9-.8a8.6 8.6 0 0 0 2.6 1.5l.3 2a.6.6 0 0 0 .6.5h3a.6.6 0 0 0 .6-.5l.3-2a8.6 8.6 0 0 0 2.6-1.5l1.9.8a.6.6 0 0 0 .8-.3l1.5-2.6a.6.6 0 0 0-.1-.8l-1.6-1.2Z"/></svg>
@@ -177,9 +175,9 @@
               <select id="rksSubjectSelect" class="mt-1 w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-indigo-500 focus:ring-indigo-500"></select>
             </label>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 220px) -->
-            <canvas id="chartRKS" role="img" aria-label="Trend pozycji wybranego kierunku Politechniki Warszawskiej w Rankingu Kierunków Studiów Perspektywy." class="w-full" style="margin-top: 0.25rem; height: 260px;">Trend pozycji wybranego kierunku Politechniki Warszawskiej w Rankingu Kierunków Studiów Perspektywy. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <canvas id="chartRKS" role="img" aria-label="Zestawienie pozycji wybranego kierunku Politechniki Warszawskiej w Rankingu Kierunków Studiów Perspektywy." class="w-full" style="margin-top: 0.25rem; height: 260px;">Zestawienie pozycji wybranego kierunku Politechniki Warszawskiej w Rankingu Kierunków Studiów Perspektywy. Szczegółowy opis znajduje się pod wykresem.</canvas>
             <p id="rksSubjectNote" aria-live="polite" class="text-xs text-gray-500 mt-4">Pozycje PW w rankingach kierunkowych Perspektyw aktualizują się po wyborze kierunku.</p>
-            <p class="text-[11px] text-slate-500 mt-2">Źródło: Perspektywy — Ranking Kierunków Studiów 2020–2026. Przełącznik: pozycja ↔ punktacja (0-100).</p>
+            <p class="text-[11px] text-slate-500 mt-2">Źródło: <a href="https://ranking.perspektywy.pl/ranking-kierunkow-studiow/" target="_blank" rel="noopener noreferrer" class="font-semibold text-indigo-700 underline decoration-indigo-300 underline-offset-2">Ranking Kierunków Studiów Perspektywy 2020–2026</a>. Przełącznik: pozycja ↔ punktacja (0–100).</p>
           </div>
         </div>
 
@@ -265,7 +263,7 @@
 
                 <section class="border-t border-slate-200 pt-5" aria-labelledby="rksDetailsChartTitle">
                   <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-start"><div><h3 id="rksDetailsChartTitle" class="text-base font-extrabold text-slate-950"></h3><p id="rksDetailsChartNote" class="mt-1 text-xs leading-5 text-slate-500"></p></div><div id="rksDetailsLegend" class="flex items-center gap-2 text-[11px] font-bold text-slate-600"><span class="h-0.5 w-7 bg-indigo-600"></span><span></span></div></div>
-                  <div class="chart-frame chart-frame--rks-details mt-3"><canvas id="chartRKSDetails" role="img" aria-label="Trend wyniku wybranego kierunku PW w Rankingu Kierunków Studiów Perspektywy"></canvas></div>
+                  <div class="chart-frame chart-frame--rks-details mt-3"><canvas id="chartRKSDetails" role="img" aria-label="Zestawienie wyniku wybranego kierunku PW w Rankingu Kierunków Studiów Perspektywy"></canvas></div>
                 </section>
 
                 <footer class="flex flex-col gap-3 border-t border-slate-200 pt-4 text-[11px] leading-5 text-slate-500 sm:flex-row sm:items-center sm:justify-between"><p>Źródło: <a id="rksDetailsSourceLink" href="https://ranking.perspektywy.pl/ranking-kierunkow-studiow/" target="_blank" rel="noopener noreferrer" class="font-bold text-indigo-700 underline decoration-indigo-300 underline-offset-2">oficjalne tabele Rankingu Kierunków Studiów Perspektywy 2020–2026</a>.</p><button id="rksDetailsMethodologyOpen" type="button" class="inline-flex min-h-9 items-center justify-center rounded-lg border border-indigo-200 bg-indigo-50 px-3 text-xs font-bold text-indigo-800 transition hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">Wskaźniki i wagi →</button></footer>
@@ -344,9 +342,9 @@
             <div class="flex items-center justify-between gap-3">
               <h3 class="text-lg font-semibold text-gray-900">EngiRank</h3>
               <div class="flex items-center gap-2">
-                <button id="engiDetailsOpen" type="button" data-methodology-open="engiDetailsModal" aria-controls="engiDetailsModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Otwórz szczegółowe wyniki głównego EngiRank" title="Pozycja, wynik i trend PW w EngiRank 2023–2025">
+                <button id="engiDetailsOpen" type="button" data-methodology-open="engiDetailsModal" aria-controls="engiDetailsModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Otwórz szczegółowe wyniki głównego EngiRank" title="Pozycja i wynik PW w EngiRank 2023–2025">
                   <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 4-4 3 2 4-6"/></svg>
-                  <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-60 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Pozycja, wynik i trend Politechniki Warszawskiej w edycjach 2023–2025.</span>
+                  <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-60 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Pozycja i wynik Politechniki Warszawskiej w edycjach 2023–2025.</span>
                 </button>                <button id="engiMethodologyOpen" type="button" data-methodology-open="engiMethodologyModal" aria-controls="engiMethodologyModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Otwórz metodykę EngiRank" title="Otwórz metodykę EngiRank">
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0">
   <path d="M12 8.5a3.5 3.5 0 1 1 0 7a3.5 3.5 0 0 1 0-7Z" />
@@ -363,7 +361,7 @@
             </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
             <div class="chart-frame chart-frame--engirank mt-4">
-              <canvas id="chartEngi" role="img" aria-label="Trend pozycji i wskaźnika punktowego Politechniki Warszawskiej w EngiRank.">Trend pozycji i wskaźnika punktowego Politechniki Warszawskiej w EngiRank. Szczegółowy opis znajduje się pod wykresem.</canvas>
+              <canvas id="chartEngi" role="img" aria-label="Zestawienie pozycji i wskaźnika punktowego Politechniki Warszawskiej w EngiRank.">Zestawienie pozycji i wskaźnika punktowego Politechniki Warszawskiej w EngiRank. Szczegółowy opis znajduje się pod wykresem.</canvas>
             </div>
             <p id="engiNote" aria-live="polite" class="text-xs text-gray-500 mt-4">PW zajęła pozycję 72= (ex aequo) w EngiRank 2025 z wynikiem 63,82.</p>
             <p class="text-[11px] text-slate-500 mt-2">Źródło: oficjalny profil PW w EngiRank 2023–2025. Przełącznik: pozycja ↔ wynik (0–100).</p>
@@ -375,7 +373,7 @@
               <div class="flex items-center gap-2">
                 <button id="engiSubjectDetailsOpen" type="button" data-methodology-open="engiSubjectDetailsModal" aria-controls="engiSubjectDetailsModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Otwórz szczegółowe wyniki EngiRank by Subject" title="Szczegółowe wyniki EngiRank by Subject 2023–2025">
                   <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 4-4 3 2 4-6"/></svg>
-                  <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-60 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Pozycje, punktacja i trend dyscypliny PW w edycjach 2023–2025.</span>
+                  <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-60 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Pozycje i punktacja dyscypliny PW w edycjach 2023–2025.</span>
                 </button>                <button id="engiSubjectMethodologyOpen" type="button" data-methodology-open="engiSubjectMethodologyModal" aria-controls="engiSubjectMethodologyModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Otwórz metodykę EngiRank by Subject" title="Otwórz metodykę EngiRank by Subject">
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0">
   <path d="M12 8.5a3.5 3.5 0 1 1 0 7a3.5 3.5 0 0 1 0-7Z" />
@@ -395,7 +393,7 @@
               <select id="engiSubjectSelect" class="mt-1 w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-indigo-500 focus:ring-indigo-500"></select>
             </label>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 260px) -->
-            <canvas id="chartEngiSubject" role="img" aria-label="Trend pozycji wybranego kierunku Politechniki Warszawskiej w EngiRank by Subject." class="w-full" style="margin-top: 0.25rem; height: 260px;">Trend pozycji wybranego kierunku Politechniki Warszawskiej w EngiRank by Subject. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <canvas id="chartEngiSubject" role="img" aria-label="Zestawienie pozycji wybranego kierunku Politechniki Warszawskiej w EngiRank by Subject." class="w-full" style="margin-top: 0.25rem; height: 260px;">Zestawienie pozycji wybranego kierunku Politechniki Warszawskiej w EngiRank by Subject. Szczegółowy opis znajduje się pod wykresem.</canvas>
             <p id="engiSubjectNote" aria-live="polite" class="text-xs text-gray-500 mt-4">Pozycje PW w EngiRank by Subject aktualizują się po wyborze kierunku.</p>
             <p class="text-[11px] text-slate-500 mt-2">Źródło: EngiRank by Subject 2023–2025. Przełącznik: pozycja ↔ punktacja (0-100).</p>
           </div>
@@ -506,7 +504,7 @@
               </div>
             </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 340px) -->
-            <canvas id="chartQS" role="img" aria-label="Trend pozycji Politechniki Warszawskiej w QS World University Rankings w latach 2020–2027." class="mt-4 w-full" style="height: 350px;">Trend pozycji Politechniki Warszawskiej w QS World University Rankings w latach 2020–2027. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <canvas id="chartQS" role="img" aria-label="Zestawienie pozycji Politechniki Warszawskiej w QS World University Rankings w latach 2020–2027." class="mt-4 w-full" style="height: 350px;">Zestawienie pozycji Politechniki Warszawskiej w QS World University Rankings w latach 2020–2027. Szczegółowy opis znajduje się pod wykresem.</canvas>
             <p class="text-xs text-gray-500 mt-4">PW utrzymuje się w okolicach globalnego top 500 QS; w edycji 2027 zajmuje miejsce =504.</p>
             <p class="text-[11px] text-slate-500 mt-2">Źródło: QS World University Rankings 2020–2027.</p>
           </div>
@@ -517,7 +515,7 @@
               <div class="flex shrink-0 items-center gap-2">
                 <button id="qsSubjectDetailsOpen" type="button" data-methodology-open="qsSubjectDetailsModal" aria-controls="qsSubjectDetailsModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Otwórz szczegółowe wyniki QS World University Rankings by Subject" title="Szczegółowe wyniki i pozycje 2023–2026">
                   <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 4-4 3 2 4-6"/></svg>
-                  <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-64 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Pozycje, przedziały i trend wybranej dyscypliny PW w edycjach 2023–2026.</span>
+                  <span class="pointer-events-none absolute right-0 top-full z-20 mt-2 hidden w-64 rounded-xl bg-slate-950 px-3 py-2 text-left text-[11px] font-medium leading-4 text-white shadow-xl group-hover:block group-focus:block">Pozycje, przedziały i wyniki wybranej dyscypliny PW w edycjach 2023–2026.</span>
                 </button>
                 <button id="qsSubjectMethodologyOpen" type="button" data-methodology-open="qsSubjectMethodologyModal" aria-controls="qsSubjectMethodologyModal" aria-haspopup="dialog" class="group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Otwórz metodykę QS World University Rankings by Subject" title="Otwórz metodykę QS World University Rankings by Subject">
                   <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0"><path d="M12 8.5a3.5 3.5 0 1 1 0 7a3.5 3.5 0 0 1 0-7Z"/><path d="M19.4 13.5a7.9 7.9 0 0 0 .1-1.5 7.9 7.9 0 0 0-.1-1.5l1.6-1.2a.6.6 0 0 0 .1-.8l-1.5-2.6a.6.6 0 0 0-.8-.3l-1.9.8a8.6 8.6 0 0 0-2.6-1.5l-.3-2a.6.6 0 0 0-.6-.5h-3a.6.6 0 0 0-.6.5l-.3 2a8.6 8.6 0 0 0-2.6 1.5l-1.9-.8a.6.6 0 0 0-.8.3L2.8 8.5a.6.6 0 0 0 .1.8l1.6 1.2a7.9 7.9 0 0 0-.1 1.5 7.9 7.9 0 0 0 .1 1.5l-1.6 1.2a.6.6 0 0 0-.1.8l1.5 2.6a.6.6 0 0 0 .8.3l1.9-.8a8.6 8.6 0 0 0 2.6 1.5l.3 2a.6.6 0 0 0 .6.5h3a.6.6 0 0 0 .6-.5l.3-2a8.6 8.6 0 0 0 2.6-1.5l1.9.8a.6.6 0 0 0 .8-.3l1.5-2.6a.6.6 0 0 0-.1-.8l-1.6-1.2Z"/></svg>
@@ -530,7 +528,7 @@
               </select>
             </label>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 300px) -->
-            <canvas id="chartQSSubject" role="img" aria-label="Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w QS World University Rankings by Subject." class="w-full" style="margin-top: 0.25rem; height: 280px;">Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w QS World University Rankings by Subject. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <canvas id="chartQSSubject" role="img" aria-label="Zestawienie pozycji wybranej dyscypliny Politechniki Warszawskiej w QS World University Rankings by Subject." class="w-full" style="margin-top: 0.25rem; height: 280px;">Zestawienie pozycji wybranej dyscypliny Politechniki Warszawskiej w QS World University Rankings by Subject. Szczegółowy opis znajduje się pod wykresem.</canvas>
             <p id="qsSubjectNote" aria-live="polite" class="text-xs text-gray-500 mt-4">Pozycja PW w QS by Subject aktualizuje się po wyborze dyscypliny.</p>
             <p class="text-[11px] text-slate-500 mt-2">Źródło: QS World University Rankings by Subject 2023-2026.</p>
           </div>
@@ -609,7 +607,7 @@
               </div>
             </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
-            <canvas id="chartTHE" role="img" aria-label="Trend pozycji Politechniki Warszawskiej w Times Higher Education World University Rankings." class="mt-4 w-full" style="height: 288px;">Trend pozycji Politechniki Warszawskiej w Times Higher Education World University Rankings. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <canvas id="chartTHE" role="img" aria-label="Zestawienie pozycji Politechniki Warszawskiej w Times Higher Education World University Rankings." class="mt-4 w-full" style="height: 288px;">Zestawienie pozycji Politechniki Warszawskiej w Times Higher Education World University Rankings. Szczegółowy opis znajduje się pod wykresem.</canvas>
             <p class="text-xs text-gray-500 mt-4">PW utrzymuje stabilną obecność w przedziale 1201–1500 THE.</p>
             <p class="text-[11px] text-slate-500 mt-2">Źródło: Times Higher Education World University Rankings 2020–2026.</p>
           </div>
@@ -637,7 +635,7 @@
               </select>
             </label>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 280px) -->
-            <canvas id="chartTHESubject" role="img" aria-label="Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w THE World University Rankings by Subject." class="w-full" style="margin-top: 0.25rem; height: 280px;">Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w THE World University Rankings by Subject. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <canvas id="chartTHESubject" role="img" aria-label="Zestawienie pozycji wybranej dyscypliny Politechniki Warszawskiej w THE World University Rankings by Subject." class="w-full" style="margin-top: 0.25rem; height: 280px;">Zestawienie pozycji wybranej dyscypliny Politechniki Warszawskiej w THE World University Rankings by Subject. Szczegółowy opis znajduje się pod wykresem.</canvas>
             <p id="theSubjectNote" aria-live="polite" class="text-xs text-gray-500 mt-4">Pozycja PW w THE by Subject aktualizuje się po wyborze dyscypliny.</p>
             <p class="text-[11px] text-slate-500 mt-2">Źródło: THE World University Rankings by Subject 2020-2026.</p>
           </div>
@@ -708,7 +706,7 @@
               </div>
             </div>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 288px) -->
-            <canvas id="chartARWU" role="img" aria-label="Trend pozycji Politechniki Warszawskiej w Academic Ranking of World Universities." class="mt-4 w-full" style="height: 288px;">Trend pozycji Politechniki Warszawskiej w Academic Ranking of World Universities. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <canvas id="chartARWU" role="img" aria-label="Zestawienie pozycji Politechniki Warszawskiej w Academic Ranking of World Universities." class="mt-4 w-full" style="height: 288px;">Zestawienie pozycji Politechniki Warszawskiej w Academic Ranking of World Universities. Szczegółowy opis znajduje się pod wykresem.</canvas>
             <p class="text-xs text-gray-500 mt-4">W edycji 2026 PW pozostaje w paśmie 901–1000 na świecie i 4–7 w Polsce.</p>
             <p class="text-[11px] text-slate-500 mt-2">Źródło: Academic Ranking of World Universities 2020–2026.</p>
           </div>
@@ -733,7 +731,7 @@
               </select>
             </label>
             <!-- WYSOKOŚĆ WYKRESU: Zmień wartość height (aktualnie: 280px) -->
-            <canvas id="chartGRAS" role="img" aria-label="Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w Global Ranking of Academic Subjects." class="w-full" style="margin-top: 0.25rem; height: 280px;">Trend pozycji wybranej dyscypliny Politechniki Warszawskiej w Global Ranking of Academic Subjects. Szczegółowy opis znajduje się pod wykresem.</canvas>
+            <canvas id="chartGRAS" role="img" aria-label="Zestawienie pozycji wybranej dyscypliny Politechniki Warszawskiej w Global Ranking of Academic Subjects." class="w-full" style="margin-top: 0.25rem; height: 280px;">Zestawienie pozycji wybranej dyscypliny Politechniki Warszawskiej w Global Ranking of Academic Subjects. Szczegółowy opis znajduje się pod wykresem.</canvas>
             <p id="grasSubjectNote" aria-live="polite" class="text-xs text-gray-500 mt-4">Pozycja PW w GRAS aktualizuje się po wyborze dyscypliny.</p>
             <p class="text-[11px] text-slate-500 mt-2">Źródło: Global Ranking of Academic Subjects 2020-2025.</p>
           </div>
@@ -763,7 +761,7 @@
               </svg>
               <div>
                 <p class="text-sm font-extrabold">Metodologia rankingu zmieniała się między edycjami</p>
-                <p class="mt-1 text-xs leading-5 text-amber-900">Wartości 0–100 są normalizowane w każdej edycji względem innych uczelni. Zmiana wyniku może wynikać z rezultatu PW, wyników konkurentów, zmiany źródła danych, definicji albo wagi wskaźnika.</p>
+                <p class="mt-1 text-xs leading-5 text-amber-900">Wartości 0–100 są normalizowane w każdej edycji względem innych uczelni. Na prezentowane wartości wpływają osiągnięcia PW, rezultaty innych uczelni oraz aktualizacje źródeł danych, definicji i wag wskaźników.</p>
               </div>
             </aside>
 
@@ -788,7 +786,7 @@
                   </div>
                 </div>
               </div>
-              <p id="perspektywyDetailsMetricHelp" class="mt-3 text-xs leading-5 text-slate-500">WSK jest wynikiem końcowym w skali 0–100. W widoku pozycji mniejszy numer oznacza lepsze miejsce.</p>
+              <p id="perspektywyDetailsMetricHelp" class="mt-3 text-xs leading-5 text-slate-500">WSK jest wynikiem końcowym w skali 0–100. W widoku pozycji wyższe położenie na osi oznacza lepsze miejsce.</p>
               <div id="perspektywyDetailsRelated" class="mt-3 hidden flex flex-wrap items-center gap-2 border-t border-slate-200 pt-3" aria-label="Powiązane serie wskaźników"><span class="text-xs font-semibold text-slate-600">Powiązane serie:</span></div>
               <div class="mt-5 overflow-x-auto"><div id="perspektywyDetailsYearCards" class="grid min-w-[840px] grid-cols-7 overflow-hidden border-y border-slate-200" role="list"></div></div>
               <p id="perspektywyDetailsStatus" class="sr-only" aria-live="polite"></p>
@@ -796,10 +794,10 @@
 
             <section class="border-t border-slate-200 pt-5" aria-labelledby="perspektywyDetailsChartTitle">
               <div class="flex flex-wrap items-start justify-between gap-3">
-                <div><h3 id="perspektywyDetailsChartTitle" class="text-base font-extrabold text-slate-950">WSK: trend 2020–2026</h3><p id="perspektywyDetailsChartNote" class="mt-1 text-xs leading-5 text-slate-500">Skala 0–100; wyższy WSK oznacza lepszy wynik.</p></div>
+                <div><h3 id="perspektywyDetailsChartTitle" class="text-base font-extrabold text-slate-950">WSK: wyniki 2020–2026</h3><p id="perspektywyDetailsChartNote" class="mt-1 text-xs leading-5 text-slate-500">Skala 0–100; wyższy WSK oznacza lepszy wynik.</p></div>
                 <div class="flex items-center gap-2 text-xs font-semibold text-slate-600" aria-hidden="true"><span id="perspektywyDetailsLegendLine" class="h-0.5 w-8 bg-indigo-600"></span><span id="perspektywyDetailsLegendLabel">WSK 0–100</span></div>
               </div>
-              <div class="chart-frame chart-frame--perspektywy-details mt-4"><canvas id="chartPerspektywyDetails" role="img" aria-label="Trend wskaźnika WSK Politechniki Warszawskiej w Rankingu Uczelni Akademickich Perspektywy w latach 2020–2026.">Trend WSK Politechniki Warszawskiej w Perspektywach w latach 2020–2026.</canvas></div>
+              <div class="chart-frame chart-frame--perspektywy-details mt-4"><canvas id="chartPerspektywyDetails" role="img" aria-label="Zestawienie wskaźnika WSK Politechniki Warszawskiej w Rankingu Uczelni Akademickich Perspektywy w latach 2020–2026.">Zestawienie WSK Politechniki Warszawskiej w Perspektywach w latach 2020–2026.</canvas></div>
             </section>
 
             <details class="perspektywy-methodology-history border-y border-slate-200" open>
@@ -810,10 +808,10 @@
               <div class="pb-4">
                 <div class="grid gap-2 border-t border-slate-100 py-3 sm:grid-cols-[3.5rem_7.5rem_1fr] sm:gap-4"><strong class="text-sm text-indigo-700">2021</strong><span class="text-[11px] font-bold uppercase text-amber-800">Zmiana</span><p class="text-xs leading-5 text-slate-600">Usunięto Preferencje pracodawców. Waga ELA wzrosła z 7% do 12%, a sposób wyliczania wskaźnika został zmieniony. <a href="https://ranking.perspektywy.pl/metodologia-rankingu-uczelni-akademickich/2021/" target="_blank" rel="noopener noreferrer" class="font-semibold text-indigo-700 underline underline-offset-2">Metodologia 2021</a></p></div>
                 <div class="grid gap-2 border-t border-slate-100 py-3 sm:grid-cols-[3.5rem_7.5rem_1fr] sm:gap-4"><strong class="text-sm text-indigo-700">2022</strong><span class="text-[11px] font-bold uppercase text-emerald-700">Nowe</span><p class="text-xs leading-5 text-slate-600">Dodano SDG oraz Uczestnictwo w uniwersytecie europejskim. Zmieniono podział wag w innowacyjności i umiędzynarodowieniu. <a href="https://www.ranking.perspektywy.pl/metodologia-rankingu-uczelni-akademickich-2022r/" target="_blank" rel="noopener noreferrer" class="font-semibold text-indigo-700 underline underline-offset-2">Metodologia 2022</a></p></div>
-                <div class="grid gap-2 border-t border-slate-100 py-3 sm:grid-cols-[3.5rem_7.5rem_1fr] sm:gap-4"><strong class="text-sm text-indigo-700">2023</strong><span class="text-[11px] font-bold uppercase text-amber-800">Zastąpienie</span><p class="text-xs leading-5 text-slate-600">Ocena parametryczna została zastąpiona Ewaluacją działalności naukowej. Zmieniono również zestaw wskaźników umiędzynarodowienia. <a href="https://2023.ranking.perspektywy.pl/article/metodologia-rankingu-uczelni-akademickich-2023" target="_blank" rel="noopener noreferrer" class="font-semibold text-indigo-700 underline underline-offset-2">Metodologia 2023</a></p></div>
-                <div class="grid gap-2 border-t border-slate-100 py-3 sm:grid-cols-[3.5rem_7.5rem_1fr] sm:gap-4"><strong class="text-sm text-indigo-700">2024</strong><span class="text-[11px] font-bold uppercase text-rose-700">Duża zmiana</span><p class="text-xs leading-5 text-slate-600">ELA rozbito na Wynagrodzenia i Zatrudnienie. Dodano środki UE i kształcenie doktorantów, połączono uprawnienia oraz usunięto projekty partnerstw strategicznych. <a href="https://2024.ranking.perspektywy.pl/article/rsw2024-co-zmienilismy" target="_blank" rel="noopener noreferrer" class="font-semibold text-indigo-700 underline underline-offset-2">Opis zmian 2024</a></p></div>
-                <div class="grid gap-2 border-t border-slate-100 py-3 sm:grid-cols-[3.5rem_7.5rem_1fr] sm:gap-4"><strong class="text-sm text-indigo-700">2025</strong><span class="text-[11px] font-bold uppercase text-amber-800">Zmiana wag</span><p class="text-xs leading-5 text-slate-600">Usunięto Cytowania. Ich wagę przeniesiono na FWCI i Top 10. Zmieniono także wagi ewaluacji, kadry, doktorantów i środków UE. <a href="https://2025.ranking.perspektywy.pl/tekst/co-zmienilismy-w-rankingu-2025/" target="_blank" rel="noopener noreferrer" class="font-semibold text-indigo-700 underline underline-offset-2">Opis zmian 2025</a></p></div>
-                <div class="grid gap-2 border-t border-slate-100 py-3 sm:grid-cols-[3.5rem_7.5rem_1fr] sm:gap-4"><strong class="text-sm text-indigo-700">2026</strong><span class="text-[11px] font-bold uppercase text-cyan-700">Bez zmian</span><p class="text-xs leading-5 text-slate-600">Metodologia RUA pozostała taka jak w 2025. Zaktualizowano okresy danych i zastosowano szczególną korektę dla wybranych uczelni jednodyscyplinowych. <a href="https://ranking.perspektywy.pl/o-rankingu/" target="_blank" rel="noopener noreferrer" class="font-semibold text-indigo-700 underline underline-offset-2">Opis metodologii 2026</a></p></div>
+                <div class="grid gap-2 border-t border-slate-100 py-3 sm:grid-cols-[3.5rem_7.5rem_1fr] sm:gap-4"><strong class="text-sm text-indigo-700">2023</strong><span class="text-[11px] font-bold uppercase text-amber-800">Zastąpienie</span><p class="text-xs leading-5 text-slate-600">Ocena parametryczna została zastąpiona Ewaluacją działalności naukowej. Zmieniono również zestaw wskaźników umiędzynarodowienia. <a href="https://www.ranking.perspektywy.pl/metodologia-rankingu-uczelni-akademickich/2023/" target="_blank" rel="noopener noreferrer" class="font-semibold text-indigo-700 underline underline-offset-2">Metodologia 2023</a></p></div>
+                <div class="grid gap-2 border-t border-slate-100 py-3 sm:grid-cols-[3.5rem_7.5rem_1fr] sm:gap-4"><strong class="text-sm text-indigo-700">2024</strong><span class="text-[11px] font-bold uppercase text-rose-700">Duża zmiana</span><p class="text-xs leading-5 text-slate-600">ELA rozbito na Wynagrodzenia i Zatrudnienie. Dodano środki UE i kształcenie doktorantów, połączono uprawnienia oraz usunięto projekty partnerstw strategicznych. <a href="https://www.ranking.perspektywy.pl/metodologia-rankingu-uczelni-akademickich/2024/" target="_blank" rel="noopener noreferrer" class="font-semibold text-indigo-700 underline underline-offset-2">Metodologia 2024</a></p></div>
+                <div class="grid gap-2 border-t border-slate-100 py-3 sm:grid-cols-[3.5rem_7.5rem_1fr] sm:gap-4"><strong class="text-sm text-indigo-700">2025</strong><span class="text-[11px] font-bold uppercase text-amber-800">Zmiana wag</span><p class="text-xs leading-5 text-slate-600">Usunięto Cytowania. Ich wagę przeniesiono na FWCI i Top 10. Zmieniono także wagi ewaluacji, kadry, doktorantów i środków UE. <a href="https://www.ranking.perspektywy.pl/metodologia-rankingu-uczelni-akademickich/2025/" target="_blank" rel="noopener noreferrer" class="font-semibold text-indigo-700 underline underline-offset-2">Metodologia 2025</a></p></div>
+                <div class="grid gap-2 border-t border-slate-100 py-3 sm:grid-cols-[3.5rem_7.5rem_1fr] sm:gap-4"><strong class="text-sm text-indigo-700">2026</strong><span class="text-[11px] font-bold uppercase text-cyan-700">Bez zmian</span><p class="text-xs leading-5 text-slate-600">Metodologia RUA pozostała taka jak w 2025. Zaktualizowano okresy danych i zastosowano szczególną korektę dla wybranych uczelni jednodyscyplinowych. <a href="https://www.ranking.perspektywy.pl/metodologia-rankingu-uczelni-akademickich/" target="_blank" rel="noopener noreferrer" class="font-semibold text-indigo-700 underline underline-offset-2">Opis metodologii 2026</a></p></div>
               </div>
             </details>
 
@@ -1068,7 +1066,7 @@
                 </div>
               </div>
               <div class="chart-frame chart-frame--qs-details mt-4">
-                <canvas id="chartQSWurDetails" role="img" aria-label="Trend wyniku Politechniki Warszawskiej dla wybranego wskaźnika QS World University Rankings w latach 2024–2026.">Trend wyniku PW dla wybranego wskaźnika QS World University Rankings w latach 2024–2026.</canvas>
+                <canvas id="chartQSWurDetails" role="img" aria-label="Zestawienie wyniku Politechniki Warszawskiej dla wybranego wskaźnika QS World University Rankings w latach 2024–2026.">Zestawienie wyniku PW dla wybranego wskaźnika QS World University Rankings w latach 2024–2026.</canvas>
               </div>
             </section>
             <p class="border-t border-slate-200 pt-4 text-xs leading-5 text-slate-500">Źródło: QS World University Rankings, dane PW 2024–2026.</p>
@@ -1177,7 +1175,7 @@
                 <div><h3 id="qsSubjectDetailsChartTitle" class="text-base font-extrabold text-slate-950"></h3><p id="qsSubjectDetailsChartNote" class="mt-1 text-xs leading-5 text-slate-500"></p></div>
                 <div id="qsSubjectDetailsLegend" class="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] font-bold text-slate-600"></div>
               </div>
-              <div class="chart-frame chart-frame--rks-details mt-3"><canvas id="chartQSSubjectDetails" role="img" aria-label="Trend pozycji lub wyniku wybranej dyscypliny PW w QS World University Rankings by Subject 2020–2026"></canvas></div>
+              <div class="chart-frame chart-frame--rks-details mt-3"><canvas id="chartQSSubjectDetails" role="img" aria-label="Zestawienie pozycji lub wyniku wybranej dyscypliny PW w QS World University Rankings by Subject 2020–2026"></canvas></div>
             </section>
 
             <footer class="flex flex-col gap-3 border-t border-slate-200 pt-4 text-[11px] leading-5 text-slate-500 sm:flex-row sm:items-center sm:justify-between">
@@ -1526,7 +1524,7 @@
                 <div><h3 id="grasDetailsChartTitle" class="text-base font-extrabold text-slate-950"></h3><p id="grasDetailsChartNote" class="mt-1 text-xs leading-5 text-slate-500"></p></div>
                 <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] font-bold text-slate-600"><span class="inline-flex items-center gap-2"><i class="h-0.5 w-7 bg-rose-600"></i>Początek przedziału</span><span class="inline-flex items-center gap-2"><i class="h-0.5 w-7 border-t-2 border-dashed border-rose-400"></i>Koniec przedziału</span></div>
               </div>
-              <div class="chart-frame chart-frame--rks-details mt-3"><canvas id="chartGrasDetails" role="img" aria-label="Trend pozycji wybranej dyscypliny PW w GRAS 2020–2025"></canvas></div>
+              <div class="chart-frame chart-frame--rks-details mt-3"><canvas id="chartGrasDetails" role="img" aria-label="Zestawienie pozycji wybranej dyscypliny PW w GRAS 2020–2025"></canvas></div>
             </section>
 
             <footer class="flex flex-col gap-3 border-t border-slate-200 pt-4 text-[11px] leading-5 text-slate-500 sm:flex-row sm:items-center sm:justify-between">
@@ -1639,7 +1637,7 @@
 
             <section class="border-t border-slate-200 pt-5" aria-labelledby="engiDetailsChartTitle">
               <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-start"><div><h3 id="engiDetailsChartTitle" class="text-base font-extrabold text-slate-950"></h3><p id="engiDetailsChartNote" class="mt-1 text-xs leading-5 text-slate-500"></p></div><div id="engiDetailsLegend" class="flex items-center gap-2 text-[11px] font-bold text-slate-600"><span class="h-0.5 w-7 bg-indigo-600"></span><span></span></div></div>
-              <div class="chart-frame chart-frame--rks-details mt-3"><canvas id="chartEngiDetails" role="img" aria-label="Trend pozycji i wyniku Politechniki Warszawskiej w głównym EngiRank"></canvas></div>
+              <div class="chart-frame chart-frame--rks-details mt-3"><canvas id="chartEngiDetails" role="img" aria-label="Zestawienie pozycji i wyniku Politechniki Warszawskiej w głównym EngiRank"></canvas></div>
             </section>
 
             <footer class="flex flex-col gap-3 border-t border-slate-200 pt-4 text-[11px] leading-5 text-slate-500 sm:flex-row sm:items-center sm:justify-between"><p>Źródło: <a href="https://engirank.eu/ranking/2025/all/" target="_blank" rel="noopener noreferrer" class="font-bold text-indigo-700 underline decoration-indigo-300 underline-offset-2">oficjalne wyniki EngiRank 2023–2025</a>.</p><button id="engiDetailsMethodologyOpen" type="button" class="inline-flex min-h-9 items-center justify-center rounded-lg border border-indigo-200 bg-indigo-50 px-3 text-xs font-bold text-indigo-800 transition hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">Wskaźniki i wagi →</button></footer>
@@ -1735,7 +1733,7 @@
 
             <section class="border-t border-slate-200 pt-5" aria-labelledby="engiSubjectDetailsChartTitle">
               <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-start"><div><h3 id="engiSubjectDetailsChartTitle" class="text-base font-extrabold text-slate-950"></h3><p id="engiSubjectDetailsChartNote" class="mt-1 text-xs leading-5 text-slate-500"></p></div><div id="engiSubjectDetailsLegend" class="flex items-center gap-2 text-[11px] font-bold text-slate-600"><span class="h-0.5 w-7 bg-indigo-600"></span><span></span></div></div>
-              <div class="chart-frame chart-frame--rks-details mt-3"><canvas id="chartEngiSubjectDetails" role="img" aria-label="Trend wyniku wybranej dyscypliny PW w EngiRank by Subject"></canvas></div>
+              <div class="chart-frame chart-frame--rks-details mt-3"><canvas id="chartEngiSubjectDetails" role="img" aria-label="Zestawienie wyniku wybranej dyscypliny PW w EngiRank by Subject"></canvas></div>
             </section>
 
             <footer class="flex flex-col gap-3 border-t border-slate-200 pt-4 text-[11px] leading-5 text-slate-500 sm:flex-row sm:items-center sm:justify-between"><p>Źródło: <a id="engiSubjectDetailsSourceLink" href="https://engirank.eu/institution/warsaw-university-of-technology/2025" target="_blank" rel="noopener noreferrer" class="font-bold text-indigo-700 underline decoration-indigo-300 underline-offset-2">oficjalny profil PW w EngiRank 2023–2025</a>.</p><button id="engiSubjectDetailsMethodologyOpen" type="button" class="inline-flex min-h-9 items-center justify-center rounded-lg border border-indigo-200 bg-indigo-50 px-3 text-xs font-bold text-indigo-800 transition hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">Wskaźniki i wagi →</button></footer>
@@ -1841,7 +1839,7 @@
             <nav class="rua-info-tabs" aria-label="Dodatkowe informacje o metodyce"><button type="button" class="active" data-rua-panel="ruaEntryPanel">Kryteria wejścia</button><button type="button" data-rua-panel="ruaNormalizationPanel">Normalizacja</button><button type="button" data-rua-panel="ruaSourcesPanel">Źródła</button></nav>
             <div id="ruaEntryPanel" class="rua-info-panel">Ranking obejmuje uczelnie akademickie posiadające uprawnienia doktorskie w co najmniej jednej dyscyplinie, minimum 300 studentów studiów stacjonarnych oraz co najmniej dwa roczniki absolwentów.</div>
             <div id="ruaNormalizationPanel" class="rua-info-panel hidden">Wyniki wskaźników są normalizowane do skali 0–100 względem najlepszej uczelni w danej edycji. Identyczna wartość źródłowa może więc prowadzić do innego wyniku po zmianie grupy odniesienia.</div>
-            <div id="ruaSourcesPanel" class="rua-info-panel hidden">Źródła obejmują między innymi POL-on, ELA/ZUS, SciVal, CORDIS, PKA, Komisję Europejską i ankietę uczelni. <a id="ruaMethodologySource" href="https://www.ranking.perspektywy.pl/metodologia/2026/" target="_blank" rel="noopener noreferrer">Otwórz oficjalną metodologię Perspektywy dla edycji 2026</a>.</div>
+            <div id="ruaSourcesPanel" class="rua-info-panel hidden">Źródła obejmują między innymi POL-on, ELA/ZUS, SciVal, CORDIS, PKA, Komisję Europejską i ankietę uczelni. <a id="ruaMethodologySource" href="https://www.ranking.perspektywy.pl/metodologia-rankingu-uczelni-akademickich/" target="_blank" rel="noopener noreferrer">Otwórz oficjalną metodologię Perspektywy dla edycji 2026</a>.</div>
           </div>
         </section>
       </div>
@@ -1863,8 +1861,8 @@
     <script src="assets/js/engirank-subject-indicators.js?v=20260720-qs-subject-results"></script>
     <script src="assets/js/qs-subject-indicators.js?v=20260720-the-subject-results"></script>
     <script src="assets/js/the-subject-indicators.js?v=20260720-the-subject-results"></script>
-    <script src="assets/js/perspektywy-methodology.js?v=20260720-engi-subject-indicators"></script>
-    <script src="assets/js/dashboard.js?v=20260818-arwu-2026"></script>
+    <script src="assets/js/perspektywy-methodology.js?v=20260818-results-copy"></script>
+    <script src="assets/js/dashboard.js?v=20260818-legend-spacing"></script>
   </body>
 </html>
 
