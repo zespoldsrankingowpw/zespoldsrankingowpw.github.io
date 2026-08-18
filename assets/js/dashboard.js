@@ -4719,6 +4719,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const indicator = isPosition ? null : arwuDetailsData.indicators[metricKey];
     const years = arwuDetailsData.years;
     const latestIndex = years.length - 1;
+    const periodLabel = years[0] + '–' + years[latestIndex];
+    const latestYear = years[latestIndex];
     const strongest = Object.values(arwuDetailsData.indicators)
       .map((item) => ({ label: item.shortLabel, value: item.values[latestIndex] }))
       .sort((a, b) => b.value - a.value)[0];
@@ -4744,24 +4746,24 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     if (isWorld) {
-      if (arwuDetailsChartTitle) arwuDetailsChartTitle.textContent = 'Pozycja światowa PW — pasma 2020–2025';
+      if (arwuDetailsChartTitle) arwuDetailsChartTitle.textContent = 'Pozycja światowa PW — pasma ' + periodLabel;
       if (arwuDetailsChartNote) arwuDetailsChartNote.textContent = 'W 2020 PW zajmowała pasmo 801–900; od edycji 2021 pozostaje w paśmie 901–1000. Dokładne miejsce wewnątrz pasma nie jest publikowane.';
-      arwuDetailsCanvas.setAttribute('aria-label', 'Pasma światowej pozycji Politechniki Warszawskiej w ARWU 2020–2025');
+      arwuDetailsCanvas.setAttribute('aria-label', 'Pasma światowej pozycji Politechniki Warszawskiej w ARWU ' + periodLabel);
     } else if (isNational) {
-      if (arwuDetailsChartTitle) arwuDetailsChartTitle.textContent = 'Pozycja PW w Polsce — pasma 2020–2025';
-      if (arwuDetailsChartNote) arwuDetailsChartNote.textContent = 'Pozycja krajowa jest również publikowana jako przedział. W 2025 PW znalazła się na miejscach 4–7 w Polsce.';
-      arwuDetailsCanvas.setAttribute('aria-label', 'Pasma krajowej pozycji Politechniki Warszawskiej w ARWU 2020–2025');
+      if (arwuDetailsChartTitle) arwuDetailsChartTitle.textContent = 'Pozycja PW w Polsce — pasma ' + periodLabel;
+      if (arwuDetailsChartNote) arwuDetailsChartNote.textContent = 'Pozycja krajowa jest również publikowana jako przedział. W ' + latestYear + ' PW znalazła się na miejscach ' + arwuDetailsData.nationalRankLabels[latestIndex] + ' w Polsce.';
+      arwuDetailsCanvas.setAttribute('aria-label', 'Pasma krajowej pozycji Politechniki Warszawskiej w ARWU ' + periodLabel);
     } else {
       const first = indicator.values[0];
       const latest = indicator.values[latestIndex];
       const change = latest - first;
-      if (arwuDetailsChartTitle) arwuDetailsChartTitle.textContent = indicator.shortLabel + ' — ' + indicator.label + ', 2020–2025';
+      if (arwuDetailsChartTitle) arwuDetailsChartTitle.textContent = indicator.shortLabel + ' — ' + indicator.label + ', ' + periodLabel;
       if (arwuDetailsChartNote) {
         arwuDetailsChartNote.textContent = allZero
-          ? 'Opublikowany wynik wynosi 0,0 we wszystkich sześciu edycjach. Waga wskaźnika w ARWU: ' + indicator.weight + '%.'
+          ? 'Opublikowany wynik wynosi 0,0 we wszystkich ' + years.length + ' edycjach. Waga wskaźnika w ARWU: ' + indicator.weight + '%.'
           : 'Zmiana względem 2020: ' + (change >= 0 ? '+' : '−') + formatArwuScore(Math.abs(change)) + ' pkt. Waga wskaźnika: ' + indicator.weight + '%. Wyniki są normalizowane względem lidera każdej edycji.';
       }
-      arwuDetailsCanvas.setAttribute('aria-label', indicator.shortLabel + ': wynik Politechniki Warszawskiej w ARWU 2020–2025');
+      arwuDetailsCanvas.setAttribute('aria-label', indicator.shortLabel + ': wynik Politechniki Warszawskiej w ARWU ' + periodLabel);
     }
 
     if (!arwuDetailsChart) {
@@ -5781,27 +5783,27 @@ document.addEventListener('DOMContentLoaded', function () {
     },
     {
       code: 'HiCi', dataKey: 'hici', name: 'Najczęściej cytowani badacze', weight: 20, color: '#ea580c',
-      source: 'Clarivate Highly Cited Researchers, lista opublikowana w listopadzie 2024 r.', period: 'lista HCR 2024',
+      source: 'Clarivate Highly Cited Researchers, lista opublikowana w grudniu 2025 r.', period: 'lista HCR 2025',
       description: 'Liczba badaczy z główną afiliacją w uczelni, ujętych przez Clarivate wśród Highly Cited Researchers.',
       calculation: 'Uwzględnia się wyłącznie główne afiliacje. Badacz wskazany przez Clarivate w więcej niż jednej kategorii Essential Science Indicators jest liczony osobno w każdej z nich.'
     },
     {
       code: 'N&S', dataKey: 'ns', name: 'Publikacje w Nature i Science', weight: 20, color: '#d97706',
-      source: 'Serwisy czasopism „Nature” i „Science”.', period: 'artykuły 2020–2024',
+      source: 'Serwisy czasopism „Nature” i „Science”.', period: 'artykuły 2021–2025',
       description: 'Liczba artykułów badawczych opublikowanych w czasopismach „Nature” i „Science” w pięcioletnim oknie.',
       calculation: 'Waga afiliacji wynosi 100% dla autora korespondencyjnego, 50% dla pierwszego autora, 25% dla kolejnego autora i 10% dla pozostałych. Uwzględniany jest wyłącznie typ dokumentu Article.'
     },
     {
       code: 'PUB', dataKey: 'pub', name: 'Publikacje w SCIE i SSCI', weight: 20, color: '#4f46e5',
-      source: 'Clarivate Web of Science: Science Citation Index Expanded i Social Sciences Citation Index.', period: 'artykuły z 2024 r.',
+      source: 'Clarivate Web of Science: Science Citation Index Expanded i Social Sciences Citation Index.', period: 'artykuły z 2025 r.',
       description: 'Łączna liczba publikacji uczelni indeksowanych w SCIE i SSCI w roku objętym pomiarem.',
       calculation: 'Uwzględniany jest wyłącznie typ dokumentu Article. Publikacje indeksowane w Social Sciences Citation Index otrzymują podwójną wagę.'
     },
     {
       code: 'PCP', dataKey: 'pcp', name: 'Wynik per capita', weight: 10, color: '#475569',
-      source: 'Wyniki pięciu pozostałych wskaźników oraz krajowe lub regionalne dane o kadrze akademickiej FTE.', period: 'dane właściwe dla edycji 2025',
+      source: 'Wyniki pięciu pozostałych wskaźników oraz krajowe lub regionalne dane o kadrze akademickiej FTE.', period: 'dane właściwe dla edycji 2026',
       description: 'Ważony wynik pięciu pozostałych wskaźników podzielony przez liczbę pracowników akademickich w przeliczeniu na pełne etaty.',
-      calculation: 'Gdy dla kraju nie ma danych o liczbie kadry, ARWU wykorzystuje średnią liczbę pracowników uczelni ze światowego TOP 1000. W edycji 2025 Polska znajduje się w grupie krajów z dostępnymi danymi kadrowymi.'
+      calculation: 'Gdy dla kraju nie ma danych o liczbie kadry, ARWU wykorzystuje średnią liczbę pracowników uczelni ze światowego TOP 1000. W edycji 2026 Polska znajduje się w grupie krajów z dostępnymi danymi kadrowymi.'
     }
   ];
 
@@ -5908,8 +5910,8 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     arwuMethodologyIndicatorList.replaceChildren(
-      createDetailRow('Źródło danych', activeIndicator.source, formatArwuMethodologyWeight(activeIndicator.weight), 'waga', 'źródło oficjalne', 'ARWU 2025 Methodology'),
-      createDetailRow('Okres i sposób naliczania', activeIndicator.calculation, '2025', 'edycja', activeIndicator.period),
+      createDetailRow('Źródło danych', activeIndicator.source, formatArwuMethodologyWeight(activeIndicator.weight), 'waga', 'źródło oficjalne', 'ARWU 2026 Methodology'),
+      createDetailRow('Okres i sposób naliczania', activeIndicator.calculation, '2026', 'edycja', activeIndicator.period),
       createDetailRow('Wynik Politechniki Warszawskiej', 'Wartość opublikowana w profilu PW. Wynik wskaźnika jest znormalizowany względem najlepszej uczelni w tej samej edycji.', formatArwuMethodologyScore(latestScore), 'wynik PW', 'skala 0–100')
     );
 
