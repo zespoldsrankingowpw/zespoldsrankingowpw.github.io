@@ -1,20 +1,20 @@
 window.RankingData = (() => {
   'use strict';
 
-  const qsWurDetailsYears = [2024, 2025, 2026];
+  const qsWurDetailsYears = [2024, 2025, 2026, 2027];
 
   const qsWurDetailsData = {
-    'Academic Reputation': { scores: [22.8, 23.3, 28.4], ranks: [382, 380, 442], rankLabels: ['382', '380', '442'] },
-    'Employer Reputation': { scores: [49.8, 51.9, 72.4], ranks: [172, 168, 137], rankLabels: ['172', '168', '137'] },
-    'Faculty Student Ratio': { scores: [38.7, 42.6, 55.7], ranks: [408, 366, 337], rankLabels: ['408', '366', '337'] },
-    'Citations per Faculty': { scores: [4.3, 4.7, 9.5], ranks: [701, 701, 801], rankLabels: ['701+', '701', '801'] },
-    'International Faculty': { scores: [1.8, 2.4, 3.4], ranks: [701, 701, 801], rankLabels: ['701+', '701+', '801+'] },
-    'International Students': { scores: [10.3, 10.3, 17.6], ranks: [701, 701, 771], rankLabels: ['701+', '701', '771'] },
-    'International Research Network': { scores: [9.7, 60.6, 63.8], ranks: [676, 627, 638], rankLabels: ['676', '627', '638'] },
-    'Employment Outcomes': { scores: [11.5, 9.8, 15.9], ranks: [701, 701, 801], rankLabels: ['701+', '701', '801'] },
-    'Sustainability': { scores: [2.1, 1.4, 38.4], ranks: [701, 701, 801], rankLabels: ['701+', '701+', '801+'] },
-    'International Students Diversity': { scores: [null, null, 23.7], ranks: [null, null, 710], rankLabels: [null, null, '710'] },
-    'Overall Score': { scores: [20.7, 23.2, 32.8], ranks: [571, 527, 487], rankLabels: ['=571', '527', '487'] }
+    'Academic Reputation': { scores: [22.8, 23.3, 28.4, 29.9], ranks: [382, 380, 442, null], rankLabels: ['382', '380', '442', null], contribution2027: 27.0 },
+    'Employer Reputation': { scores: [49.8, 51.9, 72.4, 60.8], ranks: [172, 168, 137, null], rankLabels: ['172', '168', '137', null], contribution2027: 27.4 },
+    'Faculty Student Ratio': { scores: [38.7, 42.6, 55.7, 59.5], ranks: [408, 366, 337, null], rankLabels: ['408', '366', '337', null], contribution2027: 17.9 },
+    'Citations per Faculty': { scores: [4.3, 4.7, 9.5, 8.7], ranks: [701, 701, 801, null], rankLabels: ['701+', '701', '801', null], contribution2027: 5.2 },
+    'International Faculty': { scores: [1.8, 2.4, 3.4, 3.9], ranks: [701, 701, 801, null], rankLabels: ['701+', '701+', '801+', null], contribution2027: 0.6 },
+    'International Students': { scores: [10.3, 10.3, 17.6, 15.2], ranks: [701, 701, 771, null], rankLabels: ['701+', '701', '771', null], contribution2027: 2.3 },
+    'International Research Network': { scores: [9.7, 60.6, 63.8, null], ranks: [676, 627, 638, null], rankLabels: ['676', '627', '638', null], contribution2027: 8.6 },
+    'Employment Outcomes': { scores: [11.5, 9.8, 15.9, null], ranks: [701, 701, 801, null], rankLabels: ['701+', '701', '801', null], contribution2027: 2.7 },
+    'Sustainability': { scores: [2.1, 1.4, 38.4, null], ranks: [701, 701, 801, null], rankLabels: ['701+', '701+', '801+', null], contribution2027: 8.4 },
+    'International Students Diversity': { scores: [null, null, 23.7, null], ranks: [null, null, 710, null], rankLabels: [null, null, '710', null] },
+    'Overall Score': { scores: [20.7, 23.2, 32.8, 32.2], ranks: [571, 527, 487, 504], rankLabels: ['=571', '527', '487', '=504'] }
   };
 
   const theWurDetailsData = {
@@ -1387,39 +1387,39 @@ window.RankingData = (() => {
   };
 
   const grasSubjectData = {
-    years: [2020, 2021, 2022, 2023, 2024, 2025],
+    years: [2020, 2021, 2022, 2023, 2024, 2025, 2026],
     subjects: {
       "Elektrotechnika i elektronika (Electrical & Electronic Engineering)": {
-        lower: [301, 401, 401, null, null, null],
-        upper: [400, 500, 500, null, null, null]
+        lower: [301, 401, 401, null, null, null, null],
+        upper: [400, 500, 500, null, null, null, null]
       },
       "Energetyka (Energy Science & Engineering)": {
-        lower: [301, null, null, null, null, null],
-        upper: [400, null, null, null, null, null]
+        lower: [301, null, null, null, null, null, null],
+        upper: [400, null, null, null, null, null, null]
       },
       "Fizyka (Physics)": {
-        lower: [301, 301, 201, 301, 401, 401],
-        upper: [400, 400, 300, 400, 500, 500]
+        lower: [301, 301, 201, 301, 401, 401, 401],
+        upper: [400, 400, 300, 400, 500, 500, 500]
       },
       "Inżynieria mechaniczna (Mechanical Engineering)": {
-        lower: [201, 301, null, null, 301, null],
-        upper: [300, 400, null, null, 400, null]
+        lower: [201, 301, null, null, 301, null, 301],
+        upper: [300, 400, null, null, 400, null, 400]
       },
       "Inżynieria metalurgiczna (Metallurgical Engineering)": {
-        lower: [null, null, null, null, 151, 101],
-        upper: [null, null, null, null, 200, 150]
+        lower: [null, null, null, null, 151, 101, 101],
+        upper: [null, null, null, null, 200, 150, 150]
       },
       "Matematyka (Mathematics)": {
-        lower: [301, null, null, null, null, null],
-        upper: [400, null, null, null, null, null]
+        lower: [301, null, null, null, null, null, null],
+        upper: [400, null, null, null, null, null, null]
       },
       "Nauka i technologie instrumentacji (Instruments Science & Technology)": {
-        lower: [151, 151, 101, null, 201, 201],
-        upper: [200, 200, 150, null, 300, 300]
+        lower: [151, 151, 101, null, 201, 201, 201],
+        upper: [200, 200, 150, null, 300, 300, 300]
       },
       "Telekomunikacja (Telecommunication Engineering)": {
-        lower: [201, null, null, null, null, null],
-        upper: [300, null, null, null, null, null]
+        lower: [201, null, null, null, null, null, null],
+        upper: [300, null, null, null, null, null, null]
       }
     }
   };

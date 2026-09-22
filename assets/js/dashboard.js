@@ -824,11 +824,14 @@ document.addEventListener('DOMContentLoaded', function () {
         const secondaryValue = isScore ? rank : score;
         const article = document.createElement('article');
         article.setAttribute('role', 'listitem');
-        article.className = 'border-b border-slate-200 px-5 py-5 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0';
+        article.className = 'border-b border-slate-200 px-4 py-5 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0';
         article.innerHTML =
           '<p class="text-center text-sm font-bold tracking-wide text-indigo-700">' + year + '</p>' +
           '<p class="mt-3 text-center text-4xl font-extrabold ' + (primaryMissing ? 'text-slate-300' : isScore ? 'text-slate-950' : 'text-cyan-700') + '">' + primaryValue + '</p>' +
-          '<p class="mt-2 text-center text-sm text-slate-500">' + secondaryLabel + ' <strong class="' + (isScore ? 'text-cyan-700' : 'text-indigo-700') + '">' + secondaryValue + '</strong></p>';
+          '<p class="mt-2 text-center text-sm text-slate-500">' + secondaryLabel + ' <strong class="' + (isScore ? 'text-cyan-700' : 'text-indigo-700') + '">' + secondaryValue + '</strong></p>' +
+          (year === 2027 && typeof series.contribution2027 === 'number'
+            ? '<p class="mt-2 text-center text-[11px] font-semibold text-slate-500">Udział w wyniku: ' + formatQsWurScore(series.contribution2027) + '%</p>'
+            : '');
         return article;
       });
       qsWurDetailsYearCards.replaceChildren(...cards);
@@ -838,11 +841,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const modeDescription = isScore
       ? 'Skala 0–100; wyższy wynik jest lepszy.'
       : 'Wyższe położenie na osi oznacza lepsze miejsce.';
-    const availabilityNote = indicator === 'International Students Diversity'
-      ? ' Dane są dostępne od edycji 2026.'
+    let availabilityNote = indicator === 'International Students Diversity'
+      ? ' Dane są dostępne dla edycji 2026; wartości za 2027 nie opublikowano.'
       : '';
+    if (qsWurDetailsMode === 'rank' && indicator !== 'Overall Score') {
+      availabilityNote += ' QS nie opublikował globalnej pozycji tego wskaźnika za 2027.';
+    } else if (qsWurDetailsMode === 'score' && series.scores[series.scores.length - 1] == null && typeof series.contribution2027 === 'number') {
+      availabilityNote += ' Za 2027 opublikowano udział wskaźnika w końcowym wyniku PW, ale nie jego wartość 0–100.';
+    }
 
-    if (qsWurDetailsChartTitle) qsWurDetailsChartTitle.textContent = displayLabel + ' — ' + modeLabel + ' 2024–2026';
+    if (qsWurDetailsChartTitle) qsWurDetailsChartTitle.textContent = displayLabel + ' — ' + modeLabel + ' ' + qsWurDetailsYears[0] + '–' + qsWurDetailsYears[qsWurDetailsYears.length - 1];
     if (qsWurDetailsChartNote) qsWurDetailsChartNote.textContent = modeDescription + availabilityNote;
     if (qsWurDetailsStatus) qsWurDetailsStatus.textContent = 'Wybrano: ' + displayLabel + ', widok: ' + modeLabel + '.';
     if (qsWurDetailsLegendLabel) {
@@ -852,7 +860,7 @@ document.addEventListener('DOMContentLoaded', function () {
       qsWurDetailsLegendLine.className = 'h-0.5 w-8 ' + (isScore ? 'bg-indigo-600' : 'bg-cyan-600');
     }
     if (qsWurDetailsCanvas) {
-      qsWurDetailsCanvas.setAttribute('aria-label', displayLabel + ': ' + modeLabel + ' Politechniki Warszawskiej w QS World University Rankings w latach 2024–2026.');
+      qsWurDetailsCanvas.setAttribute('aria-label', displayLabel + ': ' + modeLabel + ' Politechniki Warszawskiej w QS World University Rankings w latach ' + qsWurDetailsYears[0] + '–' + qsWurDetailsYears[qsWurDetailsYears.length - 1] + '.');
     }
     if (!qsWurDetailsCanvas || typeof Chart === 'undefined') return;
 
@@ -2901,14 +2909,14 @@ document.addEventListener('DOMContentLoaded', function () {
       grasDetailsMissingNotice?.classList.toggle('hidden', typeof lowerSeries[latestIndex] === 'number');
 
       const missingYears = grasSubjectData.years.filter((year, index) => typeof lowerSeries[index] !== 'number');
-      if (grasDetailsChartTitle) grasDetailsChartTitle.textContent = subjectName + ' — pozycja 2020–2025';
+      if (grasDetailsChartTitle) grasDetailsChartTitle.textContent = subjectName + ' — pozycja ' + grasSubjectData.years[0] + '–' + grasSubjectData.years[latestIndex];
       if (grasDetailsChartNote) {
         grasDetailsChartNote.textContent = 'Najlepszy opublikowany wynik: ' + bestBand
           + (bestYears.length ? ' (' + bestYears.join(', ') + ')' : '') + '.'
           + (lastListedIndex === null ? ' Brak opublikowanych pozycji.' : ' Ostatnia obecność: ' + grasSubjectData.years[lastListedIndex] + ', ' + lastListedBand + '.')
-          + (missingYears.length ? ' Poza listą w edycjach: ' + missingYears.join(', ') + '.' : ' Wynik dostępny we wszystkich sześciu edycjach.');
+          + (missingYears.length ? ' Poza listą w edycjach: ' + missingYears.join(', ') + '.' : ' Wynik dostępny we wszystkich ' + grasSubjectData.years.length + ' edycjach.');
       }
-      grasDetailsCanvas.setAttribute('aria-label', subjectName + ': przedział pozycji PW w GRAS 2020–2025');
+      grasDetailsCanvas.setAttribute('aria-label', subjectName + ': przedział pozycji PW w GRAS ' + grasSubjectData.years[0] + '–' + grasSubjectData.years[latestIndex]);
 
       if (!grasDetailsChart) {
         grasDetailsChart = new Chart(grasDetailsCanvas, {
@@ -6311,7 +6319,7 @@ document.addEventListener('DOMContentLoaded', function () {
     'Fizyka (Physics)': { threshold: 300, listed: 500, weights: [60, 60, 60, 20, 100, 100, 100, 50, 20] },
     'Inżynieria mechaniczna (Mechanical Engineering)': { threshold: 100, listed: 400, weights: [40, 20, 60, 0, 60, 60, 100, 50, 20] },
     'Inżynieria metalurgiczna (Metallurgical Engineering)': { threshold: 100, listed: 300, weights: [0, 0, 40, 0, 100, 0, 100, 50, 20] },
-    'Matematyka (Mathematics)': { threshold: 100, listed: 500, weights: [40, 0, 60, 20, 100, 100, 100, 50, 20] },
+    'Matematyka (Mathematics)': { threshold: 100, listed: 500, weights: [40, 20, 60, 20, 100, 100, 100, 50, 20] },
     'Nauka i technologie instrumentacji (Instruments Science & Technology)': { threshold: 100, listed: 400, weights: [0, 0, 20, 0, 100, 0, 100, 50, 20] },
     'Telekomunikacja (Telecommunication Engineering)': { threshold: 100, listed: 400, weights: [40, 20, 20, 20, 100, 60, 100, 50, 20] }
   };
@@ -6325,17 +6333,16 @@ document.addEventListener('DOMContentLoaded', function () {
   ];
 
   const grasMethodologyIndicators = [
-    { code: 'Laureate', name: 'Laureaci międzynarodowych nagród', group: 'Kadra światowej klasy', source: 'Academic Excellence Survey i oficjalne strony nagród', period: 'nagrody 1981–2024; stan kadry: VI 2025', description: 'Pełnoetatowi pracownicy do 80. roku życia, którzy otrzymali jedną z prestiżowych nagród wskazanych dla dyscypliny. Jedna osoba jest liczona raz w tej samej dyscyplinie.' },
-    { code: 'HCR', name: 'Highly Cited Researchers', group: 'Kadra światowej klasy', source: 'Clarivate Highly Cited Researchers', period: 'lista wydana w I 2025', description: 'Badacze o wyjątkowo wysokim wpływie cytowań. Uwzględniane są tylko główne afiliacje; wyróżnienie w kilku dyscyplinach jest liczone osobno.' },
-    { code: 'Editor', name: 'Redaktorzy naczelni czasopism', group: 'Kadra światowej klasy', source: 'JCR 2023 i oficjalne strony czasopism', period: 'funkcje pełnione w 2025 r.', description: 'Redaktorzy naczelni i ich zastępcy w czasopismach SCIE, SSCI i A&HCI. Funkcja naczelna ma wagę 200%, zastępcy 100%; wyłączono czasopisma Hindawi, MDPI, Frontiers i ESCI.' },
-    { code: 'Leadership', name: 'Władze organizacji naukowych', group: 'Kadra światowej klasy', source: 'Academic Excellence Survey i strony organizacji', period: 'stan na VII 2025', description: 'Pracownicy pełniący funkcje kierownicze w kluczowych organizacjach międzynarodowych. Prezydent i sekretarz generalny mają wagę 200%, a pozostałe wskazane funkcje 100%.' },
-    { code: 'TJ', name: 'Publikacje w topowych źródłach', group: 'Dorobek światowej klasy', source: 'Academic Excellence Survey, Web of Science i strony źródeł', period: 'publikacje 2020–2024', description: 'Artykuły i prace przeglądowe w najważniejszych czasopismach lub konferencjach. Dla informatyki i AI stosuje się także 26 konferencji, a w sześciu dyscyplinach zastępczo czasopisma Q1.' },
-    { code: 'Award', name: 'Międzynarodowe nagrody akademickie', group: 'Dorobek światowej klasy', source: 'Academic Excellence Survey i oficjalne strony nagród', period: 'nagrody 1901–2024', description: 'Nagrody zdobyte przez pracowników pełnoetatowych w czasie afiliacji. Punkty są dzielone między laureatów i afiliacje, a wagi maleją dla starszych nagród: 100% za 2021–2024, 75% za 2011–2020, 50% za 2001–2010 i 25% za 1991–2000.' },
-    { code: 'Q1', name: 'Publikacje w pierwszym kwartylu', group: 'Badania wysokiej jakości', source: 'Clarivate Web of Science i InCites', period: 'publikacje 2020–2024', description: 'Liczba artykułów i prac przeglądowych opublikowanych w czasopismach Q1 według Journal Impact Factor, po przypisaniu kategorii Web of Science do dyscyplin GRAS.' },
-    { code: 'CNCI', name: 'Znormalizowany wpływ cytowań', group: 'Wpływ badań', source: 'Clarivate InCites', period: 'publikacje 2020–2024', description: 'Stosunek liczby cytowań do średniej dla tej samej kategorii, roku i typu dokumentu. Wartość 1 oznacza średnią światową; dla skrajnych wyników stosowany jest limit opisany w zasadach liczenia.' },
-    { code: 'IC', name: 'Współpraca międzynarodowa', group: 'Współpraca międzynarodowa', source: 'Clarivate InCites', period: 'publikacje 2020–2024', description: 'Udział artykułów i prac przeglądowych, których adresy autorów obejmują instytucje z co najmniej dwóch krajów, w całym dorobku uczelni w dyscyplinie.' }
+    { code: 'Laureate', name: 'Laureaci międzynarodowych nagród', group: 'Kadra światowej klasy', source: 'Academic Excellence Survey i oficjalne strony nagród', period: 'nagrody 1981–2025; stan kadry: VII 2026', description: 'Pełnoetatowi pracownicy do 80. roku życia, którzy otrzymali jedną z prestiżowych nagród wskazanych dla dyscypliny. Jedna osoba jest liczona raz w tej samej dyscyplinie.' },
+    { code: 'HCR', name: 'Highly Cited Researchers', group: 'Kadra światowej klasy', source: 'Clarivate Highly Cited Researchers', period: 'lista wydana w XII 2025', description: 'Badacze o wyjątkowo wysokim wpływie cytowań. Uwzględniane są tylko główne afiliacje; przy wyróżnieniu w kilku kategoriach badacz jest przypisywany do dyscypliny z największym udziałem jego publikacji.' },
+    { code: 'Editor', name: 'Redaktorzy naczelni czasopism', group: 'Kadra światowej klasy', source: 'JCR 2024 i oficjalne strony czasopism', period: 'stan na VII 2026', description: 'Redaktorzy naczelni i ich zastępcy w czasopismach SCIE, SSCI i A&HCI. Funkcja naczelna ma wagę 200%, zastępcy 100%; wyłączono czasopisma MDPI i Frontiers, a czasopism ESCI nie uwzględnia się.' },
+    { code: 'Leadership', name: 'Władze organizacji naukowych', group: 'Kadra światowej klasy', source: 'Academic Excellence Survey i strony organizacji', period: 'stan na IV 2026', description: 'Pracownicy pełniący funkcje kierownicze w kluczowych organizacjach międzynarodowych. Prezydent i sekretarz generalny mają wagę 200%, a pozostałe wskazane funkcje 100%.' },
+    { code: 'TJ', name: 'Publikacje w topowych źródłach', group: 'Dorobek światowej klasy', source: 'Academic Excellence Survey, Web of Science i strony źródeł', period: 'publikacje 2021–2025', description: 'Artykuły i prace przeglądowe w 182 najważniejszych czasopismach. Dla informatyki i sztucznej inteligencji uwzględnia się także 26 konferencji, a w pozostałych czterech dyscyplinach stosuje się zastępczo czasopisma Q1.' },
+    { code: 'Award', name: 'Międzynarodowe nagrody akademickie', group: 'Dorobek światowej klasy', source: 'Academic Excellence Survey i oficjalne strony nagród', period: 'nagrody 1901–2025', description: 'Nagrody zdobyte przez pracowników pełnoetatowych w czasie afiliacji. Punkty są dzielone między laureatów i afiliacje, a wagi maleją dla starszych nagród: 100% za 2021–2025, 75% za 2011–2020, 50% za 2001–2010 i 25% za 1991–2000.' },
+    { code: 'Q1', name: 'Publikacje w pierwszym kwartylu', group: 'Badania wysokiej jakości', source: 'Clarivate Web of Science i InCites', period: 'publikacje 2021–2025', description: 'Liczba artykułów i prac przeglądowych opublikowanych w czasopismach Q1 według Journal Impact Factor, po przypisaniu kategorii Web of Science do dyscyplin GRAS.' },
+    { code: 'CNCI', name: 'Znormalizowany wpływ cytowań', group: 'Wpływ badań', source: 'Clarivate InCites', period: 'publikacje 2021–2025', description: 'Stosunek liczby cytowań do średniej dla tej samej kategorii, roku i typu dokumentu. Wartość 1 oznacza średnią światową; dla skrajnych wyników stosowany jest limit opisany w zasadach liczenia.' },
+    { code: 'IC', name: 'Współpraca międzynarodowa', group: 'Współpraca międzynarodowa', source: 'Clarivate InCites', period: 'publikacje 2021–2025', description: 'Udział artykułów i prac przeglądowych, których adresy autorów obejmują instytucje z co najmniej dwóch krajów, w całym dorobku uczelni w dyscyplinie.' }
   ];
-
   let activeGrasMethodologyGroup = 'Kadra światowej klasy';
   const formatGrasPosition = (subject) => {
     const data = grasSubjectData?.subjects?.[subject];
@@ -6456,8 +6463,8 @@ document.addEventListener('DOMContentLoaded', function () {
     if (grasMethodologyIndicatorCount) grasMethodologyIndicatorCount.textContent = grasMethodologyIndicators.length;
     if (grasMethodologyPublicationThreshold) grasMethodologyPublicationThreshold.textContent = profile.threshold;
     if (grasMethodologyLatestPosition) grasMethodologyLatestPosition.textContent = latestPosition;
-    if (grasMethodologyEligibilityDetail) grasMethodologyEligibilityDetail.textContent = 'Próg dla wybranej dyscypliny: ' + profile.threshold + ' publikacji z lat 2020–2024; liczba publikowanych uczelni: ' + profile.listed + '.';
-    if (grasMethodologyPublicationDetail) grasMethodologyPublicationDetail.textContent = 'W tej dyscyplinie publikowanych jest ' + profile.listed + ' uczelni. Pozycja PW w edycji 2025: ' + latestPosition + '.';
+    if (grasMethodologyEligibilityDetail) grasMethodologyEligibilityDetail.textContent = 'Próg dla wybranej dyscypliny: ' + profile.threshold + ' publikacji z lat 2021–2025; liczba publikowanych uczelni: ' + profile.listed + '.';
+    if (grasMethodologyPublicationDetail) grasMethodologyPublicationDetail.textContent = 'W tej dyscyplinie publikowanych jest ' + profile.listed + ' uczelni. Pozycja PW w edycji 2026: ' + latestPosition + '.';
   };
 
   grasMethodologySelect?.addEventListener('change', renderGrasMethodology);
