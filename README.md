@@ -17,6 +17,8 @@ Końcowa sekcja QS Sustainability Rankings obejmuje edycje 2024–2027 i jest od
 
 Światowe pozycje zachowują dokładne etykiety QS, w tym remisy i otwarte pasma 1001+ / 1251+. Szczegóły pokazują wynik oraz pozycję każdej z trzech kategorii i ośmiu wskaźników w edycjach 2024–2027. `categoryRanks` i `indicatorRanks` zawierają dla każdej miary i edycji obiekt `{raw, lower, upper}`; otwarte pasmo ma `upper: null`. Kafle edycji pokazują wynik i pozycję wybranej miary, a wykres pozwala wybrać punktację lub pozycję. Brakujące pola są pomijane.
 
+Metodyka QS Sustainability jest dostępna pod okrągłym przyciskiem z ikoną w nagłówku karty historii. Modal korzysta ze wspólnego mechanizmu: zamknięcie przyciskiem lub Escape, pułapka fokusu i powrót do przycisku otwierającego.
+
 QS Sustainability obejmuje Environmental Impact, Social Impact i Governance oraz osiem wskaźników: Environmental Sustainability, Environmental Education, Environmental Research, Equality, Knowledge Exchange, Impact of Education, Employability & Opportunities, Health and Wellbeing. Kategorie, wskaźniki i wynik ogólny mają skalę 0–100. Wynik ogólny łączy trzy kategorie; dla PW jest dostępny za 2026 (60,3) i 2027 (72,1). W arkuszach 2024 i 2025 wynik ogólny PW jest pusty / „-”, więc pozostaje `null`. Nie pokazuje się 2023, pozycji krajowej ani Good Governance.
 
 Liczby niepustych, unikalnych instytucji z arkuszy: 2024 — 1 397; 2025 — 1 743; 2026 — 2 021; 2027 — 2 003.
