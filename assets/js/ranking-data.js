@@ -1549,83 +1549,83 @@ window.RankingData = (() => {
   "overallScores": [
     null,
     null,
-    null,
+    60.3,
     72.1
   ],
   "categories": {
     "Environmental Impact": [
       26.5,
       15.4,
-      null,
+      53.3,
       67.7
     ],
     "Social Impact": [
       45.2,
       58.1,
-      null,
+      63.5,
       74.8
     ],
     "Governance": [
       28.2,
       74.2,
-      null,
-      78.0
+      72.6,
+      78
     ]
   },
   "indicators": {
     "Environmental Sustainability": [
       10.1,
-      9.0,
-      null,
+      9,
+      28.2,
       56.6
     ],
     "Environmental Education": [
       31.9,
-      1.0,
-      null,
+      1,
+      68.1,
       70.1
     ],
     "Environmental Research": [
       37.8,
       40.6,
-      null,
+      62.6,
       75.3
     ],
     "Equality": [
       30.2,
       54.6,
-      null,
+      55.9,
       76.2
     ],
     "Knowledge Exchange": [
       48.8,
       59.5,
-      null,
+      65.7,
       60.6
     ],
     "Impact of Education": [
       33.1,
       30.5,
-      null,
-      61.0
+      35.4,
+      61
     ],
     "Employability & Opportunities": [
       71.4,
       77.5,
-      null,
+      86.1,
       88.7
     ],
     "Health and Wellbeing": [
-      40.0,
+      40,
       63.7,
-      null,
+      69.4,
       84.8
     ]
   },
   "institutions": [
     1394,
     1745,
-    null,
+    1994,
     2003
   ],
   "sources": {
@@ -1635,7 +1635,7 @@ window.RankingData = (() => {
     "years": [
       "https://www.topuniversities.com/sustainability-rankings/2024",
       "https://www.topuniversities.com/sustainability-rankings/2025",
-      "https://www.topuniversities.com/universities/warsaw-university-technology",
+      "https://www.topuniversities.com/sites/default/files/2025-11/2026%20QS%20Sustainability%20Rankings%20Results%20v1.2%20%28For%20qs.com%29.xlsx",
       "https://www.topuniversities.com/sustainability-rankings"
     ]
   }
