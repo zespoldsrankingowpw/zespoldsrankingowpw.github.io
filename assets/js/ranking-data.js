@@ -1623,9 +1623,9 @@ window.RankingData = (() => {
     ]
   },
   "institutions": [
-    1394,
-    1745,
-    1994,
+    1397,
+    1743,
+    2021,
     2003
   ],
   "sources": {
@@ -1635,10 +1635,294 @@ window.RankingData = (() => {
     "years": [
       "https://www.topuniversities.com/sustainability-rankings/2024",
       "https://www.topuniversities.com/sustainability-rankings/2025",
-      "https://www.topuniversities.com/sites/default/files/2025-11/2026%20QS%20Sustainability%20Rankings%20Results%20v1.2%20%28For%20qs.com%29.xlsx",
+      "https://www.topuniversities.com/sustainability-rankings?year=2026",
       "https://www.topuniversities.com/sustainability-rankings"
     ]
-  }
+  },
+  "categoryRanks": {
+    "Environmental Impact": [
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "=763",
+        "lower": 763,
+        "upper": 763
+      },
+      {
+        "raw": "=437",
+        "lower": 437,
+        "upper": 437
+      }
+    ],
+    "Social Impact": [
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "=764",
+        "lower": 764,
+        "upper": 764
+      },
+      {
+        "raw": "=838",
+        "lower": 838,
+        "upper": 838
+      },
+      {
+        "raw": "=600",
+        "lower": 600,
+        "upper": 600
+      }
+    ],
+    "Governance": [
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "=558",
+        "lower": 558,
+        "upper": 558
+      },
+      {
+        "raw": "=782",
+        "lower": 782,
+        "upper": 782
+      },
+      {
+        "raw": "=780",
+        "lower": 780,
+        "upper": 780
+      }
+    ]
+  },
+  "indicatorRanks": {
+    "Environmental Sustainability": [
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "1251+",
+        "lower": 1251,
+        "upper": null
+      },
+      {
+        "raw": "=428",
+        "lower": 428,
+        "upper": 428
+      }
+    ],
+    "Environmental Education": [
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "=478",
+        "lower": 478,
+        "upper": 478
+      },
+      {
+        "raw": "=484",
+        "lower": 484,
+        "upper": 484
+      }
+    ],
+    "Environmental Research": [
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "1251+",
+        "lower": 1251,
+        "upper": null
+      },
+      {
+        "raw": "=805",
+        "lower": 805,
+        "upper": 805
+      }
+    ],
+    "Equality": [
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "1251+",
+        "lower": 1251,
+        "upper": null
+      },
+      {
+        "raw": "=712",
+        "lower": 712,
+        "upper": 712
+      }
+    ],
+    "Knowledge Exchange": [
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "=965",
+        "lower": 965,
+        "upper": 965
+      },
+      {
+        "raw": "=1027",
+        "lower": 1027,
+        "upper": 1027
+      },
+      {
+        "raw": "1251+",
+        "lower": 1251,
+        "upper": null
+      }
+    ],
+    "Impact of Education": [
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "1251+",
+        "lower": 1251,
+        "upper": null
+      },
+      {
+        "raw": "=1026",
+        "lower": 1026,
+        "upper": 1026
+      }
+    ],
+    "Employability & Opportunities": [
+      {
+        "raw": "403",
+        "lower": 403,
+        "upper": 403
+      },
+      {
+        "raw": "323",
+        "lower": 323,
+        "upper": 323
+      },
+      {
+        "raw": "=299",
+        "lower": 299,
+        "upper": 299
+      },
+      {
+        "raw": "=303",
+        "lower": 303,
+        "upper": 303
+      }
+    ],
+    "Health and Wellbeing": [
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "=840",
+        "lower": 840,
+        "upper": 840
+      },
+      {
+        "raw": "=943",
+        "lower": 943,
+        "upper": 943
+      },
+      {
+        "raw": "=478",
+        "lower": 478,
+        "upper": 478
+      }
+    ]
+  },
+  "sourceFiles": [
+    {
+      "edition": 2024,
+      "file": "2024 QS Sustainability Rankings V2.2 (For qs.com).xlsx",
+      "version": "V2.2",
+      "sheet": "PUBLISHED",
+      "pwRow": 1399,
+      "url": "https://www.topuniversities.com/sustainability-rankings/2024",
+      "readDate": "2026-11-17"
+    },
+    {
+      "edition": 2025,
+      "file": "2025 QS Sustainability Rankings Results v1.4 (For qs.com).xlsx",
+      "version": "v1.4",
+      "sheet": "Results",
+      "pwRow": 1144,
+      "url": "https://www.topuniversities.com/sustainability-rankings/2025",
+      "readDate": "2026-11-17"
+    },
+    {
+      "edition": 2026,
+      "file": "2026 QS Sustainability Rankings Results v1.6 (For qs.com).xlsx",
+      "version": "v1.6",
+      "sheet": "Results",
+      "pwRow": 757,
+      "url": "https://www.topuniversities.com/sustainability-rankings?year=2026",
+      "readDate": "2026-11-17"
+    },
+    {
+      "edition": 2027,
+      "file": "2027 QS Sustainability Rankings - Results v2.1(for qs.com).xlsx",
+      "version": "v2.1",
+      "sheet": "sustainability_rankings",
+      "pwRow": 503,
+      "url": "https://www.topuniversities.com/sustainability-rankings",
+      "readDate": "2026-11-17"
+    }
+  ]
 };
 
   return Object.freeze({

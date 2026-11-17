@@ -15,9 +15,20 @@ Statyczny dashboard rankingów Politechniki Warszawskiej publikowany przez GitHu
 
 Końcowa sekcja QS Sustainability Rankings obejmuje edycje 2024–2027 i jest odrębna od wskaźnika Sustainability w QS WUR. Dane znajdują się w zmiennych `qsSustainabilityYears`, `qsSustainabilityLower/Upper`, `qsSustainabilityLabels` i `qsSustainabilityDetails`; obsługę wykresów i szczegółów zawiera `assets/js/qs-sustainability.js`.
 
-Światowe pozycje zachowują etykiety QS: 1201+, 1121-1140, =746, =495. Wynik ogólny występuje tylko dla 2027 (72,1). Punktacje trzech kategorii i ośmiu wskaźników obejmują 2024, 2025 i 2027; null w 2026 nie jest zamieniane na zero. Nie pokazuje się edycji 2023, pozycji krajowej ani wskaźnika Good Governance bez opublikowanej wartości PW.
+Światowe pozycje zachowują dokładne etykiety QS, w tym remisy i otwarte pasma 1001+ / 1251+. Szczegóły pokazują wynik oraz pozycję każdej z trzech kategorii i ośmiu wskaźników w edycjach 2024–2027. `categoryRanks` i `indicatorRanks` zawierają dla każdej miary i edycji obiekt `{raw, lower, upper}`; otwarte pasmo ma `upper: null`. Kafle edycji pokazują wynik i pozycję wybranej miary, a wykres pozwala wybrać punktację lub pozycję. Brakujące pola są pomijane.
 
-- [QS Sustainability Rankings](https://www.topuniversities.com/sustainability-rankings), [profil PW](https://www.topuniversities.com/universities/warsaw-university-technology) i [metodyka](https://support.qs.com/hc/en-gb/articles/8551503200668-QS-World-University-Rankings-Sustainability) — odczyt 17.11.2026.
+QS Sustainability obejmuje Environmental Impact, Social Impact i Governance oraz osiem wskaźników: Environmental Sustainability, Environmental Education, Environmental Research, Equality, Knowledge Exchange, Impact of Education, Employability & Opportunities, Health and Wellbeing. Kategorie, wskaźniki i wynik ogólny mają skalę 0–100. Wynik ogólny łączy trzy kategorie; dla PW jest dostępny za 2026 (60,3) i 2027 (72,1). W arkuszach 2024 i 2025 wynik ogólny PW jest pusty / „-”, więc pozostaje `null`. Nie pokazuje się 2023, pozycji krajowej ani Good Governance.
+
+Liczby niepustych, unikalnych instytucji z arkuszy: 2024 — 1 397; 2025 — 1 743; 2026 — 2 021; 2027 — 2 003.
+
+Źródła: oficjalne arkusze QS (odczyt 17.11.2026):
+
+- `2024 QS Sustainability Rankings V2.2 (For qs.com).xlsx`
+- `2025 QS Sustainability Rankings Results v1.4 (For qs.com).xlsx`
+- `2026 QS Sustainability Rankings Results v1.6 (For qs.com).xlsx`
+- `2027 QS Sustainability Rankings - Results v2.1(for qs.com).xlsx`
+
+[QS Sustainability Rankings](https://www.topuniversities.com/sustainability-rankings), [profil PW](https://www.topuniversities.com/universities/warsaw-university-technology), [metodyka QS](https://support.qs.com/hc/en-gb/articles/8551503200668-QS-World-University-Rankings-Sustainability).
 
 Panel THE pokazuje WUR 2027 oraz wyniki dziedzinowe 2026. Moduł metodyki WUR 2026 opisuje tę konkretną edycję; odwołuje się do jej wyniku, niezależnie od ostatniego roku w szeregu ogólnym.
 
