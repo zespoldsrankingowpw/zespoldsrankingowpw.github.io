@@ -1516,7 +1516,138 @@ window.RankingData = (() => {
 
   const engiScores = [60.17, 62.2, 63.82];
 
+  const qsSustainabilityYears = [
+  2024,
+  2025,
+  2026,
+  2027
+];
+
+  const qsSustainabilityLower = [
+  1201,
+  1121,
+  746,
+  495
+];
+
+  const qsSustainabilityUpper = [
+  null,
+  1140,
+  746,
+  495
+];
+
+  const qsSustainabilityLabels = [
+  "1201+",
+  "1121-1140",
+  "=746",
+  "=495"
+];
+
+  const qsSustainabilityDetails = {
+  "reviewedAt": "2026-11-17",
+  "overallScores": [
+    null,
+    null,
+    null,
+    72.1
+  ],
+  "categories": {
+    "Environmental Impact": [
+      26.5,
+      15.4,
+      null,
+      67.7
+    ],
+    "Social Impact": [
+      45.2,
+      58.1,
+      null,
+      74.8
+    ],
+    "Governance": [
+      28.2,
+      74.2,
+      null,
+      78.0
+    ]
+  },
+  "indicators": {
+    "Environmental Sustainability": [
+      10.1,
+      9.0,
+      null,
+      56.6
+    ],
+    "Environmental Education": [
+      31.9,
+      1.0,
+      null,
+      70.1
+    ],
+    "Environmental Research": [
+      37.8,
+      40.6,
+      null,
+      75.3
+    ],
+    "Equality": [
+      30.2,
+      54.6,
+      null,
+      76.2
+    ],
+    "Knowledge Exchange": [
+      48.8,
+      59.5,
+      null,
+      60.6
+    ],
+    "Impact of Education": [
+      33.1,
+      30.5,
+      null,
+      61.0
+    ],
+    "Employability & Opportunities": [
+      71.4,
+      77.5,
+      null,
+      88.7
+    ],
+    "Health and Wellbeing": [
+      40.0,
+      63.7,
+      null,
+      84.8
+    ]
+  },
+  "institutions": [
+    1394,
+    1745,
+    null,
+    2003
+  ],
+  "sources": {
+    "ranking": "https://www.topuniversities.com/sustainability-rankings",
+    "profile": "https://www.topuniversities.com/universities/warsaw-university-technology",
+    "methodology": "https://support.qs.com/hc/en-gb/articles/8551503200668-QS-World-University-Rankings-Sustainability",
+    "years": [
+      "https://www.topuniversities.com/sustainability-rankings/2024",
+      "https://www.topuniversities.com/sustainability-rankings/2025",
+      "https://www.topuniversities.com/universities/warsaw-university-technology",
+      "https://www.topuniversities.com/sustainability-rankings"
+    ]
+  }
+};
+
   return Object.freeze({
+    qsSustainabilityYears,
+    qsSustainabilityLower,
+    qsSustainabilityUpper,
+    qsSustainabilityLabels,
+    qsSustainabilityDetails,
+
     qsWurDetailsYears,
     qsWurDetailsData,
     theWurDetailsData,

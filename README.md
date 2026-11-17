@@ -8,9 +8,16 @@ Statyczny dashboard rankingów Politechniki Warszawskiej publikowany przez GitHu
 - `assets/css/dashboard.css` — style dashboardu.
 - `assets/js/ranking-data.js` — dane wykresów i szeregi rankingowe.
 - `assets/js/dashboard.js` — wykresy, filtry, nawigacja i modale.
+- `assets/js/qs-sustainability.js` — wykresy i szczegóły QS Sustainability.
 - `assets/pw-logo.png` — logo i ikona strony.
 
 ## Edycje i źródła
+
+Końcowa sekcja QS Sustainability Rankings obejmuje edycje 2024–2027 i jest odrębna od wskaźnika Sustainability w QS WUR. Dane znajdują się w zmiennych `qsSustainabilityYears`, `qsSustainabilityLower/Upper`, `qsSustainabilityLabels` i `qsSustainabilityDetails`; obsługę wykresów i szczegółów zawiera `assets/js/qs-sustainability.js`.
+
+Światowe pozycje zachowują etykiety QS: 1201+, 1121-1140, =746, =495. Wynik ogólny występuje tylko dla 2027 (72,1). Punktacje trzech kategorii i ośmiu wskaźników obejmują 2024, 2025 i 2027; null w 2026 nie jest zamieniane na zero. Nie pokazuje się edycji 2023, pozycji krajowej ani wskaźnika Good Governance bez opublikowanej wartości PW.
+
+- [QS Sustainability Rankings](https://www.topuniversities.com/sustainability-rankings), [profil PW](https://www.topuniversities.com/universities/warsaw-university-technology) i [metodyka](https://support.qs.com/hc/en-gb/articles/8551503200668-QS-World-University-Rankings-Sustainability) — odczyt 17.11.2026.
 
 Panel THE pokazuje WUR 2027 oraz wyniki dziedzinowe 2026. Moduł metodyki WUR 2026 opisuje tę konkretną edycję; odwołuje się do jej wyniku, niezależnie od ostatniego roku w szeregu ogólnym.
 
