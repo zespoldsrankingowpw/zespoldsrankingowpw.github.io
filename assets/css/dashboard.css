@@ -9,6 +9,27 @@ html { scroll-behavior: smooth; }
 html, body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
 body { background: radial-gradient(circle at 50% -10%, #eef2ff 0, #f8fafc 34rem); }
 [id] { scroll-margin-top: 6.5rem; }
+html.pw-dashboard-embedded { scroll-behavior: auto; }
+.pw-dashboard-embedded .dashboard-nav { position: static !important; }
+.pw-dashboard-embedded [id] { scroll-margin-top: 0; }
+/* Activate flow dialogs only after a parent has accepted automatic height.
+   Without that handshake, an ordinary scrolling iframe remains usable. */
+.pw-dashboard-auto-height body.overflow-hidden { overflow: visible !important; }
+.pw-dashboard-auto-height [role="dialog"][aria-modal="true"] {
+  position: relative !important;
+  inset: auto !important;
+  margin: 2rem 0;
+}
+.pw-dashboard-auto-height [role="dialog"][aria-modal="true"] > .absolute { display: none; }
+.pw-dashboard-auto-height [role="dialog"][aria-modal="true"] > .relative {
+  min-height: 0 !important;
+  padding: 0 !important;
+}
+.pw-dashboard-auto-height [role="dialog"][aria-modal="true"] > .relative > section {
+  max-height: none !important;
+  overflow: visible !important;
+}
+.pw-dashboard-auto-height [role="dialog"][aria-modal="true"] header { position: static !important; }
 .ranking-card {
   min-width: 0;
   border: 1px solid rgba(226, 232, 240, .95);

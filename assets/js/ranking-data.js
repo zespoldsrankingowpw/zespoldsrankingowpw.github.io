@@ -14,22 +14,22 @@ window.RankingData = (() => {
     'Employment Outcomes': { scores: [11.5, 9.8, 15.9, null], ranks: [701, 701, 801, null], rankLabels: ['701+', '701', '801', null], contribution2027: 2.7 },
     'Sustainability': { scores: [2.1, 1.4, 38.4, null], ranks: [701, 701, 801, null], rankLabels: ['701+', '701+', '801+', null], contribution2027: 8.4 },
     'International Students Diversity': { scores: [null, null, 23.7, null], ranks: [null, null, 710, null], rankLabels: [null, null, '710', null] },
-    'Overall Score': { scores: [20.7, 23.2, 32.8, 32.2], ranks: [571, 527, 487, 504], rankLabels: ['=571', '527', '487', '=504'] }
+    'Overall Score': { scores: [20.7, 23.2, 32.8, 32.2], ranks: [571, 527, 487, 504], rankLabels: ['=571', '=527', '=487', '=504'] }
   };
 
   const theWurDetailsData = {
-    years: [2020, 2021, 2022, 2023, 2024, 2025, 2026],
-    rankLabels: ['1001+', '1001+', '1201+', '1201–1500', '1201–1500', '1201–1500', '1201–1500'],
-    rankLower: [1001, 1001, 1201, 1201, 1201, 1201, 1201],
-    rankUpper: [null, null, null, 1500, 1500, 1500, 1500],
-    scoreRangeLower: [10.7, 10.3, 10.6, 18.4, 22.8, 25.2, 27.3],
-    scoreRangeUpper: [22.1, 25.0, 22.3, 24.3, 28.2, 30.6, 32.0],
+    years: [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027],
+    rankLabels: ['1001+', '1001+', '1201+', '1201–1500', '1201–1500', '1201–1500', '1201–1500', '1401–1600'],
+    rankLower: [1001, 1001, 1201, 1201, 1201, 1201, 1201, 1401],
+    rankUpper: [null, null, null, 1500, 1500, 1500, 1500, 1600],
+    scoreRangeLower: [10.7, 10.3, 10.6, 18.4, 22.8, 25.2, 27.3, 27.3],
+    scoreRangeUpper: [22.1, 25.0, 22.3, 24.3, 28.2, 30.6, 32.0, 30.4],
     pillars: {
-      teaching: { label: 'Kształcenie', sourceLabel: 'Teaching', values: [19.2, 20.3, 19.7, 18.4, 22.0, 25.7, 28.3] },
-      researchEnvironment: { label: 'Środowisko badawcze', sourceLabel: 'Research / Research Environment', values: [11.8, 12.3, 15.9, 17.6, 19.6, 17.6, 17.7], changedIn2024: true },
-      researchQuality: { label: 'Jakość badań', sourceLabel: 'Citations / Research Quality', values: [30.7, 23.8, 19.0, 15.8, 33.3, 30.8, 32.9], changedIn2024: true },
-      industry: { label: 'Współpraca z przemysłem', sourceLabel: 'Industry', values: [39.8, 38.4, 39.1, 41.0, 53.5, 54.9, 61.1] },
-      internationalOutlook: { label: 'Umiędzynarodowienie', sourceLabel: 'International Outlook', values: [25.1, 26.0, 28.2, 28.6, 31.7, 32.8, 33.9] }
+      teaching: { label: 'Kształcenie', sourceLabel: 'Teaching', values: [19.2, 20.3, 19.7, 18.4, 22.0, 25.7, 28.3, 29.0] },
+      researchEnvironment: { label: 'Środowisko badawcze', sourceLabel: 'Research / Research Environment', values: [11.8, 12.3, 15.9, 17.6, 19.6, 17.6, 17.7, 19.8], changedIn2024: true },
+      researchQuality: { label: 'Jakość badań', sourceLabel: 'Citations / Research Quality', values: [30.7, 23.8, 19.0, 15.8, 33.3, 30.8, 32.9, 34.8], changedIn2024: true },
+      industry: { label: 'Współpraca z przemysłem', sourceLabel: 'Industry', values: [39.8, 38.4, 39.1, 41.0, 53.5, 54.9, 61.1, 57.7] },
+      internationalOutlook: { label: 'Umiędzynarodowienie', sourceLabel: 'International Outlook', values: [25.1, 26.0, 28.2, 28.6, 31.7, 32.8, 33.9, 34.2] }
     }
   };
 
@@ -1472,11 +1472,11 @@ window.RankingData = (() => {
     }
   };
 
-  const theYears = [2020, 2021, 2022, 2023, 2024, 2025, 2026];
+  const theYears = [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027];
 
-  const theLower = [1001, 1001, 1201, 1201, 1201, 1201, 1201];
+  const theLower = [1001, 1001, 1201, 1201, 1201, 1201, 1201, 1401];
 
-  const theUpper = [null, null, null, 1500, 1500, 1500, 1500];
+  const theUpper = [null, null, null, 1500, 1500, 1500, 1500, 1600];
 
   const arwuYears = [2020, 2021, 2022, 2023, 2024, 2025, 2026];
 
@@ -1516,7 +1516,422 @@ window.RankingData = (() => {
 
   const engiScores = [60.17, 62.2, 63.82];
 
+  const qsSustainabilityYears = [
+  2024,
+  2025,
+  2026,
+  2027
+];
+
+  const qsSustainabilityLower = [
+  1201,
+  1121,
+  746,
+  495
+];
+
+  const qsSustainabilityUpper = [
+  null,
+  1140,
+  746,
+  495
+];
+
+  const qsSustainabilityLabels = [
+  "1201+",
+  "1121-1140",
+  "=746",
+  "=495"
+];
+
+  const qsSustainabilityDetails = {
+  "reviewedAt": "2026-11-17",
+  "overallScores": [
+    null,
+    null,
+    60.3,
+    72.1
+  ],
+  "categories": {
+    "Environmental Impact": [
+      26.5,
+      15.4,
+      53.3,
+      67.7
+    ],
+    "Social Impact": [
+      45.2,
+      58.1,
+      63.5,
+      74.8
+    ],
+    "Governance": [
+      28.2,
+      74.2,
+      72.6,
+      78
+    ]
+  },
+  "indicators": {
+    "Environmental Sustainability": [
+      10.1,
+      9,
+      28.2,
+      56.6
+    ],
+    "Environmental Education": [
+      31.9,
+      1,
+      68.1,
+      70.1
+    ],
+    "Environmental Research": [
+      37.8,
+      40.6,
+      62.6,
+      75.3
+    ],
+    "Equality": [
+      30.2,
+      54.6,
+      55.9,
+      76.2
+    ],
+    "Knowledge Exchange": [
+      48.8,
+      59.5,
+      65.7,
+      60.6
+    ],
+    "Impact of Education": [
+      33.1,
+      30.5,
+      35.4,
+      61
+    ],
+    "Employability & Opportunities": [
+      71.4,
+      77.5,
+      86.1,
+      88.7
+    ],
+    "Health and Wellbeing": [
+      40,
+      63.7,
+      69.4,
+      84.8
+    ]
+  },
+  "institutions": [
+    1397,
+    1743,
+    2021,
+    2003
+  ],
+  "sources": {
+    "ranking": "https://www.topuniversities.com/sustainability-rankings",
+    "profile": "https://www.topuniversities.com/universities/warsaw-university-technology",
+    "methodology": "https://support.qs.com/hc/en-gb/articles/8551503200668-QS-World-University-Rankings-Sustainability",
+    "years": [
+      "https://www.topuniversities.com/sustainability-rankings/2024",
+      "https://www.topuniversities.com/sustainability-rankings/2025",
+      "https://www.topuniversities.com/sustainability-rankings?year=2026",
+      "https://www.topuniversities.com/sustainability-rankings"
+    ]
+  },
+  "categoryRanks": {
+    "Environmental Impact": [
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "=763",
+        "lower": 763,
+        "upper": 763
+      },
+      {
+        "raw": "=437",
+        "lower": 437,
+        "upper": 437
+      }
+    ],
+    "Social Impact": [
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "=764",
+        "lower": 764,
+        "upper": 764
+      },
+      {
+        "raw": "=838",
+        "lower": 838,
+        "upper": 838
+      },
+      {
+        "raw": "=600",
+        "lower": 600,
+        "upper": 600
+      }
+    ],
+    "Governance": [
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "=558",
+        "lower": 558,
+        "upper": 558
+      },
+      {
+        "raw": "=782",
+        "lower": 782,
+        "upper": 782
+      },
+      {
+        "raw": "=780",
+        "lower": 780,
+        "upper": 780
+      }
+    ]
+  },
+  "indicatorRanks": {
+    "Environmental Sustainability": [
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "1251+",
+        "lower": 1251,
+        "upper": null
+      },
+      {
+        "raw": "=428",
+        "lower": 428,
+        "upper": 428
+      }
+    ],
+    "Environmental Education": [
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "=478",
+        "lower": 478,
+        "upper": 478
+      },
+      {
+        "raw": "=484",
+        "lower": 484,
+        "upper": 484
+      }
+    ],
+    "Environmental Research": [
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "1251+",
+        "lower": 1251,
+        "upper": null
+      },
+      {
+        "raw": "=805",
+        "lower": 805,
+        "upper": 805
+      }
+    ],
+    "Equality": [
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "1251+",
+        "lower": 1251,
+        "upper": null
+      },
+      {
+        "raw": "=712",
+        "lower": 712,
+        "upper": 712
+      }
+    ],
+    "Knowledge Exchange": [
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "=965",
+        "lower": 965,
+        "upper": 965
+      },
+      {
+        "raw": "=1027",
+        "lower": 1027,
+        "upper": 1027
+      },
+      {
+        "raw": "1251+",
+        "lower": 1251,
+        "upper": null
+      }
+    ],
+    "Impact of Education": [
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "1251+",
+        "lower": 1251,
+        "upper": null
+      },
+      {
+        "raw": "=1026",
+        "lower": 1026,
+        "upper": 1026
+      }
+    ],
+    "Employability & Opportunities": [
+      {
+        "raw": "403",
+        "lower": 403,
+        "upper": 403
+      },
+      {
+        "raw": "323",
+        "lower": 323,
+        "upper": 323
+      },
+      {
+        "raw": "=299",
+        "lower": 299,
+        "upper": 299
+      },
+      {
+        "raw": "=303",
+        "lower": 303,
+        "upper": 303
+      }
+    ],
+    "Health and Wellbeing": [
+      {
+        "raw": "1001+",
+        "lower": 1001,
+        "upper": null
+      },
+      {
+        "raw": "=840",
+        "lower": 840,
+        "upper": 840
+      },
+      {
+        "raw": "=943",
+        "lower": 943,
+        "upper": 943
+      },
+      {
+        "raw": "=478",
+        "lower": 478,
+        "upper": 478
+      }
+    ]
+  },
+  "sourceFiles": [
+    {
+      "edition": 2024,
+      "file": "2024 QS Sustainability Rankings V2.2 (For qs.com).xlsx",
+      "version": "V2.2",
+      "sheet": "PUBLISHED",
+      "pwRow": 1399,
+      "url": "https://www.topuniversities.com/sustainability-rankings/2024",
+      "readDate": "2026-11-17"
+    },
+    {
+      "edition": 2025,
+      "file": "2025 QS Sustainability Rankings Results v1.4 (For qs.com).xlsx",
+      "version": "v1.4",
+      "sheet": "Results",
+      "pwRow": 1144,
+      "url": "https://www.topuniversities.com/sustainability-rankings/2025",
+      "readDate": "2026-11-17"
+    },
+    {
+      "edition": 2026,
+      "file": "2026 QS Sustainability Rankings Results v1.6 (For qs.com).xlsx",
+      "version": "v1.6",
+      "sheet": "Results",
+      "pwRow": 757,
+      "url": "https://www.topuniversities.com/sustainability-rankings?year=2026",
+      "readDate": "2026-11-17"
+    },
+    {
+      "edition": 2027,
+      "file": "2027 QS Sustainability Rankings - Results v2.1(for qs.com).xlsx",
+      "version": "v2.1",
+      "sheet": "sustainability_rankings",
+      "pwRow": 503,
+      "url": "https://www.topuniversities.com/sustainability-rankings",
+      "readDate": "2026-11-17"
+    }
+  ]
+};
+
   return Object.freeze({
+    qsSustainabilityYears,
+    qsSustainabilityLower,
+    qsSustainabilityUpper,
+    qsSustainabilityLabels,
+    qsSustainabilityDetails,
+
     qsWurDetailsYears,
     qsWurDetailsData,
     theWurDetailsData,

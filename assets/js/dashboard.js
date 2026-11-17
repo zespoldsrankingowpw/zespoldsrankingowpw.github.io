@@ -1082,7 +1082,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const observedSections = navLinks
     .map((link) => document.querySelector(link.getAttribute('href')))
     .filter(Boolean);
-  if ('IntersectionObserver' in window && observedSections.length) {
+  if (window.parent === window && 'IntersectionObserver' in window && observedSections.length) {
     const sectionObserver = new IntersectionObserver((entries) => {
       const visible = entries
         .filter((entry) => entry.isIntersecting)
@@ -4494,6 +4494,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (theWurDetailsStrongestPillar) theWurDetailsStrongestPillar.textContent = strongest ? strongest.label + ' ' + formatTheWurScore(strongest.value) : '—';
     if (theWurDetailsBestBand) theWurDetailsBestBand.textContent = theWurDetailsData.rankLabels[0];
     if (theWurDetailsCoverage) theWurDetailsCoverage.textContent = years.length + ' / ' + years.length;
+    if (theWurDetailsYearCards) {
+      theWurDetailsYearCards.style.gridTemplateColumns = 'repeat(' + years.length + ', minmax(7.5rem, 1fr))';
+    }
     theWurDetailsYearCards?.replaceChildren(...years.map((year, index) => createTheWurYearCard(year, index, metricKey)));
     theWurDetailsChangeNotice?.classList.toggle('hidden', !pillar?.changedIn2024);
 
@@ -4504,20 +4507,20 @@ document.addEventListener('DOMContentLoaded', function () {
     if (legendText) legendText.textContent = isPosition ? 'Opublikowane pasmo' : pillar.sourceLabel + ' · wynik 0–100';
 
     if (isPosition) {
-      if (theWurDetailsChartTitle) theWurDetailsChartTitle.textContent = 'Pozycja globalna PW — pasma 2020–2026';
-      if (theWurDetailsChartNote) theWurDetailsChartNote.textContent = 'W edycjach 2020–2022 znak „+” wyznacza tylko początek otwartego pasma. Od 2023 PW znajduje się w paśmie 1201–1500.';
-      theWurDetailsCanvas.setAttribute('aria-label', 'Opublikowane pasma pozycji Politechniki Warszawskiej w THE World University Rankings 2020–2026');
+      if (theWurDetailsChartTitle) theWurDetailsChartTitle.textContent = 'Pozycja globalna PW — pasma ' + years[0] + '–' + years.at(-1);
+      if (theWurDetailsChartNote) theWurDetailsChartNote.textContent = 'W edycjach 2020–2022 znak „+” wyznacza tylko początek otwartego pasma. W latach 2023–2026 PW zajmowała pasmo 1201–1500; w edycji 2027: 1401–1600.';
+      theWurDetailsCanvas.setAttribute('aria-label', 'Opublikowane pasma pozycji Politechniki Warszawskiej w THE World University Rankings ' + years[0] + '–' + years.at(-1));
     } else {
       const firstValue = pillar.values[0];
       const latestValue = pillar.values[latestIndex];
       const change = latestValue - firstValue;
-      if (theWurDetailsChartTitle) theWurDetailsChartTitle.textContent = pillar.label + ' — wynik 2020–2026';
+      if (theWurDetailsChartTitle) theWurDetailsChartTitle.textContent = pillar.label + ' — wynik ' + years[0] + '–' + years.at(-1);
       if (theWurDetailsChartNote) {
         theWurDetailsChartNote.textContent = pillar.changedIn2024
           ? pillar.sourceLabel + ': od edycji 2024 obowiązuje szersza definicja filaru, dlatego seria nie jest w pełni porównywalna w czasie.'
           : 'Zmiana względem 2020: ' + (change >= 0 ? '+' : '−') + formatTheWurScore(Math.abs(change)) + ' pkt. Wyższy wynik oznacza lepszą ocenę.';
       }
-      theWurDetailsCanvas.setAttribute('aria-label', pillar.label + ': wynik Politechniki Warszawskiej w THE World University Rankings 2020–2026');
+      theWurDetailsCanvas.setAttribute('aria-label', pillar.label + ': wynik Politechniki Warszawskiej w THE World University Rankings ' + years[0] + '–' + years.at(-1));
     }
 
     if (!theWurDetailsChart) {
@@ -4579,7 +4582,7 @@ document.addEventListener('DOMContentLoaded', function () {
       ];
       yAxis.reverse = true;
       yAxis.min = 900;
-      yAxis.max = 1550;
+      yAxis.max = Math.max(...theWurDetailsData.rankUpper.filter(Number.isFinite)) + 50;
       yAxis.ticks.stepSize = 100;
       yAxis.ticks.callback = (value) => Math.round(value);
       yAxis.title.text = 'Pozycja (im wyżej, tym lepiej)';
@@ -6095,11 +6098,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const unweightedCount = theWurMethodologyIndicators.filter((indicator) => indicator.weight === 0).length;
     if (theWurMethodologyIndicatorCount) theWurMethodologyIndicatorCount.textContent = weightedCount + ' + ' + unweightedCount;
     if (theWurMethodologyPillarCount) theWurMethodologyPillarCount.textContent = theWurMethodologyPillars.length;
-    if (theWurMethodologyLatestPosition && theLower?.length) {
-      const latestIndex = theLower.length - 1;
-      theWurMethodologyLatestPosition.textContent = theLower[latestIndex] === theUpper[latestIndex]
-        ? '=' + theLower[latestIndex]
-        : theLower[latestIndex] + '–' + theUpper[latestIndex];
+    if (theWurMethodologyLatestPosition) {
+      const editionIndex = theWurDetailsData.years.indexOf(2026);
+      theWurMethodologyLatestPosition.textContent = theWurDetailsData.rankLabels[editionIndex];
     }
   };
 
