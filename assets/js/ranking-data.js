@@ -14,22 +14,22 @@ window.RankingData = (() => {
     'Employment Outcomes': { scores: [11.5, 9.8, 15.9, null], ranks: [701, 701, 801, null], rankLabels: ['701+', '701', '801', null], contribution2027: 2.7 },
     'Sustainability': { scores: [2.1, 1.4, 38.4, null], ranks: [701, 701, 801, null], rankLabels: ['701+', '701+', '801+', null], contribution2027: 8.4 },
     'International Students Diversity': { scores: [null, null, 23.7, null], ranks: [null, null, 710, null], rankLabels: [null, null, '710', null] },
-    'Overall Score': { scores: [20.7, 23.2, 32.8, 32.2], ranks: [571, 527, 487, 504], rankLabels: ['=571', '527', '487', '=504'] }
+    'Overall Score': { scores: [20.7, 23.2, 32.8, 32.2], ranks: [571, 527, 487, 504], rankLabels: ['=571', '=527', '=487', '=504'] }
   };
 
   const theWurDetailsData = {
-    years: [2020, 2021, 2022, 2023, 2024, 2025, 2026],
-    rankLabels: ['1001+', '1001+', '1201+', '1201–1500', '1201–1500', '1201–1500', '1201–1500'],
-    rankLower: [1001, 1001, 1201, 1201, 1201, 1201, 1201],
-    rankUpper: [null, null, null, 1500, 1500, 1500, 1500],
-    scoreRangeLower: [10.7, 10.3, 10.6, 18.4, 22.8, 25.2, 27.3],
-    scoreRangeUpper: [22.1, 25.0, 22.3, 24.3, 28.2, 30.6, 32.0],
+    years: [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027],
+    rankLabels: ['1001+', '1001+', '1201+', '1201–1500', '1201–1500', '1201–1500', '1201–1500', '1401–1600'],
+    rankLower: [1001, 1001, 1201, 1201, 1201, 1201, 1201, 1401],
+    rankUpper: [null, null, null, 1500, 1500, 1500, 1500, 1600],
+    scoreRangeLower: [10.7, 10.3, 10.6, 18.4, 22.8, 25.2, 27.3, 27.3],
+    scoreRangeUpper: [22.1, 25.0, 22.3, 24.3, 28.2, 30.6, 32.0, 30.4],
     pillars: {
-      teaching: { label: 'Kształcenie', sourceLabel: 'Teaching', values: [19.2, 20.3, 19.7, 18.4, 22.0, 25.7, 28.3] },
-      researchEnvironment: { label: 'Środowisko badawcze', sourceLabel: 'Research / Research Environment', values: [11.8, 12.3, 15.9, 17.6, 19.6, 17.6, 17.7], changedIn2024: true },
-      researchQuality: { label: 'Jakość badań', sourceLabel: 'Citations / Research Quality', values: [30.7, 23.8, 19.0, 15.8, 33.3, 30.8, 32.9], changedIn2024: true },
-      industry: { label: 'Współpraca z przemysłem', sourceLabel: 'Industry', values: [39.8, 38.4, 39.1, 41.0, 53.5, 54.9, 61.1] },
-      internationalOutlook: { label: 'Umiędzynarodowienie', sourceLabel: 'International Outlook', values: [25.1, 26.0, 28.2, 28.6, 31.7, 32.8, 33.9] }
+      teaching: { label: 'Kształcenie', sourceLabel: 'Teaching', values: [19.2, 20.3, 19.7, 18.4, 22.0, 25.7, 28.3, 29.0] },
+      researchEnvironment: { label: 'Środowisko badawcze', sourceLabel: 'Research / Research Environment', values: [11.8, 12.3, 15.9, 17.6, 19.6, 17.6, 17.7, 19.8], changedIn2024: true },
+      researchQuality: { label: 'Jakość badań', sourceLabel: 'Citations / Research Quality', values: [30.7, 23.8, 19.0, 15.8, 33.3, 30.8, 32.9, 34.8], changedIn2024: true },
+      industry: { label: 'Współpraca z przemysłem', sourceLabel: 'Industry', values: [39.8, 38.4, 39.1, 41.0, 53.5, 54.9, 61.1, 57.7] },
+      internationalOutlook: { label: 'Umiędzynarodowienie', sourceLabel: 'International Outlook', values: [25.1, 26.0, 28.2, 28.6, 31.7, 32.8, 33.9, 34.2] }
     }
   };
 
@@ -1472,11 +1472,11 @@ window.RankingData = (() => {
     }
   };
 
-  const theYears = [2020, 2021, 2022, 2023, 2024, 2025, 2026];
+  const theYears = [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027];
 
-  const theLower = [1001, 1001, 1201, 1201, 1201, 1201, 1201];
+  const theLower = [1001, 1001, 1201, 1201, 1201, 1201, 1201, 1401];
 
-  const theUpper = [null, null, null, 1500, 1500, 1500, 1500];
+  const theUpper = [null, null, null, 1500, 1500, 1500, 1500, 1600];
 
   const arwuYears = [2020, 2021, 2022, 2023, 2024, 2025, 2026];
 
@@ -1516,7 +1516,102 @@ window.RankingData = (() => {
 
   const engiScores = [60.17, 62.2, 63.82];
 
+  const sdgReportData = {
+  "reviewedAt": "2026-11-17",
+  "sourceUrl": "https://www.timeshighereducation.com/impactrankings",
+  "reportYear": 2025,
+  "reportUrl": "https://www.das.pw.edu.pl/Rankingi-PW/Zrownowazony-rozwoj/SDG/2025/",
+  "goals": [
+    {
+      "id": 1,
+      "title": "Koniec z ubóstwem",
+      "reportUrl": "https://www.das.pw.edu.pl/Rankingi-PW/Zrownowazony-rozwoj/SDG/2025/Warsaw-University-of-Technology-SDG-Report-2025-SDG-1-No-poverty"
+    },
+    {
+      "id": 2,
+      "title": "Zero głodu",
+      "reportUrl": "https://www.das.pw.edu.pl/Rankingi-PW/Zrownowazony-rozwoj/SDG/2025/Warsaw-University-of-Technology-SDG-Report-2025-SDG-2-Zero-hunger"
+    },
+    {
+      "id": 3,
+      "title": "Dobre zdrowie i jakość życia",
+      "reportUrl": "https://www.das.pw.edu.pl/Rankingi-PW/Zrownowazony-rozwoj/SDG/2025/Warsaw-University-of-Technology-SDG-Report-2025-SDG-3-Good-health-and-well-being"
+    },
+    {
+      "id": 4,
+      "title": "Dobra jakość edukacji",
+      "reportUrl": "https://www.das.pw.edu.pl/Rankingi-PW/Zrownowazony-rozwoj/SDG/2025/Warsaw-University-of-Technology-SDG-Report-2025-SDG-4-Quality-education"
+    },
+    {
+      "id": 5,
+      "title": "Równość płci",
+      "reportUrl": "https://www.das.pw.edu.pl/Rankingi-PW/Zrownowazony-rozwoj/SDG/2025/Warsaw-University-of-Technology-SDG-Report-2025-SDG-5-Gender-equality"
+    },
+    {
+      "id": 6,
+      "title": "Czysta woda i warunki sanitarne",
+      "reportUrl": "https://www.das.pw.edu.pl/Rankingi-PW/Zrownowazony-rozwoj/SDG/2025/Warsaw-University-of-Technology-SDG-Report-2025-SDG-6-Clean-water-and-sanitation"
+    },
+    {
+      "id": 7,
+      "title": "Czysta i dostępna energia",
+      "reportUrl": "https://www.das.pw.edu.pl/Rankingi-PW/Zrownowazony-rozwoj/SDG/2025/Warsaw-University-of-Technology-SDG-Report-2025-SDG-7-Affordable-and-clean-energy"
+    },
+    {
+      "id": 8,
+      "title": "Wzrost gospodarczy i godna praca",
+      "reportUrl": "https://www.das.pw.edu.pl/Rankingi-PW/Zrownowazony-rozwoj/SDG/2025/Warsaw-University-of-Technology-SDG-Report-2025-SDG-8-Decent-work-and-economic-growth"
+    },
+    {
+      "id": 9,
+      "title": "Innowacyjność, przemysł, infrastruktura",
+      "reportUrl": "https://www.das.pw.edu.pl/Rankingi-PW/Zrownowazony-rozwoj/SDG/2025/Warsaw-University-of-Technology-SDG-Report-2025-SDG-9-Industry-innovation-and-infrastructure"
+    },
+    {
+      "id": 10,
+      "title": "Mniej nierówności",
+      "reportUrl": "https://www.das.pw.edu.pl/Rankingi-PW/Zrownowazony-rozwoj/SDG/2025/Warsaw-University-of-Technology-SDG-Report-2025-SDG-10-Reduced-inequalities"
+    },
+    {
+      "id": 11,
+      "title": "Zrównoważone miasta i społeczności",
+      "reportUrl": "https://www.das.pw.edu.pl/Rankingi-PW/Zrownowazony-rozwoj/SDG/2025/Warsaw-University-of-Technology-SDG-Report-2025-SDG-11-Sustainable-cities-and-communities"
+    },
+    {
+      "id": 12,
+      "title": "Odpowiedzialna konsumpcja i produkcja",
+      "reportUrl": "https://www.das.pw.edu.pl/Rankingi-PW/Zrownowazony-rozwoj/SDG/2025/Warsaw-University-of-Technology-SDG-Report-2025-SDG-12-Responsible-consumption-and-production"
+    },
+    {
+      "id": 13,
+      "title": "Działania w dziedzinie klimatu",
+      "reportUrl": "https://www.das.pw.edu.pl/Rankingi-PW/Zrownowazony-rozwoj/SDG/2025/Warsaw-University-of-Technology-SDG-Report-2025-SDG-13-Climate-action"
+    },
+    {
+      "id": 14,
+      "title": "Życie pod wodą",
+      "reportUrl": "https://www.das.pw.edu.pl/Rankingi-PW/Zrownowazony-rozwoj/SDG/2025/Warsaw-University-of-Technology-SDG-Report-2025-SDG-14-Life-below-water"
+    },
+    {
+      "id": 15,
+      "title": "Życie na lądzie",
+      "reportUrl": "https://www.das.pw.edu.pl/Rankingi-PW/Zrownowazony-rozwoj/SDG/2025/Warsaw-University-of-Technology-SDG-Report-2025-SDG-15-Life-on-land"
+    },
+    {
+      "id": 16,
+      "title": "Pokój, sprawiedliwość i silne instytucje",
+      "reportUrl": "https://www.das.pw.edu.pl/Rankingi-PW/Zrownowazony-rozwoj/SDG/2025/Warsaw-University-of-Technology-SDG-Report-2025-SDG-16-Peace-justice-and-strong-institutions"
+    },
+    {
+      "id": 17,
+      "title": "Partnerstwa na rzecz celów",
+      "reportUrl": "https://www.das.pw.edu.pl/Rankingi-PW/Zrownowazony-rozwoj/SDG/2025/Warsaw-University-of-Technology-SDG-Report-2025-SDG-17-Partnerships-for-the-goals"
+    }
+  ]
+};
+
   return Object.freeze({
+    sdgReportData,
     qsWurDetailsYears,
     qsWurDetailsData,
     theWurDetailsData,
