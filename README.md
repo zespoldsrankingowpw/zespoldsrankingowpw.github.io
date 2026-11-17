@@ -26,3 +26,13 @@ Po aktualizacji danych należy sprawdzić daty, etykiety oraz podsumowania w `in
 Strona nie wymaga budowania. Tailwind, Chart.js i fonty są pobierane z adresów wskazanych w `index.html`. Lokalny podgląd: `python -m http.server 8765`. Kontrola obejmuje szerokości 390 i 1365 px, konsolę przeglądarki, wybór kierunków, przełączniki oraz szczegóły THE.
 
 Za treść odpowiada Zespół ds. Rankingów DAS PW.
+
+## Osadzanie z automatyczną wysokością
+
+`assets/js/embed-height.js` działa wyłącznie wewnątrz ramki. Wysyła rodzicowi `pw-dashboard-height` z wysokością dokumentu po załadowaniu, zmianie okna i zmianie rozmiaru body. Pomiar jest ograniczony do jednego zaplanowanego wywołania na 100 ms. `targetOrigin` wynosi `*`; wiadomości zawierają wysokość lub pozycję kotwicy, bez danych rankingowych.
+
+Rodzic weryfikuje origin GitHub Pages i `event.source`, przyjmuje tylko skończone liczby w zakresie do 40000 px, ustawia wysokość i wyłącza wewnętrzne przewijanie. Pierwszą poprawną wiadomość potwierdza przez `pw-dashboard-embed-ready`. Dopiero wtedy modale dziecka przechodzą do układu dokumentu, a kotwice przewijają rodzica przez `pw-dashboard-anchor`.
+
+`scrollHeight` ma dolne ograniczenie równe wysokości viewportu. Gdy treść maleje, wiadomość `pw-dashboard-measure` prosi rodzica o przejściowy pomiar w ramce 600 px; dziecko następnie raportuje rzeczywisty `document.documentElement.scrollHeight`. Rodzic zachowuje pozycję przewijania podczas ponownego pomiaru.
+
+Bez potwierdzenia rodzica działa fallback `scrolling="auto"` z minimalną wysokością 600 px. Nawigacja osadzona jest statyczna; samodzielna strona zachowuje sticky i dotychczasowe modale. Publiczny skrypt jest dostępny dopiero po publikacji commita na GitHub Pages.

@@ -1082,7 +1082,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const observedSections = navLinks
     .map((link) => document.querySelector(link.getAttribute('href')))
     .filter(Boolean);
-  if ('IntersectionObserver' in window && observedSections.length) {
+  if (window.parent === window && 'IntersectionObserver' in window && observedSections.length) {
     const sectionObserver = new IntersectionObserver((entries) => {
       const visible = entries
         .filter((entry) => entry.isIntersecting)
