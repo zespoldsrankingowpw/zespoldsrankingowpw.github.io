@@ -299,7 +299,7 @@ html.pw-dashboard-embedded { scroll-behavior: auto; }
 .rks-details-stats span { display: block; color: #64748b; font-size: .6rem; font-weight: 800; text-transform: uppercase; }
 .rks-details-stats b { display: block; margin-top: .35rem; color: #0b1220; font-size: 1.35rem; line-height: 1.1; }
 .rks-details-years { display: grid; min-width: 56rem; grid-template-columns: repeat(7, minmax(7.5rem, 1fr)); border-top: 1px solid #dbe3ee; border-bottom: 1px solid #dbe3ee; }
-.engi-details-years { min-width: 30rem; grid-template-columns: repeat(3, minmax(9rem, 1fr)); }
+.engi-details-years { min-width: 38rem; grid-template-columns: repeat(4, minmax(9rem, 1fr)); }
 .arwu-details-years { min-width: 56rem; grid-template-columns: repeat(7, minmax(7.5rem, 1fr)); }
 .gras-details-years { min-width: 48rem; grid-template-columns: repeat(6, minmax(8rem, 1fr)); }
 .qs-subject-details-years { min-width: 38rem; grid-template-columns: repeat(4, minmax(9rem, 1fr)); }
