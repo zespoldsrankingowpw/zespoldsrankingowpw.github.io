@@ -37,6 +37,10 @@ Panel THE pokazuje WUR 2027 oraz wyniki dziedzinowe 2026. Moduł metodyki WUR 20
 - [Profil PW w THE](https://www.timeshighereducation.com/world-university-rankings/warsaw-university-technology) — przedziały i edycje.
 - [Tabela THE Europe 2027](https://beta.timeshighereducation.com/student/best-universities/best-universities-europe) — kolumny World Rank, Overall i pięć filarów.
 
+EngiRank obejmuje edycje 2023–2026: ranking instytucjonalny oraz siedem dziedzin. W edycji 2026 PW zajęła 67= miejsce w Europie (4. w Polsce), z wynikiem 65,42. Dane serii znajdują się w `assets/js/ranking-data.js`, a szczegóły wskaźników dziedzinowych w `assets/js/engirank-subject-indicators.js`. Cztery dziedziny mają siedem wskaźników, a lądowa, środowiska i medyczna — osiem (z SDG); brak SDG jest oznaczony jako `null`.
+
+Źródła (odczyt 23.11.2026): [ranking instytucjonalny 2026](https://engirank.eu/ranking/2026/all/) oraz [profil PW 2026](https://www.engirank.eu/institution/warsaw-university-of-technology/2026) i tabele dziedzinowe podlinkowane w szczegółach dashboardu. W edycji 2026 okno danych przesunięto z lat 2020–2024 na 2021–2025, wprowadzono progi publikacji w dziedzinach i uwzględniono RIBA w akredytacjach; wyniki lat nie są w pełni porównywalne. Historyczne dane 2023–2025 zachowano.
+
 ## Edycja
 
 Wartości rankingowe edytuje się w `assets/js/ranking-data.js`. Lata i szeregi wartości muszą mieć zgodną długość; `null` oznacza brak wartości. Dopisanie nowej edycji nie zmienia historycznych komórek. Przedział pozycji i przedział punktacji należy zachować jako przedziały.

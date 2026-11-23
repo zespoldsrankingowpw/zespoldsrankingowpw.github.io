@@ -3271,8 +3271,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const numericPositions = positionSeries.filter((value) => typeof value === 'number');
         const bestPosition = numericPositions.length ? Math.min(...numericPositions) : null;
         const top100Count = numericPositions.filter((value) => value <= 100).length;
-        setEngiSubjectDetailsStat(0, 'Pozycja 2025', rawSeries[latestIndex] ?? '—');
-        setEngiSubjectDetailsStat(1, 'Wynik ogólny 2025', formatEngiScore(scoreSeries[latestIndex]));
+        setEngiSubjectDetailsStat(0, 'Pozycja 2026', rawSeries[latestIndex] ?? '—');
+        setEngiSubjectDetailsStat(1, 'Wynik ogólny 2026', formatEngiScore(scoreSeries[latestIndex]));
         setEngiSubjectDetailsStat(2, 'Najlepsza pozycja', bestPosition === null ? '—' : (rawSeries[positionSeries.indexOf(bestPosition)] || bestPosition + '.'));
         setEngiSubjectDetailsStat(3, 'Edycje w TOP 100', top100Count + ' / ' + engiSubjectYears.length);
         engiSubjectDetailsYearCards?.replaceChildren(...engiSubjectYears.map((year, index) =>
@@ -3292,7 +3292,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       if (engiSubjectDetailsChartTitle) {
         engiSubjectDetailsChartTitle.textContent = subjectName + ' — '
-          + (isIndicator ? metricLabel : (isScore ? 'wynik ogólny' : 'pozycja')) + ' 2023–2025';
+          + (isIndicator ? metricLabel : (isScore ? 'wynik ogólny' : 'pozycja')) + ' 2023–2026';
       }
       if (engiSubjectDetailsChartNote) {
         engiSubjectDetailsChartNote.textContent = isIndicator
@@ -3309,11 +3309,11 @@ document.addEventListener('DOMContentLoaded', function () {
       if (legendText) legendText.textContent = isIndicator ? metricLabel + ' 0–100' : (isScore ? 'Wynik ogólny 0–100' : 'Pozycja');
       engiSubjectDetailsCanvas.setAttribute('aria-label', subjectName + ': '
         + (isIndicator ? metricLabel : (isScore ? 'wynik ogólny' : 'pozycja'))
-        + ' w EngiRank by Subject 2023–2025');
+        + ' w EngiRank by Subject 2023–2026');
 
       if (engiSubjectDetailsSourceLink) {
-        engiSubjectDetailsSourceLink.href = 'https://engirank.eu/ranking/2025/' + officialSubject.slug + '/';
-        engiSubjectDetailsSourceLink.textContent = 'oficjalne wyniki EngiRank: ' + subjectName + ', edycje 2023–2025';
+        engiSubjectDetailsSourceLink.href = 'https://engirank.eu/ranking/2026/' + officialSubject.slug + '/';
+        engiSubjectDetailsSourceLink.textContent = 'oficjalne wyniki EngiRank: ' + subjectName + ', edycje 2023–2026';
       }
 
       if (!engiSubjectDetailsChart) {
@@ -5145,8 +5145,8 @@ document.addEventListener('DOMContentLoaded', function () {
         dataset.backgroundColor = 'rgba(16,185,129,0.15)';
 
         yAxis.reverse = false;
-        yAxis.min = 58;
-        yAxis.max = 65;
+        yAxis.min = Math.max(0, Math.floor(Math.min(...engiScores) - 2));
+        yAxis.max = Math.min(100, Math.ceil(Math.max(...engiScores) + 2));
         yAxis.ticks.stepSize = 1;
         yAxis.ticks.callback = (value) => (typeof value === 'number' ? value.toFixed(1) : value);
         yAxis.title.text = 'Wynik (im wyższy, tym lepiej)';
@@ -5156,7 +5156,7 @@ document.addEventListener('DOMContentLoaded', function () {
           return value !== null && value !== undefined ? `Wynik: ${value.toFixed(2)}` : 'Brak danych';
         };
         if (engiNote) {
-          engiNote.textContent = 'PW w EngiRank 2025 zajęła pozycję 72= (ex aequo) z wynikiem 63,82.';
+          engiNote.textContent = 'PW w EngiRank 2026 zajęła pozycję 67= (ex aequo) z wynikiem 65,42.';
         }
       } else {
         dataset.label = 'Pozycja (im wyżej, tym lepiej)';
@@ -5176,7 +5176,7 @@ document.addEventListener('DOMContentLoaded', function () {
           return value !== null && value !== undefined ? `Pozycja: ${engiRankLabels?.[context.dataIndex] || value}` : 'Brak danych';
         };
         if (engiNote) {
-          engiNote.textContent = 'PW w EngiRank 2025 zajęła pozycję 72= (ex aequo) z wynikiem 63,82.';
+          engiNote.textContent = 'PW w EngiRank 2026 zajęła pozycję 67= (ex aequo) z wynikiem 65,42.';
         }
       }
 
@@ -5253,7 +5253,7 @@ document.addEventListener('DOMContentLoaded', function () {
         ? 'Brak pełnych danych do oceny zmiany wyniku.'
         : `Zmiana od 2023: ${scoreChange >= 0 ? '+' : '−'}${formatEngiMainScore(Math.abs(scoreChange))} pkt.`;
 
-      if (engiDetailsChartTitle) engiDetailsChartTitle.textContent = `Politechnika Warszawska — ${isScore ? 'wynik' : 'pozycja'} 2023–2025`;
+      if (engiDetailsChartTitle) engiDetailsChartTitle.textContent = `Politechnika Warszawska — ${isScore ? 'wynik' : 'pozycja'} 2023–2026`;
       if (engiDetailsChartNote) engiDetailsChartNote.textContent = isScore
         ? `${scoreSummary} Wynik 100 otrzymuje lider edycji.`
         : `${positionSummary} Najlepszy wynik: ${bestPosition ?? '—'}. miejsce${bestYears.length ? ` (${bestYears.join(', ')})` : ''}.`;
@@ -5261,7 +5261,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const legendText = engiDetailsLegend?.querySelector('span:last-child');
       if (legendLine) legendLine.style.backgroundColor = chartColor;
       if (legendText) legendText.textContent = isScore ? 'Wynik 0–100' : 'Pozycja';
-      engiDetailsCanvas.setAttribute('aria-label', `Politechnika Warszawska: ${isScore ? 'wynik' : 'pozycja'} w głównym EngiRank 2023–2025`);
+      engiDetailsCanvas.setAttribute('aria-label', `Politechnika Warszawska: ${isScore ? 'wynik' : 'pozycja'} w głównym EngiRank 2023–2026`);
 
       if (!engiDetailsChart) {
         engiDetailsChart = new Chart(engiDetailsCanvas, {
@@ -6498,25 +6498,25 @@ document.addEventListener('DOMContentLoaded', function () {
   ];
 
   const engiInstitutionIndicators = [
-    { label: 'Publikacje', group: 'Badania', weight: 10, source: 'Scopus / SciVal', period: '2020–2024', description: 'Liczba publikacji uczelni w obszarze Engineering & Technology według klasyfikacji FORD.' },
-    { label: 'Publikacje w Top 10% czasopism', group: 'Badania', weight: 6, source: 'Scopus / SciVal', period: '2020–2024', description: 'Odsetek publikacji w czasopismach należących do górnych 10% według wskaźnika CiteScore.' },
-    { label: 'Cytowania', group: 'Badania', weight: 6, source: 'Scopus / SciVal', period: '2020–2024', description: 'Średnia liczba cytowań przypadających na publikację w obszarze Engineering & Technology.' },
-    { label: 'Zmiana wpływu cytowaniowego', group: 'Badania', weight: 6, source: 'Scopus / SciVal', period: '2020–2024 vs 2015–2019', description: 'Relacja FWCI publikacji z lat 2020–2024 do FWCI publikacji z lat 2015–2019.' },
-    { label: 'Finansowanie badań i innowacji', group: 'Innowacyjność', weight: 10, source: 'CORDIS / Bank Światowy', period: '2020–2024', description: 'Wartość grantów z programów ramowych UE, skorygowana parytetem siły nabywczej.' },
-    { label: 'Patenty', group: 'Innowacyjność', weight: 5, source: 'EPO-PATSTAT', period: '2020–2024', description: 'Liczba patentów przyznanych uczelni przez Europejski Urząd Patentowy.' },
-    { label: 'Cytowania patentowe', group: 'Innowacyjność', weight: 5, source: 'Scopus / SciVal', period: '2020–2024', description: 'Średnia liczba cytowań patentowych przypadających na publikację naukową uczelni w obszarze inżynierii i technologii.' },
-    { label: 'Współpraca akademicka z biznesem', group: 'Innowacyjność', weight: 5, source: 'Scopus / SciVal', period: '2020–2024', description: 'Odsetek publikacji współtworzonych z badaczami afiliowanymi poza sektorem akademickim.' },
-    { label: 'SDG 9: Przemysł, innowacyjność i infrastruktura', group: 'SDG 9', weight: 10, source: 'Scopus / SciVal', period: '2020–2024', description: 'Liczba publikacji przypisanych jednocześnie do SDG 9 oraz obszaru Engineering & Technology.' },
-    { label: 'Współpraca międzynarodowa', group: 'Umiędzynarodowienie', weight: 10, source: 'Scopus / SciVal', period: '2020–2024', description: 'Odsetek publikacji w obszarze Engineering & Technology mających współautorów z więcej niż jednego kraju.' },
-    { label: 'Wpływ współpracy międzynarodowej', group: 'Umiędzynarodowienie', weight: 2, source: 'Scopus / SciVal', period: '2020–2024', description: 'Wpływ cytowaniowy publikacji uczelni powstałych we współautorstwie międzynarodowym.' },
-    { label: 'European University', group: 'Umiędzynarodowienie', weight: 4, source: 'European Education Area', period: 'stan na 18.08.2025', description: 'Wskaźnik binarny: pełne członkostwo uczelni w jednym z sojuszy European Universities.' },
-    { label: 'Inżynieria chemiczna', group: 'Wielodyscyplinarność', weight: 3, source: 'EngiRank by Subject', period: 'edycja 2025', description: 'Wynik uczelni w rankingu dziedzinowym Chemical Engineering.' },
-    { label: 'Inżynieria lądowa', group: 'Wielodyscyplinarność', weight: 3, source: 'EngiRank by Subject', period: 'edycja 2025', description: 'Wynik uczelni w rankingu dziedzinowym Civil Engineering.' },
-    { label: 'Elektronika, elektrotechnika i inżynieria informacyjna', group: 'Wielodyscyplinarność', weight: 3, source: 'EngiRank by Subject', period: 'edycja 2025', description: 'Wynik uczelni w rankingu Electrical, Electronic and Information Engineering.' },
-    { label: 'Inżynieria środowiska', group: 'Wielodyscyplinarność', weight: 3, source: 'EngiRank by Subject', period: 'edycja 2025', description: 'Wynik uczelni w rankingu dziedzinowym Environmental Engineering.' },
-    { label: 'Inżynieria materiałowa', group: 'Wielodyscyplinarność', weight: 3, source: 'EngiRank by Subject', period: 'edycja 2025', description: 'Wynik uczelni w rankingu dziedzinowym Materials Engineering.' },
-    { label: 'Inżynieria mechaniczna', group: 'Wielodyscyplinarność', weight: 3, source: 'EngiRank by Subject', period: 'edycja 2025', description: 'Wynik uczelni w rankingu dziedzinowym Mechanical Engineering.' },
-    { label: 'Inżynieria medyczna', group: 'Wielodyscyplinarność', weight: 3, source: 'EngiRank by Subject', period: 'edycja 2025', description: 'Wynik uczelni w rankingu dziedzinowym Medical Engineering.' }
+    { label: 'Publikacje', group: 'Badania', weight: 10, source: 'Scopus / SciVal', period: '2021–2025', description: 'Liczba publikacji uczelni w obszarze Engineering & Technology według klasyfikacji FORD.' },
+    { label: 'Publikacje w Top 10% czasopism', group: 'Badania', weight: 6, source: 'Scopus / SciVal', period: '2021–2025', description: 'Odsetek publikacji w czasopismach należących do górnych 10% według wskaźnika CiteScore.' },
+    { label: 'Cytowania', group: 'Badania', weight: 6, source: 'Scopus / SciVal', period: '2021–2025', description: 'Średnia liczba cytowań przypadających na publikację w obszarze Engineering & Technology.' },
+    { label: 'Zmiana wpływu cytowaniowego', group: 'Badania', weight: 6, source: 'Scopus / SciVal', period: '2021–2025 vs 2016–2020', description: 'Relacja FWCI publikacji z lat 2021–2025 do FWCI publikacji z lat 2016–2020.' },
+    { label: 'Finansowanie badań i innowacji', group: 'Innowacyjność', weight: 10, source: 'CORDIS / Bank Światowy', period: '2021–2025', description: 'Wartość grantów z programów ramowych UE, skorygowana parytetem siły nabywczej.' },
+    { label: 'Patenty', group: 'Innowacyjność', weight: 5, source: 'EPO-PATSTAT', period: '2021–2025', description: 'Liczba patentów przyznanych uczelni przez Europejski Urząd Patentowy.' },
+    { label: 'Cytowania patentowe', group: 'Innowacyjność', weight: 5, source: 'Scopus / SciVal', period: '2021–2025', description: 'Średnia liczba cytowań patentowych przypadających na publikację naukową uczelni w obszarze inżynierii i technologii.' },
+    { label: 'Współpraca akademicka z biznesem', group: 'Innowacyjność', weight: 5, source: 'Scopus / SciVal', period: '2021–2025', description: 'Odsetek publikacji współtworzonych z badaczami afiliowanymi poza sektorem akademickim.' },
+    { label: 'SDG 9: Przemysł, innowacyjność i infrastruktura', group: 'SDG 9', weight: 10, source: 'Scopus / SciVal', period: '2021–2025', description: 'Liczba publikacji przypisanych jednocześnie do SDG 9 oraz obszaru Engineering & Technology.' },
+    { label: 'Współpraca międzynarodowa', group: 'Umiędzynarodowienie', weight: 10, source: 'Scopus / SciVal', period: '2021–2025', description: 'Odsetek publikacji w obszarze Engineering & Technology mających współautorów z więcej niż jednego kraju.' },
+    { label: 'Wpływ współpracy międzynarodowej', group: 'Umiędzynarodowienie', weight: 2, source: 'Scopus / SciVal', period: '2021–2025', description: 'Wpływ cytowaniowy publikacji uczelni powstałych we współautorstwie międzynarodowym.' },
+    { label: 'European University', group: 'Umiędzynarodowienie', weight: 4, source: 'European Education Area', period: 'stan na 15.08.2026', description: 'Wskaźnik binarny: pełne członkostwo uczelni w jednym z sojuszy European Universities.' },
+    { label: 'Inżynieria chemiczna', group: 'Wielodyscyplinarność', weight: 3, source: 'EngiRank by Subject', period: 'edycja 2026', description: 'Wynik uczelni w rankingu dziedzinowym Chemical Engineering.' },
+    { label: 'Inżynieria lądowa', group: 'Wielodyscyplinarność', weight: 3, source: 'EngiRank by Subject', period: 'edycja 2026', description: 'Wynik uczelni w rankingu dziedzinowym Civil Engineering.' },
+    { label: 'Elektronika, elektrotechnika i inżynieria informacyjna', group: 'Wielodyscyplinarność', weight: 3, source: 'EngiRank by Subject', period: 'edycja 2026', description: 'Wynik uczelni w rankingu Electrical, Electronic and Information Engineering.' },
+    { label: 'Inżynieria środowiska', group: 'Wielodyscyplinarność', weight: 3, source: 'EngiRank by Subject', period: 'edycja 2026', description: 'Wynik uczelni w rankingu dziedzinowym Environmental Engineering.' },
+    { label: 'Inżynieria materiałowa', group: 'Wielodyscyplinarność', weight: 3, source: 'EngiRank by Subject', period: 'edycja 2026', description: 'Wynik uczelni w rankingu dziedzinowym Materials Engineering.' },
+    { label: 'Inżynieria mechaniczna', group: 'Wielodyscyplinarność', weight: 3, source: 'EngiRank by Subject', period: 'edycja 2026', description: 'Wynik uczelni w rankingu dziedzinowym Mechanical Engineering.' },
+    { label: 'Inżynieria medyczna', group: 'Wielodyscyplinarność', weight: 3, source: 'EngiRank by Subject', period: 'edycja 2026', description: 'Wynik uczelni w rankingu dziedzinowym Medical Engineering.' }
   ];
 
   const formatEngiInstitutionWeight = (value) => `${Number(value).toLocaleString('pl-PL')}%`;
@@ -6651,21 +6651,21 @@ document.addEventListener('DOMContentLoaded', function () {
   const engiMethodologyCriteria = [
     { name: 'Badania', color: '#4f46e5', description: 'Skala, jakość, wpływ cytowań i dynamika dorobku naukowego w konkretnej dyscyplinie.' },
     { name: 'Innowacyjność', color: '#0891b2', description: 'Współpraca publikacyjna z biznesem oraz finansowanie europejskich projektów badawczo-innowacyjnych.' },
-    { name: 'Jakość kształcenia', color: '#d97706', description: 'Liczba programów inżynierskich z uznanymi akredytacjami ABET lub EUR-ACE.' },
+    { name: 'Jakość kształcenia', color: '#d97706', description: 'Liczba programów inżynierskich z uznanymi akredytacjami ABET, EUR-ACE lub RIBA.' },
     { name: 'Wkład w SDG', color: '#059669', description: 'Dorobek publikacyjny wspierający cel zrównoważonego rozwoju właściwy dla wybranej dyscypliny.' }
   ];
 
   const engiMethodologyIndicators = {
-    'Publikacje': { group: 'Badania', color: '#4338ca', source: 'Scopus / SciVal', period: '2020–2024', description: 'Liczba publikacji uczelni przypisanych do ocenianej dyscypliny.' },
-    'Publikacje w Top 10% czasopism': { group: 'Badania', color: '#6366f1', source: 'Scopus / SciVal', period: '2020–2024', description: 'Odsetek publikacji w czasopismach należących do górnych 10% według wskaźnika CiteScore.' },
-    'Cytowania': { group: 'Badania', color: '#818cf8', source: 'Scopus / SciVal', period: '2020–2024', description: 'Średnia liczba cytowań przypadających na publikację w ocenianej dyscyplinie.' },
-    'Zmiana wpływu cytowaniowego': { group: 'Badania', color: '#a5b4fc', source: 'Scopus / SciVal', period: '2020–2024 vs 2015–2019', description: 'Relacja FWCI publikacji z lat 2020–2024 do FWCI publikacji z lat 2015–2019; wskaźnik premiuje wzrost wpływu.' },
-    'Współpraca akademicka z biznesem': { group: 'Innowacyjność', color: '#0891b2', source: 'Scopus / SciVal', period: '2020–2024', description: 'Odsetek publikacji współtworzonych z badaczami afiliowanymi poza sektorem akademickim.' },
-    'Finansowanie badań i innowacji': { group: 'Innowacyjność', color: '#22d3ee', source: 'CORDIS', period: '2020–2024', description: 'Wartość grantów z programów ramowych UE finansujących projekty związane z ocenianą dyscypliną.' },
-    'Akredytacje': { group: 'Jakość kształcenia', color: '#f59e0b', source: 'ABET / ENAEE (EUR-ACE)', period: 'ważne w 2025', description: 'Liczba programów związanych z dyscypliną posiadających akredytację ABET lub EUR-ACE. Osiem i więcej akredytacji daje maksymalny wynik wskaźnika.' },
-    'SDG 3: Dobre zdrowie i jakość życia': { group: 'Wkład w SDG', color: '#10b981', source: 'Scopus / SciVal', period: '2020–2024', description: 'Liczba publikacji przypisanych jednocześnie do inżynierii medycznej i celu SDG 3.' },
-    'SDG 6: Czysta woda i warunki sanitarne': { group: 'Wkład w SDG', color: '#06b6d4', source: 'Scopus / SciVal', period: '2020–2024', description: 'Liczba publikacji przypisanych jednocześnie do inżynierii środowiska i celu SDG 6.' },
-    'SDG 11: Zrównoważone miasta i społeczności': { group: 'Wkład w SDG', color: '#14b8a6', source: 'Scopus / SciVal', period: '2020–2024', description: 'Liczba publikacji przypisanych jednocześnie do inżynierii lądowej i celu SDG 11.' }
+    'Publikacje': { group: 'Badania', color: '#4338ca', source: 'Scopus / SciVal', period: '2021–2025', description: 'Liczba publikacji uczelni przypisanych do ocenianej dyscypliny.' },
+    'Publikacje w Top 10% czasopism': { group: 'Badania', color: '#6366f1', source: 'Scopus / SciVal', period: '2021–2025', description: 'Odsetek publikacji w czasopismach należących do górnych 10% według wskaźnika CiteScore.' },
+    'Cytowania': { group: 'Badania', color: '#818cf8', source: 'Scopus / SciVal', period: '2021–2025', description: 'Średnia liczba cytowań przypadających na publikację w ocenianej dyscyplinie.' },
+    'Zmiana wpływu cytowaniowego': { group: 'Badania', color: '#a5b4fc', source: 'Scopus / SciVal', period: '2021–2025 vs 2016–2020', description: 'Relacja FWCI publikacji z lat 2021–2025 do FWCI publikacji z lat 2016–2020; wskaźnik premiuje wzrost wpływu.' },
+    'Współpraca akademicka z biznesem': { group: 'Innowacyjność', color: '#0891b2', source: 'Scopus / SciVal', period: '2021–2025', description: 'Odsetek publikacji współtworzonych z badaczami afiliowanymi poza sektorem akademickim.' },
+    'Finansowanie badań i innowacji': { group: 'Innowacyjność', color: '#22d3ee', source: 'CORDIS', period: '2021–2025', description: 'Wartość grantów z programów ramowych UE finansujących projekty związane z ocenianą dyscypliną.' },
+    'Akredytacje': { group: 'Jakość kształcenia', color: '#f59e0b', source: 'ABET / ENAEE (EUR-ACE) / RIBA', period: 'ważne w 2026', description: 'Liczba programów związanych z dyscypliną posiadających akredytację ABET, EUR-ACE lub RIBA.' },
+    'SDG 3: Dobre zdrowie i jakość życia': { group: 'Wkład w SDG', color: '#10b981', source: 'Scopus / SciVal', period: '2021–2025', description: 'Liczba publikacji przypisanych jednocześnie do inżynierii medycznej i celu SDG 3.' },
+    'SDG 6: Czysta woda i warunki sanitarne': { group: 'Wkład w SDG', color: '#06b6d4', source: 'Scopus / SciVal', period: '2021–2025', description: 'Liczba publikacji przypisanych jednocześnie do inżynierii środowiska i celu SDG 6.' },
+    'SDG 11: Zrównoważone miasta i społeczności': { group: 'Wkład w SDG', color: '#14b8a6', source: 'Scopus / SciVal', period: '2021–2025', description: 'Liczba publikacji przypisanych jednocześnie do inżynierii lądowej i celu SDG 11.' }
   };
 
   const engiPublicationThresholds = [
@@ -6838,8 +6838,8 @@ document.addEventListener('DOMContentLoaded', function () {
     if (engiMethodologyVariantTag) engiMethodologyVariantTag.textContent = `${variant.special ? 'SDG' : 'Standard'} · próg ${variant.threshold} publ.`;
     if (engiMethodologyText) {
       engiMethodologyText.textContent = variant.special
-        ? `${subject}: badania 60%, innowacyjność 25%, jakość kształcenia 10% i ${variant.sdgLabel.split(':')[0]} 5%. Próg kwalifikacyjny wynosi ${variant.threshold} publikacji w latach 2020–2024.`
-        : `${subject}: badania 64%, innowacyjność 26% i jakość kształcenia 10%. Próg kwalifikacyjny wynosi ${variant.threshold} publikacji w latach 2020–2024.`;
+        ? `${subject}: badania 60%, innowacyjność 25%, jakość kształcenia 10% i ${variant.sdgLabel.split(':')[0]} 5%. Próg kwalifikacyjny wynosi ${variant.threshold} publikacji w latach 2021–2025.`
+        : `${subject}: badania 64%, innowacyjność 26% i jakość kształcenia 10%. Próg kwalifikacyjny wynosi ${variant.threshold} publikacji w latach 2021–2025.`;
     }
     renderEngiMethodologyWeights(weights);
   };

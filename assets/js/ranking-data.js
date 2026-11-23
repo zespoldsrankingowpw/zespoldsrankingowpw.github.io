@@ -1425,49 +1425,49 @@ window.RankingData = (() => {
   };
 
   const engiSubjectData = {
-    years: [2023, 2024, 2025],
+    years: [2023, 2024, 2025, 2026],
     subjects: {
       "Inżynieria chemiczna (Chemical Engineering)": {
-        lower: [77, 49, 56],
-        upper: [77, 49, 56],
-        raw: ["77=", "49=", "56="],
-        score: [63.13, 72.13, 71.76]
+        lower: [77, 49, 56, 66],
+        upper: [77, 49, 56, 66],
+        raw: ["77=", "49=", "56=", "66="],
+        score: [63.13, 72.13, 71.76, 69.82]
       },
       "Inżynieria lądowa (Civil Engineering)": {
-        lower: [77, 70, 84],
-        upper: [77, 70, 84],
-        raw: ["77=", "70=", "84="],
-        score: [58.87, 64.52, 63.59]
+        lower: [77, 70, 84, 78],
+        upper: [77, 70, 84, 78],
+        raw: ["77=", "70=", "84=", "78="],
+        score: [58.87, 64.52, 63.59, 61.74]
       },
       "Elektronika, elektrotechnika i inżynieria informacyjna": {
-        lower: [95, 71, 62],
-        upper: [95, 71, 62],
-        raw: ["95=", "71=", "62="],
-        score: [64.72, 61.22, 67.75]
+        lower: [95, 71, 62, 53],
+        upper: [95, 71, 62, 53],
+        raw: ["95=", "71=", "62=", "53="],
+        score: [64.72, 61.22, 67.75, 72.51]
       },
       "Inżynieria środowiska (Environmental engineering)": {
-        lower: [74, 86, 130],
-        upper: [74, 86, 130],
-        raw: ["74=", "86=", "130="],
-        score: [60.85, 60.81, 56.80]
+        lower: [74, 86, 130, 112],
+        upper: [74, 86, 130, 112],
+        raw: ["74=", "86=", "130=", "112="],
+        score: [60.85, 60.81, 56.80, 57.43]
       },
       "Inżynieria materiałowa (Materials Engineering)": {
-        lower: [71, 47, 50],
-        upper: [71, 47, 50],
-        raw: ["71=", "47=", "50="],
-        score: [69.72, 71.53, 71.31]
+        lower: [71, 47, 50, 57],
+        upper: [71, 47, 50, 57],
+        raw: ["71=", "47=", "50=", "57="],
+        score: [69.72, 71.53, 71.31, 68.24]
       },
       "Inżynieria mechaniczna (Mechanical engineering)": {
-        lower: [63, 76, 80],
-        upper: [63, 76, 80],
-        raw: ["63=", "76=", "80="],
-        score: [72.77, 69.37, 70.86]
+        lower: [63, 76, 80, 131],
+        upper: [63, 76, 80, 131],
+        raw: ["63=", "76=", "80=", "131="],
+        score: [72.77, 69.37, 70.86, 62.99]
       },
       "Inżynieria medyczna": {
-        lower: [63, 59, 73],
-        upper: [63, 59, 73],
-        raw: ["63", "59=", "73="],
-        score: [54.77, 57.27, 57.14]
+        lower: [63, 59, 73, 76],
+        upper: [63, 59, 73, 76],
+        raw: ["63", "59=", "73=", "76="],
+        score: [54.77, 57.27, 57.14, 58.89]
       }
     }
   };
@@ -1508,13 +1508,13 @@ window.RankingData = (() => {
 
   const perspektywyScores = [78.9, 83.4, 84, 88, 85, 89.9, 92.3];
 
-  const engiYears = [2023, 2024, 2025];
+  const engiYears = [2023, 2024, 2025, 2026];
 
-  const engiPositions = [69, 64, 72];
+  const engiPositions = [69, 64, 72, 67];
 
-  const engiRankLabels = ['69=', '64=', '72='];
+  const engiRankLabels = ['69=', '64=', '72=', '67='];
 
-  const engiScores = [60.17, 62.2, 63.82];
+  const engiScores = [60.17, 62.2, 63.82, 65.42];
 
   const qsSustainabilityYears = [
   2024,
